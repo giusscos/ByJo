@@ -15,7 +15,8 @@ struct OperationView: View {
     
     @Query var assets: [Asset]
     
-    @State var activeSheet: SheetTypes?
+    @State var viewCategory: Bool = false
+    
     @State var selectedOperation: AssetOperation?
     @State var selectedCategoryOperation: CategoryOperation?
     
@@ -25,7 +26,7 @@ struct OperationView: View {
                 ContentUnavailableView(
                     "No Operations Found",
                     systemImage: "exclamationmark",
-                    description: Text("You need to add a transaction by clicking the plus button on the top right corner")
+                    description: Text("You need to add an operation by clicking the plus button on the top right corner")
                 )
             } else {
                 ForEach(operations) { value in
@@ -40,11 +41,18 @@ struct OperationView: View {
                         }
                         
                         Button {
-                            editOperation(operation: value)
+                            selectedOperation = value
                         } label: {
                             Label("Edit", systemImage: "pencil")
-                        }.tint(.blue)
+                        }
+                        .tint(.blue)
                     }
+                    .sheet(item: $selectedOperation) { value in
+                        EditAssetOperation(operation: value)
+                    }
+                }
+                .sheet(isPresented: $viewCategory) {
+                    CategoryOperationView()
                 }
             }
         }
@@ -60,7 +68,7 @@ struct OperationView: View {
                     }
                     
                     Button {
-                        viewCategoryOperation()
+                        viewCategory.toggle()
                     } label: {
                         Label("View categories", systemImage: "list.bullet")
                     }
@@ -70,59 +78,30 @@ struct OperationView: View {
                     } label: {
                         Label("Add category", systemImage: "plus")
                     }
+                    
                 } label: {
-                    Label("Add", systemImage: "plus")
+                    Label("Menu", systemImage: "ellipsis.circle")
                 }
             }
         }
-        .sheet(item: $activeSheet) { item in
-            switch item {
-            case .operation:
-                if let operation = selectedOperation {
-                    EditAssetOperation(operation: operation)
-                }
-                
-            case .category:
-                if let categoryOperation = selectedCategoryOperation {
-                    EditCategoryOperation(category: categoryOperation)
-                }
-                
-            case .viewCategories:
-                CategoryOperationView()
-            }
+        .sheet(item: $selectedCategoryOperation) { value in
+            EditCategoryOperation(category: value)
         }
     }
     
     func addOperation() {
-        if(!assets.isEmpty && assets.first != nil){
-            activeSheet = .operation
-            let operation = AssetOperation(date: .now, amount: 0.0)
+        if(!assets.isEmpty && assets.first != nil) {
+            let operation = AssetOperation()
             selectedOperation = operation
             modelContext.insert(operation)
         }
     }
-    
-    func editOperation(operation: AssetOperation) {
-        activeSheet = .operation
-        selectedOperation = operation
-    }
-    
-    func viewCategoryOperation() {
-        activeSheet = .viewCategories
-    }
-    
+        
     func addCategoryOperation() {
-        activeSheet = .category
         let categoryOperation = CategoryOperation(name: "")
         selectedCategoryOperation = categoryOperation
         modelContext.insert(categoryOperation)
     }
-}
-
-enum SheetTypes: Identifiable {
-    case operation, category, viewCategories
-    
-    var id: Int { hashValue }
 }
 
 #Preview {

@@ -21,13 +21,23 @@ class AssetOperation {
     @Relationship var asset: Asset?
     @Relationship var category: CategoryOperation?
     
-    init(name: String = "", currency: CurrencyCode = CurrencyCode.usd, date: Date = .now, amount: Decimal = 0, asset: Asset? = nil, category: CategoryOperation? = nil, note: String = "", frequency: RecurrenceFrequency = RecurrenceFrequency.single) {
+    init (
+         name: String = "",
+         currency: CurrencyCode = CurrencyCode.usd,
+         date: Date = .now,
+         amount: Decimal = 0,
+         asset: Asset? = nil,
+         category: CategoryOperation? = nil,
+         note: String = "",
+         frequency: RecurrenceFrequency = RecurrenceFrequency.single
+    ) {
         self.id = UUID()
         self.name = name
         self.currency = currency
         self.date = date
         self.amount = amount
         self.asset = asset
+        self.category = category
         self.note = note
         self.frequency = frequency
     }

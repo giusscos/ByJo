@@ -12,29 +12,35 @@ struct OperationRow: View {
     
     var body: some View {
         HStack (alignment: .center) {
-            VStack (alignment: .leading, spacing: 8) {
+            VStack (alignment: .leading, spacing: 0) {
                 Text(operation.name)
-                    .font(.title2)
+                    .font(.title3)
                     .fontWeight(.semibold)
-                    .lineLimit(1)
 
                 HStack {
                     if let asset = operation.asset {
                         Text(asset.name)
                             .font(.caption)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.accentColor)
-                            .foregroundStyle(.white)
-                            .fontWeight(.semibold)
-                            .clipShape(Capsule())
+                            .foregroundStyle(.secondary)
+                            
+                        Divider()
+                    }
+                    
+                    if let category = operation.category {
+                        Text(category.name)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        
+                        Divider()
                     }
                     
                     Text(operation.date, format: .dateTime.day().month().year())
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
-            }.frame(maxWidth: .infinity, alignment: .leading)
+            }.lineLimit(1)
+            .padding(.top, 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack {
                 Text(operation.amount, format: .currency(code: operation.currency.rawValue))

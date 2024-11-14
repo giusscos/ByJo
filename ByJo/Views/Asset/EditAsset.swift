@@ -73,9 +73,6 @@ struct EditAsset: View {
             }.frame(maxHeight: .infinity, alignment: .top)
             .listStyle(.plain)
         }
-        .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
-        }
     }
 }
 

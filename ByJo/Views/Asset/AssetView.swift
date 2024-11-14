@@ -26,22 +26,7 @@ struct AssetView: View {
                     systemImage: "exclamationmark",
                     description: Text("You need to add an asset by clicking the plus button on the top right corner")
                 )
-            } else {
-                Section {
-                    Chart(assets, id: \.id) { value in
-                        BarMark(
-                            x: .value("Asset", value.name),
-                            y: .value("Amount", value.initialBalance)
-                        )
-                        .foregroundStyle(.blue.gradient)
-                        .cornerRadius(4)
-                    }
-                    .frame(maxHeight: UIScreen.main.bounds.height / 3, alignment: .top)
-                    .listRowInsets(.init(top: 10, leading: 0, bottom: 0, trailing: 0))
-                    .listRowBackground(Color.clear)
-                    .aspectRatio(16/9, contentMode: .fit)
-                }
-                
+            } else {                
                 Section {
                     ForEach(assets) { value in
                         NavigationLink {

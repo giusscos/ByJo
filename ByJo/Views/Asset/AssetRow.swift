@@ -15,20 +15,16 @@ struct AssetRow: View {
             Text(asset.icon)
                 .font(.largeTitle)
                                
-            VStack (alignment: .leading, spacing: 8) {
+            VStack (alignment: .leading, spacing: 0) {
                 Text(asset.name)
-                    .font(.title2)
+                    .font(.title3)
                     .fontWeight(.semibold)
                     .lineLimit(1)
                 
                 Text(asset.type.rawValue)
                     .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.accentColor)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.secondary)
                     .fontWeight(.semibold)
-                    .clipShape(Capsule())
             }.frame(maxWidth: .infinity, alignment: .leading)
             
             Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))

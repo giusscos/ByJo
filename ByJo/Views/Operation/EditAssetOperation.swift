@@ -42,13 +42,6 @@ struct EditAssetOperation: View {
                 
                 DatePicker("Date", selection: $operation.date, displayedComponents: .date)
                     .datePickerStyle(.compact)
-            
-                Picker("Currency", selection: $operation.currency) {
-                    ForEach(CurrencyCode.allCases, id: \.self) { value in
-                        Text(value.rawValue)
-                    }
-                }
-                .pickerStyle(.menu)
                 
                 HStack {
                     Text("Amount: ")
@@ -84,11 +77,9 @@ struct EditAssetOperation: View {
             .listStyle(.plain)
         }
         .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
-            
             if let asset = assets.first {
                 operation.asset = asset
-                operation.currency = asset.currency
+                operation.currency = asset.currency                
             }
                     
             if let category = categoriesOperation.first {

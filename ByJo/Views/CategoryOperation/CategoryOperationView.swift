@@ -29,33 +29,41 @@ struct CategoryOperationView: View {
                     addCategoryOperation()
                 } label: {
                     Label("Add", systemImage: "plus")
-                        .labelStyle(.titleOnly)
+                        .labelStyle(.iconOnly)
                 }.frame(maxWidth: .infinity, alignment: .trailing)
             }.padding()
             
             List {
-                Section {
-                    ForEach(categories) { value in
-                        Text(value.name)
-                            .swipeActions {
-                                Button (role: .destructive) {
-                                    modelContext.delete(value)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+                if categories.isEmpty {
+                    ContentUnavailableView(
+                        "No Categories Found",
+                        systemImage: "exclamationmark",
+                        description: Text("You need to add a category by clicking the plus button on the top right corner")
+                    )
+                } else {
+                    Section {
+                        ForEach(categories) { value in
+                            Text(value.name)
+                                .swipeActions {
+                                    Button (role: .destructive) {
+                                        modelContext.delete(value)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                    
+                                    Button {
+                                        selectedCategoryOperation = value
+                                    } label: {
+                                        Label("Edit", systemImage: "pencil")
+                                            .tint(.blue)
+                                    }
                                 }
-                                
-                                Button {
-                                    selectedCategoryOperation = value
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                        .tint(.blue)
-                                }
-                            }
+                        }
+                    } header: {
+                        Text("Categories")
                     }
-                } header: {
-                    Text("Categories")
                 }
-            }.listStyle(.plain)
+            }.listStyle(.plain)                
         }.sheet(item: $selectedCategoryOperation) { value in
             EditCategoryOperation(category: value)
         }

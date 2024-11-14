@@ -34,6 +34,8 @@ struct ContentView: View {
                     SettingsView()
                 }
             }
+        }.onAppear {
+            UITextField.appearance().clearButtonMode = .whileEditing
         }
     }
 }
