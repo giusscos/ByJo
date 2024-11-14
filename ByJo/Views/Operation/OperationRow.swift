@@ -51,7 +51,6 @@ struct OperationRow: View {
         AssetOperation(
             name: "Shopping",
             date: .now,
-            type: AssetOperationType.transaction,
             amount: 100.0,
             asset: Asset(name: "Cash", initialBalance: 10000)
         )

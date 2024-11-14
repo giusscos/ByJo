@@ -12,8 +12,6 @@ struct EditCategoryOperation: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @Query(sort: \CategoryOperation.name) var categories: [CategoryOperation]
-    
     @Bindable var category: CategoryOperation
 
     var body: some View {
@@ -38,14 +36,6 @@ struct EditCategoryOperation: View {
             
             List {
                 TextField("Name", text: $category.name)
-                
-                Section {
-                    ForEach(categories) { category in
-                        Text(category.name)
-                    }
-                } header: {
-                    Text("Categories")
-                }
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .listStyle(.plain)

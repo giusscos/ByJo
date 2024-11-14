@@ -17,7 +17,7 @@ struct OperationDetailView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("\(operation.name) - \(operation.type.rawValue)")
+                Text("\(operation.name)")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
@@ -65,5 +65,5 @@ struct OperationDetailView: View {
 }
 
 #Preview {
-    OperationDetailView(operation: AssetOperation(date: .now, type: .transaction, amount: 100))
+    OperationDetailView(operation: AssetOperation(date: .now, amount: 100))
 }

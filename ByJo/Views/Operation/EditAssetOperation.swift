@@ -42,14 +42,7 @@ struct EditAssetOperation: View {
                 
                 DatePicker("Date", selection: $operation.date, displayedComponents: .date)
                     .datePickerStyle(.compact)
-                
-                Picker("Type", selection: $operation.type) {
-                    ForEach(AssetOperationType.allCases, id: \.self) { value in
-                        Text(value.rawValue)
-                    }
-                }
-                .pickerStyle(.menu)
-                
+            
                 Picker("Currency", selection: $operation.currency) {
                     ForEach(CurrencyCode.allCases, id: \.self) { value in
                         Text(value.rawValue)
@@ -110,7 +103,6 @@ struct EditAssetOperation: View {
                         AssetOperation(
                             name: "Shopping",
                             date: .now,
-                            type: AssetOperationType.transfer,
                             amount: 100.0,
                             asset: Asset(name: "Cash", initialBalance: 10000)
                         )

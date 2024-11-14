@@ -40,7 +40,7 @@ struct OperationView: View {
                         }
                         
                         Button {
-                            print("Edit")
+                            editOperation(operation: value)
                         } label: {
                             Label("Edit", systemImage: "pencil")
                         }.tint(.blue)
@@ -56,7 +56,13 @@ struct OperationView: View {
                     Button {
                         addOperation()
                     } label: {
-                        Label("Add asset", systemImage: "plus")
+                        Label("Add operation", systemImage: "plus")
+                    }
+                    
+                    Button {
+                        viewCategoryOperation()
+                    } label: {
+                        Label("View categories", systemImage: "list.bullet")
                     }
                     
                     Button {
@@ -68,13 +74,6 @@ struct OperationView: View {
                     Label("Add", systemImage: "plus")
                 }
             }
-            
-//            TODO: Edit button implementation
-//            if (!assets.isEmpty) {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    EditButton()
-//                }
-//            }
         }
         .sheet(item: $activeSheet) { item in
             switch item {
@@ -87,6 +86,9 @@ struct OperationView: View {
                 if let categoryOperation = selectedCategoryOperation {
                     EditCategoryOperation(category: categoryOperation)
                 }
+                
+            case .viewCategories:
+                CategoryOperationView()
             }
         }
     }
@@ -94,10 +96,19 @@ struct OperationView: View {
     func addOperation() {
         if(!assets.isEmpty && assets.first != nil){
             activeSheet = .operation
-            let operation = AssetOperation(date: .now, type: .transaction, amount: 0.0)
+            let operation = AssetOperation(date: .now, amount: 0.0)
             selectedOperation = operation
             modelContext.insert(operation)
         }
+    }
+    
+    func editOperation(operation: AssetOperation) {
+        activeSheet = .operation
+        selectedOperation = operation
+    }
+    
+    func viewCategoryOperation() {
+        activeSheet = .viewCategories
     }
     
     func addCategoryOperation() {
@@ -109,7 +120,7 @@ struct OperationView: View {
 }
 
 enum SheetTypes: Identifiable {
-    case operation, category
+    case operation, category, viewCategories
     
     var id: Int { hashValue }
 }

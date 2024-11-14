@@ -27,8 +27,6 @@ struct AssetDetailView: View {
                                 x: .value("Date", value.date),
                                 y: .value("Amount", value.amount)
                             )
-                            .foregroundStyle(by: .value("Type", value.type.rawValue))
-                            
                         }
                         .frame(maxHeight: UIScreen.main.bounds.height / 3, alignment: .top)
                         .aspectRatio(16/9, contentMode: .fit)
@@ -58,7 +56,7 @@ struct AssetDetailView: View {
     }
     
     func addOperation(){
-        let operation = AssetOperation(name: "", currency: asset.currency, date: .now, type: .transaction, amount: 0, asset: asset)
+        let operation = AssetOperation(name: "", currency: asset.currency, date: .now, amount: 0, asset: asset)
         selectedOperation = operation
         modelContext.insert(operation)
     }

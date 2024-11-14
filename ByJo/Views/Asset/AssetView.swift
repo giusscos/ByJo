@@ -76,13 +76,6 @@ struct AssetView: View {
                     Label("Add asset", systemImage: "plus")
                 }
             }
-            
-//            TODO: Edit button implementation
-//            if (!assets.isEmpty) {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    EditButton()
-//                }
-//            }
         }
         .sheet(item: $selectedAsset) { value in
             EditAsset(asset: value)
