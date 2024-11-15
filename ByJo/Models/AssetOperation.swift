@@ -41,6 +41,42 @@ class AssetOperation {
         self.note = note
         self.frequency = frequency
     }
+    
+    func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {
+        let calendar = Calendar.current
+        let now = Date()
+        let filteredData: [AssetOperation]
+        
+        switch range {
+        case .day:
+            let startOfDay = calendar.startOfDay(for: now)
+            filteredData = data.filter { $0.date >= startOfDay }
+        case .week:
+            if let startOfWeek = calendar.date(byAdding: .day, value: -7, to: now) {
+                filteredData = data.filter { $0.date >= startOfWeek }
+            } else {
+                filteredData = data
+            }
+        case .month:
+            if let startOfMonth = calendar.date(byAdding: .month, value: -1, to: now) {
+                filteredData = data.filter { $0.date >= startOfMonth }
+            } else {
+                filteredData = data
+            }
+        case .year:
+            if let startOfYear = calendar.date(byAdding: .year, value: -1, to: now) {
+                filteredData = data.filter { $0.date >= startOfYear }
+            } else {
+                filteredData = data
+            }
+        case .ytd:
+            let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now))!
+            filteredData = data.filter { $0.date >= startOfYear }
+        }
+        
+        return filteredData
+    }
+
 }
 
 enum RecurrenceFrequency: String, Codable, CaseIterable {
@@ -51,3 +87,12 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
     case yearly = "Yearly"
 }
 
+enum DateRangeOption: String, CaseIterable, Identifiable {
+    case day = "1D"
+    case week = "1W"
+    case month = "1M"
+    case ytd = "YtD"
+    case year = "1Y"
+    
+    var id: String { rawValue }
+}
