@@ -77,13 +77,17 @@ struct EditAssetOperation: View {
             .listStyle(.plain)
         }
         .onAppear {
-            if let asset = assets.first {
-                operation.asset = asset
-                operation.currency = asset.currency                
+            if operation.asset == nil {
+                if let asset = assets.first {
+                    operation.asset = asset
+                    operation.currency = asset.currency
+                }
             }
-                    
-            if let category = categoriesOperation.first {
-                operation.category = category
+            
+            if operation.category == nil {
+                if let category = categoriesOperation.first {
+                    operation.category = category
+                }                
             }
         }
     }

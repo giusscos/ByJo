@@ -8,17 +8,33 @@
 import SwiftUI
 import SwiftData
 
+enum ActiveSheet: Identifiable {
+    case editOperation(AssetOperation)
+    case viewCategories
+    case editCategory(CategoryOperation)
+    
+    var id: String {
+        switch self {
+        case .editOperation(let operation):
+            return "editOperation-\(operation.id)"
+        case .viewCategories:
+            return "viewCategories"
+        case .editCategory(let category):
+            return "editCategory-\(category.id)"
+        }
+    }
+}
+
 struct OperationView: View {
     @Environment(\.modelContext) var modelContext
     
-    @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    @Query(filter: #Predicate<AssetOperation> { value in
+        value.name != ""
+    }, sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @Query var assets: [Asset]
     
-    @State var viewCategory: Bool = false
-    
-    @State var selectedOperation: AssetOperation?
-    @State var selectedCategoryOperation: CategoryOperation?
+    @State private var activeSheet: ActiveSheet?
     
     var body: some View {
         List {
@@ -33,26 +49,20 @@ struct OperationView: View {
                     NavigationLink(destination: OperationDetailView(operation: value)) {
                         OperationRow(operation: value)
                     }
-                    .swipeActions (edge: .trailing) {
-                        Button (role: .destructive) {
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
                             modelContext.delete(value)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
                         
                         Button {
-                            selectedOperation = value
+                            activeSheet = .editOperation(value)
                         } label: {
                             Label("Edit", systemImage: "pencil")
                         }
                         .tint(.blue)
                     }
-                    .sheet(item: $selectedOperation) { value in
-                        EditAssetOperation(operation: value)
-                    }
-                }
-                .sheet(isPresented: $viewCategory) {
-                    CategoryOperationView()
                 }
             }
         }
@@ -68,7 +78,7 @@ struct OperationView: View {
                     }
                     
                     Button {
-                        viewCategory.toggle()
+                        activeSheet = .viewCategories
                     } label: {
                         Label("View categories", systemImage: "list.bullet")
                     }
@@ -84,26 +94,35 @@ struct OperationView: View {
                 }
             }
         }
-        .sheet(item: $selectedCategoryOperation) { value in
-            EditCategoryOperation(category: value)
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .editOperation(let operation):
+                EditAssetOperation(operation: operation)
+            case .viewCategories:
+                CategoryOperationView()
+            case .editCategory(let category):
+                EditCategoryOperation(category: category)
+            }
         }
     }
     
     func addOperation() {
-        if(!assets.isEmpty && assets.first != nil) {
+        if let asset = assets.first {
             let operation = AssetOperation()
-            selectedOperation = operation
+            operation.asset = asset
             modelContext.insert(operation)
+            activeSheet = .editOperation(operation)
         }
     }
-        
+    
     func addCategoryOperation() {
         let categoryOperation = CategoryOperation(name: "")
-        selectedCategoryOperation = categoryOperation
         modelContext.insert(categoryOperation)
+        activeSheet = .editCategory(categoryOperation)
     }
 }
 
 #Preview {
     OperationView()
 }
+

@@ -51,12 +51,11 @@ struct AssetDetailView: View {
         }
         .sheet(item: $selectedOperation) { value in
             EditAssetOperation(operation: value)
-                .presentationDragIndicator(.visible)
         }
     }
     
     func addOperation(){
-        let operation = AssetOperation(name: "", currency: asset.currency, date: .now, amount: 0, asset: asset)
+        let operation = AssetOperation(currency: asset.currency, asset: asset)
         selectedOperation = operation
         modelContext.insert(operation)
     }
