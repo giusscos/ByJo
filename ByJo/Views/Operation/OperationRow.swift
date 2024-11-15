@@ -12,7 +12,11 @@ struct OperationRow: View {
     
     var body: some View {
         HStack (alignment: .center) {
-            VStack (alignment: .leading, spacing: 0) {
+            VStack (alignment: .leading, spacing: 4) {
+                Text(operation.date, format: .dateTime.day().month().year())
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                
                 Text(operation.name)
                     .font(.title3)
                     .fontWeight(.semibold)
@@ -22,21 +26,16 @@ struct OperationRow: View {
                         Text(asset.name)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                            
-                        Divider()
                     }
                     
                     if let category = operation.category {
+                        Divider()
+                            .frame(height: 10)
+                        
                         Text(category.name)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        
-                        Divider()
                     }
-                    
-                    Text(operation.date, format: .dateTime.day().month().year())
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
                 }
             }.lineLimit(1)
             .padding(.top, 4)

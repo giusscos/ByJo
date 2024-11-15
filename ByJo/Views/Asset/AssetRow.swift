@@ -12,9 +12,6 @@ struct AssetRow: View {
     
     var body: some View {
         HStack (alignment: .center) {
-            Text(asset.icon)
-                .font(.largeTitle)
-                               
             VStack (alignment: .leading, spacing: 0) {
                 Text(asset.name)
                     .font(.title3)
@@ -35,5 +32,5 @@ struct AssetRow: View {
 }
 
 #Preview {
-    AssetRow(asset: Asset(name: "Asset", icon: "💰", type: .cash, initialBalance: 20000))
+    AssetRow(asset: Asset(name: "Asset", type: .cash, initialBalance: 20000))
 }

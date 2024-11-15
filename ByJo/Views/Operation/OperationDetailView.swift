@@ -44,9 +44,6 @@ struct OperationDetailView: View {
             if let asset = operation.asset {
                 HStack (alignment: .center) {
                     HStack (alignment: .center, spacing: 0) {
-                        Text(asset.icon)
-                            .font(.largeTitle)
-                        
                         Text("\(asset.name)")
                             .font(.title)
                             .fontWeight(.semibold)

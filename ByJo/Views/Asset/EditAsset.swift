@@ -37,8 +37,6 @@ struct EditAsset: View {
             
             List {
                 Section {
-                    TextField("Emoji", text: $asset.icon)
-                    
                     TextField("Name", text: $asset.name)
                 }
                 
