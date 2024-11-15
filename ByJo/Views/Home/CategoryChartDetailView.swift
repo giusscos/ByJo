@@ -28,7 +28,7 @@ struct CategoryChartDetailView: View {
     
     var body: some View {
         ScrollView {
-            Text("Operations")
+            Text("Categories")
                 .font(.largeTitle)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .topLeading)

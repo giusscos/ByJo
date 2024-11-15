@@ -48,9 +48,12 @@ class AssetOperation {
         let filteredData: [AssetOperation]
         
         switch range {
-        case .day:
-            let startOfDay = calendar.startOfDay(for: now)
-            filteredData = data.filter { $0.date >= startOfDay }
+        case .threeDay:
+            if let startOfWeek = calendar.date(byAdding: .day, value: -3, to: now) {
+                filteredData = data.filter { $0.date >= startOfWeek }
+            } else {
+                filteredData = data
+            }
         case .week:
             if let startOfWeek = calendar.date(byAdding: .day, value: -7, to: now) {
                 filteredData = data.filter { $0.date >= startOfWeek }
@@ -63,15 +66,27 @@ class AssetOperation {
             } else {
                 filteredData = data
             }
-        case .year:
-            if let startOfYear = calendar.date(byAdding: .year, value: -1, to: now) {
-                filteredData = data.filter { $0.date >= startOfYear }
+        case .threeMonth:
+            if let startOfMonth = calendar.date(byAdding: .month, value: -3, to: now) {
+                filteredData = data.filter { $0.date >= startOfMonth }
             } else {
                 filteredData = data
             }
         case .ytd:
             let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now))!
             filteredData = data.filter { $0.date >= startOfYear }
+        case .year:
+            if let startOfYear = calendar.date(byAdding: .year, value: -1, to: now) {
+                filteredData = data.filter { $0.date >= startOfYear }
+            } else {
+                filteredData = data
+            }
+        case .threeYear:
+            if let startOfYear = calendar.date(byAdding: .year, value: -3, to: now) {
+                filteredData = data.filter { $0.date >= startOfYear }
+            } else {
+                filteredData = data
+            }
         }
         
         return filteredData
@@ -88,11 +103,13 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
 }
 
 enum DateRangeOption: String, CaseIterable, Identifiable {
-    case day = "1D"
+    case threeDay = "3D"
     case week = "1W"
     case month = "1M"
-    case ytd = "YtD"
+    case threeMonth = "3M"
+    case ytd = "YTD"
     case year = "1Y"
+    case threeYear = "3Y"
     
     var id: String { rawValue }
 }

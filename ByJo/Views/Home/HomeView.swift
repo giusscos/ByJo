@@ -47,8 +47,25 @@ struct HomeView: View {
     var categoryWithLowestBalance: (CategoryOperation, Decimal) { findCategoryWithLowestBalance(categories: categories)
     }
 
+    var totalIncome: Decimal {
+        filteredData.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
+    }
+    
     var totalExpenses: Decimal {
         filteredData.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
+    }
+    
+    var incomeData: [AssetOperation] {
+        AssetOperation().filterData(for: dateRange, data: operations.filter { $0.amount > 0.0 })
+    }
+    
+    var outcomeData: [AssetOperation] {
+        AssetOperation().filterData(for: dateRange, data: operations.filter { $0.amount < 0.0 })
+    }
+    
+    var operationsData: [OperationDataType] {
+        [OperationDataType(type: "Outcome", data: outcomeData),
+         OperationDataType(type: "Income", data: incomeData)]
     }
     
     var body: some View {
@@ -70,7 +87,7 @@ struct HomeView: View {
                                 .bold()
                                 
                             if let assetsCurrency = assets.first {
-                                Text("Your total wallet balance hits ")
+                                Text("The sum of your assets hits ")
                                 + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
                                     .bold()
                                     .foregroundStyle(Color.accentColor)
@@ -110,7 +127,7 @@ struct HomeView: View {
                                 Text(categoryWithHighestBalance.0.name)
                                     .bold()
                                     .foregroundStyle(Color.accentColor)
-                                + Text(" hits ")
+                                + Text(" this month hits ")
                                 + Text(categoryWithHighestBalance.1, format: .currency(code: operation.currency.rawValue))
                                     .bold()
                                     .foregroundStyle(Color.accentColor)
@@ -141,26 +158,39 @@ struct HomeView: View {
                                 .bold()
                             
                             if let assetsCurrency = assets.first {
-                                Text("Your expenses this month hits ")
+                                Text("Your incomes this month hits ")
+                                + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
+                                    .bold()
+                                    .foregroundStyle(Color.green)
+                                
+                                Text("Your outcomes this month hits ")
                                 + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
                                     .bold()
                                     .foregroundStyle(Color.red)
                             }
-                            Chart (filteredData) { value in
-                                LineMark(
-                                    x: .value("Date", value.date),
-                                    y: .value("Amount", value.amount)
-                                )
-                                .foregroundStyle(Color.accentColor)
+                            
+                            Chart (operationsData) { operation in
+                                ForEach(operation.data) { value in
+                                    LineMark(
+                                        x: .value("Date", value.date),
+                                        y: .value("Amount", value.amount)
+                                    )
+                                }
+                                .foregroundStyle(by: .value("Type", operation.type))
+                                .symbol(by: .value("Type", operation.type))
+                                .symbolSize(30)
                             }
+                            .chartForegroundStyleScale([
+                                "Outcome": Color.red,
+                                "Income": Color.green
+                            ])
                             .formatChart()
                         }
                     }.tint(.primary)
                 }
             }
         }
-        .navigationTitle("Home")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Stats")
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
             case .assetChart:
@@ -205,6 +235,13 @@ struct HomeView: View {
         
         return minCategory ?? (CategoryOperation(name: ""), Decimal(0))
     }
+}
+    
+struct OperationDataType: Identifiable {
+    let type: String
+    let data: [AssetOperation]
+    
+    var id: String { type }
 }
 
 struct ChartFrame: ViewModifier {
