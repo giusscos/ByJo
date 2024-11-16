@@ -6,34 +6,43 @@
 //
 
 import SwiftUI
+import SwiftData
 import Charts
 
 struct AssetDetailView: View {
     @Environment(\.modelContext) var modelContext
     
     var asset: Asset
+
+    @Query(filter: #Predicate<AssetOperation> { value in
+        value.name != "" || value.amount != 0.0
+    }, sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @State var selectedOperation: AssetOperation?
-            
+    
+    var assetOperation: [AssetOperation]? {
+        operations.filter { $0.asset == asset }
+    }
+    
     var body: some View {
         NavigationStack {
-            if asset.operations == [] {
+            if assetOperation == [] {
                 ContentUnavailableView("No operations yet", systemImage: "exclamationmark", description: Text("You need to add operations to this asset to see them here."))
             } else {
-                if let operations = asset.operations {
+                if let operations = assetOperation {
                     List {
-                        Chart(operations.sorted(by: { $0.date < $1.date })) { value in
+                        Chart(operations) { value in
                             LineMark(
                                 x: .value("Date", value.date),
                                 y: .value("Amount", value.amount)
                             )
+                            .symbol(.square)
+                            .symbolSize(30)
                         }
-                        .frame(maxHeight: UIScreen.main.bounds.height / 3, alignment: .top)
-                        .aspectRatio(16/9, contentMode: .fit)
+                        .aspectRatio(1, contentMode: .fit)
                         .listRowBackground(Color.clear)
-                        .listRowInsets(.init(top: 10, leading: 0, bottom: 0, trailing: 0))
                         
-                        AssetOperationView(operations: operations.sorted(by: { $0.date > $1.date }))
+                        AssetOperationView(operations: operations)
                     }
                 }
             }

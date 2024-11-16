@@ -13,10 +13,10 @@ struct OperationRow: View {
     var body: some View {
         HStack (alignment: .center) {
             VStack (alignment: .leading, spacing: 4) {
-                Text(operation.date, format: .dateTime.day().month().year())
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                
+//                Text(operation.date, format: .dateTime.day().month().year())
+//                    .font(.caption2)
+//                    .foregroundStyle(.secondary)
+//                
                 Text(operation.name)
                     .font(.title3)
                     .fontWeight(.semibold)

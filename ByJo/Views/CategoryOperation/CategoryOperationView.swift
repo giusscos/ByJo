@@ -12,7 +12,9 @@ struct CategoryOperationView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @Query(sort: \CategoryOperation.name) var categories: [CategoryOperation]
+    @Query(filter: #Predicate<CategoryOperation> { value in
+        value.name != ""
+    }, sort: \CategoryOperation.name) var categories: [CategoryOperation]
     
     @State var selectedCategoryOperation: CategoryOperation?
     

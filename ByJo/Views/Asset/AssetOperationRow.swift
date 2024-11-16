@@ -18,9 +18,14 @@ struct AssetOperationRow: View {
                     .fontWeight(.semibold)
                     .lineLimit(1)
                 
-                Text(operation.date, format: .dateTime.day().month().year())
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                if let category = operation.category {
+                    Text(category.name)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+//                Text(operation.date, format: .dateTime.day().month().year())
+//                    .font(.caption2)
+//                    .foregroundStyle(.secondary)
             }.frame(maxWidth: .infinity, alignment: .leading)
             
             HStack {
