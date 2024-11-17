@@ -12,6 +12,10 @@ import Charts
 struct AssetChartDetailView: View {
     @Query var assets: [Asset]
     
+    var totalAmountAsset: Decimal? {
+        assets.reduce(0) { $0 + $1.calculateCurrentBalance() }
+    }
+    
     var topAsset: Asset? {
         assets.max { $0.calculateCurrentBalance() < $1.calculateCurrentBalance() }
     }
@@ -19,7 +23,7 @@ struct AssetChartDetailView: View {
     var worseAsset: Asset? {
         assets.max { $0.calculateCurrentBalance() > $1.calculateCurrentBalance() }
     }
-    
+        
     var body: some View {
         ScrollView {
             Text("Assets")
@@ -28,6 +32,17 @@ struct AssetChartDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             VStack (alignment: .leading, spacing: 0) {
+                if let totalAmount = totalAmountAsset {
+                    Text("Total balance: ")
+                    + Text(totalAmount, format: .currency(code: assets.first!.currency.rawValue))
+                        .bold()
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .font(.headline)
+            
+            VStack (alignment: .leading, spacing: 0) {
+                
                 if let asset = topAsset {
                     Text("Top asset: ")
                     + Text(asset.name)

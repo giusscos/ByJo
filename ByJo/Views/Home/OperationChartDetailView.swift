@@ -15,15 +15,15 @@ struct OperationChartDetailView: View {
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     var filteredData: [AssetOperation] {
-        AssetOperation().filterData(for: dateRange, data: operations)
+        filterData(for: dateRange, data: operations)
     }
     
     var incomeData: [AssetOperation] {
-        AssetOperation().filterData(for: dateRange, data: operations.filter { $0.amount > 0.0 })
+        filterData(for: dateRange, data: operations.filter { $0.amount > 0.0 })
     }
     
     var outcomeData: [AssetOperation] {
-        AssetOperation().filterData(for: dateRange, data: operations.filter { $0.amount < 0.0 })
+        filterData(for: dateRange, data: operations.filter { $0.amount < 0.0 })
     }
     
     var totalIncome: Decimal {
@@ -68,7 +68,7 @@ struct OperationChartDetailView: View {
             
             Chart (operationsData) { operation in
                 ForEach(operation.data) { value in
-                    LineMark(
+                    PointMark(
                         x: .value("Date", value.date),
                         y: .value("Amount", value.amount)
                     )

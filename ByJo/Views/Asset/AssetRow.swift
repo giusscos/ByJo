@@ -24,9 +24,11 @@ struct AssetRow: View {
                     .fontWeight(.semibold)
             }.frame(maxWidth: .infinity, alignment: .leading)
             
-            Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
-                .font(.title2)
-                .fontWeight(.semibold)
+            VStack (alignment: .trailing, spacing: 0) {
+                Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
         }
     }
 }

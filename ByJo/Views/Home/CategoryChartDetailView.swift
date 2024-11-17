@@ -17,13 +17,15 @@ struct CategoryChartDetailView: View {
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
 
     var filteredData: [AssetOperation] {
-        AssetOperation().filterData(for: dateRange, data: operations)
+        filterData(for: dateRange, data: operations)
     }
     
-    var categoryWithHighestBalance: (CategoryOperation, Decimal) { findCategoryWithHighestBalance(categories: categories)
+    var categoryWithHighestBalance: (CategoryOperation, Decimal) {
+        findCategoryWithHighestBalance(categories: categories)
     }
     
-    var categoryWithLowestBalance: (CategoryOperation, Decimal) { findCategoryWithLowestBalance(categories: categories)
+    var categoryWithLowestBalance: (CategoryOperation, Decimal) {
+        findCategoryWithLowestBalance(categories: categories)
     }
     
     var body: some View {

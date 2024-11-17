@@ -11,13 +11,13 @@ import SwiftData
 
 @Model
 class CategoryOperation {
-    var id: UUID = UUID()
     var name: String = ""
+    var id: UUID = UUID()
     
-    @Relationship var assetOperation: AssetOperation?
+    @Relationship var assetOperation: [AssetOperation]?
     
-    init(id: UUID = UUID(), name: String) {
-        self.id = id
+    init(name: String) {
+        self.id = UUID()
         self.name = name
     }
 }

@@ -72,6 +72,7 @@ struct EditAssetOperation: View {
                         .foregroundColor(.secondary)
                     
                     TextEditor(text: $operation.note)
+                        .frame(minHeight: 50)
                 }.padding(.vertical)
             }.frame(maxHeight: .infinity, alignment: .top)
             .listStyle(.plain)
@@ -83,6 +84,8 @@ struct EditAssetOperation: View {
                     operation.currency = asset.currency
                 }
             }
+            
+            print(operation.category?.name ?? "none")
             
             if operation.category == nil {
                 if let category = categoriesOperation.first {

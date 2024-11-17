@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State var manageSubscription: Bool = false
+//    @State var manageSubscription: Bool = false
     
     var body: some View {
         List {
             Section {
-                Button("Manage subscription") {
-                    manageSubscription.toggle()
-                }
-                
+//                Button("Manage subscription") {
+//                    manageSubscription.toggle()
+//                }
+//                
                 Link("Terms of use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
                     .font(.headline)
                     .foregroundColor(.blue)

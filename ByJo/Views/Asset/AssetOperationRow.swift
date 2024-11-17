@@ -23,9 +23,6 @@ struct AssetOperationRow: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
-//                Text(operation.date, format: .dateTime.day().month().year())
-//                    .font(.caption2)
-//                    .foregroundStyle(.secondary)
             }.frame(maxWidth: .infinity, alignment: .leading)
             
             HStack {
