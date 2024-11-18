@@ -191,6 +191,7 @@ struct HomeView: View {
             }
         }
         .navigationTitle("Stats")
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
             case .assetChart:

@@ -18,25 +18,7 @@ struct EditAssetOperation: View {
     @Query var categoriesOperation: [CategoryOperation]
     
     var body: some View {
-        VStack{
-            HStack {
-                Button (role: .destructive) {
-                    modelContext.delete(operation)
-                    
-                    dismiss()
-                } label: {
-                    Label("Delete", systemImage: "chevron.left")
-                        .labelStyle(.titleOnly)
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                
-                Button {
-                    dismiss()
-                } label: {
-                    Label("Save", systemImage: "checkmark.circle")
-                        .labelStyle(.titleOnly)
-                }.frame(maxWidth: .infinity, alignment: .trailing)
-            }.padding()
-            
+        NavigationStack {
             List {
                 TextField("Name", text: $operation.name)
                 
@@ -46,9 +28,20 @@ struct EditAssetOperation: View {
                 HStack {
                     Text("Amount: ")
                     
-                    TextField("Amount", value: $operation.amount, format: .currency(code: operation.currency.rawValue))
-                        .keyboardType(.decimalPad)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    if let asset = operation.asset {
+                        TextField("Amount", value: $operation.amount, format: .currency(code: asset.currency.rawValue))
+                            .keyboardType(.decimalPad)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                        
+                        Button {
+                            operation.amount *= -1
+                        } label: {
+                            Label("Negative Amount", systemImage: "minus")
+                                .labelStyle(.iconOnly)
+                        }
+                        .disabled(operation.amount.isNaN || operation.amount == 0.0)
+                        .padding(.leading)
+                    }
                 }
                 
                 Picker("Asset", selection: $operation.asset) {
@@ -75,8 +68,31 @@ struct EditAssetOperation: View {
                         .frame(minHeight: 50)
                 }.padding(.vertical)
             }.frame(maxHeight: .infinity, alignment: .top)
-            .listStyle(.plain)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button (role: .destructive) {
+                            modelContext.delete(operation)
+                            
+                            dismiss()
+                        } label: {
+                            Label("Delete", systemImage: "chevron.left")
+                                .labelStyle(.titleOnly)
+                        }
+                        .tint(.red)
+                    }
+    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Label("Save", systemImage: "checkmark.circle")
+                                .labelStyle(.titleOnly)
+                        }
+                        .disabled(operation.name.isEmpty)
+                    }
+                }
         }
+        .interactiveDismissDisabled(operation.name.isEmpty)
         .onAppear {
             if operation.asset == nil {
                 if let asset = assets.first {

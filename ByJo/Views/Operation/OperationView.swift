@@ -11,7 +11,6 @@ import SwiftData
 enum ActiveSheet: Identifiable {
     case editOperation(AssetOperation)
     case viewCategories
-    case editCategory(CategoryOperation)
     
     var id: String {
         switch self {
@@ -19,8 +18,6 @@ enum ActiveSheet: Identifiable {
             return "editOperation-\(operation.id)"
         case .viewCategories:
             return "viewCategories"
-        case .editCategory(let category):
-            return "editCategory-\(category.id)"
         }
     }
 }
@@ -28,9 +25,7 @@ enum ActiveSheet: Identifiable {
 struct OperationView: View {
     @Environment(\.modelContext) var modelContext
     
-    @Query(filter: #Predicate<AssetOperation> { value in
-        value.name != "" || value.amount != 0.0
-    }, sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @Query var assets: [Asset]
     
@@ -99,17 +94,11 @@ struct OperationView: View {
                     } label: {
                         Label("Add operation", systemImage: "plus")
                     }
-                                        
-                    Button {
-                        addCategoryOperation()
-                    } label: {
-                        Label("Add category", systemImage: "plus")
-                    }
-                    
+                                                            
                     Button {
                         activeSheet = .viewCategories
                     } label: {
-                        Label("View categories", systemImage: "list.bullet")
+                        Label("Categories", systemImage: "list.bullet")
                     }
                 } label: {
                     Label("Menu", systemImage: "ellipsis.circle")
@@ -122,8 +111,7 @@ struct OperationView: View {
                 EditAssetOperation(operation: operation)
             case .viewCategories:
                 CategoryOperationView()
-            case .editCategory(let category):
-                EditCategoryOperation(category: category)
+                    .presentationDragIndicator(.visible)
             }
         }
     }
@@ -135,12 +123,6 @@ struct OperationView: View {
             modelContext.insert(operation)
             activeSheet = .editOperation(operation)
         }
-    }
-    
-    func addCategoryOperation() {
-        let categoryOperation = CategoryOperation(name: "")
-        modelContext.insert(categoryOperation)
-        activeSheet = .editCategory(categoryOperation)
     }
 }
 

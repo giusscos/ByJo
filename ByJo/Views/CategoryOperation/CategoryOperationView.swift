@@ -16,24 +16,28 @@ struct CategoryOperationView: View {
         value.name != ""
     }, sort: \CategoryOperation.name) var categories: [CategoryOperation]
     
-    @State var selectedCategoryOperation: CategoryOperation?
+    @State var categoryOperation: CategoryOperation = CategoryOperation(name: "")
+    @State var showInsert: Bool = false
     
     var body: some View {
         VStack {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Label("Back", systemImage: "chevron.left")
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                
-                Button {
-                    addCategoryOperation()
-                } label: {
-                    Label("Add", systemImage: "plus")
-                        .labelStyle(.iconOnly)
-                }.frame(maxWidth: .infinity, alignment: .trailing)
-            }.padding()
+//            HStack {
+//                Button {
+//                    dismiss()
+//                } label: {
+//                    Label("Back", systemImage: "chevron.left")
+//                }.frame(maxWidth: .infinity, alignment: .leading)
+//                
+//                if showInsert {
+//                    Button {
+//                        withAnimation {
+//                            addCategory()
+//                        }
+//                    } label: {
+//                        Label("Done", systemImage: "checkmark")
+//                    }.frame(maxWidth: .infinity, alignment: .trailing)
+//                }
+//            }.padding()
             
             List {
                 if categories.isEmpty {
@@ -43,6 +47,41 @@ struct CategoryOperationView: View {
                         description: Text("You need to add a category by clicking the plus button on the top right corner")
                     )
                 } else {
+                    Section {
+                        if showInsert {
+                            HStack {
+                                TextField("Category Name", text: $categoryOperation.name)
+                                    .onSubmit {
+                                        withAnimation {
+                                            addCategory()
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Button {
+                                    withAnimation {
+                                        addCategory()
+                                    }
+                                } label: {
+                                    Label("Done", systemImage: "checkmark")
+                                        .labelStyle(.iconOnly)
+                                }
+                                .padding(.leading)
+                                .disabled(categoryOperation.name.isEmpty)
+                            }
+                        }
+                        
+                        if !showInsert {
+                            Button {
+                                withAnimation {
+                                    showInsert.toggle()
+                                }
+                            } label: {
+                                Label("Add Category", systemImage: "plus")
+                            }
+                        }
+                    }
+                    
                     Section {
                         ForEach(categories) { value in
                             Text(value.name)
@@ -54,7 +93,8 @@ struct CategoryOperationView: View {
                                     }
                                     
                                     Button {
-                                        selectedCategoryOperation = value
+                                        categoryOperation = value
+                                        showInsert.toggle()
                                     } label: {
                                         Label("Edit", systemImage: "pencil")
                                             .tint(.blue)
@@ -65,16 +105,16 @@ struct CategoryOperationView: View {
                         Text("Categories")
                     }
                 }
-            }.listStyle(.plain)                
-        }.sheet(item: $selectedCategoryOperation) { value in
-            EditCategoryOperation(category: value)
+            }
         }
     }
     
-    func addCategoryOperation() {
-        let categoryOperation = CategoryOperation(name: "")
-        selectedCategoryOperation = categoryOperation
-        modelContext.insert(categoryOperation)
+    func addCategory() {
+        if !categoryOperation.name.isEmpty {
+            modelContext.insert(categoryOperation)
+            categoryOperation = CategoryOperation(name: "")
+            showInsert.toggle()
+        }
     }
 }
 

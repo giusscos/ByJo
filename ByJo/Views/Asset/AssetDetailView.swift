@@ -18,10 +18,25 @@ struct AssetDetailView: View {
         value.name != "" || value.amount != 0.0
     }, sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
+    @State private var dateRange: DateRangeOption = .month
+    
     @State var selectedOperation: AssetOperation?
     
     var assetOperation: [AssetOperation]? {
         operations.filter { $0.asset == asset }
+    }
+    
+    var incomeData: [AssetOperation] {
+        filterData(for: dateRange, data: operations.filter { $0.amount > 0.0 })
+    }
+    
+    var outcomeData: [AssetOperation] {
+        filterData(for: dateRange, data: operations.filter { $0.amount < 0.0 })
+    }
+    
+    var operationsData: [OperationDataType] {
+        [OperationDataType(type: "Outcome", data: outcomeData),
+         OperationDataType(type: "Income", data: incomeData)]
     }
     
     var body: some View {
@@ -31,14 +46,21 @@ struct AssetDetailView: View {
             } else {
                 if let operations = assetOperation {
                     List {
-                        Chart(operations) { value in
-                            LineMark(
-                                x: .value("Date", value.date),
-                                y: .value("Amount", value.amount)
-                            )
-                            .symbol(.square)
+                        Chart (operationsData) { operation in
+                            ForEach(operation.data) { value in
+                                PointMark(
+                                    x: .value("Date", value.date),
+                                    y: .value("Amount", value.amount)
+                                )
+                            }
+                            .foregroundStyle(by: .value("Type", operation.type))
+                            .symbol(by: .value("Type", operation.type))
                             .symbolSize(30)
                         }
+                        .chartForegroundStyleScale([
+                            "Outcome": Color.red,
+                            "Income": Color.green
+                        ])
                         .aspectRatio(1, contentMode: .fit)
                         .listRowBackground(Color.clear)
                         

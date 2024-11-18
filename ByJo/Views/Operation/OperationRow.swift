@@ -38,8 +38,8 @@ struct OperationRow: View {
             .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            HStack {
-                Text(operation.amount, format: .currency(code: operation.currency.rawValue))
+            if let asset = operation.asset {
+                Text(operation.amount, format: .currency(code: asset.currency.rawValue))
                     .foregroundStyle(operation.amount > 0 ? .green : .red)
                     .font(.title2)
                     .fontWeight(.semibold)
