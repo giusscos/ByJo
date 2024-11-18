@@ -37,20 +37,25 @@ struct CategoryChartDetailView: View {
             
             VStack (alignment: .leading, spacing: 0) {
                 if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
-                    Text("Top category: ")
-                    + Text(categoryWithHighestBalance.0.name)
-                        .bold()
-                    + Text(" with ")
-                    + Text(categoryWithHighestBalance.1, format: .currency(code: operation.currency.rawValue))
-                        .bold()
+                    if let asset = operation.asset {
+                        Text("Top category: ")
+                        + Text(categoryWithHighestBalance.0.name)
+                            .bold()
+                        + Text(" with ")
+                        + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
+                            .bold()
+                    }
                 }
+                
                 if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
-                    Text("Worse asset: ")
-                    + Text(categoryWithLowestBalance.0.name)
-                        .bold()
-                    + Text(" with ")
-                    + Text(categoryWithLowestBalance.1, format: .currency(code: operation.currency.rawValue))
-                        .bold()
+                    if let asset = operation.asset {
+                        Text("Worse asset: ")
+                        + Text(categoryWithLowestBalance.0.name)
+                            .bold()
+                        + Text(" with ")
+                        + Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
+                            .bold()
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)

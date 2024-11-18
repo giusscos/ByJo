@@ -32,7 +32,23 @@ struct AssetView: View {
                         NavigationLink {
                             AssetDetailView(asset: value)
                         } label: {
-                            AssetRow(asset: value)
+                            HStack (alignment: .center) {
+                                VStack (alignment: .leading, spacing: 0) {
+                                    Text(value.name)
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .lineLimit(1)
+                                    
+                                    Text(value.type.rawValue)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .fontWeight(.semibold)
+                                }.frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Text(value.calculateCurrentBalance(), format: .currency(code: value.currency.rawValue))
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                            }
                         }
                         .swipeActions (edge: .trailing) {
                             Button (role: .destructive) {

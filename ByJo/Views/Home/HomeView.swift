@@ -9,27 +9,13 @@ import SwiftUI
 import SwiftData
 import Charts
 
-enum ActiveHomeSheet: Identifiable {
-    case assetChart
-    case categoryChart
-    case operationChart
-    
-    var id: String {
-        switch self {
-        case .assetChart: return "assetChart"
-        case .categoryChart: return "categoryChart"
-        case .operationChart: return "operationChart"
-        }
-    }
-}
-
 struct HomeView: View {
+    @Namespace private var namespace
+    
     @Query var assets: [Asset]
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
-    
-    @State private var activeSheet: ActiveHomeSheet?
     
     @State private var dateRange: DateRangeOption = .month
     
@@ -69,141 +55,138 @@ struct HomeView: View {
     }
     
     var body: some View {
-        List {
-            if assets.isEmpty {
-                ContentUnavailableView(
-                    "No Assets Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner")
-                )
-            } else {
-                Section {
-                    Button {
-                        activeSheet = .assetChart
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text("Your Assets")
-                                .font(.title)
-                                .bold()
+        NavigationStack {
+            List {
+                if assets.isEmpty {
+                    ContentUnavailableView(
+                        "No Assets Found",
+                        systemImage: "exclamationmark",
+                        description: Text("You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner")
+                    )
+                } else {
+                    Section {
+                        NavigationLink {
+                            AssetChartDetailView()
+                                .navigationTransition(.zoom(sourceID: 0, in: namespace))
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text("Assets")
+                                    .font(.title)
+                                    .bold()
+                                    
+                                if let assetsCurrency = assets.first {
+                                    Text("The sum of your assets hits ")
+                                    + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
+                                        .bold()
+                                        .foregroundStyle(Color.accentColor)
+                                }
                                 
-                            if let assetsCurrency = assets.first {
-                                Text("The sum of your assets hits ")
-                                + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
-                                    .bold()
-                                    .foregroundStyle(Color.accentColor)
-                            }
-                            
-                            Chart(assets) { value in
-                                BarMark(
-                                    x: .value("Asset", value.name),
-                                    y: .value("Amount", value.calculateCurrentBalance())
-                                )
-                                .foregroundStyle(by: .value("Asset", value.name))
-                                .cornerRadius(4)
-                            }
-                            .formatChart()
-                        }
-                    }.tint(.primary)
-                }
-            }
-            
-            if operations.isEmpty {
-                ContentUnavailableView(
-                    "No Operations Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
-                )
-            } else {
-                Section {
-                    Button {
-                        activeSheet = .categoryChart
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text("Your Cateogries")
-                                .font(.title)
-                                .bold()
-                            
-                            if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
-                                Text(categoryWithHighestBalance.0.name)
-                                    .bold()
-                                    .foregroundStyle(Color.accentColor)
-                                + Text(" this month hits ")
-                                + Text(categoryWithHighestBalance.1, format: .currency(code: operation.currency.rawValue))
-                                    .bold()
-                                    .foregroundStyle(Color.accentColor)
-                            }
-                            
-                            Chart(filteredData) { value in
-                                if let category = value.category {
+                                Chart(assets) { value in
                                     BarMark(
-                                        x: .value("Amount", value.amount),
-                                        y: .value("Category", category.name)
+                                        x: .value("Asset", value.name),
+                                        y: .value("Amount", value.calculateCurrentBalance())
                                     )
-                                    .foregroundStyle(by: .value("Category", category.name))
+                                    .foregroundStyle(by: .value("Asset", value.name))
                                     .cornerRadius(4)
                                 }
+                                .formatChart()
                             }
-                            .formatChart()
-                        }
-                    }.tint(.primary)
+                        }.tint(.primary)
+                        .matchedTransitionSource(id: 0, in: namespace)
+                    }
                 }
                 
-                Section {
-                    Button {
-                        activeSheet = .operationChart
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text("Your Operations")
-                                .font(.title)
-                                .bold()
-                            
-                            if let assetsCurrency = assets.first {
-                                Text("Your incomes this month hits ")
-                                + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
+                if operations.isEmpty {
+                    ContentUnavailableView(
+                        "No Operations Found",
+                        systemImage: "exclamationmark",
+                        description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
+                    )
+                } else {
+                    Section {
+                        NavigationLink {
+                            CategoryChartDetailView()
+                                .navigationTransition(.zoom(sourceID: 1, in: namespace))
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text("Cateogries")
+                                    .font(.title)
                                     .bold()
-                                    .foregroundStyle(Color.green)
                                 
-                                Text("Your outcomes this month hits ")
-                                + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
-                                    .bold()
-                                    .foregroundStyle(Color.red)
-                            }
-                            
-                            Chart (operationsData) { operation in
-                                ForEach(operation.data) { value in
-                                    PointMark(
-                                        x: .value("Date", value.date),
-                                        y: .value("Amount", value.amount)
-                                    )
+                                if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
+                                    if let asset = operation.asset {
+                                        Text(categoryWithHighestBalance.0.name)
+                                            .bold()
+                                            .foregroundStyle(Color.accentColor)
+                                        + Text(" this month hits ")
+                                        + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                            .bold()
+                                            .foregroundStyle(Color.accentColor)
+                                    }
                                 }
-                                .foregroundStyle(by: .value("Type", operation.type))
-                                .symbol(by: .value("Type", operation.type))
-                                .symbolSize(30)
+                                
+                                Chart(filteredData) { value in
+                                    if let category = value.category {
+                                        BarMark(
+                                            x: .value("Amount", value.amount),
+                                            y: .value("Category", category.name)
+                                        )
+                                        .foregroundStyle(by: .value("Category", category.name))
+                                        .cornerRadius(4)
+                                    }
+                                }
+                                .formatChart()
                             }
-                            .chartForegroundStyleScale([
-                                "Outcome": Color.red,
-                                "Income": Color.green
-                            ])
-                            .formatChart()
-                        }
-                    }.tint(.primary)
+                        }.tint(.primary)
+                            .matchedTransitionSource(id: 1, in: namespace)
+                    }
+                    
+                    Section {
+                        NavigationLink {
+                            OperationChartDetailView()
+                                .navigationTransition(.zoom(sourceID: 2, in: namespace))
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text("Operations")
+                                    .font(.title)
+                                    .bold()
+                                
+                                if let assetsCurrency = assets.first {
+                                    Text("Your incomes this month hits ")
+                                    + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
+                                        .bold()
+                                        .foregroundStyle(Color.green)
+                                    
+                                    Text("Your outcomes this month hits ")
+                                    + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
+                                        .bold()
+                                        .foregroundStyle(Color.red)
+                                }
+                                
+                                Chart (operationsData) { operation in
+                                    ForEach(operation.data) { value in
+                                        PointMark(
+                                            x: .value("Date", value.date),
+                                            y: .value("Amount", value.amount)
+                                        )
+                                    }
+                                    .foregroundStyle(by: .value("Type", operation.type))
+                                    .symbol(by: .value("Type", operation.type))
+                                    .symbolSize(30)
+                                }
+                                .chartForegroundStyleScale([
+                                    "Outcome": Color.red,
+                                    "Income": Color.green
+                                ])
+                                .formatChart()
+                            }
+                        }.tint(.primary)
+                            .matchedTransitionSource(id: 2, in: namespace)
+                    }
                 }
             }
-        }
-        .navigationTitle("Stats")
-        .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $activeSheet) { sheet in
-            switch sheet {
-            case .assetChart:
-                AssetChartDetailView()
-                    .presentationDragIndicator(.visible)
-            case .categoryChart:
-                CategoryChartDetailView()
-                    .presentationDragIndicator(.visible)
-            case .operationChart:
-                OperationChartDetailView()
-                    .presentationDragIndicator(.visible)
-            }
+            .navigationTitle("Stats")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     

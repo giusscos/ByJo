@@ -101,8 +101,6 @@ struct EditAssetOperation: View {
                 }
             }
             
-            print(operation.category?.name ?? "none")
-            
             if operation.category == nil {
                 if let category = categoriesOperation.first {
                     operation.category = category

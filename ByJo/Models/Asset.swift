@@ -32,7 +32,6 @@ class Asset {
     func calculateCurrentBalance() -> Decimal {
         return operations?.reduce(initialBalance) { $0 + $1.amount } ?? initialBalance
     }
-    
 }
 
 enum CurrencyCode: String, CaseIterable, Codable {
