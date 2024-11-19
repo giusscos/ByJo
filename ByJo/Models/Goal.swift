@@ -10,15 +10,14 @@ import SwiftData
 
 @Model
 class Goal {
-    var id: UUID
-    var title: String
-    var targetAmount: Double
-    var currentAmount: Double = 0
+    var id: UUID = UUID()
+    var title: String = ""
+    var targetAmount: Decimal = 0
     var dueDate: Date?
     
     @Relationship var asset: Asset?
     
-    init(title: String, targetAmount: Double, dueDate: Date? = nil, asset: Asset? = nil) {
+    init(title: String, targetAmount: Decimal, dueDate: Date? = nil, asset: Asset? = nil) {
         self.id = UUID()
         self.title = title
         self.targetAmount = targetAmount

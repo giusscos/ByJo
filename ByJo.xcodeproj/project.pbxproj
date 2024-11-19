@@ -6,13 +6,31 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		68AFBC342CEBFD190086749E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AFBC332CEBFD190086749E /* StoreKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		68A4BD172CD8E7D100614F19 /* ByJo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ByJo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68AFBC332CEBFD190086749E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		68AFBC312CEB93760086749E /* Exceptions for "ByJo" folder in "ByJo" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 68A4BD162CD8E7D100614F19 /* ByJo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		68A4BD192CD8E7D100614F19 /* ByJo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				68AFBC312CEB93760086749E /* Exceptions for "ByJo" folder in "ByJo" target */,
+			);
 			path = ByJo;
 			sourceTree = "<group>";
 		};
@@ -23,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68AFBC342CEBFD190086749E /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				68A4BD192CD8E7D100614F19 /* ByJo */,
+				68AFBC322CEBFD190086749E /* Frameworks */,
 				68A4BD182CD8E7D100614F19 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +63,14 @@
 				68A4BD172CD8E7D100614F19 /* ByJo.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		68AFBC322CEBFD190086749E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				68AFBC332CEBFD190086749E /* StoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,12 +277,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ByJo/ByJo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ByJo/Preview Content\"";
 				DEVELOPMENT_TEAM = MA7MBQ947C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ByJo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ByJo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -280,12 +310,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ByJo/ByJo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ByJo/Preview Content\"";
 				DEVELOPMENT_TEAM = MA7MBQ947C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ByJo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ByJo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
