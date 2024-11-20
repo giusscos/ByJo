@@ -44,33 +44,25 @@ struct ContentView: View {
             }
         } else {
             SubscriptionStoreView(groupID: Store().groupId) {
-                VStack {
+                VStack (spacing: 4) {
                     Image(systemName: "lock.fill")
                         .foregroundStyle(.blue)
                         .font(.largeTitle)
                     
-                    Text("Unlock App Access")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    
-                    Text("You can track your financial activities, view your assets, and operations in fantastic charts so you can be aware of your financial situation and make good decisions.")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
-                    
-                    Text("Subscribe to unlock access and start tracking your finances")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.center)
-                        .padding(.vertical)
-                    
-                    HStack {
-                        Link("Terms of use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-
-                        Link("Privacy Policy", destination: URL(string: "https://giusscos.it/privacy")!)
+                    VStack (spacing: 12) {
+                        Text("Unlock App Access")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        
+                        Text("Track your financial activities, view your assets and operations so you can be aware of your financial situation and make good decisions.")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.center)
                     }
                 }.padding()
             }
+            .subscriptionStoreButtonLabel(.multiline)
+            .storeButton(.visible, for: .restorePurchases)
         }
     }
 }

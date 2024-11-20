@@ -21,7 +21,7 @@ struct OperationDetailView: View {
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
-                Text(operation.date, format: .dateTime)
+                Text(operation.date, format: .dateTime.day().month().year())
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 

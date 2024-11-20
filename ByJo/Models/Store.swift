@@ -144,7 +144,9 @@ class Store {
     private var subscriptionGroupStatus: RenewalState?
     
     private let productIds: [String] = ["bj_4999_1y_v1", "bj_499_1m"]
+//    private let productIds: [String] = ["bj_499_1m"] // test
     let groupId: String = "21584181"
+//    let groupId: String = "0C83600A" // test
     
     var updateListenerTask : Task<Void, Error>? = nil
     

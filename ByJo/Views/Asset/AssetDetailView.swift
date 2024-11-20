@@ -14,9 +14,7 @@ struct AssetDetailView: View {
     
     var asset: Asset
 
-    @Query(filter: #Predicate<AssetOperation> { value in
-        value.name != "" || value.amount != 0.0
-    }, sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @State private var dateRange: DateRangeOption = .month
     
@@ -27,11 +25,19 @@ struct AssetDetailView: View {
     }
     
     var incomeData: [AssetOperation] {
-        filterData(for: dateRange, data: operations.filter { $0.amount > 0.0 })
+        if let operationsAsset = assetOperation {
+            return filterData(for: dateRange, data: operationsAsset.filter { $0.amount > 0.0 })
+        } else {
+            return []
+        }
     }
     
     var outcomeData: [AssetOperation] {
-        filterData(for: dateRange, data: operations.filter { $0.amount < 0.0 })
+        if let operationsAsset = assetOperation {
+            return filterData(for: dateRange, data: operationsAsset.filter { $0.amount < 0.0 })
+        } else {
+            return []
+        }
     }
     
     var operationsData: [OperationDataType] {
@@ -46,6 +52,14 @@ struct AssetDetailView: View {
             } else {
                 if let operations = assetOperation {
                     List {
+                        Picker("Date Range", selection: $dateRange.animation()) {
+                            ForEach(DateRangeOption.allCases) { range in
+                                Text(range.rawValue).tag(range)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .listRowBackground(Color.clear)
+                        
                         Chart (operationsData) { operation in
                             ForEach(operation.data) { value in
                                 PointMark(
@@ -63,6 +77,7 @@ struct AssetDetailView: View {
                         ])
                         .aspectRatio(1, contentMode: .fit)
                         .listRowBackground(Color.clear)
+                        
                         
                         AssetOperationView(operations: operations)
                     }

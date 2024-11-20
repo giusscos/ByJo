@@ -20,7 +20,7 @@
     "_applicationInternalID" : "6738330716",
     "_developerTeamID" : "MA7MBQ947C",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 753714117.96970296,
+    "_lastSynchronizedDate" : 753805293.45208097,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -72,76 +72,7 @@
     ]
   },
   "subscriptionGroups" : [
-    {
-      "id" : "21584181",
-      "localizations" : [
 
-      ],
-      "name" : "ByJo Pro access",
-      "subscriptions" : [
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "49.99",
-          "familyShareable" : false,
-          "groupNumber" : 2,
-          "internalID" : "6738363154",
-          "introductoryOffer" : null,
-          "localizations" : [
-            {
-              "description" : "Be aware of your financial data",
-              "displayName" : "Annual Pro Access",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "bj_4999_1y_v1",
-          "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "ByJo Annual $49.99",
-          "subscriptionGroupID" : "21584181",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
-        },
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "4.99",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "6738356827",
-          "introductoryOffer" : {
-            "internalID" : "F1CE29C4",
-            "numberOfPeriods" : 1,
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
-          },
-          "localizations" : [
-            {
-              "description" : "Be aware of your financial data",
-              "displayName" : "Monthly Pro Access",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "bj_499_1m",
-          "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "ByJo Monthly $4.99",
-          "subscriptionGroupID" : "21584181",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
-        }
-      ]
-    }
   ],
   "version" : {
     "major" : 4,
