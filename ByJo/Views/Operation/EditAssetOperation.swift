@@ -36,7 +36,7 @@ struct EditAssetOperation: View {
                         Button {
                             operation.amount *= -1
                         } label: {
-                            Label("Negative Amount", systemImage: "minus")
+                            Label(operation.amount > 0 ? "Negative Amount" : "Positive Amount", systemImage: operation.amount > 0 ? "minus.circle" : "plus.circle")
                                 .labelStyle(.iconOnly)
                         }
                         .disabled(operation.amount.isNaN || operation.amount == 0.0)
