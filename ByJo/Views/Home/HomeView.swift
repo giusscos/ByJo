@@ -10,14 +10,19 @@ import SwiftData
 import Charts
 
 struct HomeView: View {
+    @Environment(\.modelContext) var modelContext
+    
     @Namespace private var namespace
     
     @Query var assets: [Asset]
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    @Query var goals: [Goal]
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     @State private var dateRange: DateRangeOption = .month
+    
+    @State private var selectedGoal: Goal?
     
     var filteredData: [AssetOperation] {
         filterData(for: dateRange, data: operations)
@@ -57,6 +62,78 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                Button {
+                    addGoal()
+                } label: {
+                    Label("Add goal", systemImage: "plus")
+                }
+                
+                if !goals.isEmpty {
+                    Section {
+                        ScrollView(.horizontal) {
+                            HStack (spacing: 24) {
+                                ForEach(goals) { goal in
+                                    VStack(alignment: .leading) {
+                                        if !goal.title.isEmpty {
+                                            Text(goal.title)
+                                                .font(.title)
+                                                .bold()
+                                        }
+                                    
+                                        if let asset = goal.asset {
+                                            Text(asset.name)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                            
+                                            HStack {
+                                                Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
+                                                    .font(.headline)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                
+                                                Text(goal.targetAmount, format: .currency(code: asset.currency.rawValue))
+                                                    .font(.headline)
+                                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                            }
+                                            .padding(.top, 8)
+                                            
+//                                            ProgressView (value: 0.2) {
+//                                                HStack {
+//                                                    Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
+//                                                        .font(.headline)
+//                                                        .frame(maxWidth: .infinity, alignment: .leading)
+//
+//                                                    Text(goal.targetAmount, format: .currency(code: asset.currency.rawValue))
+//                                                        .font(.headline)
+//                                                        .frame(maxWidth: .infinity, alignment: .trailing)
+//                                                }
+//                                            }
+//                                            .progressViewStyle(.linear)
+//                                            .padding(.top, 8)
+                                        }
+                                    }
+                                    .onTapGesture {
+                                        selectedGoal = goal
+                                    }
+                                    .padding()
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    .containerRelativeFrame(.horizontal)
+                                    .scrollTransition(axis: .horizontal) { content, phase in
+                                        content
+                                            .blur(radius: phase.isIdentity ? 0 : 2)
+                                            .offset(x: phase.value * -100)
+                                            .scaleEffect(phase.isIdentity ? 1 : 0.7)
+                                            .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
+                                    }
+                                }
+                            }.scrollTargetLayout()
+                        }
+                        .scrollIndicators(.hidden)
+                        .scrollTargetBehavior(.viewAligned)
+                    }
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowBackground(Color.clear)
+                }
+                
                 if assets.isEmpty {
                     ContentUnavailableView(
                         "No Assets Found",
@@ -187,6 +264,9 @@ struct HomeView: View {
             }
             .navigationTitle("Stats")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $selectedGoal) { item in
+                EditGoal(goal: item)
+            }
         }
     }
     
@@ -218,6 +298,12 @@ struct HomeView: View {
         let minCategory = categoryBalances.min { $0.1 < $1.1 }
         
         return minCategory ?? (CategoryOperation(name: ""), Decimal(0))
+    }
+    
+    func addGoal() {
+        let goal = Goal(title: "", targetAmount: 0)
+        selectedGoal = goal
+        modelContext.insert(goal)
     }
 }
     

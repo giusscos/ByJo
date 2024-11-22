@@ -14,8 +14,13 @@ class Goal {
     var title: String = ""
     var targetAmount: Decimal = 0
     var dueDate: Date?
+    var completed: Bool = false
     
     @Relationship var asset: Asset?
+    
+    var progress: Decimal {
+        targetAmount / (asset?.calculateCurrentBalance() ?? 0)
+    }
     
     init(title: String, targetAmount: Decimal, dueDate: Date? = nil, asset: Asset? = nil) {
         self.id = UUID()
