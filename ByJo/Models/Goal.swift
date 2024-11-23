@@ -22,6 +22,12 @@ class Goal {
         targetAmount / (asset?.calculateCurrentBalance() ?? 0)
     }
     
+    var isExpired: Bool {
+        if let date = dueDate {
+            return Date() > date
+        } else { return false }
+    }
+    
     init(title: String, targetAmount: Decimal, dueDate: Date? = nil, asset: Asset? = nil) {
         self.id = UUID()
         self.title = title

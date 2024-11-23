@@ -76,8 +76,10 @@ struct EditGoal:View {
                     Button {
                         if isWithDueDate {
                             goal.dueDate = date
+                        } else {
+                            goal.dueDate = nil
                         }
-                        
+
                         dismiss()
                     } label: {
                         Label("Save", systemImage: "checkmark")
@@ -92,6 +94,11 @@ struct EditGoal:View {
                 if let asset = assets.first {
                     goal.asset = asset
                 }
+            }
+            
+            if let goalDate = goal.dueDate {
+                isWithDueDate = true
+                date = goalDate
             }
         }
     }
