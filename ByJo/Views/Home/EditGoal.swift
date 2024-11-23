@@ -47,14 +47,10 @@ struct EditGoal:View {
                     }
                 }
                 
-                Button {
-                    withAnimation {
-                        isWithDueDate.toggle()
-                    }
-                } label: {
-                    Label(!isWithDueDate ? "Add due date (optional)" : "Remove due date (optional)", systemImage: !isWithDueDate ? "plus" : "minus")
-                }
+                Toggle("Pin goal", isOn: $goal.isPinned)
                 
+                Toggle("Due date", isOn: $isWithDueDate.animation())
+                                
                 if isWithDueDate {
                     DatePicker("Due date", selection: $date, displayedComponents: .date)
                         .datePickerStyle(.compact)

@@ -16,7 +16,9 @@ struct HomeView: View {
     
     @Query var assets: [Asset]
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
-    @Query(sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
+    @Query(filter: #Predicate<Goal> { value in
+        value.isPinned
+    }, sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
@@ -66,81 +68,28 @@ struct HomeView: View {
             List {
                 if !goals.isEmpty {
                     Section {
-                        VStack {
-                            ScrollView(.horizontal) {
-                                HStack (spacing: 24) {
-                                    ForEach(goals) { goal in
-                                        if !goal.isExpired {
-                                            VStack(alignment: .leading) {
-                                                HStack {
-                                                    if !goal.title.isEmpty {
-                                                        Text(goal.title)
-                                                            .font(.title)
-                                                            .bold()
-                                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                                    }
-                                                    
-                                                    if let dueDate = goal.dueDate {
-                                                        HStack (spacing: 4){
-                                                            Text("Due date: ")
-                                                            
-                                                            Text(dueDate, format: .dateTime.day().month().year())
-                                                        }
-                                                        .foregroundStyle(.secondary)
-                                                        .font(.caption)
-                                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                                    }
-                                                }
-                                                
-                                                if let asset = goal.asset {
-                                                    Text(asset.name)
-                                                        .font(.subheadline)
-                                                        .foregroundColor(.secondary)
-                                                    
-                                                    HStack {
-                                                        VStack (alignment: .leading) {
-                                                            Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
-                                                                .font(.headline)
-                                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                            
-                                                            Text("Current ☝️")
-                                                                .font(.caption)
-                                                                .foregroundStyle(.secondary)
-                                                        }
-                                                        
-                                                        VStack (alignment: .trailing) {
-                                                            Text(goal.targetAmount, format: .currency(code: asset.currency.rawValue))
-                                                                .font(.headline)
-                                                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                                            
-                                                            Text("☝️ Target")
-                                                                .font(.caption)
-                                                                .foregroundStyle(.secondary)
-                                                        }
-                                                    }
-                                                    .padding(.top, 8)
-                                                }
-                                            }
-                                            .onTapGesture {
-                                                if goal.isExpired { return }
-                                                
-                                                selectedGoal = goal
-                                            }
-                                            .containerRelativeFrame(.horizontal)
-                                            .scrollTransition(axis: .horizontal) { content, phase in
-                                                content
-                                                    .blur(radius: phase.isIdentity ? 0 : 2)
-                                                    .offset(x: phase.value * -100)
-                                                    .scaleEffect(phase.isIdentity ? 1 : 0.7)
-                                                    .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
-                                            }
+                        ScrollView(.horizontal) {
+                            HStack (spacing: 24) {
+                                ForEach(goals) { goal in
+                                    GoalRow(goal: goal)
+                                        .onTapGesture {
+                                            selectedGoal = goal
                                         }
-                                    }
-                                }.scrollTargetLayout()
-                            }
-                            .scrollIndicators(.hidden)
-                            .scrollTargetBehavior(.viewAligned)
+                                        .containerRelativeFrame(.horizontal)
+                                        .scrollTransition(axis: .horizontal) { content, phase in
+                                            content
+                                                .blur(radius: phase.isIdentity ? 0 : 2)
+                                                .offset(x: phase.value * -100)
+                                                .scaleEffect(phase.isIdentity ? 1 : 0.7)
+                                                .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
+                                        }
+                                }
+                            }.scrollTargetLayout()
                         }
+                        .scrollIndicators(.hidden)
+                        .scrollTargetBehavior(.viewAligned)
+                    } header: {
+                        Text("Pinned goal")
                     }
                 }
                 

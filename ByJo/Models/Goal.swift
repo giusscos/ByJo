@@ -14,13 +14,10 @@ class Goal {
     var title: String = ""
     var targetAmount: Decimal = 0
     var dueDate: Date?
-    var completed: Bool = false
+    var isPinned: Bool = false
+    var isCompleted: Bool = false
     
     @Relationship var asset: Asset?
-    
-    var progress: Decimal {
-        targetAmount / (asset?.calculateCurrentBalance() ?? 0)
-    }
     
     var isExpired: Bool {
         if let date = dueDate {
