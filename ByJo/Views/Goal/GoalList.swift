@@ -17,23 +17,40 @@ struct GoalList: View {
     
     var body: some View {
         List {
-            ForEach (goals) { goal in
-                Section {
-                    GoalRow(goal: goal)
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                modelContext.delete(goal)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+            if goals.isEmpty {
+                ContentUnavailableView(
+                    "No Goals Found",
+                    systemImage: "exclamationmark",
+                    description: Text("You need to add a goal tapping the plus button on the top right corner")
+                )
+            } else {
+                ForEach (goals) { goal in
+                    Section {
+                        GoalRow(goal: goal)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    modelContext.delete(goal)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                
+                                Button {
+                                    selectedGaol = goal
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.blue)
                             }
-                            
-                            Button {
-                                selectedGaol = goal
-                            } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }
-                            .tint(.blue)
-                        }
+                    }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    selectedGaol = Goal(title: "", targetAmount: 0)
+                }) {
+                    Label("Add Goal", systemImage: "plus")
                 }
             }
         }

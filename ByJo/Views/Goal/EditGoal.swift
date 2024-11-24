@@ -89,6 +89,7 @@ struct EditGoal:View {
             if goal.asset == nil {
                 if let asset = assets.first {
                     goal.asset = asset
+                    goal.targetAmount = asset.calculateCurrentBalance()
                 }
             }
             
