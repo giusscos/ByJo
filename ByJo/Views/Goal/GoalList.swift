@@ -13,7 +13,7 @@ struct GoalList: View {
     
     @Query(sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
     
-    @State var selectedGaol: Goal?
+    @State var selectedGoal: Goal?
     
     var body: some View {
         List {
@@ -35,7 +35,7 @@ struct GoalList: View {
                                 }
                                 
                                 Button {
-                                    selectedGaol = goal
+                                    selectedGoal = goal
                                 } label: {
                                     Label("Edit", systemImage: "pencil")
                                 }
@@ -48,15 +48,21 @@ struct GoalList: View {
         .toolbar {
             ToolbarItem {
                 Button(action: {
-                    selectedGaol = Goal(title: "", targetAmount: 0)
+                    addGoal()
                 }) {
                     Label("Add Goal", systemImage: "plus")
                 }
             }
         }
-        .sheet(item: $selectedGaol) { goal in
+        .sheet(item: $selectedGoal) { goal in
             EditGoal(goal: goal)
         }
+    }
+    
+    func addGoal() {
+        let goal = Goal(title: "", targetAmount: 0)
+        selectedGoal = goal
+        modelContext.insert(goal)
     }
 }
 
