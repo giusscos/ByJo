@@ -11,6 +11,28 @@ import StoreKit
 
 struct ContentView: View {
     @State var store = Store()
+    @State private var currentIndex: Int = 0
+    @State private var timer: Timer? = nil
+    
+    private let contentData = [
+        (
+            title: "Unlock App Access",
+            description: "Set goals to achieve and enhance your performance",
+            imageName: "Goal"
+        ),
+        (
+            title: "Unlock App Access",
+            description: "View fantastic charts to track your progress and view your results more easily",
+            imageName: "Charts"
+        ),
+        (
+            title: "Unlock App Access",
+            description: "View, filter and manage your asset operations",
+            imageName: "Operations"
+        )
+    ]
+    
+    private let slideInterval: TimeInterval = 7
     
     var body: some View {
         if !store.purchasedSubscriptions.isEmpty {
@@ -44,26 +66,53 @@ struct ContentView: View {
             }
         } else {
             SubscriptionStoreView(groupID: Store().groupId) {
-                VStack (spacing: 4) {
-                    Image(systemName: "lock.fill")
-                        .foregroundStyle(.blue)
-                        .font(.largeTitle)
+                VStack(spacing: 12) {
+                    Spacer()
                     
-                    VStack (spacing: 12) {
-                        Text("Unlock App Access")
-                            .font(.title)
-                            .fontWeight(.bold)
-                        
-                        Text("Track your financial activities, view your assets and operations so you can be aware of your financial situation and make good decisions.")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .multilineTextAlignment(.center)
-                    }
-                }.padding()
+                    Text(contentData[currentIndex].title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Text(contentData[currentIndex].description)
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                    
+                    Spacer()
+                    
+                    Image(contentData[currentIndex].imageName)
+                        .resizable()
+                        .scaledToFit()
+                    
+                    Text("\(currentIndex + 1)/\(contentData.count)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .animation(.easeInOut, value: currentIndex)
             }
+            .subscriptionStoreControlStyle(.compactPicker, placement: .bottomBar)
             .subscriptionStoreButtonLabel(.multiline)
             .storeButton(.visible, for: .restorePurchases)
+            .onAppear {
+                startTimer()
+            }
+            .onDisappear {
+                stopTimer()
+            }
         }
+    }
+    
+    func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: slideInterval, repeats: true) { _ in
+            currentIndex = currentIndex + 1
+            if currentIndex > contentData.count - 1 {
+                currentIndex = 0
+            }
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 

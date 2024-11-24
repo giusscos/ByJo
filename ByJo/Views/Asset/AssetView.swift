@@ -14,10 +14,22 @@ struct AssetView: View {
     
     @Query var assets: [Asset]
     
-    @State var selectedAsset: Asset?
+    @State var activeSheet: SheetType? = nil
+    
+    enum SheetType: Identifiable {
+        case editAsset(Asset)
+        case editGoal(Goal)
         
-    @State var calculateOperations: Bool = false
-
+        var id: String {
+            switch self {
+            case .editAsset(let asset):
+                return "editAsset_\(asset.id)"
+            case .editGoal(let goal):
+                return "editGoal_\(goal.id)"
+            }
+        }
+    }
+    
     var body: some View {
         List {
             if assets.isEmpty {
@@ -26,7 +38,7 @@ struct AssetView: View {
                     systemImage: "exclamationmark",
                     description: Text("You need to add an asset by clicking the plus button on the top right corner")
                 )
-            } else {                
+            } else {
                 Section {
                     ForEach(assets) { value in
                         NavigationLink {
@@ -58,7 +70,7 @@ struct AssetView: View {
                             }
                             
                             Button {
-                                selectedAsset = value
+                                activeSheet = .editAsset(value)
                             } label: {
                                 Label("Edit", systemImage: "pencil")
                             }.tint(.blue)
@@ -71,23 +83,49 @@ struct AssetView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    addAsset()
+                Menu {
+                    Button {
+                        addAsset()
+                    } label: {
+                        Label("Add asset", systemImage: "plus")
+                    }
+                    
+                    Button {
+                        addGoal()
+                    } label: {
+                        Label("Add goal", systemImage: "plus")
+                    }
+                    
+                    NavigationLink {
+                        GoalList()
+                    } label: {
+                        Label("Goals", systemImage: "list.bullet")
+                    }
                 } label: {
-                    Label("Add asset", systemImage: "plus")
+                    Label("Menu", systemImage: "ellipsis.circle")
                 }
             }
         }
-        .sheet(item: $selectedAsset) { value in
-            EditAsset(asset: value)
-                .presentationDragIndicator(.visible)
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .editAsset(let asset):
+                EditAsset(asset: asset)
+            case .editGoal(let goal):
+                EditGoal(goal: goal)
+            }
         }
     }
     
     func addAsset() {
         let asset = Asset(name: "", type: .cash, initialBalance: 0)
-        selectedAsset = asset
+        activeSheet = .editAsset(asset)
         modelContext.insert(asset)
+    }
+    
+    func addGoal() {
+        let goal = Goal(title: "", targetAmount: 0)
+        activeSheet = .editGoal(goal)
+        modelContext.insert(goal)
     }
 }
 

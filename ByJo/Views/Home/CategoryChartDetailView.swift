@@ -49,7 +49,7 @@ struct CategoryChartDetailView: View {
                 
                 if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
                     if let asset = operation.asset {
-                        Text("Worse asset: ")
+                        Text("Worse category: ")
                         + Text(categoryWithLowestBalance.0.name)
                             .bold()
                         + Text(" with ")
