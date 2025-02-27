@@ -11,8 +11,8 @@ import Charts
 
 struct OperationChartDetailView: View {
     @State private var dateRange: DateRangeOption = .month
-    
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    @Query var assets: [Asset]
     
     var filteredData: [AssetOperation] {
         filterData(for: dateRange, data: operations)
@@ -46,47 +46,85 @@ struct OperationChartDetailView: View {
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
-            VStack (alignment: .leading, spacing: 0) {
-                Text("Total Income: ")
-                + Text(totalIncome, format: .currency(code: filteredData.first!.currency.rawValue))
-                    .bold()
-                
-                Text("Total Outcome: ")
-                + Text(totalOutcome, format: .currency(code: filteredData.first!.currency.rawValue))
-                    .bold()
-            }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            
-            Picker("Date Range", selection: $dateRange.animation()) {
-                ForEach(DateRangeOption.allCases) { range in
-                    Text(range.rawValue).tag(range)
+            if operations.isEmpty {
+                ContentUnavailableView(
+                    "No Operations Found",
+                    systemImage: "exclamationmark",
+                    description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
+                )
+            } else {
+                VStack(alignment: .leading, spacing: 16) {
+                    if let currency = assets.first?.currency {
+                        VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Total Income")
+                                    .foregroundStyle(.secondary)
+                                Text(totalIncome, format: .currency(code: currency.rawValue))
+                                    .font(.title3)
+                                    .bold()
+                                    .foregroundStyle(Color.green)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Total Outcome")
+                                    .foregroundStyle(.secondary)
+                                Text(totalOutcome, format: .currency(code: currency.rawValue))
+                                    .font(.title3)
+                                    .bold()
+                                    .foregroundStyle(Color.red)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                        
+                        Picker("Date Range", selection: $dateRange.animation()) {
+                            ForEach(DateRangeOption.allCases) { range in
+                                Text(range.rawValue).tag(range)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        
+                        if !filteredData.isEmpty {
+                            Chart(operationsData) { operation in
+                                ForEach(operation.data) { value in
+                                    LineMark(
+                                        x: .value("Date", value.date),
+                                        y: .value("Amount", value.amount)
+                                    )
+                                    .foregroundStyle(by: .value("Type", operation.type))
+                                    
+                                    PointMark(
+                                        x: .value("Date", value.date),
+                                        y: .value("Amount", value.amount)
+                                    )
+                                    .foregroundStyle(by: .value("Type", operation.type))
+                                }
+                            }
+                            .chartForegroundStyleScale([
+                                "Outcome": Color.red,
+                                "Income": Color.green
+                            ])
+                            .chartYScale(domain: (totalOutcome * 2.5)...(totalIncome * 1.5))
+                            .chartLegend(.visible)
+                            .chartYAxis {
+                                AxisMarks(position: .leading)
+                            }
+                            .frame(height: 300)
+                        } else {
+                            ContentUnavailableView(
+                                "No Data for Selected Range",
+                                systemImage: "chart.line.downtrend.xyaxis",
+                                description: Text("Try selecting a different date range or add new operations")
+                            )
+                            .frame(height: 300)
+                        }
+                    }
                 }
+                .padding(.top)
             }
-            .pickerStyle(.segmented)
-            
-            Chart (operationsData) { operation in
-                ForEach(operation.data) { value in
-                    PointMark(
-                        x: .value("Date", value.date),
-                        y: .value("Amount", value.amount)
-                    )
-                }
-                .foregroundStyle(by: .value("Type", operation.type))
-                .symbol(by: .value("Type", operation.type))
-                .symbolSize(30)
-            }
-            .chartForegroundStyleScale([
-                "Outcome": Color.red,
-                "Income": Color.green
-            ])
-            .chartYScale(domain: (totalOutcome * 2.5)...(totalIncome * 1.5))
-            .aspectRatio(1, contentMode: .fit)
-        }.padding()
+        }
+        .padding()
     }
 }
-
 
 #Preview {
     OperationChartDetailView()

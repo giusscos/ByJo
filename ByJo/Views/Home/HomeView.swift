@@ -23,10 +23,9 @@ struct HomeView: View {
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     @State private var dateRange: DateRangeOption = .month
-    
     @State private var selectedGoal: Goal?
-    
-    @State private var indexGoal: Goal?
+    @State private var selectedAsset: Asset?
+    @AppStorage("showingChartLabels") private var showingChartLabels = true
     
     var filteredData: [AssetOperation] {
         filterData(for: dateRange, data: operations)
@@ -36,10 +35,12 @@ struct HomeView: View {
         assets.reduce(0) { $0 + $1.calculateCurrentBalance() }
     }
     
-    var categoryWithHighestBalance: (CategoryOperation, Decimal) { findCategoryWithHighestBalance(categories: categories)
+    var categoryWithHighestBalance: (CategoryOperation, Decimal) {
+        findCategoryWithHighestBalance(categories: categories)
     }
     
-    var categoryWithLowestBalance: (CategoryOperation, Decimal) { findCategoryWithLowestBalance(categories: categories)
+    var categoryWithLowestBalance: (CategoryOperation, Decimal) {
+        findCategoryWithLowestBalance(categories: categories)
     }
 
     var totalIncome: Decimal {
@@ -89,7 +90,8 @@ struct HomeView: View {
                         .scrollIndicators(.hidden)
                         .scrollTargetBehavior(.viewAligned)
                     } header: {
-                        Text("Pinned goal")
+                        Text("Pinned Goals")
+                            .font(.headline)
                     }
                 }
                 
@@ -105,16 +107,20 @@ struct HomeView: View {
                             AssetChartDetailView()
                                 .navigationTransition(.zoom(sourceID: 0, in: namespace))
                         } label: {
-                            VStack(alignment: .leading) {
-                                Text("Assets")
-                                    .font(.title)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Assets Overview")
+                                    .font(.title2)
                                     .bold()
                                     
                                 if let assetsCurrency = assets.first {
-                                    Text("The sum of your assets hits ")
-                                    + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.accentColor)
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Total Balance")
+                                            .foregroundStyle(.secondary)
+                                        Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
+                                            .font(.title3)
+                                            .bold()
+                                            .foregroundStyle(Color.accentColor)
+                                    }
                                 }
                                 
                                 Chart(assets) { value in
@@ -123,9 +129,13 @@ struct HomeView: View {
                                         y: .value("Amount", value.calculateCurrentBalance())
                                     )
                                     .foregroundStyle(by: .value("Asset", value.name))
-                                    .cornerRadius(4)
+                                    .cornerRadius(8)
                                 }
-                                .formatChart()
+                                .chartLegend(showingChartLabels ? .visible : .hidden)
+                                .chartYAxis(.hidden)
+                                .chartXAxis(.hidden)
+                                .frame(height: 200)
+                                .padding(.vertical, 8)
                             }
                         }.tint(.primary)
                         .matchedTransitionSource(id: 0, in: namespace)
@@ -140,38 +150,65 @@ struct HomeView: View {
                     )
                 } else {
                     Section {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Picker("Date Range", selection: $dateRange.animation()) {
+                                ForEach(DateRangeOption.allCases) { range in
+                                    Text(range.rawValue).tag(range)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                        }
+                    }
+                    
+                    Section {
                         NavigationLink {
                             CategoryChartDetailView()
                                 .navigationTransition(.zoom(sourceID: 1, in: namespace))
                         } label: {
-                            VStack(alignment: .leading) {
-                                Text("Cateogries")
-                                    .font(.title)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Categories Overview")
+                                    .font(.title2)
                                     .bold()
                                 
                                 if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
                                     if let asset = operation.asset {
-                                        Text(categoryWithHighestBalance.0.name)
-                                            .bold()
-                                            .foregroundStyle(Color.accentColor)
-                                        + Text(" this month hits ")
-                                        + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
-                                            .bold()
-                                            .foregroundStyle(Color.accentColor)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Top Category")
+                                                .foregroundStyle(.secondary)
+                                            HStack {
+                                                Text(categoryWithHighestBalance.0.name)
+                                                    .bold()
+                                                Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                                    .bold()
+                                                    .foregroundStyle(Color.accentColor)
+                                            }
+                                        }
                                     }
                                 }
                                 
-                                Chart(filteredData) { value in
-                                    if let category = value.category {
-                                        BarMark(
-                                            x: .value("Amount", value.amount),
-                                            y: .value("Category", category.name)
-                                        )
-                                        .foregroundStyle(by: .value("Category", category.name))
-                                        .cornerRadius(4)
+                                if !filteredData.isEmpty {
+                                    Chart(filteredData) { value in
+                                        if let category = value.category {
+                                            BarMark(
+                                                x: .value("Amount", value.amount),
+                                                y: .value("Category", category.name)
+                                            )
+                                            .foregroundStyle(by: .value("Category", category.name))
+                                            .cornerRadius(8)
+                                        }
                                     }
+                                    .chartLegend(showingChartLabels ? .visible : .hidden)
+                                    .chartYAxis(.hidden)
+                                    .chartXAxis(.hidden)
+                                    .frame(height: 200)
+                                    .padding(.vertical, 8)
+                                } else {
+                                    ContentUnavailableView(
+                                        "No Data for Selected Range",
+                                        systemImage: "calendar.badge.exclamationmark",
+                                        description: Text("Try selecting a different date range or add new operations")
+                                    )
                                 }
-                                .formatChart()
                             }
                         }.tint(.primary)
                             .matchedTransitionSource(id: 1, in: namespace)
@@ -182,39 +219,65 @@ struct HomeView: View {
                             OperationChartDetailView()
                                 .navigationTransition(.zoom(sourceID: 2, in: namespace))
                         } label: {
-                            VStack(alignment: .leading) {
-                                Text("Operations")
-                                    .font(.title)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Operations Overview")
+                                    .font(.title2)
                                     .bold()
                                 
                                 if let assetsCurrency = assets.first {
-                                    Text("Your incomes this month hits ")
-                                    + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.green)
-                                    
-                                    Text("Your outcomes this month hits ")
-                                    + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.red)
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Income")
+                                                .foregroundStyle(.secondary)
+                                            Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
+                                                .font(.title3)
+                                                .bold()
+                                                .foregroundStyle(Color.green)
+                                        }
+                                        
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Expenses")
+                                                .foregroundStyle(.secondary)
+                                            Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
+                                                .font(.title3)
+                                                .bold()
+                                                .foregroundStyle(Color.red)
+                                        }
+                                    }
                                 }
                                 
-                                Chart (operationsData) { operation in
-                                    ForEach(operation.data) { value in
-                                        PointMark(
-                                            x: .value("Date", value.date),
-                                            y: .value("Amount", value.amount)
-                                        )
+                                if !filteredData.isEmpty {
+                                    Chart(operationsData) { operation in
+                                        ForEach(operation.data) { value in
+                                            LineMark(
+                                                x: .value("Date", value.date),
+                                                y: .value("Amount", value.amount)
+                                            )
+                                            .foregroundStyle(by: .value("Type", operation.type))
+                                            
+                                            PointMark(
+                                                x: .value("Date", value.date),
+                                                y: .value("Amount", value.amount)
+                                            )
+                                            .foregroundStyle(by: .value("Type", operation.type))
+                                        }
                                     }
-                                    .foregroundStyle(by: .value("Type", operation.type))
-                                    .symbol(by: .value("Type", operation.type))
-                                    .symbolSize(30)
+                                    .chartForegroundStyleScale([
+                                        "Outcome": Color.red,
+                                        "Income": Color.green
+                                    ])
+                                    .chartLegend(showingChartLabels ? .visible : .hidden)
+                                    .chartYAxis(.hidden)
+                                    .chartXAxis(.hidden)
+                                    .frame(height: 200)
+                                    .padding(.vertical, 8)
+                                } else {
+                                    ContentUnavailableView(
+                                        "No Data for Selected Range",
+                                        systemImage: "calendar.badge.exclamationmark",
+                                        description: Text("Try selecting a different date range or add new operations")
+                                    )
                                 }
-                                .chartForegroundStyleScale([
-                                    "Outcome": Color.red,
-                                    "Income": Color.green
-                                ])
-                                .formatChart()
                             }
                         }.tint(.primary)
                             .matchedTransitionSource(id: 2, in: namespace)
@@ -235,7 +298,17 @@ struct HomeView: View {
                         NavigationLink {
                             GoalList()
                         } label: {
-                            Label("Gaols", systemImage: "list.bullet")
+                            Label("Goals", systemImage: "list.bullet")
+                        }
+                        
+                        Button {
+                            withAnimation(.spring()) {
+                                showingChartLabels.toggle()
+                            }
+
+                        } label: {
+                            Label(showingChartLabels ? "Hide Chart Labels" : "Show Chart Labels",
+                                  systemImage: showingChartLabels ? "eye.slash" : "eye")
                         }
                     } label: {
                         Label("Menu", systemImage: "ellipsis.circle")

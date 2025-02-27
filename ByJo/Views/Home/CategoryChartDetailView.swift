@@ -35,52 +35,86 @@ struct CategoryChartDetailView: View {
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
-            VStack (alignment: .leading, spacing: 0) {
-                if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
-                    if let asset = operation.asset {
-                        Text("Top category: ")
-                        + Text(categoryWithHighestBalance.0.name)
-                            .bold()
-                        + Text(" with ")
-                        + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
-                            .bold()
+            if operations.isEmpty {
+                ContentUnavailableView(
+                    "No Operations Found",
+                    systemImage: "exclamationmark",
+                    description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
+                )
+            } else {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
+                            if let asset = operation.asset {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Top Category")
+                                        .foregroundStyle(.secondary)
+                                    HStack {
+                                        Text(categoryWithHighestBalance.0.name)
+                                            .bold()
+                                        Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                            .bold()
+                                            .foregroundStyle(Color.accentColor)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
+                            if let asset = operation.asset {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Lowest Category")
+                                        .foregroundStyle(.secondary)
+                                    HStack {
+                                        Text(categoryWithLowestBalance.0.name)
+                                            .bold()
+                                        Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                            .bold()
+                                            .foregroundStyle(Color.red)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .font(.subheadline)
+                    
+                    Picker("Date Range", selection: $dateRange.animation()) {
+                        ForEach(DateRangeOption.allCases) { range in
+                            Text(range.rawValue).tag(range)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    if !filteredData.isEmpty {
+                        Chart(filteredData) { value in
+                            if let category = value.category {
+                                BarMark(
+                                    x: .value("Amount", value.amount),
+                                    y: .value("Category", category.name)
+                                )
+                                .foregroundStyle(by: .value("Category", category.name))
+                                .cornerRadius(8)
+                            }
+                        }
+                        .chartLegend(.visible)
+                        .chartYAxis {
+                            AxisMarks(position: .leading)
+                        }
+                        .frame(height: 300)
+                        .padding(.vertical, 8)
+                    } else {
+                        ContentUnavailableView(
+                            "No Data for Selected Range",
+                            systemImage: "chart.line.downtrend.xyaxis",
+                            description: Text("Try selecting a different date range or add new operations")
+                        )
+                        .frame(height: 300)
                     }
                 }
-                
-                if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
-                    if let asset = operation.asset {
-                        Text("Worse category: ")
-                        + Text(categoryWithLowestBalance.0.name)
-                            .bold()
-                        + Text(" with ")
-                        + Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
-                            .bold()
-                    }
-                }
+                .padding(.top)
             }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            
-            Picker("Date Range", selection: $dateRange.animation()) {
-                ForEach(DateRangeOption.allCases) { range in
-                    Text(range.rawValue).tag(range)
-                }
-            }
-            .pickerStyle(.segmented)
-            
-            Chart(filteredData) { value in
-                if let category = value.category {
-                    BarMark(
-                        x: .value("Amount", value.amount),
-                        y: .value("Category", category.name)
-                    )
-                    .foregroundStyle(by: .value("Category", category.name))
-                    .cornerRadius(4)
-                }
-            }
-            .aspectRatio(1, contentMode: .fit)
-        }.padding()
+        }
+        .padding()
     }
     
     func calculateCategoryBalance(category: CategoryOperation) -> Decimal {
