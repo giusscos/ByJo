@@ -16,9 +16,13 @@ struct AssetDetailView: View {
 
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
-    @State private var dateRange: DateRangeOption = .month
+    @State private var dateRange: DateRangeOption = .all
     
     @State var selectedOperation: AssetOperation?
+    
+    var availableDateRanges: [DateRangeOption] {
+        DateRangeOption.availableRanges(for: assetOperation ?? [])
+    }
     
     var assetOperation: [AssetOperation]? {
         operations.filter { $0.asset == asset }
@@ -45,6 +49,22 @@ struct AssetDetailView: View {
          OperationDataType(type: "Income", data: incomeData)]
     }
     
+    var totalIncome: Decimal {
+        incomeData.reduce(0) { $0 + $1.amount }
+    }
+    
+    var totalOutcome: Decimal {
+        outcomeData.reduce(0) { $0 + $1.amount }
+    }
+    
+    var chartYScale: ClosedRange<Decimal> {
+        let maxIncome = totalIncome
+        let minOutcome = totalOutcome
+        let buffer = max(abs(maxIncome), abs(minOutcome)) * 0.1
+        
+        return (minOutcome - buffer)...(maxIncome + buffer)
+    }
+    
     var body: some View {
         NavigationStack {
             if assetOperation == [] {
@@ -53,31 +73,52 @@ struct AssetDetailView: View {
                 if let operations = assetOperation {
                     List {
                         Picker("Date Range", selection: $dateRange.animation()) {
-                            ForEach(DateRangeOption.allCases) { range in
-                                Text(range.rawValue).tag(range)
+                            ForEach(availableDateRanges) { range in
+                                Text(range.label).tag(range)
                             }
                         }
                         .pickerStyle(.segmented)
                         .listRowBackground(Color.clear)
                         
-                        Chart (operationsData) { operation in
-                            ForEach(operation.data) { value in
-                                PointMark(
-                                    x: .value("Date", value.date),
-                                    y: .value("Amount", value.amount)
-                                )
+                        if !operationsData.flatMap({ $0.data }).isEmpty {
+                            Chart (operationsData) { operation in
+                                ForEach(operation.data) { value in
+                                    LineMark(
+                                        x: .value("Date", value.date),
+                                        y: .value("Amount", value.amount)
+                                    )
+                                    .foregroundStyle(by: .value("Type", operation.type))
+                                    
+                                    PointMark(
+                                        x: .value("Date", value.date),
+                                        y: .value("Amount", value.amount)
+                                    )
+                                    .foregroundStyle(by: .value("Type", operation.type))
+                                }
                             }
-                            .foregroundStyle(by: .value("Type", operation.type))
-                            .symbol(by: .value("Type", operation.type))
-                            .symbolSize(30)
+                            .chartForegroundStyleScale([
+                                "Outcome": Color.red,
+                                "Income": Color.green
+                            ])
+                            .chartYScale(domain: chartYScale)
+                            .chartLegend(.visible)
+                            .chartYAxis {
+                                AxisMarks(position: .leading)
+                            }
+                            .chartXAxis {
+                                AxisMarks(values: .stride(by: .day))
+                            }
+                            .aspectRatio(1, contentMode: .fit)
+                            .listRowBackground(Color.clear)
+                        } else {
+                            ContentUnavailableView(
+                                "No Data for Selected Range",
+                                systemImage: "chart.line.downtrend.xyaxis",
+                                description: Text("Try selecting a different date range or add new operations")
+                            )
+                            .frame(height: 300)
+                            .listRowBackground(Color.clear)
                         }
-                        .chartForegroundStyleScale([
-                            "Outcome": Color.red,
-                            "Income": Color.green
-                        ])
-                        .aspectRatio(1, contentMode: .fit)
-                        .listRowBackground(Color.clear)
-                        
                         
                         AssetOperationView(operations: operations)
                     }

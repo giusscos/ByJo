@@ -10,9 +10,13 @@ import SwiftData
 import Charts
 
 struct OperationChartDetailView: View {
-    @State private var dateRange: DateRangeOption = .month
+    @State private var dateRange: DateRangeOption = .all
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     @Query var assets: [Asset]
+    
+    var availableDateRanges: [DateRangeOption] {
+        DateRangeOption.availableRanges(for: operations)
+    }
     
     var filteredData: [AssetOperation] {
         filterData(for: dateRange, data: operations)
@@ -37,6 +41,14 @@ struct OperationChartDetailView: View {
     var operationsData: [OperationDataType] {
         [OperationDataType(type: "Outcome", data: outcomeData),
         OperationDataType(type: "Income", data: incomeData)]
+    }
+    
+    var chartYScale: ClosedRange<Decimal> {
+        let maxIncome = totalIncome
+        let minOutcome = totalOutcome
+        let buffer = max(abs(maxIncome), abs(minOutcome)) * 0.1
+        
+        return (minOutcome - buffer)...(maxIncome + buffer)
     }
     
     var body: some View {
@@ -77,8 +89,8 @@ struct OperationChartDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .topLeading)
                         
                         Picker("Date Range", selection: $dateRange.animation()) {
-                            ForEach(DateRangeOption.allCases) { range in
-                                Text(range.rawValue).tag(range)
+                            ForEach(availableDateRanges) { range in
+                                Text(range.label).tag(range)
                             }
                         }
                         .pickerStyle(.segmented)
@@ -103,10 +115,13 @@ struct OperationChartDetailView: View {
                                 "Outcome": Color.red,
                                 "Income": Color.green
                             ])
-                            .chartYScale(domain: (totalOutcome * 2.5)...(totalIncome * 1.5))
+                            .chartYScale(domain: chartYScale)
                             .chartLegend(.visible)
                             .chartYAxis {
                                 AxisMarks(position: .leading)
+                            }
+                            .chartXAxis {
+                                AxisMarks(values: .stride(by: .day))
                             }
                             .frame(height: 300)
                         } else {

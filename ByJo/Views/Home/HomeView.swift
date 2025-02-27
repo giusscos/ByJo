@@ -22,10 +22,15 @@ struct HomeView: View {
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
-    @State private var dateRange: DateRangeOption = .month
+    @State private var dateRange: DateRangeOption = .all
     @State private var selectedGoal: Goal?
     @State private var selectedAsset: Asset?
+    
     @AppStorage("showingChartLabels") private var showingChartLabels = true
+    
+    var availableDateRanges: [DateRangeOption] {
+        DateRangeOption.availableRanges(for: operations)
+    }
     
     var filteredData: [AssetOperation] {
         filterData(for: dateRange, data: operations)
@@ -85,7 +90,8 @@ struct HomeView: View {
                                                 .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
                                         }
                                 }
-                            }.scrollTargetLayout()
+                            }
+                            .scrollTargetLayout()
                         }
                         .scrollIndicators(.hidden)
                         .scrollTargetBehavior(.viewAligned)
@@ -113,14 +119,9 @@ struct HomeView: View {
                                     .bold()
                                     
                                 if let assetsCurrency = assets.first {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("Total Balance")
-                                            .foregroundStyle(.secondary)
-                                        Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
-                                            .font(.title3)
-                                            .bold()
-                                            .foregroundStyle(Color.accentColor)
-                                    }
+                                    Text("The sum of your assets hits ") + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
+                                        .bold()
+                                        .foregroundStyle(Color.accentColor)
                                 }
                                 
                                 Chart(assets) { value in
@@ -137,7 +138,8 @@ struct HomeView: View {
                                 .frame(height: 200)
                                 .padding(.vertical, 8)
                             }
-                        }.tint(.primary)
+                        }
+                        .tint(.primary)
                         .matchedTransitionSource(id: 0, in: namespace)
                     }
                 }
@@ -150,15 +152,16 @@ struct HomeView: View {
                     )
                 } else {
                     Section {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Picker("Date Range", selection: $dateRange.animation()) {
-                                ForEach(DateRangeOption.allCases) { range in
-                                    Text(range.rawValue).tag(range)
-                                }
+                        Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
+                            ForEach(availableDateRanges) { range in
+                                Text(range.label)
+                                    .tag(range)
                             }
-                            .pickerStyle(.segmented)
                         }
+                        .pickerStyle(.segmented)
                     }
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowSeparatorTint(Color.clear)
                     
                     Section {
                         NavigationLink {
@@ -170,32 +173,48 @@ struct HomeView: View {
                                     .font(.title2)
                                     .bold()
                                 
-                                if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
-                                    if let asset = operation.asset {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Top Category")
-                                                .foregroundStyle(.secondary)
-                                            HStack {
-                                                Text(categoryWithHighestBalance.0.name)
-                                                    .bold()
-                                                Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
-                                                    .bold()
-                                                    .foregroundStyle(Color.accentColor)
-                                            }
+                                if !filteredData.isEmpty {
+                                    if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
+                                        if let asset = operation.asset {
+                                            Text(categoryWithHighestBalance.0.name)
+                                                .bold()
+                                                .foregroundStyle(Color.accentColor)
+                                            + Text(" this period hits ")
+                                            + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                                .bold()
+                                                .foregroundStyle(Color.green)
                                         }
                                     }
-                                }
-                                
-                                if !filteredData.isEmpty {
-                                    Chart(filteredData) { value in
-                                        if let category = value.category {
-                                            BarMark(
-                                                x: .value("Amount", value.amount),
-                                                y: .value("Category", category.name)
-                                            )
-                                            .foregroundStyle(by: .value("Category", category.name))
-                                            .cornerRadius(8)
+                                    
+                                    if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
+                                        if let asset = operation.asset {
+                                            Text(categoryWithLowestBalance.0.name)
+                                                .bold()
+                                                .foregroundStyle(Color.accentColor)
+                                            + Text(" this period hits ")
+                                            + Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                                .bold()
+                                                .foregroundStyle(Color.red)
                                         }
+                                    }
+                                
+                                    let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
+                                        .map { (key, values) in
+                                            (
+                                                category: key,
+                                                total: values.reduce(0) { $0 + $1.amount }
+                                            )
+                                        }
+                                        .filter { !$0.category.isEmpty }
+                                        .sorted { abs($0.total) > abs($1.total) }
+                                    
+                                    Chart(groupedData, id: \.category) { item in
+                                        BarMark(
+                                            x: .value("Amount", item.total),
+                                            y: .value("Category", item.category)
+                                        )
+                                        .foregroundStyle(by: .value("Category", item.category))
+                                        .cornerRadius(8)
                                     }
                                     .chartLegend(showingChartLabels ? .visible : .hidden)
                                     .chartYAxis(.hidden)
@@ -210,8 +229,9 @@ struct HomeView: View {
                                     )
                                 }
                             }
-                        }.tint(.primary)
-                            .matchedTransitionSource(id: 1, in: namespace)
+                        }
+                        .tint(.primary)
+                        .matchedTransitionSource(id: 1, in: namespace)
                     }
                     
                     Section {
@@ -224,29 +244,21 @@ struct HomeView: View {
                                     .font(.title2)
                                     .bold()
                                 
-                                if let assetsCurrency = assets.first {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Income")
-                                                .foregroundStyle(.secondary)
-                                            Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
-                                                .font(.title3)
+                                if !filteredData.isEmpty {
+                                    if let assetsCurrency = assets.first {
+                                        if totalIncome > 0 {
+                                            Text("Your incomes this period hits ") + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
                                                 .bold()
                                                 .foregroundStyle(Color.green)
                                         }
                                         
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("Expenses")
-                                                .foregroundStyle(.secondary)
-                                            Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
-                                                .font(.title3)
+                                        if totalExpenses < 0 {
+                                            Text("Your outcomes this period hits ") + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
                                                 .bold()
                                                 .foregroundStyle(Color.red)
                                         }
                                     }
-                                }
                                 
-                                if !filteredData.isEmpty {
                                     Chart(operationsData) { operation in
                                         ForEach(operation.data) { value in
                                             LineMark(
@@ -279,8 +291,9 @@ struct HomeView: View {
                                     )
                                 }
                             }
-                        }.tint(.primary)
-                            .matchedTransitionSource(id: 2, in: namespace)
+                        }
+                        .tint(.primary)
+                        .matchedTransitionSource(id: 2, in: namespace)
                     }
                 }
             }
@@ -305,7 +318,6 @@ struct HomeView: View {
                             withAnimation(.spring()) {
                                 showingChartLabels.toggle()
                             }
-
                         } label: {
                             Label(showingChartLabels ? "Hide Chart Labels" : "Show Chart Labels",
                                   systemImage: showingChartLabels ? "eye.slash" : "eye")
@@ -322,7 +334,7 @@ struct HomeView: View {
     }
     
     func calculateCategoryBalance(category: CategoryOperation) -> Decimal {
-        let operationsForCategory = operations.filter { $0.category?.id == category.id }
+        let operationsForCategory = filteredData.filter { $0.category?.id == category.id }
         
         let totalBalance = operationsForCategory.reduce(Decimal(0)) { $0 + $1.amount }
         

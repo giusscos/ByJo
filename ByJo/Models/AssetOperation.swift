@@ -46,48 +46,33 @@ class AssetOperation {
 func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {
     let calendar = Calendar.current
     let now = Date()
-    let filteredData: [AssetOperation]
     
     switch range {
-    case .threeDay:
-        if let startOfWeek = calendar.date(byAdding: .day, value: -3, to: now) {
-            filteredData = data.filter { $0.date >= startOfWeek }
-        } else {
-            filteredData = data
-        }
+    case .all:
+        return data
     case .week:
-        if let startOfWeek = calendar.date(byAdding: .day, value: -7, to: now) {
-            filteredData = data.filter { $0.date >= startOfWeek }
-        } else {
-            filteredData = data
+        if let startDate = calendar.date(byAdding: .day, value: -7, to: now) {
+            return data.filter { $0.date >= startDate }
         }
     case .month:
-        if let startOfMonth = calendar.date(byAdding: .month, value: -1, to: now) {
-            filteredData = data.filter { $0.date >= startOfMonth }
-        } else {
-            filteredData = data
+        if let startDate = calendar.date(byAdding: .month, value: -1, to: now) {
+            return data.filter { $0.date >= startDate }
         }
-    case .threeMonth:
-        if let startOfMonth = calendar.date(byAdding: .month, value: -3, to: now) {
-            filteredData = data.filter { $0.date >= startOfMonth }
-        } else {
-            filteredData = data
+    case .threeMonths:
+        if let startDate = calendar.date(byAdding: .month, value: -3, to: now) {
+            return data.filter { $0.date >= startDate }
+        }
+    case .sixMonths:
+        if let startDate = calendar.date(byAdding: .month, value: -6, to: now) {
+            return data.filter { $0.date >= startDate }
         }
     case .year:
-        if let startOfYear = calendar.date(byAdding: .year, value: -1, to: now) {
-            filteredData = data.filter { $0.date >= startOfYear }
-        } else {
-            filteredData = data
-        }
-    case .threeYear:
-        if let startOfYear = calendar.date(byAdding: .year, value: -3, to: now) {
-            filteredData = data.filter { $0.date >= startOfYear }
-        } else {
-            filteredData = data
+        if let startDate = calendar.date(byAdding: .year, value: -1, to: now) {
+            return data.filter { $0.date >= startDate }
         }
     }
     
-    return filteredData
+    return data
 }
 
 enum RecurrenceFrequency: String, Codable, CaseIterable {
@@ -98,13 +83,48 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
     case yearly = "Yearly"
 }
 
-enum DateRangeOption: String, CaseIterable, Identifiable {
-    case threeDay = "3D"
-    case week = "1W"
-    case month = "1M"
-    case threeMonth = "3M"
-    case year = "1Y"
-    case threeYear = "3Y"
+enum DateRangeOption: Identifiable, Hashable {
+    case week
+    case month
+    case threeMonths
+    case sixMonths
+    case year
+    case all
     
-    var id: String { rawValue }
+    var id: String { label }
+    
+    var label: String {
+        switch self {
+        case .week: return "1W"
+        case .month: return "1M"
+        case .threeMonths: return "3M"
+        case .sixMonths: return "6M"
+        case .year: return "1Y"
+        case .all: return "All"
+        }
+    }
+    
+    static func availableRanges(for operations: [AssetOperation], maxOptions: Int = 6) -> [DateRangeOption] {
+        guard !operations.isEmpty else { return [.all] }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        let oldestDate = operations.map { $0.date }.min() ?? now
+        let timeSpan = calendar.dateComponents([.day], from: oldestDate, to: now).day ?? 0
+        
+        var ranges: [DateRangeOption] = [.all]
+        
+        if timeSpan >= 7 { ranges.append(.week) }
+        if timeSpan >= 30 { ranges.append(.month) }
+        if timeSpan >= 90 { ranges.append(.threeMonths) }
+        if timeSpan >= 180 { ranges.append(.sixMonths) }
+        if timeSpan >= 365 { ranges.append(.year) }
+        
+        // Ensure we don't exceed maxOptions
+        if ranges.count > maxOptions {
+            ranges = Array(ranges.prefix(maxOptions))
+        }
+        
+        return ranges
+    }
 }

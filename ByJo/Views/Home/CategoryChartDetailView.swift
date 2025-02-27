@@ -10,11 +10,15 @@ import SwiftData
 import Charts
 
 struct CategoryChartDetailView: View {
-    @State private var dateRange: DateRangeOption = .month
+    @State private var dateRange: DateRangeOption = .all
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
+
+    var availableDateRanges: [DateRangeOption] {
+        DateRangeOption.availableRanges(for: operations)
+    }
 
     var filteredData: [AssetOperation] {
         filterData(for: dateRange, data: operations)
@@ -79,22 +83,30 @@ struct CategoryChartDetailView: View {
                     .font(.subheadline)
                     
                     Picker("Date Range", selection: $dateRange.animation()) {
-                        ForEach(DateRangeOption.allCases) { range in
-                            Text(range.rawValue).tag(range)
+                        ForEach(availableDateRanges) { range in
+                            Text(range.label).tag(range)
                         }
                     }
                     .pickerStyle(.segmented)
                     
                     if !filteredData.isEmpty {
-                        Chart(filteredData) { value in
-                            if let category = value.category {
-                                BarMark(
-                                    x: .value("Amount", value.amount),
-                                    y: .value("Category", category.name)
+                        let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
+                            .map { (key, values) in
+                                (
+                                    category: key,
+                                    total: values.reduce(0) { $0 + $1.amount }
                                 )
-                                .foregroundStyle(by: .value("Category", category.name))
-                                .cornerRadius(8)
                             }
+                            .filter { !$0.category.isEmpty }
+                            .sorted { abs($0.total) > abs($1.total) }
+                        
+                        Chart(groupedData, id: \.category) { item in
+                            BarMark(
+                                x: .value("Amount", item.total),
+                                y: .value("Category", item.category)
+                            )
+                            .foregroundStyle(by: .value("Category", item.category))
+                            .cornerRadius(8)
                         }
                         .chartLegend(.visible)
                         .chartYAxis {
