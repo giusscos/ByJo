@@ -62,9 +62,13 @@ struct GoalRow: View {
                 .padding(.top, 8)
             }
         }
+        .padding()
+        .background(Color(uiColor: .secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .padding()
         .overlay {
-            if goal.isExpired {
-                Label("Expired", systemImage: "exclamationmark.triangle.fill")
+            if goal.isExpired && !goal.isCompleted {
+                Label("Expired", systemImage: "exclamationmark")
                     .foregroundStyle(.white)
                     .font(.headline)
                     .padding()
@@ -79,13 +83,33 @@ struct GoalRow: View {
                             goal.isCompleted.toggle()
                         }
                     } label: {
-                        Label(goal.isCompleted ? "Completed" : "Complete", systemImage: goal.isCompleted ? "checkmark.circle.fill" : "checkmark.circle")
-                            .contentTransition(.symbolEffect(.replace))
-                            .foregroundStyle(.white)
-                            .font(.headline)
-                            .padding()
-                            .background(goal.isCompleted ? .green : .blue)
-                            .clipShape(Capsule())
+                        if goal.isCompleted {
+                            if let dueDate = goal.dueDate, Date.now > dueDate {
+                                Label("Completed Late", systemImage: "checkmark.circle.fill")
+                                    .contentTransition(.symbolEffect(.replace))
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
+                                    .padding()
+                                    .background(Color.orange)
+                                    .clipShape(Capsule())
+                            } else {
+                                Label("Completed", systemImage: "checkmark.circle.fill")
+                                    .contentTransition(.symbolEffect(.replace))
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
+                                    .padding()
+                                    .background(Color.green)
+                                    .clipShape(Capsule())
+                            }
+                        } else {
+                            Label("Complete", systemImage: "checkmark.circle")
+                                .contentTransition(.symbolEffect(.replace))
+                                .foregroundStyle(.white)
+                                .font(.headline)
+                                .padding()
+                                .background(Color.blue)
+                                .clipShape(Capsule())
+                        }
                     }
                 }
             }

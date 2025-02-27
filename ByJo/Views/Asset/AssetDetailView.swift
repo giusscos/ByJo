@@ -68,7 +68,11 @@ struct AssetDetailView: View {
     var body: some View {
         NavigationStack {
             if assetOperation == [] {
-                ContentUnavailableView("No operations yet", systemImage: "exclamationmark", description: Text("You need to add operations to this asset to see them here."))
+                NoDataView(
+                    title: "No operations yet",
+                    description: "You need to add operations to this asset to see them here.",
+                    systemImage: "exclamationmark"
+                )
             } else {
                 if let operations = assetOperation {
                     List {
@@ -111,12 +115,7 @@ struct AssetDetailView: View {
                             .aspectRatio(1, contentMode: .fit)
                             .listRowBackground(Color.clear)
                         } else {
-                            ContentUnavailableView(
-                                "No Data for Selected Range",
-                                systemImage: "chart.line.downtrend.xyaxis",
-                                description: Text("Try selecting a different date range or add new operations")
-                            )
-                            .frame(height: 300)
+                            NoDataView()
                             .listRowBackground(Color.clear)
                         }
                         

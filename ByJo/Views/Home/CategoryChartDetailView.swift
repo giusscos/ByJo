@@ -40,11 +40,13 @@ struct CategoryChartDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             if operations.isEmpty {
-                ContentUnavailableView(
-                    "No Operations Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
+                NoDataView(
+                    title: "No Operations Found",
+                    description: "You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner",
+                    systemImage: "exclamationmark"
                 )
+            } else if filteredData.isEmpty {
+                NoDataView()
             } else {
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading, spacing: 8) {
@@ -89,39 +91,30 @@ struct CategoryChartDetailView: View {
                     }
                     .pickerStyle(.segmented)
                     
-                    if !filteredData.isEmpty {
-                        let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
-                            .map { (key, values) in
-                                (
-                                    category: key,
-                                    total: values.reduce(0) { $0 + $1.amount }
-                                )
-                            }
-                            .filter { !$0.category.isEmpty }
-                            .sorted { abs($0.total) > abs($1.total) }
-                        
-                        Chart(groupedData, id: \.category) { item in
-                            BarMark(
-                                x: .value("Amount", item.total),
-                                y: .value("Category", item.category)
+                    let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
+                        .map { (key, values) in
+                            (
+                                category: key,
+                                total: values.reduce(0) { $0 + $1.amount }
                             )
-                            .foregroundStyle(by: .value("Category", item.category))
-                            .cornerRadius(8)
                         }
-                        .chartLegend(.visible)
-                        .chartYAxis {
-                            AxisMarks(position: .leading)
-                        }
-                        .frame(height: 300)
-                        .padding(.vertical, 8)
-                    } else {
-                        ContentUnavailableView(
-                            "No Data for Selected Range",
-                            systemImage: "chart.line.downtrend.xyaxis",
-                            description: Text("Try selecting a different date range or add new operations")
+                        .filter { !$0.category.isEmpty }
+                        .sorted { abs($0.total) > abs($1.total) }
+                    
+                    Chart(groupedData, id: \.category) { item in
+                        BarMark(
+                            x: .value("Amount", item.total),
+                            y: .value("Category", item.category)
                         )
-                        .frame(height: 300)
+                        .foregroundStyle(by: .value("Category", item.category))
+                        .cornerRadius(8)
                     }
+                    .chartLegend(.visible)
+                    .chartYAxis {
+                        AxisMarks(position: .leading)
+                    }
+                    .frame(height: 300)
+                    .padding(.vertical, 8)
                 }
                 .padding(.top)
             }

@@ -71,149 +71,68 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                if !goals.isEmpty {
-                    Section {
-                        ScrollView(.horizontal) {
-                            HStack (spacing: 24) {
-                                ForEach(goals) { goal in
-                                    GoalRow(goal: goal)
-                                        .onTapGesture {
-                                            selectedGoal = goal
-                                        }
-                                        .containerRelativeFrame(.horizontal)
-                                        .scrollTransition(axis: .horizontal) { content, phase in
-                                            content
-                                                .blur(radius: phase.isIdentity ? 0 : 2)
-                                                .offset(x: phase.value * -100)
-                                                .scaleEffect(phase.isIdentity ? 1 : 0.7)
-                                                .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
-                                        }
+            ScrollView {
+                VStack(spacing: 16) {
+                    if !goals.isEmpty {
+                        VStack(alignment: .leading) {
+                            Text("Pinned Goals")
+                                .font(.headline)
+                                .padding(.horizontal)
+                            
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 24) {
+                                    ForEach(goals) { goal in
+                                        GoalRow(goal: goal)
+                                            .onTapGesture {
+                                                selectedGoal = goal
+                                            }
+                                            .containerRelativeFrame(.horizontal)
+                                            .scrollTransition(axis: .horizontal) { content, phase in
+                                                content
+                                                    .blur(radius: phase.isIdentity ? 0 : 2)
+                                                    .offset(x: phase.value * -200)
+                                                    .scaleEffect(phase.isIdentity ? 1 : 0.7)
+                                                    .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
+                                            }
+                                    }
                                 }
+                                .scrollTargetLayout()
                             }
-                            .scrollTargetLayout()
+                            .scrollIndicators(.hidden)
+                            .scrollTargetBehavior(.viewAligned)
                         }
-                        .scrollIndicators(.hidden)
-                        .scrollTargetBehavior(.viewAligned)
-                    } header: {
-                        Text("Pinned Goals")
-                            .font(.headline)
                     }
-                }
-                
-                if assets.isEmpty {
-                    ContentUnavailableView(
-                        "No Assets Found",
-                        systemImage: "exclamationmark",
-                        description: Text("You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner")
-                    )
-                } else {
-                    Section {
-                        NavigationLink {
-                            AssetChartDetailView()
-                                .navigationTransition(.zoom(sourceID: 0, in: namespace))
-                        } label: {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Assets Overview")
-                                    .font(.title2)
-                                    .bold()
-                                    
-                                if let assetsCurrency = assets.first {
-                                    Text("The sum of your assets hits ") + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.accentColor)
-                                }
-                                
-                                Chart(assets) { value in
-                                    BarMark(
-                                        x: .value("Asset", value.name),
-                                        y: .value("Amount", value.calculateCurrentBalance())
-                                    )
-                                    .foregroundStyle(by: .value("Asset", value.name))
-                                    .cornerRadius(8)
-                                }
-                                .chartLegend(showingChartLabels ? .visible : .hidden)
-                                .chartYAxis(.hidden)
-                                .chartXAxis(.hidden)
-                                .frame(height: 200)
-                                .padding(.vertical, 8)
-                            }
-                        }
-                        .tint(.primary)
-                        .matchedTransitionSource(id: 0, in: namespace)
-                    }
-                }
-                
-                if operations.isEmpty {
-                    ContentUnavailableView(
-                        "No Operations Found",
-                        systemImage: "exclamationmark",
-                        description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
-                    )
-                } else {
-                    Section {
-                        Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
-                            ForEach(availableDateRanges) { range in
-                                Text(range.label)
-                                    .tag(range)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                    }
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .listRowSeparatorTint(Color.clear)
                     
-                    Section {
-                        NavigationLink {
-                            CategoryChartDetailView()
-                                .navigationTransition(.zoom(sourceID: 1, in: namespace))
-                        } label: {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Categories Overview")
-                                    .font(.title2)
-                                    .bold()
-                                
-                                if !filteredData.isEmpty {
-                                    if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
-                                        if let asset = operation.asset {
-                                            Text(categoryWithHighestBalance.0.name)
-                                                .bold()
-                                                .foregroundStyle(Color.accentColor)
-                                            + Text(" this period hits ")
-                                            + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
-                                                .bold()
-                                                .foregroundStyle(Color.green)
-                                        }
+                    if assets.isEmpty {
+                        NoDataView(
+                            title: "No Assets Found",
+                            description: "You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner",
+                            systemImage: "exclamationmark"
+                        )
+                        .padding()
+                    } else {
+                        VStack(spacing: 16) {
+                            NavigationLink {
+                                AssetChartDetailView()
+                                    .navigationTransition(.zoom(sourceID: 0, in: namespace))
+                            } label: {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Assets Overview")
+                                        .font(.title2)
+                                        .bold()
+                                    
+                                    if let assetsCurrency = assets.first {
+                                        Text("The sum of your assets hits ") + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
+                                            .bold()
+                                            .foregroundStyle(Color.accentColor)
                                     }
                                     
-                                    if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
-                                        if let asset = operation.asset {
-                                            Text(categoryWithLowestBalance.0.name)
-                                                .bold()
-                                                .foregroundStyle(Color.accentColor)
-                                            + Text(" this period hits ")
-                                            + Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
-                                                .bold()
-                                                .foregroundStyle(Color.red)
-                                        }
-                                    }
-                                
-                                    let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
-                                        .map { (key, values) in
-                                            (
-                                                category: key,
-                                                total: values.reduce(0) { $0 + $1.amount }
-                                            )
-                                        }
-                                        .filter { !$0.category.isEmpty }
-                                        .sorted { abs($0.total) > abs($1.total) }
-                                    
-                                    Chart(groupedData, id: \.category) { item in
+                                    Chart(assets) { value in
                                         BarMark(
-                                            x: .value("Amount", item.total),
-                                            y: .value("Category", item.category)
+                                            x: .value("Asset", value.name),
+                                            y: .value("Amount", value.calculateCurrentBalance())
                                         )
-                                        .foregroundStyle(by: .value("Category", item.category))
+                                        .foregroundStyle(by: .value("Asset", value.name))
                                         .cornerRadius(8)
                                     }
                                     .chartLegend(showingChartLabels ? .visible : .hidden)
@@ -221,81 +140,166 @@ struct HomeView: View {
                                     .chartXAxis(.hidden)
                                     .frame(height: 200)
                                     .padding(.vertical, 8)
-                                } else {
-                                    ContentUnavailableView(
-                                        "No Data for Selected Range",
-                                        systemImage: "calendar.badge.exclamationmark",
-                                        description: Text("Try selecting a different date range or add new operations")
-                                    )
                                 }
+                                .padding()
+                                .background(Color(uiColor: .secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                             }
+                            .tint(.primary)
+                            .matchedTransitionSource(id: 0, in: namespace)
                         }
-                        .tint(.primary)
-                        .matchedTransitionSource(id: 1, in: namespace)
+                        .padding(.horizontal)
                     }
                     
-                    Section {
-                        NavigationLink {
-                            OperationChartDetailView()
-                                .navigationTransition(.zoom(sourceID: 2, in: namespace))
-                        } label: {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Operations Overview")
-                                    .font(.title2)
-                                    .bold()
-                                
-                                if !filteredData.isEmpty {
-                                    if let assetsCurrency = assets.first {
-                                        if totalIncome > 0 {
-                                            Text("Your incomes this period hits ") + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
-                                                .bold()
-                                                .foregroundStyle(Color.green)
-                                        }
-                                        
-                                        if totalExpenses < 0 {
-                                            Text("Your outcomes this period hits ") + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
-                                                .bold()
-                                                .foregroundStyle(Color.red)
-                                        }
-                                    }
-                                
-                                    Chart(operationsData) { operation in
-                                        ForEach(operation.data) { value in
-                                            LineMark(
-                                                x: .value("Date", value.date),
-                                                y: .value("Amount", value.amount)
-                                            )
-                                            .foregroundStyle(by: .value("Type", operation.type))
-                                            
-                                            PointMark(
-                                                x: .value("Date", value.date),
-                                                y: .value("Amount", value.amount)
-                                            )
-                                            .foregroundStyle(by: .value("Type", operation.type))
-                                        }
-                                    }
-                                    .chartForegroundStyleScale([
-                                        "Outcome": Color.red,
-                                        "Income": Color.green
-                                    ])
-                                    .chartLegend(showingChartLabels ? .visible : .hidden)
-                                    .chartYAxis(.hidden)
-                                    .chartXAxis(.hidden)
-                                    .frame(height: 200)
-                                    .padding(.vertical, 8)
-                                } else {
-                                    ContentUnavailableView(
-                                        "No Data for Selected Range",
-                                        systemImage: "calendar.badge.exclamationmark",
-                                        description: Text("Try selecting a different date range or add new operations")
-                                    )
+                    if operations.isEmpty {
+                        NoDataView(
+                            title: "No Operations Found",
+                            description: "You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner",
+                            systemImage: "exclamationmark"
+                        )
+                        .padding()
+                    } else {
+                        VStack(spacing: 16) {
+                            Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
+                                ForEach(availableDateRanges) { range in
+                                    Text(range.label)
+                                        .tag(range)
                                 }
                             }
+                            .pickerStyle(.segmented)
+                            .padding(.horizontal)
+                            
+                            NavigationLink {
+                                CategoryChartDetailView()
+                                    .navigationTransition(.zoom(sourceID: 1, in: namespace))
+                            } label: {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Categories Overview")
+                                        .font(.title2)
+                                        .bold()
+                                    
+                                    if !filteredData.isEmpty {
+                                        if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
+                                            if let asset = operation.asset {
+                                                Text(categoryWithHighestBalance.0.name)
+                                                    .bold()
+                                                    .foregroundStyle(Color.accentColor)
+                                                + Text(" this period hits ")
+                                                + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                                    .bold()
+                                                    .foregroundStyle(Color.green)
+                                            }
+                                        }
+                                        
+                                        if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
+                                            if let asset = operation.asset {
+                                                Text(categoryWithLowestBalance.0.name)
+                                                    .bold()
+                                                    .foregroundStyle(Color.accentColor)
+                                                + Text(" this period hits ")
+                                                + Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
+                                                    .bold()
+                                                    .foregroundStyle(Color.red)
+                                            }
+                                        }
+                                    
+                                        let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
+                                            .map { (key, values) in
+                                                (
+                                                    category: key,
+                                                    total: values.reduce(0) { $0 + $1.amount }
+                                                )
+                                            }
+                                            .filter { !$0.category.isEmpty }
+                                            .sorted { abs($0.total) > abs($1.total) }
+                                    
+                                        Chart(groupedData, id: \.category) { item in
+                                            BarMark(
+                                                x: .value("Amount", item.total),
+                                                y: .value("Category", item.category)
+                                            )
+                                            .foregroundStyle(by: .value("Category", item.category))
+                                            .cornerRadius(8)
+                                        }
+                                        .chartLegend(showingChartLabels ? .visible : .hidden)
+                                        .chartYAxis(.hidden)
+                                        .chartXAxis(.hidden)
+                                        .frame(height: 200)
+                                        .padding(.vertical, 8)
+                                    } else {
+                                        NoDataView()
+                                    }
+                                }
+                                .padding()
+                                .background(Color(uiColor: .secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            }
+                            .tint(.primary)
+                            .matchedTransitionSource(id: 1, in: namespace)
+                            
+                            NavigationLink {
+                                OperationChartDetailView()
+                                    .navigationTransition(.zoom(sourceID: 2, in: namespace))
+                            } label: {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("Operations Overview")
+                                        .font(.title2)
+                                        .bold()
+                                    
+                                    if !filteredData.isEmpty {
+                                        if let assetsCurrency = assets.first {
+                                            if totalIncome > 0 {
+                                                Text("Your incomes this period hits ") + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
+                                                    .bold()
+                                                    .foregroundStyle(Color.green)
+                                            }
+                                            
+                                            if totalExpenses < 0 {
+                                                Text("Your outcomes this period hits ") + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
+                                                    .bold()
+                                                    .foregroundStyle(Color.red)
+                                            }
+                                        }
+                                    
+                                        Chart(operationsData) { operation in
+                                            ForEach(operation.data) { value in
+                                                LineMark(
+                                                    x: .value("Date", value.date),
+                                                    y: .value("Amount", value.amount)
+                                                )
+                                                .foregroundStyle(by: .value("Type", operation.type))
+                                                
+                                                PointMark(
+                                                    x: .value("Date", value.date),
+                                                    y: .value("Amount", value.amount)
+                                                )
+                                                .foregroundStyle(by: .value("Type", operation.type))
+                                            }
+                                        }
+                                        .chartForegroundStyleScale([
+                                            "Outcome": Color.red,
+                                            "Income": Color.green
+                                        ])
+                                        .chartLegend(showingChartLabels ? .visible : .hidden)
+                                        .chartYAxis(.hidden)
+                                        .chartXAxis(.hidden)
+                                        .frame(height: 200)
+                                        .padding(.vertical, 8)
+                                    } else {
+                                        NoDataView()
+                                    }
+                                }
+                                .padding()
+                                .background(Color(uiColor: .secondarySystemBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            }
+                            .tint(.primary)
+                            .matchedTransitionSource(id: 2, in: namespace)
                         }
-                        .tint(.primary)
-                        .matchedTransitionSource(id: 2, in: namespace)
+                        .padding(.horizontal)
                     }
                 }
+                .padding(.vertical)
             }
             .navigationTitle("Stats")
             .navigationBarTitleDisplayMode(.inline)
@@ -391,6 +395,30 @@ struct ChartFrame: ViewModifier {
 extension View {
     func formatChart() -> some View {
         self.modifier(ChartFrame())
+    }
+}
+
+struct NoDataView: View {
+    let title: String
+    let description: String
+    let systemImage: String
+    
+    init(
+        title: String = "No Data for Selected Range",
+        description: String = "Try selecting a different date range or add new operations",
+        systemImage: String = "calendar.badge.exclamationmark"
+    ) {
+        self.title = title
+        self.description = description
+        self.systemImage = systemImage
+    }
+    
+    var body: some View {
+        ContentUnavailableView(
+            title,
+            systemImage: systemImage,
+            description: Text(description)
+        )
     }
 }
 

@@ -59,11 +59,13 @@ struct OperationChartDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             if operations.isEmpty {
-                ContentUnavailableView(
-                    "No Operations Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
+                NoDataView(
+                    title: "No Operations Found",
+                    description: "You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner",
+                    systemImage: "exclamationmark"
                 )
+            } else if filteredData.isEmpty {
+                NoDataView()
             } else {
                 VStack(alignment: .leading, spacing: 16) {
                     if let currency = assets.first?.currency {
@@ -95,43 +97,34 @@ struct OperationChartDetailView: View {
                         }
                         .pickerStyle(.segmented)
                         
-                        if !filteredData.isEmpty {
-                            Chart(operationsData) { operation in
-                                ForEach(operation.data) { value in
-                                    LineMark(
-                                        x: .value("Date", value.date),
-                                        y: .value("Amount", value.amount)
-                                    )
-                                    .foregroundStyle(by: .value("Type", operation.type))
-                                    
-                                    PointMark(
-                                        x: .value("Date", value.date),
-                                        y: .value("Amount", value.amount)
-                                    )
-                                    .foregroundStyle(by: .value("Type", operation.type))
-                                }
+                        Chart(operationsData) { operation in
+                            ForEach(operation.data) { value in
+                                LineMark(
+                                    x: .value("Date", value.date),
+                                    y: .value("Amount", value.amount)
+                                )
+                                .foregroundStyle(by: .value("Type", operation.type))
+                                
+                                PointMark(
+                                    x: .value("Date", value.date),
+                                    y: .value("Amount", value.amount)
+                                )
+                                .foregroundStyle(by: .value("Type", operation.type))
                             }
-                            .chartForegroundStyleScale([
-                                "Outcome": Color.red,
-                                "Income": Color.green
-                            ])
-                            .chartYScale(domain: chartYScale)
-                            .chartLegend(.visible)
-                            .chartYAxis {
-                                AxisMarks(position: .leading)
-                            }
-                            .chartXAxis {
-                                AxisMarks(values: .stride(by: .day))
-                            }
-                            .frame(height: 300)
-                        } else {
-                            ContentUnavailableView(
-                                "No Data for Selected Range",
-                                systemImage: "chart.line.downtrend.xyaxis",
-                                description: Text("Try selecting a different date range or add new operations")
-                            )
-                            .frame(height: 300)
                         }
+                        .chartForegroundStyleScale([
+                            "Outcome": Color.red,
+                            "Income": Color.green
+                        ])
+                        .chartYScale(domain: chartYScale)
+                        .chartLegend(.visible)
+                        .chartYAxis {
+                            AxisMarks(position: .leading)
+                        }
+                        .chartXAxis {
+                            AxisMarks(values: .stride(by: .day))
+                        }
+                        .frame(height: 300)
                     }
                 }
                 .padding(.top)
