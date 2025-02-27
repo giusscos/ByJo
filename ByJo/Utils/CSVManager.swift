@@ -10,6 +10,7 @@ enum CSVError: Error {
     case invalidCategory
     case invalidAsset
     case exportError
+    case duplicateOperation(Int)
     
     var description: String {
         switch self {
@@ -29,6 +30,8 @@ enum CSVError: Error {
             return "Invalid asset"
         case .exportError:
             return "Error exporting data"
+        case .duplicateOperation(let count):
+            return "\(count) operations were skipped because they already exist"
         }
     }
 }
@@ -85,6 +88,16 @@ class CSVManager {
         return result.map { $0.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: "\"", with: "") }
     }
     
+    private func isDuplicate(_ operation: AssetOperation, existingOperations: [AssetOperation]) -> Bool {
+        return existingOperations.contains { existing in
+            existing.date == operation.date &&
+            existing.name == operation.name &&
+            existing.amount == operation.amount &&
+            existing.category?.id == operation.category?.id &&
+            existing.asset?.id == operation.asset?.id
+        }
+    }
+    
     func importCSV(from url: URL, context: ModelContext, assets: [Asset], categories: [CategoryOperation]) throws -> [AssetOperation] {
         let content = try String(contentsOf: url, encoding: .utf8)
         let rows = content.components(separatedBy: .newlines)
@@ -95,6 +108,11 @@ class CSVManager {
         guard validateHeaders(headers) else { throw CSVError.invalidHeader }
         
         var operations: [AssetOperation] = []
+        var duplicateCount = 0
+        
+        // Get existing operations for duplicate checking
+        let descriptor = FetchDescriptor<AssetOperation>()
+        let existingOperations = try context.fetch(descriptor)
         
         // Skip header row
         for row in rows.dropFirst() where !row.isEmpty {
@@ -129,8 +147,19 @@ class CSVManager {
             let note = values[5]
             
             let operation = AssetOperation(name: name, currency: asset.currency, date: date, amount: amount, asset: asset, category: category, note: note)
+            
+            // Check for duplicates
+            if isDuplicate(operation, existingOperations: existingOperations) {
+                duplicateCount += 1
+                continue
+            }
+            
             operations.append(operation)
             context.insert(operation)
+        }
+        
+        if duplicateCount > 0 {
+            throw CSVError.duplicateOperation(duplicateCount)
         }
         
         return operations

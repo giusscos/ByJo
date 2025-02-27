@@ -22,6 +22,8 @@ struct SettingsView: View {
     @State private var showingTemplate = false
     @State private var importError: CSVError?
     @State private var showingError = false
+    @State private var showingSuccess = false
+    @State private var successMessage = ""
     
     var body: some View {
         List {
@@ -69,12 +71,14 @@ struct SettingsView: View {
                 guard let url = urls.first else { return }
                 
                 do {
-                    _ = try CSVManager.shared.importCSV(
+                    let importedOperations = try CSVManager.shared.importCSV(
                         from: url,
                         context: modelContext,
                         assets: assets,
                         categories: categories
                     )
+                    successMessage = "Successfully imported \(importedOperations.count) operations"
+                    showingSuccess = true
                 } catch let error as CSVError {
                     importError = error
                     showingError = true
@@ -97,6 +101,9 @@ struct SettingsView: View {
             if case .failure(_) = result {
                 importError = .exportError
                 showingError = true
+            } else {
+                successMessage = "Successfully exported \(operations.count) operations"
+                showingSuccess = true
             }
         }
         .sheet(isPresented: $showingTemplate) {
@@ -121,6 +128,11 @@ struct SettingsView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(importError?.description ?? "Unknown error occurred")
+        }
+        .alert("Success", isPresented: $showingSuccess) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(successMessage)
         }
     }
 }
