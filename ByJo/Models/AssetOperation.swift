@@ -43,6 +43,16 @@ class AssetOperation {
     }
 }
 
+extension AssetOperation: Hashable {
+    static func == (lhs: AssetOperation, rhs: AssetOperation) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {
     let calendar = Calendar.current
     let now = Date()
@@ -51,28 +61,21 @@ func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOpe
     case .all:
         return data
     case .week:
-        if let startDate = calendar.date(byAdding: .day, value: -7, to: now) {
-            return data.filter { $0.date >= startDate }
-        }
+        let startDate = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        return data.filter { $0.date >= startDate }
     case .month:
-        if let startDate = calendar.date(byAdding: .month, value: -1, to: now) {
-            return data.filter { $0.date >= startDate }
-        }
+        let startDate = calendar.date(byAdding: .month, value: -1, to: now) ?? now
+        return data.filter { $0.date >= startDate }
     case .threeMonths:
-        if let startDate = calendar.date(byAdding: .month, value: -3, to: now) {
-            return data.filter { $0.date >= startDate }
-        }
+        let startDate = calendar.date(byAdding: .month, value: -3, to: now) ?? now
+        return data.filter { $0.date >= startDate }
     case .sixMonths:
-        if let startDate = calendar.date(byAdding: .month, value: -6, to: now) {
-            return data.filter { $0.date >= startDate }
-        }
+        let startDate = calendar.date(byAdding: .month, value: -6, to: now) ?? now
+        return data.filter { $0.date >= startDate }
     case .year:
-        if let startDate = calendar.date(byAdding: .year, value: -1, to: now) {
-            return data.filter { $0.date >= startDate }
-        }
+        let startDate = calendar.date(byAdding: .year, value: -1, to: now) ?? now
+        return data.filter { $0.date >= startDate }
     }
-    
-    return data
 }
 
 enum RecurrenceFrequency: String, Codable, CaseIterable {

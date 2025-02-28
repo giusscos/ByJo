@@ -63,12 +63,22 @@ struct SettingsView: View {
         .manageSubscriptionsSheet(isPresented: $manageSubscription, subscriptionGroupID: Store().groupId)
         .fileImporter(
             isPresented: $showingImporter,
-            allowedContentTypes: [.commaSeparatedText],
+            allowedContentTypes: [.text, .commaSeparatedText],
             allowsMultipleSelection: false
         ) { result in
             switch result {
             case .success(let urls):
                 guard let url = urls.first else { return }
+                
+                // Start accessing the security-scoped resource
+                guard url.startAccessingSecurityScopedResource() else {
+                    importError = CSVError.detailedError("Permission denied: Cannot access the selected file")
+                    showingError = true
+                    return
+                }
+                
+                // Ensure we stop accessing the resource when we're done
+                defer { url.stopAccessingSecurityScopedResource() }
                 
                 do {
                     let importedOperations = try CSVManager.shared.importCSV(
@@ -83,12 +93,12 @@ struct SettingsView: View {
                     importError = error
                     showingError = true
                 } catch {
-                    importError = .invalidFormat
+                    importError = .detailedError("Unexpected error: \(error.localizedDescription)")
                     showingError = true
                 }
                 
-            case .failure(_):
-                importError = .invalidFormat
+            case .failure(let error):
+                importError = .detailedError("Failed to import file: \(error.localizedDescription)")
                 showingError = true
             }
         }
@@ -119,7 +129,13 @@ struct SettingsView: View {
                         }
                         
                         ToolbarItem(placement: .topBarLeading) {
-                            ShareLink(item: CSVManager.shared.getCSVTemplate(), subject: Text("CSV Template"), message: Text("CSV Template for ByJo")) {
+                            ShareLink(
+                                item: CSVDocument(text: CSVManager.shared.getCSVTemplate()),
+                                preview: SharePreview(
+                                    "CSV Template",
+                                    image: Image(systemName: "doc.text")
+                                )
+                            ) {
                                 Image(systemName: "square.and.arrow.down")
                             }
                         }
@@ -140,22 +156,39 @@ struct SettingsView: View {
     }
 }
 
-struct CSVDocument: FileDocument {
+struct CSVDocument: FileDocument, Transferable {
     static var readableContentTypes: [UTType] { [.commaSeparatedText] }
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: UTType.commaSeparatedText) { document in
+            Data(document.text.utf8)
+        }
+    }
     
-    var operations: [AssetOperation]
+    var text: String
+    
+    init(text: String) {
+        self.text = text
+    }
     
     init(operations: [AssetOperation]) {
-        self.operations = operations
+        do {
+            self.text = try CSVManager.shared.exportCSV(operations: operations)
+        } catch {
+            self.text = ""
+        }
     }
     
     init(configuration: ReadConfiguration) throws {
-        operations = []
+        guard let data = configuration.file.regularFileContents,
+              let string = String(data: data, encoding: .utf8)
+        else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        text = string
     }
     
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = try CSVManager.shared.exportCSV(operations: operations)
-        return FileWrapper(regularFileWithContents: Data(data.utf8))
+        return FileWrapper(regularFileWithContents: Data(text.utf8))
     }
 }
 
@@ -195,7 +228,6 @@ struct CSVTemplateView: View {
             }
         }
         
-        // Ensure minimum width
         self.columnWidths = widths.map { max($0, 100) }
     }
     

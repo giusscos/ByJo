@@ -11,6 +11,7 @@ import SwiftData
 enum ActiveSheet: Identifiable {
     case editOperation(AssetOperation)
     case viewCategories
+    case deleteConfirmation
     
     var id: String {
         switch self {
@@ -18,6 +19,8 @@ enum ActiveSheet: Identifiable {
             return "editOperation-\(operation.id)"
         case .viewCategories:
             return "viewCategories"
+        case .deleteConfirmation:
+            return "deleteConfirmation"
         }
     }
 }
@@ -35,6 +38,8 @@ struct OperationView: View {
     
     @State private var selectedAsset: Asset?
     @State private var filterCategory: CategoryOperation?
+    @State private var isEditMode: EditMode = .inactive
+    @State private var selectedOperations = Set<AssetOperation>()
         
     var filteredAndSortedOperations: [OperationByDate] {
         var filteredOperations = operations
@@ -82,7 +87,7 @@ struct OperationView: View {
     }
     
     var body: some View {
-        List {
+        List(selection: $selectedOperations) {
             if filteredAndSortedOperations.isEmpty {
                 ContentUnavailableView(
                     "No Operations Found",
@@ -93,10 +98,13 @@ struct OperationView: View {
                 ForEach(filteredAndSortedOperations) { item in
                     Section {
                         ForEach(item.operations) { value in
-                            NavigationLink(destination: OperationDetailView(operation: value)) {
+                            NavigationLink {
+                                OperationDetailView(operation: value)
+                            } label: {
                                 OperationRow(operation: value)
                             }
-                            .swipeActions(edge: .trailing) {
+                            .tag(value)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button(role: .destructive) {
                                     modelContext.delete(value)
                                 } label: {
@@ -121,51 +129,65 @@ struct OperationView: View {
         .navigationTitle("Operations")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
+            }
+            
             ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    Button {
-                        addOperation()
+                if isEditMode == .active {
+                    Button(role: .destructive) {
+                        activeSheet = .deleteConfirmation
                     } label: {
-                        Label("Add operation", systemImage: "plus")
+                        Label("Delete", systemImage: "trash")
                     }
-                    
-                    Button {
-                        activeSheet = .viewCategories
-                    } label: {
-                        Label("Categories", systemImage: "list.bullet")
-                    }
-                    
-                    Section {
-                        Menu("By Asset") {
-                            ForEach(assets, id: \.id) { asset in
-                                Button(asset.name) {
-                                    selectedAsset = asset
-                                }
-                            }
-                            Button("Clear Filter") {
-                                selectedAsset = nil
-                            }
+                    .disabled(selectedOperations.isEmpty)
+                } else {
+                    Menu {
+                        Button {
+                            addOperation()
+                        } label: {
+                            Label("Add operation", systemImage: "plus")
                         }
                         
-                        Menu("By Category") {
-                            ForEach(categories) { category in
-                                Button(category.name) {
-                                    filterCategory = category
+                        Button {
+                            activeSheet = .viewCategories
+                        } label: {
+                            Label("Categories", systemImage: "list.bullet")
+                        }
+                        
+                        Section {
+                            Menu("By Asset") {
+                                ForEach(assets, id: \.id) { asset in
+                                    Button(asset.name) {
+                                        selectedAsset = asset
+                                    }
+                                }
+                                Button("Clear Filter") {
+                                    selectedAsset = nil
                                 }
                             }
                             
-                            Button("Clear Filter") {
-                                filterCategory = nil
+                            Menu("By Category") {
+                                ForEach(categories) { category in
+                                    Button(category.name) {
+                                        filterCategory = category
+                                    }
+                                }
+                                
+                                Button("Clear Filter") {
+                                    filterCategory = nil
+                                }
                             }
+                        } header: {
+                            Text("Filters")
                         }
-                    } header: {
-                        Text("Filters")
+                    } label: {
+                        Label("Menu", systemImage: "ellipsis.circle")
                     }
-                } label: {
-                    Label("Menu", systemImage: "ellipsis.circle")
                 }
             }
         }
+        .environment(\.editMode, $isEditMode)
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
             case .editOperation(let operation):
@@ -173,8 +195,52 @@ struct OperationView: View {
             case .viewCategories:
                 CategoryOperationView()
                     .presentationDragIndicator(.visible)
+            case .deleteConfirmation:
+                deleteConfirmationView
             }
         }
+    }
+    
+    private var deleteConfirmationView: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Image(systemName: "trash")
+                    .font(.system(size: 50))
+                    .foregroundColor(.red)
+                
+                Text("Delete Operations")
+                    .font(.title2)
+                    .bold()
+                
+                Text("Are you sure you want to delete \(selectedOperations.count) operations? This action cannot be undone.")
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.secondary)
+                
+                HStack(spacing: 20) {
+                    Button("Cancel", role: .cancel) {
+                        activeSheet = nil
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Button("Delete", role: .destructive) {
+                        deleteSelectedOperations()
+                        activeSheet = nil
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+            .padding()
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
+    }
+    
+    private func deleteSelectedOperations() {
+        for operation in selectedOperations {
+            modelContext.delete(operation)
+        }
+        selectedOperations.removeAll()
+        isEditMode = .inactive
     }
     
     func addOperation() {
