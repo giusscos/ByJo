@@ -100,13 +100,13 @@ struct OperationChartDetailView: View {
                         Chart(operationsData) { operation in
                             ForEach(operation.data) { value in
                                 LineMark(
-                                    x: .value("Date", value.date),
+                                    x: .value("Date", value.date, unit: .day),
                                     y: .value("Amount", value.amount)
                                 )
                                 .foregroundStyle(by: .value("Type", operation.type))
                                 
                                 PointMark(
-                                    x: .value("Date", value.date),
+                                    x: .value("Date", value.date, unit: .day),
                                     y: .value("Amount", value.amount)
                                 )
                                 .foregroundStyle(by: .value("Type", operation.type))
@@ -122,7 +122,10 @@ struct OperationChartDetailView: View {
                             AxisMarks(position: .leading)
                         }
                         .chartXAxis {
-                            AxisMarks(values: .stride(by: .day))
+                            AxisMarks(preset: .aligned) { value in
+                                AxisGridLine()
+                                AxisValueLabel(format: .dateTime.month().day().year())
+                            }
                         }
                         .frame(height: 300)
                     }
