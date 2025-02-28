@@ -108,21 +108,24 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showingTemplate) {
             NavigationStack {
-                ScrollView {
-                    Text(CSVManager.shared.getCSVTemplate())
-                        .font(.system(.body, design: .monospaced))
-                        .padding()
-                }
-                .navigationTitle("CSV Template")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Done") {
-                            showingTemplate = false
+                CSVTemplateView(csvString: CSVManager.shared.getCSVTemplate())
+                    .navigationTitle("CSV Template")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") {
+                                showingTemplate = false
+                            }
+                        }
+                        
+                        ToolbarItem(placement: .topBarLeading) {
+                            ShareLink(item: CSVManager.shared.getCSVTemplate(), subject: Text("CSV Template"), message: Text("CSV Template for ByJo")) {
+                                Image(systemName: "square.and.arrow.down")
+                            }
                         }
                     }
-                }
             }
+            .presentationDetents([.medium])
         }
         .alert("Import Error", isPresented: $showingError) {
             Button("OK", role: .cancel) { }
@@ -153,6 +156,81 @@ struct CSVDocument: FileDocument {
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         let data = try CSVManager.shared.exportCSV(operations: operations)
         return FileWrapper(regularFileWithContents: Data(data.utf8))
+    }
+}
+
+struct CSVRow: Identifiable {
+    let id = UUID()
+    let date: String
+    let name: String
+    let amount: String
+    let category: String
+    let asset: String
+    let note: String
+}
+
+struct CSVTemplateView: View {
+    let headers: [String]
+    let rows: [[String]]
+    private let columnWidths: [CGFloat]
+    
+    init(csvString: String) {
+        let lines = csvString.components(separatedBy: .newlines)
+            .filter { !$0.isEmpty }
+        self.headers = CSVManager.shared.parseCSVLine(lines[0])
+        self.rows = lines.dropFirst().map { CSVManager.shared.parseCSVLine($0) }
+        
+        // Calculate column widths based on content
+        var widths: [CGFloat] = Array(repeating: 0, count: self.headers.count)
+        
+        // Check headers width
+        for (index, header) in self.headers.enumerated() {
+            widths[index] = max(widths[index], CGFloat(header.count * 10 + 32))
+        }
+        
+        // Check content width
+        for row in self.rows {
+            for (index, cell) in row.enumerated() where index < widths.count {
+                widths[index] = max(widths[index], CGFloat(cell.count * 10 + 32))
+            }
+        }
+        
+        // Ensure minimum width
+        self.columnWidths = widths.map { max($0, 100) }
+    }
+    
+    var body: some View {
+        ScrollView([.horizontal]) {
+            VStack(alignment: .leading, spacing: 0) {
+                // Headers
+                HStack(spacing: 0) {
+                    ForEach(Array(headers.enumerated()), id: \.offset) { index, header in
+                        Text(header)
+                            .font(.headline)
+                            .padding(8)
+                            .frame(width: columnWidths[index])
+                            .background(Color.gray.opacity(0.2))
+                            .border(Color.gray.opacity(0.3), width: 1)
+                    }
+                }
+                
+                // Rows
+                ForEach(rows, id: \.self) { row in
+                    HStack(spacing: 0) {
+                        ForEach(0..<headers.count, id: \.self) { index in
+                            Text(index < row.count ? row[index] : "")
+                                .font(.body)
+                                .padding(8)
+                                .frame(width: columnWidths[index])
+                                .border(Color.gray.opacity(0.3), width: 1)
+                        }
+                    }
+                }
+            }
+        }
+        .scrollIndicators(.hidden)
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
 

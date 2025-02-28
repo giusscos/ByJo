@@ -61,7 +61,7 @@ class CSVManager {
         return Set(headers) == Set(requiredHeaders)
     }
     
-    private func parseCSVLine(_ line: String) -> [String] {
+    func parseCSVLine(_ line: String) -> [String] {
         var result: [String] = []
         var currentValue = ""
         var insideQuotes = false
