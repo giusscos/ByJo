@@ -36,6 +36,12 @@ struct OperationView: View {
     
     @State private var activeSheet: ActiveSheet?
     
+    @State private var showingImporter = false
+    @State private var importError: CSVError?
+    @State private var showingError = false
+    @State private var showingSuccess = false
+    @State private var successMessage = ""
+    
     @State private var selectedAsset: Asset?
     @State private var filterCategory: CategoryOperation?
     @State private var isEditMode: EditMode = .inactive
@@ -148,6 +154,12 @@ struct OperationView: View {
                         } label: {
                             Label("Add operation", systemImage: "plus")
                         }
+
+                        Button {
+                            showingImporter.toggle()
+                        } label: {
+                            Label("Import Operations", systemImage: "square.and.arrow.down")
+                        }
                         
                         Button {
                             activeSheet = .viewCategories
@@ -198,6 +210,57 @@ struct OperationView: View {
             case .deleteConfirmation:
                 deleteConfirmationView
             }
+        }
+        .fileImporter(
+            isPresented: $showingImporter,
+            allowedContentTypes: [.commaSeparatedText],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                guard let url = urls.first else { return }
+                
+                // Start accessing the security-scoped resource
+                guard url.startAccessingSecurityScopedResource() else {
+                    importError = CSVError.detailedError("Permission denied: Cannot access the selected file")
+                    showingError = true
+                    return
+                }
+                
+                // Ensure we stop accessing the resource when we're done
+                defer { url.stopAccessingSecurityScopedResource() }
+                
+                do {
+                    let importedOperations = try CSVManager.shared.importCSV(
+                        from: url,
+                        context: modelContext,
+                        assets: assets,
+                        categories: categories
+                    )
+                    successMessage = "Successfully imported \(importedOperations.count) operations"
+                    showingSuccess = true
+                } catch let error as CSVError {
+                    importError = error
+                    showingError = true
+                } catch {
+                    importError = .detailedError("Unexpected error: \(error.localizedDescription)")
+                    showingError = true
+                }
+                
+            case .failure(let error):
+                importError = .detailedError("Failed to import file: \(error.localizedDescription)")
+                showingError = true
+            }
+        }
+        .alert("Import Error", isPresented: $showingError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(importError?.description ?? "Unknown error occurred")
+        }
+        .alert("Success", isPresented: $showingSuccess) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(successMessage)
         }
     }
     

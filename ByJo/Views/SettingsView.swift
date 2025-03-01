@@ -63,7 +63,7 @@ struct SettingsView: View {
         .manageSubscriptionsSheet(isPresented: $manageSubscription, subscriptionGroupID: Store().groupId)
         .fileImporter(
             isPresented: $showingImporter,
-            allowedContentTypes: [.text, .commaSeparatedText],
+            allowedContentTypes: [.commaSeparatedText],
             allowsMultipleSelection: false
         ) { result in
             switch result {

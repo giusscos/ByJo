@@ -110,7 +110,10 @@ struct AssetDetailView: View {
                                 AxisMarks(position: .leading)
                             }
                             .chartXAxis {
-                                AxisMarks(values: .stride(by: .day))
+                                AxisMarks(preset: .aligned) { value in
+                                    AxisGridLine()
+                                    AxisValueLabel(format: .dateTime.month().day().year())
+                                }
                             }
                             .aspectRatio(1, contentMode: .fit)
                             .listRowBackground(Color.clear)
