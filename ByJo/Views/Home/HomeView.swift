@@ -76,27 +76,12 @@ struct HomeView: View {
             List {
                 if !goals.isEmpty {
                     Section {
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 24) {
-                                ForEach(goals) { goal in
-                                    GoalRow(goal: goal)
-                                        .onTapGesture {
-                                            selectedGoal = goal
-                                        }
-                                        .containerRelativeFrame(.horizontal)
-                                        .scrollTransition(axis: .horizontal) { content, phase in
-                                            content
-                                                .blur(radius: phase.isIdentity ? 0 : 2)
-                                                .offset(x: phase.value * -200)
-                                                .scaleEffect(phase.isIdentity ? 1 : 0.7)
-                                                .rotation3DEffect(.degrees(phase.value * 10), axis: (x: 0, y: phase.value + -4, z: 0))
-                                        }
+                        ForEach(goals) { goal in
+                            GoalRow(goal: goal)
+                                .onTapGesture {
+                                    selectedGoal = goal
                                 }
-                            }
-                            .scrollTargetLayout()
                         }
-                        .scrollIndicators(.hidden)
-                        .scrollTargetBehavior(.viewAligned)
                     } header: {
                         Text("Pinned Goals")
                     }
@@ -227,6 +212,12 @@ struct HomeView: View {
                                         .chartXAxis(.hidden)
                                         .frame(height: 200)
                                         .padding(.vertical, 8)
+                                    } else {
+                                        ContentUnavailableView(
+                                            "No Data for Selected Range",
+                                            systemImage: "exclamationmark",
+                                            description: Text("Try selecting a different date range or add new operations")
+                                        )
                                     }
                                 }
                             }

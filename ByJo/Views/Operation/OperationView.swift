@@ -135,8 +135,10 @@ struct OperationView: View {
         }
         .navigationTitle("Operations")
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                EditButton()
+            if !operations.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                }
             }
             
             ToolbarItem(placement: .topBarTrailing) {
@@ -254,7 +256,7 @@ struct OperationView: View {
         .alert("You can't add an operation yet", isPresented: $showingAddOperationError) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("You need to add an asset before adding an operation")
+            Text("You need to add an asset and a category before adding an operation")
         }
         .alert("Import Error", isPresented: $showingError) {
             Button("OK", role: .cancel) { }
@@ -311,7 +313,7 @@ struct OperationView: View {
     }
     
     func addOperation() {
-        if let asset = assets.first {
+        if let asset = assets.first, !categories.isEmpty {
             let operation = AssetOperation()
             operation.asset = asset
             modelContext.insert(operation)

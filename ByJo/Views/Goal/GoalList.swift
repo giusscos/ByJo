@@ -24,8 +24,8 @@ struct GoalList: View {
                     description: Text("You need to add a goal tapping the plus button on the top right corner")
                 )
             } else {
-                ForEach (goals) { goal in
-                    Section {
+                Section {
+                    ForEach (goals) { goal in
                         GoalRow(goal: goal)
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {
@@ -42,13 +42,9 @@ struct GoalList: View {
                                 .tint(.blue)
                             }
                     }
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0 ))
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
                 }
             }
         }
-        .listStyle(.plain)
         .navigationTitle("Goals")
         .toolbar {
             ToolbarItem {

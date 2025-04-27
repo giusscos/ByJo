@@ -16,19 +16,24 @@ struct ContentView: View {
     
     private let contentData = [
         (
-            title: "Unlock App Access",
+            title: "Achieve Your Goals",
             description: "Set goals to achieve and enhance your performance",
-            imageName: "Goal"
+            imageName: "target"
         ),
         (
-            title: "Unlock App Access",
+            title: "Consult Your Progress",
             description: "View fantastic charts to track your progress and view your results more easily",
-            imageName: "Charts"
+            imageName: "chart.bar.fill"
         ),
         (
-            title: "Unlock App Access",
+            title: "Manage Your Assets easily",
             description: "View, filter and manage your asset operations",
-            imageName: "Operations"
+            imageName: "book.pages"
+        ),
+        (
+            title: "Privacy first",
+            description: "ByJo do not collect any personal data, you can export and import csv files to manage your data locally",
+            imageName: "lock.shield"
         )
     ]
     
@@ -49,7 +54,7 @@ struct ContentView: View {
                     }
                 }
                 
-                Tab("Operations", systemImage: "minus.slash.plus") {
+                Tab("Operations", systemImage: "book.pages") {
                     NavigationStack {
                         OperationView()
                     }
@@ -66,28 +71,25 @@ struct ContentView: View {
             }
         } else {
             SubscriptionStoreView(groupID: Store().groupId) {
-                VStack(spacing: 12) {
-                    Spacer()
-                    
-                    Text(contentData[currentIndex].title)
-                        .font(.title)
-                        .fontWeight(.bold)
-                    
-                    Text(contentData[currentIndex].description)
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                    
-                    Spacer()
-                    
-                    Image(contentData[currentIndex].imageName)
-                        .resizable()
-                        .scaledToFit()
-                    
-                    Text("\(currentIndex + 1)/\(contentData.count)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                TabView(selection: $currentIndex) {
+                    ForEach(0..<contentData.count, id: \.self) { index in
+                        VStack(spacing: 12) {
+                            Image(systemName: contentData[index].imageName)
+                                .font(.largeTitle)
+                            
+                            Text(contentData[index].title)
+                                .font(.title)
+                                .bold()
+                            
+                            Text(contentData[index].description)
+                                .font(.headline)
+                                .multilineTextAlignment(.center)
+                        }
+                        .tag(index)
+                    }
                 }
-                .animation(.easeInOut, value: currentIndex)
+                .tabViewStyle(.page)
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
             }
             .subscriptionStoreControlStyle(.compactPicker, placement: .bottomBar)
             .subscriptionStoreButtonLabel(.multiline)
@@ -101,16 +103,20 @@ struct ContentView: View {
         }
     }
     
-    func startTimer() {
+    private func startTimer() {
+        stopTimer()
         timer = Timer.scheduledTimer(withTimeInterval: slideInterval, repeats: true) { _ in
-            currentIndex = currentIndex + 1
-            if currentIndex > contentData.count - 1 {
-                currentIndex = 0
+            withAnimation {
+                if currentIndex >= contentData.count - 1 {
+                    currentIndex = 0
+                } else {
+                    currentIndex += 1
+                }
             }
         }
     }
     
-    func stopTimer() {
+    private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }

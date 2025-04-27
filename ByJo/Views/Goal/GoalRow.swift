@@ -14,12 +14,10 @@ struct GoalRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                if !goal.title.isEmpty {
-                    Text(goal.title)
-                        .font(.title)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+                Text(goal.title)
+                    .font(.title)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 if let dueDate = goal.dueDate {
                     HStack (spacing: 4){
@@ -43,7 +41,7 @@ struct GoalRow: View {
                         Text("Current")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                    
+                        
                         Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -59,13 +57,9 @@ struct GoalRow: View {
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                 }
-                .padding(.top, 8)
+                .padding(.vertical, 8)
             }
         }
-        .padding()
-        .background(Color(uiColor: .secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .padding()
         .overlay {
             if goal.isExpired && !goal.isCompleted {
                 Label("Expired", systemImage: "exclamationmark")
@@ -80,7 +74,7 @@ struct GoalRow: View {
                 if asset.calculateCurrentBalance() >= goal.targetAmount {
                     Button {
                         withAnimation {
-                            goal.isCompleted.toggle()
+                            goal.isCompleted = true
                         }
                     } label: {
                         if goal.isCompleted {
@@ -111,6 +105,7 @@ struct GoalRow: View {
                                 .clipShape(Capsule())
                         }
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }

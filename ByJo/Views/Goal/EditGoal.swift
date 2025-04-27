@@ -80,12 +80,12 @@ struct EditGoal:View {
                             Label("Save", systemImage: "checkmark")
                                 .labelStyle(.titleOnly)
                         }
-                        .disabled(goal.targetAmount == asset.calculateCurrentBalance())
+                        .disabled(goal.title.isEmpty || goal.targetAmount == asset.calculateCurrentBalance())
                     }
                 }
             }
         }
-        .interactiveDismissDisabled(goal.title.isEmpty)
+        .interactiveDismissDisabled(goal.title.isEmpty || goal.targetAmount == goal.asset?.calculateCurrentBalance())
         .onAppear() {
             if goal.asset == nil {
                 if let asset = assets.first {
