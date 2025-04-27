@@ -38,6 +38,7 @@ struct OperationView: View {
     
     @State private var showingImporter = false
     @State private var importError: CSVError?
+    @State private var showingAddOperationError = false
     @State private var showingError = false
     @State private var showingSuccess = false
     @State private var successMessage = ""
@@ -205,7 +206,6 @@ struct OperationView: View {
                 EditAssetOperation(operation: operation)
             case .viewCategories:
                 CategoryOperationView()
-                    .presentationDragIndicator(.visible)
             case .deleteConfirmation:
                 deleteConfirmationView
             }
@@ -250,6 +250,11 @@ struct OperationView: View {
                 importError = .detailedError("Failed to import file: \(error.localizedDescription)")
                 showingError = true
             }
+        }
+        .alert("You can't add an operation yet", isPresented: $showingAddOperationError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("You need to add an asset before adding an operation")
         }
         .alert("Import Error", isPresented: $showingError) {
             Button("OK", role: .cancel) { }
@@ -311,6 +316,8 @@ struct OperationView: View {
             operation.asset = asset
             modelContext.insert(operation)
             activeSheet = .editOperation(operation)
+        } else {
+            showingAddOperationError = true
         }
     }
 }

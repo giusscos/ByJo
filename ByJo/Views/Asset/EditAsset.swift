@@ -17,30 +17,11 @@ struct EditAsset: View {
     
     var body: some View {
         NavigationStack {
-//            HStack {
-//                Button (role: .destructive) {
-//                    modelContext.delete(asset)
-//                    
-//                    dismiss()
-//                } label: {
-//                    Label("Delete", systemImage: "chevron.left")
-//                        .labelStyle(.titleOnly)
-//                }.frame(maxWidth: .infinity, alignment: .leading)
-//                
-//                Button {
-//                    dismiss()
-//                } label: {
-//                    Label("Save", systemImage: "checkmark.circle")
-//                        .labelStyle(.titleOnly)
-//                }.frame(maxWidth: .infinity, alignment: .trailing)
-//            }.padding()
-            
             List {
                 Section {
                     TextField("Name", text: $asset.name)
-                }
-                
-                Section {
+                        .autocorrectionDisabled()
+
                     Picker("Currency", selection: $asset.currency) {
                         ForEach(CurrencyCode.allCases, id: \.self) { value in
                             Text(value.rawValue)
@@ -50,6 +31,7 @@ struct EditAsset: View {
                     
                     TextField("Initial balance", value: $asset.initialBalance, format: .currency(code: asset.currency.rawValue))
                         .keyboardType(.decimalPad)
+                        .autocorrectionDisabled()
                         .focused($isInputActive)
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
@@ -79,6 +61,7 @@ struct EditAsset: View {
                         Label("Delete", systemImage: "trash")
                             .labelStyle(.titleOnly)
                     }
+                    .foregroundColor(.red)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -90,8 +73,6 @@ struct EditAsset: View {
                     }
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .top)
-            .listStyle(.plain)
         }
     }
 }

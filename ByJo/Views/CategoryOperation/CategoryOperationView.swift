@@ -26,6 +26,7 @@ struct CategoryOperationView: View {
                     if showInsert {
                         HStack {
                             TextField("Category Name", text: $categoryOperation.name)
+                                .autocorrectionDisabled()
                                 .onSubmit {
                                     withAnimation {
                                         addCategory()

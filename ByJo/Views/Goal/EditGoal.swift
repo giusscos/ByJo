@@ -33,9 +33,7 @@ struct EditGoal:View {
                 .pickerStyle(.menu)
                 
                 if let asset = goal.asset {
-                
                     Text("Current Asset amount: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
-                    
                 }
                 
                 if let assetGoal = goal.asset {
@@ -68,18 +66,21 @@ struct EditGoal:View {
                     .foregroundColor(.red)
                 }
                 
-                ToolbarItem (placement: .topBarTrailing) {
-                    Button {
-                        if isWithDueDate {
-                            goal.dueDate = date
-                        } else {
-                            goal.dueDate = nil
+                if let asset = goal.asset {
+                    ToolbarItem (placement: .topBarTrailing) {
+                        Button {
+                            if isWithDueDate {
+                                goal.dueDate = date
+                            } else {
+                                goal.dueDate = nil
+                            }
+                            
+                            dismiss()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                                .labelStyle(.titleOnly)
                         }
-
-                        dismiss()
-                    } label: {
-                        Label("Save", systemImage: "checkmark")
-                            .labelStyle(.titleOnly)
+                        .disabled(goal.targetAmount == asset.calculateCurrentBalance())
                     }
                 }
             }
