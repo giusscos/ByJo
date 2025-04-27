@@ -17,23 +17,23 @@ struct EditAsset: View {
     
     var body: some View {
         NavigationStack {
-            HStack {
-                Button (role: .destructive) {
-                    modelContext.delete(asset)
-                    
-                    dismiss()
-                } label: {
-                    Label("Delete", systemImage: "chevron.left")
-                        .labelStyle(.titleOnly)
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                
-                 Button {
-                     dismiss()
-                 } label: {
-                     Label("Save", systemImage: "checkmark.circle")
-                         .labelStyle(.titleOnly)
-                 }.frame(maxWidth: .infinity, alignment: .trailing)
-            }.padding()
+//            HStack {
+//                Button (role: .destructive) {
+//                    modelContext.delete(asset)
+//                    
+//                    dismiss()
+//                } label: {
+//                    Label("Delete", systemImage: "chevron.left")
+//                        .labelStyle(.titleOnly)
+//                }.frame(maxWidth: .infinity, alignment: .leading)
+//                
+//                Button {
+//                    dismiss()
+//                } label: {
+//                    Label("Save", systemImage: "checkmark.circle")
+//                        .labelStyle(.titleOnly)
+//                }.frame(maxWidth: .infinity, alignment: .trailing)
+//            }.padding()
             
             List {
                 Section {
@@ -60,7 +60,7 @@ struct EditAsset: View {
                                 }
                             }
                         }
-                
+                    
                     Picker("Asset type", selection: $asset.type) {
                         ForEach(AssetType.allCases, id: \.self) { value in
                             Text(value.rawValue)
@@ -68,7 +68,29 @@ struct EditAsset: View {
                     }
                     .pickerStyle(.menu)
                 }
-            }.frame(maxHeight: .infinity, alignment: .top)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button (role: .destructive) {
+                        modelContext.delete(asset)
+                        
+                        dismiss()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                            .labelStyle(.titleOnly)
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Label("Save", systemImage: "checkmark.circle")
+                            .labelStyle(.titleOnly)
+                    }
+                }
+            }
+            .frame(maxHeight: .infinity, alignment: .top)
             .listStyle(.plain)
         }
     }

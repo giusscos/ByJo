@@ -20,26 +20,45 @@ struct CategoryOperationView: View {
     @State var showInsert: Bool = false
     
     var body: some View {
-        VStack {
-//            HStack {
-//                Button {
-//                    dismiss()
-//                } label: {
-//                    Label("Back", systemImage: "chevron.left")
-//                }.frame(maxWidth: .infinity, alignment: .leading)
-//                
-//                if showInsert {
-//                    Button {
-//                        withAnimation {
-//                            addCategory()
-//                        }
-//                    } label: {
-//                        Label("Done", systemImage: "checkmark")
-//                    }.frame(maxWidth: .infinity, alignment: .trailing)
-//                }
-//            }.padding()
-            
+        NavigationStack {
             List {
+                Section {
+                    if showInsert {
+                        HStack {
+                            TextField("Category Name", text: $categoryOperation.name)
+                                .onSubmit {
+                                    withAnimation {
+                                        addCategory()
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Button {
+                                withAnimation {
+                                    addCategory()
+                                }
+                            } label: {
+                                Label("Done", systemImage: "checkmark")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .buttonStyle(.plain)
+                            .foregroundStyle(Color.blue)
+                            .padding(.leading)
+                            .disabled(categoryOperation.name.isEmpty)
+                        }
+                    }
+                    
+                    if !showInsert {
+                        Button {
+                            withAnimation {
+                                showInsert.toggle()
+                            }
+                        } label: {
+                            Label("Add Category", systemImage: "plus")
+                        }
+                    }
+                }
+                
                 if categories.isEmpty {
                     ContentUnavailableView(
                         "No Categories Found",
@@ -47,41 +66,6 @@ struct CategoryOperationView: View {
                         description: Text("You need to add a category by clicking the plus button on the top right corner")
                     )
                 } else {
-                    Section {
-                        if showInsert {
-                            HStack {
-                                TextField("Category Name", text: $categoryOperation.name)
-                                    .onSubmit {
-                                        withAnimation {
-                                            addCategory()
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Button {
-                                    withAnimation {
-                                        addCategory()
-                                    }
-                                } label: {
-                                    Label("Done", systemImage: "checkmark")
-                                        .labelStyle(.iconOnly)
-                                }
-                                .padding(.leading)
-                                .disabled(categoryOperation.name.isEmpty)
-                            }
-                        }
-                        
-                        if !showInsert {
-                            Button {
-                                withAnimation {
-                                    showInsert.toggle()
-                                }
-                            } label: {
-                                Label("Add Category", systemImage: "plus")
-                            }
-                        }
-                    }
-                    
                     Section {
                         ForEach(categories) { value in
                             Text(value.name)
