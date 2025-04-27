@@ -133,7 +133,6 @@ struct OperationView: View {
             }
         }
         .navigationTitle("Operations")
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 EditButton()

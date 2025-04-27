@@ -32,10 +32,10 @@ struct AssetChartDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             if assets.isEmpty {
-                NoDataView(
-                    title: "No Assets Found",
-                    description: "You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner",
-                    systemImage: "exclamationmark"
+                ContentUnavailableView(
+                    "No Assets Found",
+                    systemImage: "exclamationmark",
+                    description: Text("You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner")
                 )
             } else {
                 VStack(alignment: .leading, spacing: 16) {

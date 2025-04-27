@@ -59,13 +59,17 @@ struct OperationChartDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             if operations.isEmpty {
-                NoDataView(
-                    title: "No Operations Found",
-                    description: "You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner",
-                    systemImage: "exclamationmark"
+                ContentUnavailableView(
+                    "No Operations Found",
+                    systemImage: "exclamationmark",
+                    description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
                 )
             } else if filteredData.isEmpty {
-                NoDataView()
+                ContentUnavailableView(
+                    "No Data for Selected Range",
+                    systemImage: "exclamationmark",
+                    description: Text("Try selecting a different date range or add new operations")
+                )
             } else {
                 VStack(alignment: .leading, spacing: 16) {
                     if let currency = assets.first?.currency {

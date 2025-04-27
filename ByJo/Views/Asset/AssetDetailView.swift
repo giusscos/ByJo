@@ -68,10 +68,10 @@ struct AssetDetailView: View {
     var body: some View {
         NavigationStack {
             if assetOperation == [] {
-                NoDataView(
-                    title: "No operations yet",
-                    description: "You need to add operations to this asset to see them here.",
-                    systemImage: "exclamationmark"
+                ContentUnavailableView(
+                    "No operations yet",
+                    systemImage: "exclamationmark",
+                    description: Text("You need to add operations to this asset to see them here.")
                 )
             } else {
                 if let operations = assetOperation {
@@ -118,8 +118,11 @@ struct AssetDetailView: View {
                             .aspectRatio(1, contentMode: .fit)
                             .listRowBackground(Color.clear)
                         } else {
-                            NoDataView()
-                            .listRowBackground(Color.clear)
+                            ContentUnavailableView(
+                                "No Data for Selected Range",
+                                systemImage: "exclamationmark",
+                                description: Text("Try selecting a different date range or add new operations")
+                            )
                         }
                         
                         AssetOperationView(operations: operations)

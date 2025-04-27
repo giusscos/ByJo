@@ -80,7 +80,6 @@ struct AssetView: View {
             }
         }
         .navigationTitle("Assets")
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
