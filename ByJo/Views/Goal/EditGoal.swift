@@ -51,7 +51,8 @@ struct EditGoal:View {
                     DatePicker("Due date", selection: $date, displayedComponents: .date)
                         .datePickerStyle(.compact)
                 }
-            }.toolbar {
+            }
+            .toolbar {
                 ToolbarItem (placement: .topBarLeading) {
                     Button (role: .destructive) {
                         modelContext.delete(goal)

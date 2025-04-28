@@ -7,19 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		680A7E7C2DBFC8B200D790A3 /* byjoWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 680A7E722DBFC8B000D790A3 /* byjoWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		68AFBC342CEBFD190086749E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68AFBC332CEBFD190086749E /* StoreKit.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		680A7E7A2DBFC8B200D790A3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 68A4BD0F2CD8E7D100614F19 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 680A7E712DBFC8B000D790A3;
-			remoteInfo = "byjoWatch Watch App";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		680A7E802DBFC8B200D790A3 /* Embed Watch Content */ = {
@@ -28,7 +17,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				680A7E7C2DBFC8B200D790A3 /* byjoWatch Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,23 +24,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		680A7E722DBFC8B000D790A3 /* byjoWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "byjoWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68A4BD172CD8E7D100614F19 /* ByJo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ByJo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68AFBC332CEBFD190086749E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		680A7E862DBFC8DD00D790A3 /* Exceptions for "ByJo" folder in "byjoWatch Watch App" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Models/Asset.swift,
-				Models/AssetOperation.swift,
-				Models/CategoryOperation.swift,
-				Models/Goal.swift,
-				Models/Store.swift,
-			);
-			target = 680A7E712DBFC8B000D790A3 /* byjoWatch Watch App */;
-		};
 		68AFBC312CEB93760086749E /* Exceptions for "ByJo" folder in "ByJo" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -63,16 +39,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		680A7E732DBFC8B100D790A3 /* byjoWatch Watch App */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "byjoWatch Watch App";
-			sourceTree = "<group>";
-		};
 		68A4BD192CD8E7D100614F19 /* ByJo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				68AFBC312CEB93760086749E /* Exceptions for "ByJo" folder in "ByJo" target */,
-				680A7E862DBFC8DD00D790A3 /* Exceptions for "ByJo" folder in "byjoWatch Watch App" target */,
 			);
 			path = ByJo;
 			sourceTree = "<group>";
@@ -80,13 +50,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		680A7E6F2DBFC8B000D790A3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		68A4BD142CD8E7D100614F19 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -102,7 +65,6 @@
 			isa = PBXGroup;
 			children = (
 				68A4BD192CD8E7D100614F19 /* ByJo */,
-				680A7E732DBFC8B100D790A3 /* byjoWatch Watch App */,
 				68AFBC322CEBFD190086749E /* Frameworks */,
 				68A4BD182CD8E7D100614F19 /* Products */,
 			);
@@ -112,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				68A4BD172CD8E7D100614F19 /* ByJo.app */,
-				680A7E722DBFC8B000D790A3 /* byjoWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,28 +89,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		680A7E712DBFC8B000D790A3 /* byjoWatch Watch App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 680A7E7D2DBFC8B200D790A3 /* Build configuration list for PBXNativeTarget "byjoWatch Watch App" */;
-			buildPhases = (
-				680A7E6E2DBFC8B000D790A3 /* Sources */,
-				680A7E6F2DBFC8B000D790A3 /* Frameworks */,
-				680A7E702DBFC8B000D790A3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				680A7E732DBFC8B100D790A3 /* byjoWatch Watch App */,
-			);
-			name = "byjoWatch Watch App";
-			packageProductDependencies = (
-			);
-			productName = "byjoWatch Watch App";
-			productReference = 680A7E722DBFC8B000D790A3 /* byjoWatch Watch App.app */;
-			productType = "com.apple.product-type.application";
-		};
 		68A4BD162CD8E7D100614F19 /* ByJo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 68A4BD272CD8E7D200614F19 /* Build configuration list for PBXNativeTarget "ByJo" */;
@@ -162,7 +101,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				680A7E7B2DBFC8B200D790A3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				68A4BD192CD8E7D100614F19 /* ByJo */,
@@ -184,9 +122,6 @@
 				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
-					680A7E712DBFC8B000D790A3 = {
-						CreatedOnToolsVersion = 16.3;
-					};
 					68A4BD162CD8E7D100614F19 = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -207,19 +142,11 @@
 			projectRoot = "";
 			targets = (
 				68A4BD162CD8E7D100614F19 /* ByJo */,
-				680A7E712DBFC8B000D790A3 /* byjoWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		680A7E702DBFC8B000D790A3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		68A4BD152CD8E7D100614F19 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -230,13 +157,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		680A7E6E2DBFC8B000D790A3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		68A4BD132CD8E7D100614F19 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -246,75 +166,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		680A7E7B2DBFC8B200D790A3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 680A7E712DBFC8B000D790A3 /* byjoWatch Watch App */;
-			targetProxy = 680A7E7A2DBFC8B200D790A3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		680A7E7E2DBFC8B200D790A3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "byjoWatch Watch App/byjoWatch Watch App.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "byjoWatch-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = byjoWatch;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = giusscos.ByJo;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = giusscos.ByJo.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.4;
-			};
-			name = Debug;
-		};
-		680A7E7F2DBFC8B200D790A3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "byjoWatch Watch App/byjoWatch Watch App.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "byjoWatch-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = byjoWatch;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = giusscos.ByJo;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = giusscos.ByJo.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.4;
-			};
-			name = Release;
-		};
 		68A4BD252CD8E7D200614F19 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -513,15 +365,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		680A7E7D2DBFC8B200D790A3 /* Build configuration list for PBXNativeTarget "byjoWatch Watch App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				680A7E7E2DBFC8B200D790A3 /* Debug */,
-				680A7E7F2DBFC8B200D790A3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		68A4BD122CD8E7D100614F19 /* Build configuration list for PBXProject "ByJo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

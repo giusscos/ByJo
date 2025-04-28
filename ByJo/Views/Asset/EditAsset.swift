@@ -52,6 +52,7 @@ struct EditAsset: View {
                     .pickerStyle(.menu)
                 }
             }
+            .interactiveDismissDisabled(asset.name.isEmpty)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button (role: .destructive) {
