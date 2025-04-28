@@ -29,7 +29,7 @@ struct EditAssetOperation: View {
                     Text("Amount: ")
                     
                     if let asset = operation.asset {
-                        TextField("Amount", value: $operation.amount, format: .currency(code: asset.currency.rawValue))
+                        TextField("Amount", value: $operation.amount, format: .number)
                             .keyboardType(.decimalPad)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                         

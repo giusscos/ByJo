@@ -29,7 +29,8 @@ struct EditAsset: View {
                     }
                     .pickerStyle(.menu)
                     
-                    TextField("Initial balance", value: $asset.initialBalance, format: .currency(code: asset.currency.rawValue))
+//                    TextField("Initial balance", value: $asset.initialBalance, format: .currency(code: asset.currency.rawValue))
+                    TextField("Initial balance", value: $asset.initialBalance, format: .number)
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled()
                         .focused($isInputActive)

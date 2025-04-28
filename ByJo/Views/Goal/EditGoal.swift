@@ -40,7 +40,7 @@ struct EditGoal:View {
                     HStack {
                         Text("Target amount: ")
                         
-                        TextField("Target amount", value: $goal.targetAmount, format: .currency(code: assetGoal.currency.rawValue))
+                        TextField("Target amount", value: $goal.targetAmount, format: .number)
                             .keyboardType(.decimalPad)
                     }
                 }

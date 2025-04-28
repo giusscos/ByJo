@@ -115,7 +115,7 @@ struct AssetDetailView: View {
                                     AxisValueLabel(format: .dateTime.month().day().year())
                                 }
                             }
-                            .aspectRatio(1, contentMode: .fit)
+                            .frame(height: 300)
                             .listRowBackground(Color.clear)
                         } else {
                             ContentUnavailableView(
