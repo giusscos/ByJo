@@ -28,20 +28,18 @@ struct EditAssetOperation: View {
                 HStack {
                     Text("Amount: ")
                     
-                    if let asset = operation.asset {
-                        TextField("Amount", value: $operation.amount, format: .number)
-                            .keyboardType(.decimalPad)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                        
-                        Button {
-                            operation.amount *= -1
-                        } label: {
-                            Label(operation.amount > 0 ? "Negative Amount" : "Positive Amount", systemImage: operation.amount > 0 ? "minus.circle" : "plus.circle")
-                                .labelStyle(.iconOnly)
-                        }
-                        .disabled(operation.amount.isNaN || operation.amount == 0.0)
-                        .padding(.leading)
+                    TextField("Amount", value: $operation.amount, format: .number)
+                        .keyboardType(.decimalPad)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Button {
+                        operation.amount *= -1
+                    } label: {
+                        Label(operation.amount > 0 ? "Negative Amount" : "Positive Amount", systemImage: operation.amount > 0 ? "minus.circle" : "plus.circle")
+                            .labelStyle(.iconOnly)
                     }
+                    .disabled(operation.amount.isNaN || operation.amount == 0.0)
+                    .padding(.leading)
                 }
                 
                 Picker("Asset", selection: $operation.asset) {

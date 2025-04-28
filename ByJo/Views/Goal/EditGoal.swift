@@ -36,13 +36,11 @@ struct EditGoal:View {
                     Text("Current Asset amount: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
                 }
                 
-                if let assetGoal = goal.asset {
-                    HStack {
-                        Text("Target amount: ")
-                        
-                        TextField("Target amount", value: $goal.targetAmount, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
+                HStack {
+                    Text("Target amount: ")
+                    
+                    TextField("Target amount", value: $goal.targetAmount, format: .number)
+                        .keyboardType(.decimalPad)
                 }
                 
                 Toggle("Pin goal", isOn: $goal.isPinned)
