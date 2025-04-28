@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
+    
     @Query(sort: \AssetOperation.date, order: .reverse) private var operations: [AssetOperation]
     @Query private var assets: [Asset]
     @Query private var categories: [CategoryOperation]

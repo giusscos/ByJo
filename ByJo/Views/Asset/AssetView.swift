@@ -20,6 +20,7 @@ struct AssetView: View {
     @State private var selectedType: AssetType?
     @State private var sortOrder: SortOrder = .name
     @State private var isAscending: Bool = true
+    @State private var showingBulkDeleteAlert = false
     
     enum SortOrder {
         case name
@@ -38,7 +39,6 @@ struct AssetView: View {
     enum SheetType: Identifiable {
         case editAsset(Asset)
         case editGoal(Goal)
-        case deleteConfirmation
         
         var id: String {
             switch self {
@@ -46,8 +46,6 @@ struct AssetView: View {
                 return "editAsset_\(asset.id)"
             case .editGoal(let goal):
                 return "editGoal_\(goal.id)"
-            case .deleteConfirmation:
-                return "deleteConfirmation"
             }
         }
     }
@@ -148,7 +146,7 @@ struct AssetView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEditMode == .active {
                     Button(role: .destructive) {
-                        activeSheet = .deleteConfirmation
+                        showingBulkDeleteAlert = true
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
@@ -246,43 +244,15 @@ struct AssetView: View {
                 EditAsset(asset: asset)
             case .editGoal(let goal):
                 EditGoal(goal: goal)
-            case .deleteConfirmation:
-                deleteConfirmationView
             }
         }
-    }
-    
-    private var deleteConfirmationView: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                Image(systemName: "trash")
-                    .font(.system(size: 50))
-                    .foregroundColor(.red)
-                
-                Text("Delete Assets")
-                    .font(.title2)
-                    .bold()
-                
-                Text("Are you sure you want to delete \(selectedAssets.count) assets? This action cannot be undone.")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                
-                HStack(spacing: 20) {
-                    Button("Cancel", role: .cancel) {
-                        activeSheet = nil
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Button("Delete", role: .destructive) {
-                        deleteSelectedAssets()
-                        activeSheet = nil
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
+        .alert("Delete Assets", isPresented: $showingBulkDeleteAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                deleteSelectedAssets()
             }
-            .padding()
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
+        } message: {
+            Text("Are you sure you want to delete \(selectedAssets.count) assets? This action cannot be undone.")
         }
     }
     

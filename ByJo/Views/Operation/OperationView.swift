@@ -11,7 +11,6 @@ import SwiftData
 enum ActiveSheet: Identifiable {
     case editOperation(AssetOperation)
     case viewCategories
-    case deleteConfirmation
     
     var id: String {
         switch self {
@@ -19,8 +18,6 @@ enum ActiveSheet: Identifiable {
             return "editOperation-\(operation.id)"
         case .viewCategories:
             return "viewCategories"
-        case .deleteConfirmation:
-            return "deleteConfirmation"
         }
     }
 }
@@ -35,6 +32,9 @@ struct OperationView: View {
     @Query var categories: [CategoryOperation]
     
     @State private var activeSheet: ActiveSheet?
+    @State private var operationToDelete: AssetOperation?
+    @State private var showingDeleteAlert = false
+    @State private var showingBulkDeleteAlert = false
     
     @State private var showingImporter = false
     @State private var importError: CSVError?
@@ -144,7 +144,7 @@ struct OperationView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEditMode == .active {
                     Button(role: .destructive) {
-                        activeSheet = .deleteConfirmation
+                        showingBulkDeleteAlert = true
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
@@ -208,8 +208,6 @@ struct OperationView: View {
                 EditAssetOperation(operation: operation)
             case .viewCategories:
                 CategoryOperationView()
-            case .deleteConfirmation:
-                deleteConfirmationView
             }
         }
         .fileImporter(
@@ -268,39 +266,13 @@ struct OperationView: View {
         } message: {
             Text(successMessage)
         }
-    }
-    
-    private var deleteConfirmationView: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                Image(systemName: "trash")
-                    .font(.system(size: 50))
-                    .foregroundColor(.red)
-                
-                Text("Delete Operations")
-                    .font(.title2)
-                    .bold()
-                
-                Text("Are you sure you want to delete \(selectedOperations.count) operations? This action cannot be undone.")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                
-                HStack(spacing: 20) {
-                    Button("Cancel", role: .cancel) {
-                        activeSheet = nil
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Button("Delete", role: .destructive) {
-                        deleteSelectedOperations()
-                        activeSheet = nil
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
+        .alert("Delete Operations", isPresented: $showingBulkDeleteAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                deleteSelectedOperations()
             }
-            .padding()
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
+        } message: {
+            Text("Are you sure you want to delete \(selectedOperations.count) operations? This action cannot be undone.")
         }
     }
     

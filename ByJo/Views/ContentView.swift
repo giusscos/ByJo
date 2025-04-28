@@ -76,6 +76,7 @@ struct ContentView: View {
                         VStack(spacing: 12) {
                             Image(systemName: contentData[index].imageName)
                                 .font(.largeTitle)
+                                .foregroundStyle(Color.accentColor)
                             
                             Text(contentData[index].title)
                                 .font(.title)
