@@ -71,6 +71,17 @@ struct HomeView: View {
          OperationDataType(type: "Income", data: incomeData)]
     }
     
+    var assetComparisonData: [(Asset, Decimal, Decimal)] {
+        let currentRange = dateRange
+        let previousRange = currentRange
+        
+        return assets.map { asset in
+            let currentValue = asset.calculateBalanceForDateRange(currentRange)
+            let previousValue = asset.calculatePreviousBalanceForDateRange(previousRange)
+            return (asset, currentValue, previousValue)
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -97,35 +108,23 @@ struct HomeView: View {
                     }
                 } else {
                     Section {
+                        Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
+                            ForEach(availableDateRanges) { range in
+                                Text(range.label)
+                                    .tag(range)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowBackground(Color.clear)
+                    
+                    Section {
                         NavigationLink {
                             AssetChartDetailView()
                                 .navigationTransition(.zoom(sourceID: 0, in: namespace))
                         } label: {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Assets Overview")
-                                    .font(.title2)
-                                    .bold()
-                                
-                                if let assetsCurrency = assets.first {
-                                    Text("The sum of your assets hits ") + Text(totalBalance, format: .currency(code: assetsCurrency.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.accentColor)
-                                }
-                                
-                                Chart(assets) { value in
-                                    BarMark(
-                                        x: .value("Asset", value.name),
-                                        y: .value("Amount", value.calculateCurrentBalance())
-                                    )
-                                    .foregroundStyle(by: .value("Asset", value.name))
-                                    .cornerRadius(8)
-                                }
-                                .chartLegend(showingChartLabels ? .visible : .hidden)
-                                .chartYAxis(.hidden)
-                                .chartXAxis(.hidden)
-                                .frame(height: 200)
-                                .padding(.vertical, 8)
-                            }
+                            AssetsOverviewChart(assets: assets, operations: operations, showingChartLabels: showingChartLabels, dateRange: dateRange)
                         }
                         .tint(.primary)
                         .matchedTransitionSource(id: 0, in: namespace)
@@ -141,17 +140,18 @@ struct HomeView: View {
                         )
                     }
                 } else {
-                    Section {
-                        Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
-                            ForEach(availableDateRanges) { range in
-                                Text(range.label)
-                                    .tag(range)
+                    if !assets.isEmpty {
+                        Section {
+                            NavigationLink {
+                                AssetComparisonDetailView()
+                                    .navigationTransition(.zoom(sourceID: 3, in: namespace))
+                            } label: {
+                                AssetsComparisonChart(assets: assets, assetComparisonData: assetComparisonData, showingChartLabels: showingChartLabels)
                             }
+                            .tint(.primary)
+                            .matchedTransitionSource(id: 3, in: namespace)
                         }
-                        .pickerStyle(.segmented)
                     }
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .listRowBackground(Color.clear)
                     
                     if !categories.isEmpty {
                         Section {
@@ -159,67 +159,7 @@ struct HomeView: View {
                                 CategoryChartDetailView()
                                     .navigationTransition(.zoom(sourceID: 1, in: namespace))
                             } label: {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text("Categories Overview")
-                                        .font(.title2)
-                                        .bold()
-                                    
-                                    if !filteredData.isEmpty {
-                                        if let operation = operations.first(where: { $0.category == categoryWithHighestBalance.0 }) {
-                                            if let asset = operation.asset {
-                                                Text(categoryWithHighestBalance.0.name)
-                                                    .bold()
-                                                    .foregroundStyle(Color.accentColor)
-                                                + Text(" this period hits ")
-                                                + Text(categoryWithHighestBalance.1, format: .currency(code: asset.currency.rawValue))
-                                                    .bold()
-                                                    .foregroundStyle(Color.green)
-                                            }
-                                        }
-                                        
-                                        if let operation = operations.first(where: { $0.category == categoryWithLowestBalance.0 }) {
-                                            if let asset = operation.asset {
-                                                Text(categoryWithLowestBalance.0.name)
-                                                    .bold()
-                                                    .foregroundStyle(Color.accentColor)
-                                                + Text(" this period hits ")
-                                                + Text(categoryWithLowestBalance.1, format: .currency(code: asset.currency.rawValue))
-                                                    .bold()
-                                                    .foregroundStyle(Color.red)
-                                            }
-                                        }
-                                        
-                                        let groupedData = Dictionary(grouping: filteredData, by: { $0.category?.name ?? "" })
-                                            .map { (key, values) in
-                                                (
-                                                    category: key,
-                                                    total: values.reduce(0) { $0 + $1.amount }
-                                                )
-                                            }
-                                            .filter { !$0.category.isEmpty }
-                                            .sorted { abs($0.total) > abs($1.total) }
-                                        
-                                        Chart(groupedData, id: \.category) { item in
-                                            BarMark(
-                                                x: .value("Amount", item.total),
-                                                y: .value("Category", item.category)
-                                            )
-                                            .foregroundStyle(by: .value("Category", item.category))
-                                            .cornerRadius(8)
-                                        }
-                                        .chartLegend(showingChartLabels ? .visible : .hidden)
-                                        .chartYAxis(.hidden)
-                                        .chartXAxis(.hidden)
-                                        .frame(height: 200)
-                                        .padding(.vertical, 8)
-                                    } else {
-                                        ContentUnavailableView(
-                                            "No Data for Selected Range",
-                                            systemImage: "exclamationmark",
-                                            description: Text("Try selecting a different date range or add new operations")
-                                        )
-                                    }
-                                }
+                                CategoriesOverviewChart(categories: categories, filteredData: filteredData, operations: operations, showingChartLabels: showingChartLabels)
                             }
                             .tint(.primary)
                             .matchedTransitionSource(id: 1, in: namespace)
@@ -231,59 +171,7 @@ struct HomeView: View {
                             OperationChartDetailView()
                                 .navigationTransition(.zoom(sourceID: 2, in: namespace))
                         } label: {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Operations Overview")
-                                    .font(.title2)
-                                    .bold()
-                                
-                                if !filteredData.isEmpty {
-                                    if let assetsCurrency = assets.first {
-                                        if totalIncome > 0 {
-                                            Text("Your incomes this period hits ") + Text(totalIncome, format: .currency(code: assetsCurrency.currency.rawValue))
-                                                .bold()
-                                                .foregroundStyle(Color.green)
-                                        }
-                                        
-                                        if totalExpenses < 0 {
-                                            Text("Your outcomes this period hits ") + Text(totalExpenses, format: .currency(code: assetsCurrency.currency.rawValue))
-                                                .bold()
-                                                .foregroundStyle(Color.red)
-                                        }
-                                    }
-                                    
-                                    Chart(operationsData) { operation in
-                                        ForEach(operation.data) { value in
-                                            LineMark(
-                                                x: .value("Date", value.date, unit: .day),
-                                                y: .value("Amount", value.amount)
-                                            )
-                                            .foregroundStyle(by: .value("Type", operation.type))
-                                            
-                                            PointMark(
-                                                x: .value("Date", value.date, unit: .day),
-                                                y: .value("Amount", value.amount)
-                                            )
-                                            .foregroundStyle(by: .value("Type", operation.type))
-                                        }
-                                    }
-                                    .chartForegroundStyleScale([
-                                        "Outcome": Color.red,
-                                        "Income": Color.green
-                                    ])
-                                    .chartLegend(showingChartLabels ? .visible : .hidden)
-                                    .chartYAxis(.hidden)
-                                    .chartXAxis(.hidden)
-                                    .frame(height: 200)
-                                    .padding(.vertical, 8)
-                                } else {
-                                    ContentUnavailableView(
-                                        "No Data for Selected Range",
-                                        systemImage: "exclamationmark",
-                                        description: Text("Try selecting a different date range or add new operations")
-                                    )
-                                }
-                            }
-                            
+                            OperationsOverviewChart(assets: assets, filteredData: filteredData, operationsData: operationsData, showingChartLabels: showingChartLabels)
                         }
                         .tint(.primary)
                         .matchedTransitionSource(id: 2, in: namespace)

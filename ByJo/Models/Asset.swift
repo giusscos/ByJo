@@ -32,6 +32,26 @@ class Asset {
     func calculateCurrentBalance() -> Decimal {
         return operations?.reduce(initialBalance) { $0 + $1.amount } ?? initialBalance
     }
+    
+    func calculateBalanceForDateRange(_ dateRange: DateRangeOption) -> Decimal {
+        let (startDate, endDate) = dateRange.dateRange
+        
+        let operationsInRange = operations?.filter { operation in
+            operation.date >= startDate && operation.date <= endDate
+        } ?? []
+        
+        return operationsInRange.reduce(initialBalance) { $0 + $1.amount }
+    }
+    
+    func calculatePreviousBalanceForDateRange(_ dateRange: DateRangeOption) -> Decimal {
+        let (startDate, endDate) = dateRange.previousRange
+        
+        let operationsInRange = operations?.filter { operation in
+            operation.date >= startDate && operation.date <= endDate
+        } ?? []
+        
+        return operationsInRange.reduce(initialBalance) { $0 + $1.amount }
+    }
 }
 
 enum CurrencyCode: String, CaseIterable, Codable {

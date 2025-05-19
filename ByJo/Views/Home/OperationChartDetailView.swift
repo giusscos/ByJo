@@ -52,12 +52,7 @@ struct OperationChartDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            Text("Operations")
-                .font(.largeTitle)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-            
+        VStack {
             if operations.isEmpty {
                 ContentUnavailableView(
                     "No Operations Found",
@@ -137,7 +132,9 @@ struct OperationChartDetailView: View {
                 .padding(.top)
             }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
         .padding()
+        .navigationTitle("Operations")
     }
 }
 

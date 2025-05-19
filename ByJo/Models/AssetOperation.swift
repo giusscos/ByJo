@@ -107,6 +107,83 @@ enum DateRangeOption: Identifiable, Hashable {
         }
     }
     
+    var dateRange: (startDate: Date, endDate: Date) {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        switch self {
+        case .week:
+            let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
+            let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek)!
+            return (startOfWeek, endOfWeek)
+            
+        case .month:
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth)!
+            return (startOfMonth, endOfMonth)
+            
+        case .threeMonths:
+            let startOfQuarter = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: ((calendar.component(.month, from: now) - 1) / 3) * 3 + 1))!
+            let endOfQuarter = calendar.date(byAdding: DateComponents(month: 3, day: -1), to: startOfQuarter)!
+            return (startOfQuarter, endOfQuarter)
+            
+        case .sixMonths:
+            let startOfHalfYear = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: ((calendar.component(.month, from: now) - 1) / 6) * 6 + 1))!
+            let endOfHalfYear = calendar.date(byAdding: DateComponents(month: 6, day: -1), to: startOfHalfYear)!
+            return (startOfHalfYear, endOfHalfYear)
+            
+        case .year:
+            let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now))!
+            let endOfYear = calendar.date(byAdding: DateComponents(year: 1, day: -1), to: startOfYear)!
+            return (startOfYear, endOfYear)
+            
+        case .all:
+            return (Date.distantPast, Date.distantFuture)
+        }
+    }
+    
+    var previousRange: (startDate: Date, endDate: Date) {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        switch self {
+        case .week:
+            let startOfCurrentWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
+            let startOfPreviousWeek = calendar.date(byAdding: .day, value: -7, to: startOfCurrentWeek)!
+            let endOfPreviousWeek = calendar.date(byAdding: .day, value: 6, to: startOfPreviousWeek)!
+            return (startOfPreviousWeek, endOfPreviousWeek)
+            
+        case .month:
+            let startOfCurrentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+            let startOfPreviousMonth = calendar.date(byAdding: .month, value: -1, to: startOfCurrentMonth)!
+            let endOfPreviousMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfPreviousMonth)!
+            return (startOfPreviousMonth, endOfPreviousMonth)
+            
+        case .threeMonths:
+            let currentQuarter = (calendar.component(.month, from: now) - 1) / 3
+            let startOfCurrentQuarter = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: currentQuarter * 3 + 1))!
+            let startOfPreviousQuarter = calendar.date(byAdding: .month, value: -3, to: startOfCurrentQuarter)!
+            let endOfPreviousQuarter = calendar.date(byAdding: DateComponents(month: 3, day: -1), to: startOfPreviousQuarter)!
+            return (startOfPreviousQuarter, endOfPreviousQuarter)
+            
+        case .sixMonths:
+            let currentHalfYear = (calendar.component(.month, from: now) - 1) / 6
+            let startOfCurrentHalfYear = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: currentHalfYear * 6 + 1))!
+            let startOfPreviousHalfYear = calendar.date(byAdding: .month, value: -6, to: startOfCurrentHalfYear)!
+            let endOfPreviousHalfYear = calendar.date(byAdding: DateComponents(month: 6, day: -1), to: startOfPreviousHalfYear)!
+            return (startOfPreviousHalfYear, endOfPreviousHalfYear)
+            
+        case .year:
+            let startOfCurrentYear = calendar.date(from: calendar.dateComponents([.year], from: now))!
+            let startOfPreviousYear = calendar.date(byAdding: .year, value: -1, to: startOfCurrentYear)!
+            let endOfPreviousYear = calendar.date(byAdding: DateComponents(year: 1, day: -1), to: startOfPreviousYear)!
+            return (startOfPreviousYear, endOfPreviousYear)
+            
+        case .all:
+            return (Date.distantPast, Date.distantFuture)
+        }
+    }
+    
     static func availableRanges(for operations: [AssetOperation], maxOptions: Int = 6) -> [DateRangeOption] {
         guard !operations.isEmpty else { return [.all] }
         

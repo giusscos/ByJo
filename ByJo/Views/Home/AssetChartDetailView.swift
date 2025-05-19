@@ -10,7 +10,16 @@ import SwiftData
 import Charts
 
 struct AssetChartDetailView: View {
+    @Environment(\.modelContext) var modelContext
     @Query var assets: [Asset]
+    @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    
+    @State private var dateRange: DateRangeOption = .all
+    @AppStorage("showingChartLabels") private var showingChartLabels = true
+    
+    var availableDateRanges: [DateRangeOption] {
+        DateRangeOption.availableRanges(for: operations)
+    }
     
     var totalAmountAsset: Decimal? {
         assets.reduce(0) { $0 + $1.calculateCurrentBalance() }
@@ -25,81 +34,25 @@ struct AssetChartDetailView: View {
     }
         
     var body: some View {
-        ScrollView {
-            Text("Assets")
-                .font(.largeTitle)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-            
-            if assets.isEmpty {
-                ContentUnavailableView(
-                    "No Assets Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner")
-                )
-            } else {
-                VStack(alignment: .leading, spacing: 16) {
-                    if let totalAmount = totalAmountAsset {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Total Balance")
-                                .foregroundStyle(.secondary)
-                            Text(totalAmount, format: .currency(code: assets.first!.currency.rawValue))
-                                .font(.title3)
-                                .bold()
-                                .foregroundStyle(Color.accentColor)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        if let asset = topAsset {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Top Asset")
-                                    .foregroundStyle(.secondary)
-                                HStack {
-                                    Text(asset.name)
-                                        .bold()
-                                    Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.accentColor)
-                                }
-                            }
-                        }
-                        
-                        if let asset = worseAsset {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Lowest Asset")
-                                    .foregroundStyle(.secondary)
-                                HStack {
-                                    Text(asset.name)
-                                        .bold()
-                                    Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
-                                        .bold()
-                                        .foregroundStyle(Color.red)
-                                }
-                            }
-                        }
-                    }
-                    .font(.subheadline)
-                    
-                    Chart(assets) { value in
-                        BarMark(
-                            x: .value("Asset", value.name),
-                            y: .value("Amount", value.calculateCurrentBalance())
-                        )
-                        .foregroundStyle(by: .value("Asset", value.name))
-                        .cornerRadius(8)
-                    }
-                    .chartLegend(.visible)
-                    .chartYAxis {
-                        AxisMarks(position: .leading)
-                    }
-                    .frame(height: 300)
-                    .padding(.vertical, 8)
+        VStack(spacing: 16) {
+            Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
+                ForEach(availableDateRanges) { range in
+                    Text(range.label)
+                        .tag(range)
                 }
-                .padding(.top)
             }
+            .pickerStyle(.segmented)
+            
+            AssetsOverviewChart(
+                assets: assets,
+                operations: operations,
+                showingChartLabels: true,
+                dateRange: dateRange
+            )
         }
+        .frame(maxHeight: .infinity, alignment: .top)
         .padding()
+        .navigationTitle("Assets Overview")
     }
 }
 

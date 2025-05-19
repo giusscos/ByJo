@@ -33,12 +33,7 @@ struct CategoryChartDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            Text("Categories")
-                .font(.largeTitle)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-            
+        VStack {
             if operations.isEmpty {
                 ContentUnavailableView(
                     "No Operations Found",
@@ -123,7 +118,9 @@ struct CategoryChartDetailView: View {
                 .padding(.top)
             }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
         .padding()
+        .navigationTitle("Categories")
     }
     
     func calculateCategoryBalance(category: CategoryOperation) -> Decimal {
