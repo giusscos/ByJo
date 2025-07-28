@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Goal {
+final class Goal {
     var id: UUID = UUID()
     var title: String = ""
     var targetAmount: Decimal = 0

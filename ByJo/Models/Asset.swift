@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class Asset {
+final class Asset {
     var id: UUID = UUID()
     var name: String = ""
     var currency: CurrencyCode = CurrencyCode.usd

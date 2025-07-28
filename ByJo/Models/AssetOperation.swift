@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class AssetOperation {
+final class AssetOperation {
     var id: UUID = UUID()
     var name: String = ""
     var currency: CurrencyCode = CurrencyCode.usd
@@ -43,15 +43,15 @@ class AssetOperation {
     }
 }
 
-extension AssetOperation: Hashable {
-    static func == (lhs: AssetOperation, rhs: AssetOperation) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
+//extension AssetOperation: Hashable {
+//    static func == (lhs: AssetOperation, rhs: AssetOperation) -> Bool {
+//        lhs.id == rhs.id
+//    }
+//    
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
+//}
 
 func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {
     let calendar = Calendar.current

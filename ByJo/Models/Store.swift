@@ -9,30 +9,42 @@ import Foundation
 import StoreKit
 
 //alias
-typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo //The Product.SubscriptionInfo.RenewalInfo provides information about the next subscription renewal period.
+typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo // The Product.SubscriptionInfo.RenewalInfo provides information about the next subscription renewal period.
 typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState // the renewal states of auto-renewable subscriptions.
 
 @Observable
-class Store {
+final class Store {
     private var subscriptions: [Product] = []
     var purchasedSubscriptions: [Product] = []
     private var subscriptionGroupStatus: RenewalState?
+    var isLoading: Bool = true
     
-    private let productIds: [String] = ["bj_4999_1y_v1", "bj_499_1m"]
-//    private let productIds: [String] = ["bj_499_1m"] // test
-    let groupId: String = "21584181"
-//    let groupId: String = "0C83600A" // test
+    let productIds: [String] = ["bj_499_1m_3d", "bj_4999_1y_1w", "bj_1499_1m_3d_fa", "bj_9999_1y_1w_fa"] // test
+    let groupId: String = "0C83600A" // test
+    
+    let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"] // test
+    
+    //    let productIds: [String] = ["f_199_1m_3d", "f_999_1y_1w", "f_fa_2999_1y_1w", "f_fa_399_1m_3d"]
+    //    let groupId: String = "21742027"
+    //
+    //    let productLifetimeIds: [String] = ["com.giusscos.fooFamilyLifetime", "com.giusscos.fooLifetime"]
+    
+    // if there are multiple product types - create multiple variable for each .consumable, .nonconsumable, .autoRenewable, .nonRenewable.
+    private var storeProducts: [Product] = []
+    var purchasedProducts: [Product] = []
     
     var updateListenerTask : Task<Void, Error>? = nil
     
     init() {
-        //start a transaction listern as close to app launch as possible so you don't miss a transaction
+        // start a transaction listern as close to app launch as possible so you don't miss a transaction
         updateListenerTask = listenForTransactions()
         
         Task {
             await requestProducts()
             
             await updateCustomerProductStatus()
+            
+            isLoading = false
         }
     }
     
@@ -42,7 +54,7 @@ class Store {
     
     func listenForTransactions() -> Task<Void, Error> {
         return Task.detached {
-            //Iterate through any transactions that don't come from a direct call to `purchase()`.
+            // Iterate through any transactions that don't come from a direct call to `purchase()`.
             for await result in Transaction.updates {
                 do {
                     let transaction = try self.checkVerified(result)
@@ -61,9 +73,10 @@ class Store {
     @MainActor
     func requestProducts() async {
         do {
+            storeProducts = try await Product.products(for: productLifetimeIds)
+            
             // request from the app store using the product ids (hardcoded)
             subscriptions = try await Product.products(for: productIds)
-            print(subscriptions)
         } catch {
             print("Failed product request from app store server: \(error)")
         }
@@ -74,34 +87,40 @@ class Store {
         let result = try await product.purchase()
         
         switch result {
-        case .success(let verification):
-            //Check whether the transaction is verified. If it isn't,
-            //this function rethrows the verification error.
-            let transaction = try checkVerified(verification)
-            
-            //The transaction is verified. Deliver content to the user.
-            await updateCustomerProductStatus()
-            
-            //Always finish a transaction.
-            await transaction.finish()
-            
-            return transaction
-        case .userCancelled, .pending:
-            return nil
-        default:
-            return nil
+            case .success(let verification):
+                // Check whether the transaction is verified. If it isn't,
+                // this function rethrows the verification error.
+                let transaction = try checkVerified(verification)
+                
+                // The transaction is verified. Deliver content to the user.
+                await updateCustomerProductStatus()
+                
+                // Always finish a transaction.
+                await transaction.finish()
+                
+                return transaction
+            case .userCancelled, .pending:
+                return nil
+            default:
+                return nil
         }
     }
     
+    //check if product has already been purchased
+    func isPurchased(_ product: Product) async throws -> Bool {
+        // as we only have one product type grouping .nonconsumable - we check if it belongs to the purchasedCourses which ran init()
+        return purchasedProducts.contains(product)
+    }
+    
     func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
-        //Check whether the JWS passes StoreKit verification.
+        // Check whether the JWS passes StoreKit verification.
         switch result {
-        case .unverified:
-            //StoreKit parses the JWS, but it fails verification.
-            throw StoreError.failedVerification
-        case .verified(let safe):
-            //The result is verified. Return the unwrapped value.
-            return safe
+            case .unverified:
+                // StoreKit parses the JWS, but it fails verification.
+                throw StoreError.failedVerification
+            case .verified(let safe):
+                // The result is verified. Return the unwrapped value.
+                return safe
         }
     }
     
@@ -109,18 +128,23 @@ class Store {
     func updateCustomerProductStatus() async {
         for await result in Transaction.currentEntitlements {
             do {
-                //Check whether the transaction is verified. If it isn’t, catch `failedVerification` error.
+                // Check whether the transaction is verified. If it isn't, catch `failedVerification` error.
                 let transaction = try checkVerified(result)
                 
                 switch transaction.productType {
-                case .autoRenewable:
-                    if let subscription = subscriptions.first(where: {$0.id == transaction.productID}) {
-                        purchasedSubscriptions.append(subscription)
-                    }
-                default:
-                    break
+                    case .autoRenewable:
+                        if let subscription = subscriptions.first(where: {$0.id == transaction.productID}) {
+                            purchasedSubscriptions.append(subscription)
+                        }
+                    case .nonConsumable:
+                        if let storeProduct = storeProducts.first(where: {$0.id == transaction.productID}) {
+                            purchasedProducts.append(storeProduct)
+                        }
+                    default:
+                        break
                 }
-                //Always finish a transaction.
+                
+                // Always finish a transaction.
                 await transaction.finish()
             } catch {
                 print("failed updating products")

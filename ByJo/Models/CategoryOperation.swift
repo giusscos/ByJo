@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class CategoryOperation {
+final class CategoryOperation {
     var name: String = ""
     var id: UUID = UUID()
     

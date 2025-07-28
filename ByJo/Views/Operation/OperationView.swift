@@ -36,13 +36,6 @@ struct OperationView: View {
     @State private var showingDeleteAlert = false
     @State private var showingBulkDeleteAlert = false
     
-    @State private var showingImporter = false
-    @State private var importError: CSVError?
-    @State private var showingAddOperationError = false
-    @State private var showingError = false
-    @State private var showingSuccess = false
-    @State private var successMessage = ""
-    
     @State private var selectedAsset: Asset?
     @State private var filterCategory: CategoryOperation?
     @State private var isEditMode: EditMode = .inactive
@@ -151,18 +144,14 @@ struct OperationView: View {
                     .disabled(selectedOperations.isEmpty)
                 } else {
                     Menu {
-                        Button {
-                            addOperation()
-                        } label: {
-                            Label("Add operation", systemImage: "plus")
+                        if let asset = assets.first, !categories.isEmpty {
+                            Button {
+                                addOperation()
+                            } label: {
+                                Label("Add operation", systemImage: "plus")
+                            }
                         }
 
-                        Button {
-                            showingImporter.toggle()
-                        } label: {
-                            Label("Import Operations", systemImage: "square.and.arrow.down")
-                        }
-                        
                         Button {
                             activeSheet = .viewCategories
                         } label: {
@@ -210,62 +199,6 @@ struct OperationView: View {
                 CategoryOperationView()
             }
         }
-        .fileImporter(
-            isPresented: $showingImporter,
-            allowedContentTypes: [.commaSeparatedText],
-            allowsMultipleSelection: false
-        ) { result in
-            switch result {
-            case .success(let urls):
-                guard let url = urls.first else { return }
-                
-                // Start accessing the security-scoped resource
-                guard url.startAccessingSecurityScopedResource() else {
-                    importError = CSVError.detailedError("Permission denied: Cannot access the selected file")
-                    showingError = true
-                    return
-                }
-                
-                // Ensure we stop accessing the resource when we're done
-                defer { url.stopAccessingSecurityScopedResource() }
-                
-                do {
-                    let importedOperations = try CSVManager.shared.importCSV(
-                        from: url,
-                        context: modelContext,
-                        assets: assets,
-                        categories: categories
-                    )
-                    successMessage = "Successfully imported \(importedOperations.count) operations"
-                    showingSuccess = true
-                } catch let error as CSVError {
-                    importError = error
-                    showingError = true
-                } catch {
-                    importError = .detailedError("Unexpected error: \(error.localizedDescription)")
-                    showingError = true
-                }
-                
-            case .failure(let error):
-                importError = .detailedError("Failed to import file: \(error.localizedDescription)")
-                showingError = true
-            }
-        }
-        .alert("You can't add an operation yet", isPresented: $showingAddOperationError) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("You need to add an asset and a category before adding an operation")
-        }
-        .alert("Import Error", isPresented: $showingError) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(importError?.description ?? "Unknown error occurred")
-        }
-        .alert("Success", isPresented: $showingSuccess) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(successMessage)
-        }
         .alert("Delete Operations", isPresented: $showingBulkDeleteAlert) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
@@ -290,8 +223,6 @@ struct OperationView: View {
             operation.asset = asset
             modelContext.insert(operation)
             activeSheet = .editOperation(operation)
-        } else {
-            showingAddOperationError = true
         }
     }
 }
