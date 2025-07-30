@@ -28,179 +28,158 @@ struct HomeView: View {
     @State private var selectedGoal: Goal?
     @State private var selectedAsset: Asset?
     
-    @AppStorage("showingChartLabels") private var showingChartLabels = true
-    
-    var availableDateRanges: [DateRangeOption] {
-        DateRangeOption.availableRanges(for: operations)
-    }
-    
-    var filteredData: [AssetOperation] {
-        filterData(for: dateRange, data: operations)
-    }
-    
-    var totalBalance: Decimal {
-        assets.reduce(0) { $0 + $1.calculateCurrentBalance() }
-    }
-    
-    var categoryWithHighestBalance: (CategoryOperation, Decimal) {
-        findCategoryWithHighestBalance(categories: categories)
-    }
-    
-    var categoryWithLowestBalance: (CategoryOperation, Decimal) {
-        findCategoryWithLowestBalance(categories: categories)
-    }
-    
-    var totalIncome: Decimal {
-        filteredData.filter { $0.amount > 0 }.reduce(0) { $0 + $1.amount }
-    }
-    
-    var totalExpenses: Decimal {
-        filteredData.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
-    }
-    
-    var incomeData: [AssetOperation] {
-        filterData(for: dateRange, data: operations.filter { $0.amount > 0.0 })
-    }
-    
-    var outcomeData: [AssetOperation] {
-        filterData(for: dateRange, data: operations.filter { $0.amount < 0.0 })
-    }
-    
-    var operationsData: [OperationDataType] {
-        [OperationDataType(type: "Outcome", data: outcomeData),
-         OperationDataType(type: "Income", data: incomeData)]
-    }
-    
-    var assetComparisonData: [(Asset, Decimal, Decimal)] {
-        let currentRange = dateRange
-        let previousRange = currentRange
-        
-        return assets.map { asset in
-            let currentValue = asset.calculateBalanceForDateRange(currentRange)
-            let previousValue = asset.calculatePreviousBalanceForDateRange(previousRange)
-            return (asset, currentValue, previousValue)
-        }
-    }
-    
     var body: some View {
         NavigationStack {
             List {
-                if !goals.isEmpty {
-                    Section {
-                        ForEach(goals) { goal in
-                            GoalRow(goal: goal)
-                                .onTapGesture {
-                                    selectedGoal = goal
+                Section {
+                    VStack (alignment: .leading, spacing: 24) {
+                        HStack (alignment: .center, spacing: 4) {
+                            Text("VS last month")
+                            
+                            Image(systemName: "chevron.right")
+                        }
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                        
+                        HStack (spacing: 4) {
+                            Group {
+                                if true {
+                                    Image(systemName: "arrow.up.circle.fill")
+                                        .foregroundStyle(.green)
+                                } else {
+                                    Image(systemName: "arrow.down.circle.fill")
+                                        .foregroundStyle(.red)
                                 }
+                            }
+                            .imageScale(.large)
+                            .fontWeight(.semibold)
+                            
+                            HStack {
+                                Text("2000 EUR")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                
+                                Text("(20%)")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
-                    } header: {
-                        Text("Pinned Goals")
                     }
                 }
                 
-                if assets.isEmpty {
-                    Section {
-                        ContentUnavailableView(
-                            "No Assets Found",
-                            systemImage: "exclamationmark",
-                            description: Text("You need to add an asset by selecting the Assets tab and tapping the plus button on the top right corner"),
-                        )
-                    }
-                } else {
-                    Section {
-                        Picker("Date Range", selection: $dateRange.animation().animation(.spring())) {
-                            ForEach(availableDateRanges) { range in
-                                Text(range.label)
-                                    .tag(range)
+                Section {
+                    VStack (alignment: .leading, spacing: 24) {
+                        HStack (spacing: 8) {
+                            HStack (alignment: .center, spacing: 4) {
+                                Text("Recurring operation")
+                                
+                                Image(systemName: "chevron.right")
                             }
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                            
+                            Spacer()
+                            
+                            Text("Aug 10, 25")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
                         }
-                        .pickerStyle(.segmented)
-                    }
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .listRowBackground(Color.clear)
-                    
-                    Section {
-                        NavigationLink {
-                            AssetChartDetailView()
-                                .navigationTransition(.zoom(sourceID: 0, in: namespace))
-                        } label: {
-                            AssetsOverviewChart(assets: assets, operations: operations, showingChartLabels: showingChartLabels, dateRange: dateRange)
+                        
+                        VStack (alignment: .leading) {
+                            Text("📡 Internet provider")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                            
+                            Text("16,99 EUR/mo")
+                                .font(.title)
+                                .fontWeight(.semibold)
                         }
-                        .tint(.primary)
-                        .matchedTransitionSource(id: 0, in: namespace)
                     }
                 }
                 
-                if operations.isEmpty {
-                    Section {
-                        ContentUnavailableView(
-                            "No Operations Found",
-                            systemImage: "exclamationmark",
-                            description: Text("You need to add an operation by selecting the Operations tab and tapping the plus button on the top right corner")
-                        )
-                    }
-                } else {
-                    if !assets.isEmpty {
-                        Section {
-                            NavigationLink {
-                                AssetComparisonDetailView()
-                                    .navigationTransition(.zoom(sourceID: 3, in: namespace))
-                            } label: {
-                                AssetsComparisonChart(assets: assets, assetComparisonData: assetComparisonData, showingChartLabels: showingChartLabels)
+                Section {
+                    VStack (alignment: .leading, spacing: 24) {
+                        HStack (spacing: 8) {
+                            HStack (alignment: .center, spacing: 4) {
+                                Text("Scheduled expense")
+                                
+                                Image(systemName: "chevron.right")
                             }
-                            .tint(.primary)
-                            .matchedTransitionSource(id: 3, in: namespace)
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                            
+                            Spacer()
+                            
+                            Text("Aug 15, 25")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        VStack (alignment: .leading) {
+                            Text("🧾Tax payments")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                            
+                            Text("1.714,50 EUR")
+                                .font(.title)
+                                .fontWeight(.semibold)
                         }
                     }
-                    
-                    if !categories.isEmpty {
-                        Section {
-                            NavigationLink {
-                                CategoryChartDetailView()
-                                    .navigationTransition(.zoom(sourceID: 1, in: namespace))
-                            } label: {
-                                CategoriesOverviewChart(categories: categories, filteredData: filteredData, operations: operations, showingChartLabels: showingChartLabels)
+                }
+                
+                Section {
+                    VStack (alignment: .leading, spacing: 24) {
+                        HStack (alignment: .center, spacing: 4) {
+                            Text("Category")
+                            
+                            Image(systemName: "chevron.right")
+                        }
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                        
+                        VStack (alignment: .leading) {
+                            Text("🚗 Transport")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                            
+                            HStack (spacing: 4) {
+                                Group {
+                                    if false {
+                                        Image(systemName: "arrow.up.circle.fill")
+                                            .foregroundStyle(.green)
+                                    } else {
+                                        Image(systemName: "arrow.down.circle.fill")
+                                            .foregroundStyle(.red)
+                                    }
+                                }
+                                .imageScale(.large)
+                                .fontWeight(.semibold)
+                                
+                                Text("150 EUR")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
                             }
-                            .tint(.primary)
-                            .matchedTransitionSource(id: 1, in: namespace)
                         }
-                    }
-                    
-                    Section {
-                        NavigationLink {
-                            OperationChartDetailView()
-                                .navigationTransition(.zoom(sourceID: 2, in: namespace))
-                        } label: {
-                            OperationsOverviewChart(assets: assets, filteredData: filteredData, operationsData: operationsData, showingChartLabels: showingChartLabels)
-                        }
-                        .tint(.primary)
-                        .matchedTransitionSource(id: 2, in: namespace)
                     }
                 }
             }
-            .navigationTitle("Stats")
+            .navigationTitle("$100.000")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+
+                    } label: {
+                        Label("Add operation", systemImage: "plus.circle.fill")
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Button {
-                            addGoal()
-                        } label: {
-                            Label("Add goal", systemImage: "plus")
-                        }
-                        
                         NavigationLink {
                             GoalList()
                         } label: {
                             Label("Goals", systemImage: "list.bullet")
-                        }
-                        
-                        Button {
-                            withAnimation(.spring()) {
-                                showingChartLabels.toggle()
-                            }
-                        } label: {
-                            Label(showingChartLabels ? "Hide Chart Labels" : "Show Chart Labels",
-                                  systemImage: showingChartLabels ? "eye.slash" : "eye")
                         }
                     } label: {
                         Label("Menu", systemImage: "ellipsis.circle")
@@ -211,66 +190,6 @@ struct HomeView: View {
                 EditGoal(goal: item)
             }
         }
-    }
-    
-    func calculateCategoryBalance(category: CategoryOperation) -> Decimal {
-        let operationsForCategory = filteredData.filter { $0.category?.id == category.id }
-        
-        let totalBalance = operationsForCategory.reduce(Decimal(0)) { $0 + $1.amount }
-        
-        return totalBalance
-    }
-    
-    func findCategoryWithHighestBalance(categories: [CategoryOperation]) -> (CategoryOperation, Decimal) {
-        let categoryBalances = categories.map { category in
-            let balance = calculateCategoryBalance(category: category)
-            return (category, balance)
-        }
-        
-        let maxCategory = categoryBalances.max { $0.1 < $1.1 }
-        
-        return maxCategory ?? (CategoryOperation(name: ""), Decimal(0))
-    }
-    
-    func findCategoryWithLowestBalance(categories: [CategoryOperation]) -> (CategoryOperation, Decimal) {
-        let categoryBalances = categories.map { category in
-            let balance = calculateCategoryBalance(category: category)
-            return (category, balance)
-        }
-        
-        let minCategory = categoryBalances.min { $0.1 < $1.1 }
-        
-        return minCategory ?? (CategoryOperation(name: ""), Decimal(0))
-    }
-    
-    func addGoal() {
-        let goal = Goal(title: "", targetAmount: 0)
-        selectedGoal = goal
-        modelContext.insert(goal)
-    }
-}
-
-struct OperationDataType: Identifiable {
-    let type: String
-    let data: [AssetOperation]
-    
-    var id: String { type }
-}
-
-struct ChartFrame: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding()
-            .chartXAxis(.hidden)
-            .chartYAxis(.hidden)
-            .chartLegend(.hidden)
-            .frame(height: 100)
-    }
-}
-
-extension View {
-    func formatChart() -> some View {
-        self.modifier(ChartFrame())
     }
 }
 

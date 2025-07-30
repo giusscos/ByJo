@@ -44,11 +44,6 @@ struct AssetDetailView: View {
         }
     }
     
-    var operationsData: [OperationDataType] {
-        [OperationDataType(type: "Outcome", data: outcomeData),
-         OperationDataType(type: "Income", data: incomeData)]
-    }
-    
     var totalIncome: Decimal {
         incomeData.reduce(0) { $0 + $1.amount }
     }
@@ -67,68 +62,7 @@ struct AssetDetailView: View {
     
     var body: some View {
         NavigationStack {
-            if assetOperation == [] {
-                ContentUnavailableView(
-                    "No operations yet",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add operations to this asset to see them here.")
-                )
-            } else {
-                if let operations = assetOperation {
-                    List {
-                        Picker("Date Range", selection: $dateRange.animation()) {
-                            ForEach(availableDateRanges) { range in
-                                Text(range.label).tag(range)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .listRowBackground(Color.clear)
-                        
-                        if !operationsData.flatMap({ $0.data }).isEmpty {
-                            Chart (operationsData) { operation in
-                                ForEach(operation.data) { value in
-                                    LineMark(
-                                        x: .value("Date", value.date),
-                                        y: .value("Amount", value.amount)
-                                    )
-                                    .foregroundStyle(by: .value("Type", operation.type))
-                                    
-                                    PointMark(
-                                        x: .value("Date", value.date),
-                                        y: .value("Amount", value.amount)
-                                    )
-                                    .foregroundStyle(by: .value("Type", operation.type))
-                                }
-                            }
-                            .chartForegroundStyleScale([
-                                "Outcome": Color.red,
-                                "Income": Color.green
-                            ])
-                            .chartYScale(domain: chartYScale)
-                            .chartLegend(.visible)
-                            .chartYAxis {
-                                AxisMarks(position: .leading)
-                            }
-                            .chartXAxis {
-                                AxisMarks(preset: .aligned) { value in
-                                    AxisGridLine()
-                                    AxisValueLabel(format: .dateTime.month().day().year())
-                                }
-                            }
-                            .frame(height: 300)
-                            .listRowBackground(Color.clear)
-                        } else {
-                            ContentUnavailableView(
-                                "No Data for Selected Range",
-                                systemImage: "exclamationmark",
-                                description: Text("Try selecting a different date range or add new operations")
-                            )
-                        }
-                        
-                        AssetOperationView(operations: operations)
-                    }
-                }
-            }
+            
         }
         .navigationTitle(asset.name)
         .navigationBarTitleDisplayMode(.inline)

@@ -144,7 +144,7 @@ struct OperationView: View {
                     .disabled(selectedOperations.isEmpty)
                 } else {
                     Menu {
-                        if let asset = assets.first, !categories.isEmpty {
+                        if let _ = assets.first, !categories.isEmpty {
                             Button {
                                 addOperation()
                             } label: {
