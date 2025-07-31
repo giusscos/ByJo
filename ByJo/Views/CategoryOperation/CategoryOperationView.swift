@@ -26,7 +26,7 @@ struct CategoryOperationView: View {
     var body: some View {
         NavigationStack {
             List(selection: $selectedCategories) {
-                Section("Categories") {
+                Section {
                     if showInsert {
                         TextField("Category Name", text: $categoryOperationName)
                             .autocorrectionDisabled()
@@ -71,7 +71,6 @@ struct CategoryOperationView: View {
                     .disabled(isEditMode == .active)
                 }
             }
-            .environment(\.editMode, $isEditMode)
             .navigationTitle("Categories")
             .toolbar {
                 if !showInsert, !categories.isEmpty {
@@ -81,9 +80,11 @@ struct CategoryOperationView: View {
                 } else {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
-                            showInsert = false
-                            
-                            categoryOperationName = ""
+                            withAnimation {
+                                showInsert = false
+                                
+                                categoryOperationName = ""
+                            }
                         } label: {
                             Label("Cancel", systemImage: "xmark")
                         }
@@ -100,7 +101,21 @@ struct CategoryOperationView: View {
                         }
                     }
                 }
+                
+                if isEditMode == .active {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(role: .destructive) {
+                            showingBulkDeleteAlert = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                        .disabled(selectedCategories.isEmpty)
+                    }
+                }
+                
             }
+            .environment(\.editMode, $isEditMode)
             .confirmationDialog("Delete Categories", isPresented: $showingBulkDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Delete", role: .destructive) {
