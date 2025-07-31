@@ -5,9 +5,9 @@
 //  Created by Giuseppe Cosenza on 04/11/24.
 //
 
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
 
 struct AssetDetailView: View {
     @Environment(\.modelContext) var modelContext
@@ -65,25 +65,18 @@ struct AssetDetailView: View {
             
         }
         .navigationTitle(asset.name)
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    addOperation()
+                    
                 } label: {
-                    Label("Add operation", systemImage: "plus")
+                    Label("Add operation", systemImage: "plus.circle.fill")
                 }
             }
         }
         .sheet(item: $selectedOperation) { value in
             EditAssetOperation(operation: value)
         }
-    }
-    
-    func addOperation(){
-        let operation = AssetOperation(currency: asset.currency, asset: asset)
-        selectedOperation = operation
-        modelContext.insert(operation)
     }
 }
 

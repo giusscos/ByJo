@@ -15,28 +15,20 @@ struct ContentView: View {
     var body: some View {
         if !store.purchasedSubscriptions.isEmpty {
             TabView {
-                Tab("Statistics", systemImage: "chart.bar.xaxis.ascending") {
-                    NavigationStack {
-                        HomeView()
-                    }
+                Tab("Home", systemImage: "house.fill") {
+                    HomeView()
                 }
                 
                 Tab("Assets", systemImage: "briefcase.fill") {
-                    NavigationStack {
-                        AssetView()
-                    }
+                    AssetView()
                 }
                 
                 Tab("Operations", systemImage: "book.pages") {
-                    NavigationStack {
-                        OperationView()
-                    }
+                    OperationView()
                 }
                 
                 Tab("Settings", systemImage: "gear") {
-                    NavigationStack {
-                        SettingsView()
-                    }
+                    SettingsView()
                 }
             }
             .onAppear {

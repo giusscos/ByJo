@@ -5,50 +5,55 @@
 //  Created by Giuseppe Cosenza on 04/11/24.
 //
 
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
 
 struct AssetView: View {
-    @Environment(\.modelContext) var modelContext
-    
-    @Query var assets: [Asset]
-    
-    @State var activeSheet: SheetType? = nil
-    @State private var isEditMode: EditMode = .inactive
-    @State private var selectedAssets = Set<Asset>()
-    @State private var selectedType: AssetType?
-    @State private var sortOrder: SortOrder = .name
-    @State private var isAscending: Bool = true
-    @State private var showingBulkDeleteAlert = false
-    
-    enum SortOrder {
+    enum AssetSortOrder {
         case name
         case balance
         case type
         
         var displayName: String {
             switch self {
-            case .name: return "Name"
-            case .balance: return "Balance"
-            case .type: return "Type"
+                case .name: return "Name"
+                case .balance: return "Balance"
+                case .type: return "Type"
             }
         }
     }
     
-    enum SheetType: Identifiable {
-        case editAsset(Asset)
+    enum AssetSheetType: Identifiable {
+        case create
+        case edit(Asset)
         case editGoal(Goal)
         
         var id: String {
             switch self {
-            case .editAsset(let asset):
-                return "editAsset_\(asset.id)"
-            case .editGoal(let goal):
-                return "editGoal_\(goal.id)"
+                case .create:
+                    return "create"
+                case .edit(let asset):
+                    return "edit_\(asset.id)"
+                case .editGoal(let goal):
+                    return "editGoal_\(goal.id)"
             }
         }
     }
+    
+    @Environment(\.modelContext) var modelContext
+
+    @Query var assets: [Asset]
+    
+    @State private var isEditMode: EditMode = .inactive
+    
+    @State private var activeSheet: AssetSheetType? = nil
+    @State private var sortOrder: AssetSortOrder = .name
+    @State private var isAscending: Bool = true
+    @State private var selectedType: AssetType?
+    
+    @State private var selectedAssets = Set<Asset>()
+    @State private var showingBulkDeleteAlert = false
     
     var filteredAndSortedAssets: [Asset] {
         var filteredAssets = assets
@@ -71,188 +76,188 @@ struct AssetView: View {
     }
     
     var body: some View {
-        List(selection: $selectedAssets) {
-            if filteredAndSortedAssets.isEmpty {
-                ContentUnavailableView(
-                    "No Assets Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an asset by clicking the plus button on the top right corner")
-                )
-            } else {
-                Section {
-                    ForEach(filteredAndSortedAssets) { value in
-                        NavigationLink {
-                            AssetDetailView(asset: value)
-                        } label: {
-                            HStack (alignment: .center) {
-                                VStack (alignment: .leading, spacing: 0) {
-                                    Text(value.name)
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
-                                        .lineLimit(1)
-                                    
-                                    Text(value.type.rawValue)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .fontWeight(.semibold)
-                                }.frame(maxWidth: .infinity, alignment: .leading)
+        NavigationStack {
+            List(selection: $selectedAssets) {
+                if filteredAndSortedAssets.isEmpty {
+                    ContentUnavailableView(
+                        "No Assets Found",
+                        systemImage: "exclamationmark",
+                        description: Text("You need to add an asset by clicking the plus button on the top right corner")
+                    )
+                } else {
+                    Section {
+                        ForEach(filteredAndSortedAssets) { asset in
+                            NavigationLink {
+                                AssetDetailView(asset: asset)
+                            } label: {
+                                AssetRowView(asset: asset)
+                            }
+                            .swipeActions (edge: .trailing) {
+                                Button (role: .destructive) {
+                                    modelContext.delete(asset)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                                 
-                                Text(value.calculateCurrentBalance(), format: .currency(code: value.currency.rawValue))
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
+                                Button {
+                                    activeSheet = .edit(asset)
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.blue)
                             }
                         }
-                        .tag(value)
-                        .swipeActions (edge: .trailing) {
-                            Button (role: .destructive) {
-                                modelContext.delete(value)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                    } header: {
+                        HStack {
+                            Text("\(filteredAndSortedAssets.count) assets")
+                                .foregroundStyle(.secondary)
+                            
+                            Spacer()
+                            
+                            if let type = selectedType {
+                                Text("Filtered by: \(type.rawValue)")
+                                    .foregroundStyle(.secondary)
                             }
                             
-                            Button {
-                                activeSheet = .editAsset(value)
-                            } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }.tint(.blue)
-                        }
-                    }
-                } header: {
-                    HStack {
-                        Text("\(filteredAndSortedAssets.count) assets")
-                            .foregroundStyle(.secondary)
-                        
-                        Spacer()
-                        
-                        if let type = selectedType {
-                            Text("Filtered by: \(type.rawValue)")
+                            Text("Sorted by: \(sortOrder.displayName) \(isAscending ? "↑" : "↓")")
                                 .foregroundStyle(.secondary)
                         }
-                        
-                        Text("Sorted by: \(sortOrder.displayName) \(isAscending ? "↑" : "↓")")
-                            .foregroundStyle(.secondary)
                     }
                 }
             }
-        }
-        .navigationTitle("Assets")
-        .toolbar {
-            if !assets.isEmpty {
-                ToolbarItem(placement: .topBarLeading) {
-                    EditButton()
+            .navigationTitle("Assets")
+            .toolbar {
+                if !assets.isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        EditButton()
+                    }
                 }
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                if isEditMode == .active {
-                    Button(role: .destructive) {
-                        showingBulkDeleteAlert = true
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        activeSheet = .create
                     } label: {
-                        Label("Delete", systemImage: "trash")
+                        Label("Add asset", systemImage: "plus.circle.fill")
                     }
-                    .disabled(selectedAssets.isEmpty)
-                } else {
-                    Menu {
-                        Button {
-                            addAsset()
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    if isEditMode == .active {
+                        Button(role: .destructive) {
+                            showingBulkDeleteAlert = true
                         } label: {
-                            Label("Add asset", systemImage: "plus")
+                            Label("Delete", systemImage: "trash")
                         }
-                        
-                        Button {
-                            addGoal()
-                        } label: {
-                            Label("Add goal", systemImage: "plus")
-                        }
-                        
-                        NavigationLink {
-                            GoalList()
-                        } label: {
-                            Label("Goals", systemImage: "list.bullet")
-                        }
-                        
-                        Section {
-                            Menu("By Type") {
-                                ForEach(AssetType.allCases, id: \.self) { type in
-                                    Button(type.rawValue) {
-                                        selectedType = type
+                        .disabled(selectedAssets.isEmpty)
+                    } else {
+                        Menu {
+                            Button {
+                                
+                            } label: {
+                                Label("Add goal", systemImage: "plus")
+                            }
+                            
+                            NavigationLink {
+                                GoalList()
+                            } label: {
+                                Label("Goals", systemImage: "list.bullet")
+                            }
+                            
+                            Section("Filters") {
+                                Menu("By Type") {
+                                    ForEach(AssetType.allCases, id: \.self) { type in
+                                        Button {
+                                            if type != selectedType {
+                                                selectedType = type
+                                            } else {
+                                                selectedType = nil
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Text(type.rawValue)
+                                                
+                                                if type == selectedType {
+                                                    Image(systemName: "checkmark")
+                                                }
+                                            }
+                                        }
                                     }
-                                }
-                                Button("Clear Filter") {
-                                    selectedType = nil
                                 }
                             }
                             
-                            Menu("Sort By") {
-                                Button {
-                                    sortOrder = .name
-                                } label: {
-                                    HStack {
-                                        Text("Name")
-                                        if sortOrder == .name {
-                                            Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                            Section("Sorters") {
+                                Menu("Sort By") {
+                                    Button {
+                                        sortOrder = .name
+                                    } label: {
+                                        HStack {
+                                            Text("Name")
+                                            
+                                            if sortOrder == .name {
+                                                Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                            }
                                         }
                                     }
-                                }
-                                
-                                Button {
-                                    sortOrder = .balance
-                                } label: {
-                                    HStack {
-                                        Text("Balance")
-                                        if sortOrder == .balance {
-                                            Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                    
+                                    Button {
+                                        sortOrder = .balance
+                                    } label: {
+                                        HStack {
+                                            Text("Balance")
+                                            
+                                            if sortOrder == .balance {
+                                                Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                            }
                                         }
                                     }
-                                }
-                                
-                                Button {
-                                    sortOrder = .type
-                                } label: {
-                                    HStack {
-                                        Text("Type")
-                                        if sortOrder == .type {
-                                            Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                    
+                                    Button {
+                                        sortOrder = .type
+                                    } label: {
+                                        HStack {
+                                            Text("Type")
+                                            
+                                            if sortOrder == .type {
+                                                Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                            }
                                         }
                                     }
-                                }
-                                
-                                Divider()
-                                
-                                Button {
-                                    isAscending.toggle()
-                                } label: {
-                                    HStack {
-                                        Text(isAscending ? "Ascending" : "Descending")
-                                        Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                    
+                                    Divider()
+                                    
+                                    Button {
+                                        isAscending.toggle()
+                                    } label: {
+                                        HStack {
+                                            Text(isAscending ? "Ascending" : "Descending")
+                                            Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                        }
                                     }
                                 }
                             }
-                        } header: {
-                            Text("Filters")
+                        } label: {
+                            Label("Menu", systemImage: "ellipsis.circle")
                         }
-                    } label: {
-                        Label("Menu", systemImage: "ellipsis.circle")
                     }
                 }
             }
-        }
-        .environment(\.editMode, $isEditMode)
-        .sheet(item: $activeSheet) { sheet in
-            switch sheet {
-            case .editAsset(let asset):
-                EditAsset(asset: asset)
-            case .editGoal(let goal):
-                EditGoal(goal: goal)
+            .environment(\.editMode, $isEditMode)
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                    case .create:
+                        EditAssetView()
+                    case .edit(let asset):
+                        EditAssetView(asset: asset)
+                    case .editGoal(let goal):
+                        EditGoal(goal: goal)
+                }
             }
-        }
-        .alert("Delete Assets", isPresented: $showingBulkDeleteAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                deleteSelectedAssets()
+            .confirmationDialog("Delete Assets", isPresented: $showingBulkDeleteAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    deleteSelectedAssets()
+                }
             }
-        } message: {
-            Text("Are you sure you want to delete \(selectedAssets.count) assets? This action cannot be undone.")
         }
     }
     
@@ -260,25 +265,13 @@ struct AssetView: View {
         for asset in selectedAssets {
             modelContext.delete(asset)
         }
+        
         selectedAssets.removeAll()
+        
         isEditMode = .inactive
-    }
-    
-    func addAsset() {
-        let asset = Asset(name: "", type: .cash, initialBalance: 0)
-        activeSheet = .editAsset(asset)
-        modelContext.insert(asset)
-    }
-    
-    func addGoal() {
-        let goal = Goal(title: "", targetAmount: 0)
-        activeSheet = .editGoal(goal)
-        modelContext.insert(goal)
     }
 }
 
 #Preview {
-    NavigationStack {
-        AssetView()
-    }
+    AssetView()
 }

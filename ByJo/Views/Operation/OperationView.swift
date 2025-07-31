@@ -87,125 +87,127 @@ struct OperationView: View {
     }
     
     var body: some View {
-        List(selection: $selectedOperations) {
-            if filteredAndSortedOperations.isEmpty {
-                ContentUnavailableView(
-                    "No Operations Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add an operation by clicking the plus button on the top right corner")
-                )
-            } else {
-                ForEach(filteredAndSortedOperations) { item in
-                    Section {
-                        ForEach(item.operations) { value in
-                            NavigationLink {
-                                OperationDetailView(operation: value)
-                            } label: {
-                                OperationRow(operation: value)
-                            }
-                            .tag(value)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    modelContext.delete(value)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                
-                                Button {
-                                    activeSheet = .editOperation(value)
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
-                                .tint(.blue)
-                            }
-                        }
-                    } header: {
-                        Text(item.date.formatted(.dateTime.day().month().year()))
-                            .headerProminence(.increased)
-                    }
-                }
-            }
-        }
-        .navigationTitle("Operations")
-        .toolbar {
-            if !operations.isEmpty {
-                ToolbarItem(placement: .topBarLeading) {
-                    EditButton()
-                }
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                if isEditMode == .active {
-                    Button(role: .destructive) {
-                        showingBulkDeleteAlert = true
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                    }
-                    .disabled(selectedOperations.isEmpty)
+        NavigationStack {
+            List(selection: $selectedOperations) {
+                if filteredAndSortedOperations.isEmpty {
+                    ContentUnavailableView(
+                        "No Operations Found",
+                        systemImage: "exclamationmark",
+                        description: Text("You need to add an operation by clicking the plus button on the top right corner")
+                    )
                 } else {
-                    Menu {
-                        if let _ = assets.first, !categories.isEmpty {
-                            Button {
-                                addOperation()
-                            } label: {
-                                Label("Add operation", systemImage: "plus")
-                            }
-                        }
-
-                        Button {
-                            activeSheet = .viewCategories
-                        } label: {
-                            Label("Categories", systemImage: "list.bullet")
-                        }
-                        
+                    ForEach(filteredAndSortedOperations) { item in
                         Section {
-                            Menu("By Asset") {
-                                ForEach(assets, id: \.id) { asset in
-                                    Button(asset.name) {
-                                        selectedAsset = asset
+                            ForEach(item.operations) { value in
+                                NavigationLink {
+                                    OperationDetailView(operation: value)
+                                } label: {
+                                    OperationRow(operation: value)
+                                }
+                                .tag(value)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button(role: .destructive) {
+                                        modelContext.delete(value)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
                                     }
-                                }
-                                Button("Clear Filter") {
-                                    selectedAsset = nil
-                                }
-                            }
-                            
-                            Menu("By Category") {
-                                ForEach(categories) { category in
-                                    Button(category.name) {
-                                        filterCategory = category
+                                    
+                                    Button {
+                                        activeSheet = .editOperation(value)
+                                    } label: {
+                                        Label("Edit", systemImage: "pencil")
                                     }
-                                }
-                                
-                                Button("Clear Filter") {
-                                    filterCategory = nil
+                                    .tint(.blue)
                                 }
                             }
                         } header: {
-                            Text("Filters")
+                            Text(item.date.formatted(.dateTime.day().month().year()))
+                                .headerProminence(.increased)
                         }
-                    } label: {
-                        Label("Menu", systemImage: "ellipsis.circle")
                     }
                 }
             }
-        }
-        .environment(\.editMode, $isEditMode)
-        .sheet(item: $activeSheet) { sheet in
-            switch sheet {
-            case .editOperation(let operation):
-                EditAssetOperation(operation: operation)
-            case .viewCategories:
-                CategoryOperationView()
+            .navigationTitle("Operations")
+            .toolbar {
+                if !operations.isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        EditButton()
+                    }
+                }
+                
+                if let _ = assets.first, !categories.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            addOperation()
+                        } label: {
+                            Label("Add operation", systemImage: "plus.circle.fill")
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        if isEditMode == .active {
+                            Button(role: .destructive) {
+                                showingBulkDeleteAlert = true
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                            .disabled(selectedOperations.isEmpty)
+                        } else {
+                            Menu {
+                                Button {
+                                    activeSheet = .viewCategories
+                                } label: {
+                                    Label("Categories", systemImage: "list.bullet")
+                                }
+                                
+                                Section {
+                                    Menu("By Asset") {
+                                        ForEach(assets, id: \.id) { asset in
+                                            Button(asset.name) {
+                                                selectedAsset = asset
+                                            }
+                                        }
+                                        Button("Clear Filter") {
+                                            selectedAsset = nil
+                                        }
+                                    }
+                                    
+                                    Menu("By Category") {
+                                        ForEach(categories) { category in
+                                            Button(category.name) {
+                                                filterCategory = category
+                                            }
+                                        }
+                                        
+                                        Button("Clear Filter") {
+                                            filterCategory = nil
+                                        }
+                                    }
+                                } header: {
+                                    Text("Filters")
+                                }
+                            } label: {
+                                Label("Menu", systemImage: "ellipsis.circle")
+                            }
+                        }
+                    }
+                }
             }
-        }
-        .alert("Delete Operations", isPresented: $showingBulkDeleteAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                deleteSelectedOperations()
+            .environment(\.editMode, $isEditMode)
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                    case .editOperation(let operation):
+                        EditAssetOperation(operation: operation)
+                    case .viewCategories:
+                        CategoryOperationView()
+                }
             }
-        } message: {
-            Text("Are you sure you want to delete \(selectedOperations.count) operations? This action cannot be undone.")
+            .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    deleteSelectedOperations()
+                }
+            }
         }
     }
     
