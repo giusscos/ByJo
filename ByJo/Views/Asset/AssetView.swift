@@ -92,6 +92,7 @@ struct AssetView: View {
                             } label: {
                                 AssetRowView(asset: asset)
                             }
+                            .tag(asset)
                             .swipeActions (edge: .trailing) {
                                 Button (role: .destructive) {
                                     modelContext.delete(asset)
@@ -129,15 +130,19 @@ struct AssetView: View {
             .toolbar {
                 if !assets.isEmpty {
                     ToolbarItem(placement: .topBarLeading) {
-                        EditButton()
+                        withAnimation {
+                            EditButton()
+                        }
                     }
                 }
                 
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        activeSheet = .create
-                    } label: {
-                        Label("Add asset", systemImage: "plus.circle.fill")
+                if isEditMode == .inactive {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            activeSheet = .create
+                        } label: {
+                            Label("Add", systemImage: "plus.circle.fill")
+                        }
                     }
                 }
                 
@@ -148,6 +153,7 @@ struct AssetView: View {
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
+                        .tint(.red)
                         .disabled(selectedAssets.isEmpty)
                     } else {
                         Menu {

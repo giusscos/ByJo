@@ -5,12 +5,15 @@
 //  Created by Giuseppe Cosenza on 05/11/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct AssetOperationView: View {
     @Environment(\.modelContext) var modelContext
-        
+    
+    @Query var assets: [Asset]
+    @Query var categoriesOperation: [CategoryOperation]
+    
     var operations: [AssetOperation]
     
     @State var selectedOperation: AssetOperation?
@@ -34,24 +37,26 @@ struct AssetOperationView: View {
     var body: some View {
         ForEach(dateBasedOperations) { item in
             Section {
-                ForEach(item.operations) { value in
+                ForEach(item.operations) { operation in
                     NavigationLink {
-                        OperationDetailView(operation: value)
+                        OperationDetailView(operation: operation)
                     } label: {
-                        AssetOperationRow(operation: value)
+                        AssetOperationRow(operation: operation)
                     }
+                    .tag(operation)
                     .swipeActions (edge: .trailing) {
                         Button (role: .destructive) {
-                            modelContext.delete(value)
+                            modelContext.delete(operation)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
                         
                         Button {
-                            selectedOperation = value
+                            selectedOperation = operation
                         } label: {
                             Label("Edit", systemImage: "pencil")
-                        }.tint(.blue)
+                        }
+                        .tint(.blue)
                     }
                 }
             } header: {
@@ -60,9 +65,10 @@ struct AssetOperationView: View {
             }
         }
         .sheet(item: $selectedOperation) { value in
-            EditAssetOperation(operation: value)
-                .presentationDragIndicator(.visible)
+            if let asset = assets.first, let category = categoriesOperation.first {
+                EditAssetOperationView(operation: value, asset: asset, category: category)
             }
+        }
     }
 }
 

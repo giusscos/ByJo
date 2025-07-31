@@ -15,6 +15,8 @@ struct AssetDetailView: View {
     var asset: Asset
 
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
+    @Query var assets: [Asset]
+    @Query var categories: [CategoryOperation]
     
     @State private var dateRange: DateRangeOption = .all
     
@@ -70,12 +72,14 @@ struct AssetDetailView: View {
                 Button {
                     
                 } label: {
-                    Label("Add operation", systemImage: "plus.circle.fill")
+                    Label("Add", systemImage: "plus.circle.fill")
                 }
             }
         }
         .sheet(item: $selectedOperation) { value in
-            EditAssetOperation(operation: value)
+            if let asset = assets.first, let category = categories.first {
+                EditAssetOperationView(operation: value, asset: asset, category: category)
+            }
         }
     }
 }

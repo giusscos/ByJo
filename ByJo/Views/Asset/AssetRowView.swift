@@ -25,7 +25,9 @@ struct AssetRowView: View {
             
             Spacer()
             
-            Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
+            Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue).notation(.compactName))
+                .lineLimit(1)
+                .truncationMode(.middle)
                 .font(.title)
                 .fontWeight(.semibold)
         }
