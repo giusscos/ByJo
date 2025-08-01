@@ -55,11 +55,11 @@ struct EditAssetOperationView: View {
                 
                 Section {
                     VStack(spacing: 24) {
-                        Picker("Type", selection: $isExpense.animation()) {
-                            Text("Income")
+                        Picker("Amount Type", selection: $isExpense.animation()) {
+                            Text("Positive")
                                 .tag(false)
                             
-                            Text("Outcome")
+                            Text("Negative")
                                 .tag(true)
                         }
                         .pickerStyle(.segmented)
@@ -83,8 +83,6 @@ struct EditAssetOperationView: View {
                                     focusedField = .note
                                 }
                         }
-                        .font(.title3)
-                        .fontWeight(.semibold)
                     }
                 }
                 

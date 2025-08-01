@@ -21,10 +21,15 @@ struct EditAssetView: View {
     
     var asset: Asset?
     
-    @State var name: String = ""
-    @State var currency: CurrencyCode = .usd
-    @State var initialBalance: Decimal?
-    @State var type: AssetType = .bankAccount
+    @State private var name: String = ""
+    @State private var currency: CurrencyCode = .usd
+    @State private var initialBalance: Decimal?
+    @State private var type: AssetType = .bankAccount
+    @State private var isNegative: Bool = false
+    
+    private var nilBalance: Bool {
+        initialBalance == nil || initialBalance == .zero
+    }
     
     var body: some View {
         NavigationStack {
@@ -37,23 +42,50 @@ struct EditAssetView: View {
                         .onSubmit {
                             focusedField = .balance
                         }
-
-                    Picker("Currency", selection: $currency) {
-                        ForEach(CurrencyCode.allCases, id: \.self) { value in
-                            Text(value.rawValue)
+                }
+                
+                Section {
+                    VStack (spacing: 24) {
+                        Picker("Balance Type", selection: $isNegative.animation()) {
+                            Text("Positive")
+                                .tag(false)
+                            
+                            Text("Negative")
+                                .tag(true)
+                        }
+                        .pickerStyle(.segmented)
+                        .disabled(nilBalance)
+                        .onChange(of: isNegative) { _, _ in
+                            let calculatedAmount = initialBalance ?? .zero
+                            
+                            initialBalance = calculatedAmount * -1
+                        }
+                        
+                        HStack (spacing: 6) {
+                            Text(currency.symbol)
+                                .foregroundStyle(nilBalance ? .secondary : .primary)
+                                .opacity(nilBalance ? 0.5 : 1)
+                            
+                            TextField("Initial balance", value: $initialBalance, format: .number)
+                                .keyboardType(.decimalPad)
+                                .autocorrectionDisabled()
+                                .focused($focusedField, equals: .balance)
+                                .submitLabel(.done)
+                                .onSubmit {
+                                    focusedField = .none
+                                }
+                            
+                            Picker("Currency", selection: $currency) {
+                                ForEach(CurrencyCode.allCases, id: \.self) { value in
+                                    Text(value.rawValue)
+                                }
+                            }
+                            .labelsHidden()
                         }
                     }
-                    .pickerStyle(.menu)
-                    
-                    TextField("Initial balance", value: $initialBalance, format: .number)
-                        .keyboardType(.decimalPad)
-                        .autocorrectionDisabled()
-                        .focused($focusedField, equals: .balance)
-                        .submitLabel(.done)
-                        .onSubmit {
-                            focusedField = .none
-                        }
-                    
+                }
+                
+                Section {
                     Picker("Asset type", selection: $type) {
                         ForEach(AssetType.allCases, id: \.self) { value in
                             Text(value.rawValue)
@@ -85,6 +117,8 @@ struct EditAssetView: View {
                 }
             }
             .onAppear() {
+                focusedField = .name
+                
                 if let asset = asset {
                     name = asset.name
                     currency = asset.currency
