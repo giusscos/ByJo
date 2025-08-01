@@ -43,7 +43,7 @@ struct OperationView: View {
     @State private var isEditMode: EditMode = .inactive
     @State private var filterCategory: CategoryOperation?
     @State private var selectedOperations = Set<AssetOperation>()
-        
+    
     var filteredAndSortedOperations: [OperationByDate] {
         var filteredOperations = operations
         
@@ -54,7 +54,7 @@ struct OperationView: View {
         if let category = filterCategory {
             filteredOperations = filteredOperations.filter { $0.category == category }
         }
-    
+        
         return groupOperationsByDate(filteredOperations)
     }
     
@@ -102,25 +102,27 @@ struct OperationView: View {
                     ForEach(filteredAndSortedOperations) { item in
                         Section {
                             ForEach(item.operations) { operation in
-                                NavigationLink {
-                                    OperationDetailView(operation: operation)
-                                } label: {
-                                    OperationRow(operation: operation)
-                                }
-                                .tag(operation)
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
-                                        modelContext.delete(operation)
+                                if let asset = operation.asset {
+                                    NavigationLink {
+                                        OperationDetailView(operation: operation, asset: asset)
                                     } label: {
-                                        Label("Delete", systemImage: "trash")
+                                        OperationRow(operation: operation, asset: asset)
                                     }
-                                    
-                                    Button {
-                                        activeSheet = .edit(operation)
-                                    } label: {
-                                        Label("Edit", systemImage: "pencil")
+                                    .tag(operation)
+                                    .swipeActions(edge: .trailing) {
+                                        Button(role: .destructive) {
+                                            modelContext.delete(operation)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                        
+                                        Button {
+                                            activeSheet = .edit(operation)
+                                        } label: {
+                                            Label("Edit", systemImage: "pencil")
+                                        }
+                                        .tint(.blue)
                                     }
-                                    .tint(.blue)
                                 }
                             }
                         } header: {
@@ -139,7 +141,7 @@ struct OperationView: View {
                 }
                 
                 if let _ = assets.first {
-                    if isEditMode == .inactive {
+                    if isEditMode == .inactive, !categories.isEmpty {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button {
                                 activeSheet = .create

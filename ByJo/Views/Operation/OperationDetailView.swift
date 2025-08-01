@@ -5,15 +5,21 @@
 //  Created by Giuseppe Cosenza on 05/11/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct OperationDetailView: View {
+    @Environment(\.modelContext) var modelContext
+    
     var operation: AssetOperation
+    var asset: Asset
+    
+    @State var showEditSheet: Bool = false
     
     var body: some View {
-        ScrollView {
-            VStack (alignment: .center) {
-                Text("\(operation.amount.description) EUR")
+        List {
+            Section {
+                Text(operation.amount, format: .currency(code: asset.currency.rawValue))
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
@@ -21,12 +27,14 @@ struct OperationDetailView: View {
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
-                Text(operation.date, format: .dateTime.day().month().year())
+                Text(operation.date, format: .dateTime.day().month().year().hour().minute())
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                
-                if operation.note != "" {
-                    VStack {
+            }
+            
+            if !operation.note.isEmpty {
+                Section {
+                    VStack (alignment: .leading) {
                         Text("Note: ")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -34,33 +42,31 @@ struct OperationDetailView: View {
                         Text(operation.note)
                             .font(.body)
                             .multilineTextAlignment(.center)
-                    }.padding(.vertical)
-                }
-            }.padding()
-            .frame(maxWidth: .infinity, alignment: .center)
-            
-            Divider()
-            
-            if let asset = operation.asset {
-                HStack (alignment: .center) {
-                    HStack (alignment: .center, spacing: 0) {
-                        Text("\(asset.name)")
-                            .font(.title)
-                            .fontWeight(.semibold)
                     }
-                    
-                    Divider()
-                    
-                    Text("\(asset.type.rawValue)")
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                }.padding()
-                .frame(maxWidth: .infinity, alignment: .center)
+                }
             }
         }
+        .navigationTitle(asset.name)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showEditSheet = true
+                } label: {
+                    Label("Edit", systemImage: "pencil")
+                }
+            }
+        }
+        .sheet(isPresented: $showEditSheet, content: {
+            if let category = operation.category {
+                EditAssetOperationView(operation: operation, asset: asset, category: category)
+            }
+        })
     }
 }
 
 #Preview {
-    OperationDetailView(operation: AssetOperation(date: .now, amount: 100))
+    OperationDetailView(
+        operation: AssetOperation(date: .now, amount: 100.0),
+        asset: Asset(name: "BuddyBank", initialBalance: 10000.0)
+    )
 }

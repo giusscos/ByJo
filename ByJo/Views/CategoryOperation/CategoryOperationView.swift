@@ -9,6 +9,12 @@ import SwiftData
 import SwiftUI
 
 struct CategoryOperationView: View {
+    enum FocusField: Hashable {
+        case name
+    }
+    
+    @FocusState private var focusedField: FocusField?
+    
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
@@ -28,11 +34,17 @@ struct CategoryOperationView: View {
             List(selection: $selectedCategories) {
                 Section {
                     if showInsert {
-                        TextField("Category Name", text: $categoryOperationName)
+                        TextField("Name", text: $categoryOperationName)
                             .autocorrectionDisabled()
                             .submitLabel(.done)
+                            .focused($focusedField, equals: .name)
                             .onSubmit {
+                                focusedField = .none
+                                
                                 addCategory()
+                            }
+                            .onAppear() {
+                                focusedField = .name
                             }
                     }
                     
@@ -73,9 +85,11 @@ struct CategoryOperationView: View {
             }
             .navigationTitle("Categories")
             .toolbar {
-                if !showInsert, !categories.isEmpty {
-                    ToolbarItem(placement: .topBarLeading) {
-                        EditButton()
+                if !showInsert {
+                    if !categories.isEmpty {
+                        ToolbarItem(placement: .topBarLeading) {
+                            EditButton()
+                        }
                     }
                 } else {
                     ToolbarItem(placement: .topBarLeading) {

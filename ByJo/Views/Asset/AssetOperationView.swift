@@ -38,25 +38,27 @@ struct AssetOperationView: View {
         ForEach(dateBasedOperations) { item in
             Section {
                 ForEach(item.operations) { operation in
-                    NavigationLink {
-                        OperationDetailView(operation: operation)
-                    } label: {
-                        AssetOperationRow(operation: operation)
-                    }
-                    .tag(operation)
-                    .swipeActions (edge: .trailing) {
-                        Button (role: .destructive) {
-                            modelContext.delete(operation)
+                    if let asset = operation.asset {
+                        NavigationLink {
+                            OperationDetailView(operation: operation, asset: asset)
                         } label: {
-                            Label("Delete", systemImage: "trash")
+                            AssetOperationRow(operation: operation)
                         }
-                        
-                        Button {
-                            selectedOperation = operation
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
+                        .tag(operation)
+                        .swipeActions (edge: .trailing) {
+                            Button (role: .destructive) {
+                                modelContext.delete(operation)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                            
+                            Button {
+                                selectedOperation = operation
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.blue)
                         }
-                        .tint(.blue)
                     }
                 }
             } header: {
@@ -65,7 +67,7 @@ struct AssetOperationView: View {
             }
         }
         .sheet(item: $selectedOperation) { value in
-            if let asset = assets.first, let category = categoriesOperation.first {
+            if let operation = selectedOperation, let asset = operation.asset, let category = operation.category {
                 EditAssetOperationView(operation: value, asset: asset, category: category)
             }
         }

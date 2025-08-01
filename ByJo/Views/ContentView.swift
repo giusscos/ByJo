@@ -11,9 +11,17 @@ import StoreKit
 
 struct ContentView: View {
     @State var store = Store()
+    
+    @State var showPaywallSheet: Bool = true
    
+    var hasntPaid: Bool {
+        store.purchasedSubscriptions.isEmpty || store.purchasedProducts.isEmpty
+    }
+    
     var body: some View {
-        if !store.purchasedSubscriptions.isEmpty {
+        if store.isLoading {
+            ProgressView()
+        } else {
             TabView {
                 Tab("Home", systemImage: "house.fill") {
                     HomeView()
@@ -31,11 +39,16 @@ struct ContentView: View {
                     SettingsView()
                 }
             }
+            .fullScreenCover(isPresented: $showPaywallSheet, content: {
+                PaywallView()
+            })
             .onAppear {
                 UITextField.appearance().clearButtonMode = .whileEditing
+                
+                if hasntPaid {
+                    showPaywallSheet = false
+                }
             }
-        } else {
-            PaywallView()
         }
     }
 }
