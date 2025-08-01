@@ -16,6 +16,7 @@ struct AssetDetailView: View {
         case editOperation(AssetOperation)
         case createGoal
         case editGoal(Goal)
+        case viewGoal
         
         var id: String {
             switch self {
@@ -29,6 +30,8 @@ struct AssetDetailView: View {
                     return "creteGoal"
                 case .editGoal(let goal):
                     return "editGoal-\(goal.id)"
+                case .viewGoal:
+                    return "viewGoal"
             }
         }
     }
@@ -99,6 +102,12 @@ struct AssetDetailView: View {
                             } label: {
                                 Label("Add goal", systemImage: "plus")
                             }
+                            
+                            Button {
+                                activeSheet = .viewGoal
+                            } label: {
+                                Label("Goal list", systemImage: "list.bullet")
+                            }
                         }
                         
                         Divider()
@@ -114,9 +123,9 @@ struct AssetDetailView: View {
                     case .editAsset:
                         EditAssetView(asset: asset)
                     case .createGoal:
-                        Text("Create goal")
+                        EditGoalView(asset: asset)
                     case .editGoal(let goal):
-                        Text("Edit goal \(goal.id)")
+                        EditGoalView(goal: goal, asset: asset)
                     case .createOperation:
                         if let category = categories.first {
                             EditAssetOperationView(asset: asset, category: category)
@@ -125,6 +134,8 @@ struct AssetDetailView: View {
                         if let category = categories.first {
                             EditAssetOperationView(operation: operation, asset: asset, category: category)
                         }
+                    case .viewGoal:
+                        GoalListView()
                 }
             }
         }

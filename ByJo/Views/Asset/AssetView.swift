@@ -25,18 +25,21 @@ struct AssetView: View {
     }
     
     enum AssetSheetType: Identifiable {
-        case create
-        case edit(Asset)
+        case createAsset
+        case editAsset(Asset)
+        case createGoal
         case editGoal(Goal)
         
         var id: String {
             switch self {
-                case .create:
-                    return "create"
-                case .edit(let asset):
-                    return "edit_\(asset.id)"
+                case .createAsset:
+                    return "createAsset"
+                case .editAsset(let asset):
+                    return "editAsset-\(asset.id)"
+                case .createGoal:
+                    return "createGoal"
                 case .editGoal(let goal):
-                    return "editGoal_\(goal.id)"
+                    return "editGoal-\(goal.id)"
             }
         }
     }
@@ -101,7 +104,7 @@ struct AssetView: View {
                                 }
                                 
                                 Button {
-                                    activeSheet = .edit(asset)
+                                    activeSheet = .editAsset(asset)
                                 } label: {
                                     Label("Edit", systemImage: "pencil")
                                 }
@@ -139,7 +142,7 @@ struct AssetView: View {
                 if isEditMode == .inactive {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            activeSheet = .create
+                            activeSheet = .createAsset
                         } label: {
                             Label("Add", systemImage: "plus.circle.fill")
                         }
@@ -158,13 +161,13 @@ struct AssetView: View {
                     } else {
                         Menu {
                             Button {
-                                
+                                activeSheet = .createGoal
                             } label: {
                                 Label("Add goal", systemImage: "plus")
                             }
                             
                             NavigationLink {
-                                GoalList()
+                                GoalListView()
                             } label: {
                                 Label("Goals", systemImage: "list.bullet")
                             }
@@ -250,12 +253,18 @@ struct AssetView: View {
             .environment(\.editMode, $isEditMode)
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
-                    case .create:
+                    case .createAsset:
                         EditAssetView()
-                    case .edit(let asset):
+                    case .editAsset(let asset):
                         EditAssetView(asset: asset)
+                    case .createGoal:
+                        if let asset = assets.first {
+                            EditGoalView(asset: asset)
+                        }
                     case .editGoal(let goal):
-                        EditGoal(goal: goal)
+                        if let asset = goal.asset {
+                            EditGoalView(goal: goal, asset: asset)
+                        }
                 }
             }
             .confirmationDialog("Delete Assets", isPresented: $showingBulkDeleteAlert) {

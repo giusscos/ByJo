@@ -12,24 +12,42 @@ import SwiftData
 final class Goal {
     var id: UUID = UUID()
     var title: String = ""
-    var targetAmount: Decimal = 0
+    var startingAmount: Decimal = 0.0
+    var targetAmount: Decimal = 0.0
     var dueDate: Date?
-    var isPinned: Bool = false
-    var isCompleted: Bool = false
     
     @Relationship var asset: Asset?
+    @Relationship var completedGoal: CompletedGoal?
     
     var isExpired: Bool {
         if let date = dueDate {
             return Date() > date
-        } else { return false }
+        }
+        
+        return false
     }
     
-    init(title: String, targetAmount: Decimal, dueDate: Date? = nil, asset: Asset? = nil) {
+    init(title: String, startingAmount: Decimal, targetAmount: Decimal, dueDate: Date? = nil, asset: Asset? = nil, completedGoal: CompletedGoal? = nil) {
         self.id = UUID()
         self.title = title
+        self.startingAmount = startingAmount
         self.targetAmount = targetAmount
         self.dueDate = dueDate
         self.asset = asset
+        self.completedGoal = completedGoal
+    }
+}
+
+@Model
+final class CompletedGoal {
+    var id: UUID = UUID()
+    var completedDate: Date = Date()
+    
+    @Relationship var goal: Goal?
+    
+    init(id: UUID, completedDate: Date, goal: Goal?) {
+        self.id = id
+        self.completedDate = completedDate
+        self.goal = goal
     }
 }

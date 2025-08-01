@@ -18,15 +18,7 @@ struct HomeView: View {
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
-    @Query(filter: #Predicate<Goal> { value in
-        value.isPinned
-    }, sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
-    
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
-    
-    @State private var dateRange: DateRangeOption = .all
-    @State private var selectedGoal: Goal?
-    @State private var selectedAsset: Asset?
     
     var body: some View {
         NavigationStack {
@@ -177,17 +169,14 @@ struct HomeView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         NavigationLink {
-                            GoalList()
+                            GoalListView()
                         } label: {
-                            Label("Goals", systemImage: "list.bullet")
+                            Label("Goal list", systemImage: "list.bullet")
                         }
                     } label: {
                         Label("Menu", systemImage: "ellipsis.circle")
                     }
                 }
-            }
-            .sheet(item: $selectedGoal) { item in
-                EditGoal(goal: item)
             }
         }
     }

@@ -19,11 +19,11 @@ struct OperationDetailView: View {
     var body: some View {
         List {
             Section {
-                Text(operation.amount, format: .currency(code: asset.currency.rawValue))
+                Text(operation.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("\(operation.name)")
+                Text("\(asset.name)")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
@@ -46,7 +46,7 @@ struct OperationDetailView: View {
                 }
             }
         }
-        .navigationTitle(asset.name)
+        .navigationTitle(Text(operation.amount, format: .currency(code: asset.currency.rawValue)))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
