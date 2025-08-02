@@ -31,57 +31,62 @@ struct GoalListView: View {
     @State var activeSheet: ActiveSheet?
     
     var body: some View {
-        List {
-            if goals.isEmpty {
-                ContentUnavailableView(
-                    "No Goals Found",
-                    systemImage: "exclamationmark",
-                    description: Text("You need to add a goal tapping the plus button on the top right corner")
-                )
-            } else {
-                Section {
-                    ForEach (goals) { goal in
-                        if let asset = goal.asset {
-                            GoalRowView(goal: goal, asset: asset)
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
-                                        modelContext.delete(goal)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
+        NavigationStack {
+            List {
+                if goals.isEmpty {
+                    ContentUnavailableView(
+                        "No Goals Found",
+                        systemImage: "exclamationmark",
+                        description: Text("You need to add a goal tapping the plus button on the top right corner")
+                    )
+                } else {
+                    Section {
+                        ForEach (goals) { goal in
+                            if let asset = goal.asset {
+                                GoalRowView(goal: goal, asset: asset)
+                                    .swipeActions(edge: .trailing) {
+                                        Button(role: .destructive) {
+                                            modelContext.delete(goal)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                        
+                                        Button {
+                                            activeSheet = .edit(goal)
+                                        } label: {
+                                            Label("Edit", systemImage: "pencil")
+                                        }
+                                        .tint(.blue)
                                     }
-                                    
-                                    Button {
-                                        activeSheet = .edit(goal)
-                                    } label: {
-                                        Label("Edit", systemImage: "pencil")
-                                    }
-                                    .tint(.blue)
-                                }
+                            }
                         }
                     }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
             }
-        }
-        .navigationTitle("Goals")
-        .toolbar {
-            ToolbarItem {
-                Button(action: {
-                    activeSheet = .create
-                }) {
-                    Label("Add Goal", systemImage: "plus.circle.fill")
+            .navigationTitle("Goals")
+            .toolbar {
+                ToolbarItem {
+                    Button(action: {
+                        activeSheet = .create
+                    }) {
+                        Label("Add Goal", systemImage: "plus.circle.fill")
+                    }
                 }
             }
-        }
-        .sheet(item: $activeSheet) { sheet in
-            switch sheet {
-                case .create:
-                    if let asset = assets.first {
-                        EditGoalView(asset: asset)
-                    }
-                case .edit(let goal):
-                    if let asset = goal.asset {
-                        EditGoalView(goal: goal, asset: asset)
-                    }
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                    case .create:
+                        if let asset = assets.first {
+                            EditGoalView(asset: asset)
+                        }
+                    case .edit(let goal):
+                        if let asset = goal.asset {
+                            EditGoalView(goal: goal, asset: asset)
+                        }
+                }
             }
         }
     }

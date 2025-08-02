@@ -129,7 +129,9 @@ struct EditGoalView:View {
             
             goal.dueDate = hasDueDate ? date : nil
             
-            return dismiss()
+            dismiss()
+            
+            return
         }
         
         let newGoal = Goal(

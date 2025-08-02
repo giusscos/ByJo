@@ -211,23 +211,24 @@ struct EditAssetOperationView: View {
             operation.category = category
             
             dismiss()
-        } else {
-            let calculatedAmount = amount ?? .zero
-            
-            let newOperation = AssetOperation(
-                name: name,
-                currency: asset.currency,
-                date: date,
-                amount: calculatedAmount,
-                asset: asset,
-                category: category,
-                note: note
-            )
-            
-            modelContext.insert(newOperation)
-            
-            dismiss()
+            return
         }
+        
+        let calculatedAmount = amount ?? .zero
+        
+        let newOperation = AssetOperation(
+            name: name,
+            currency: asset.currency,
+            date: date,
+            amount: calculatedAmount,
+            asset: asset,
+            category: category,
+            note: note
+        )
+        
+        modelContext.insert(newOperation)
+        
+        dismiss()   
     }
 }
 

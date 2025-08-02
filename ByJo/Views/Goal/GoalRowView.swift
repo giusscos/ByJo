@@ -14,7 +14,7 @@ struct GoalRowView: View {
     
     var progress: Double {
         let current = (asset.calculateCurrentBalance()
- as NSDecimalNumber).doubleValue
+                       as NSDecimalNumber).doubleValue
         let target = (goal.targetAmount as NSDecimalNumber).doubleValue
         return target > 0 ? current / target : 0
     }
@@ -35,6 +35,7 @@ struct GoalRowView: View {
                 Text(goal.title)
                     .font(.title)
                     .fontWeight(.semibold)
+                    .lineLimit(3)
             }
             
             VStack {
@@ -68,6 +69,10 @@ struct GoalRowView: View {
                 ProgressView(value: progress, total: 1)
             }
         }
+        .padding()
+        .background(.thinMaterial)
+        .clipShape(.rect(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
     }
 }
 

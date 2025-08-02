@@ -139,18 +139,20 @@ struct EditAssetView: View {
             asset.type = type
             
             dismiss()
-        } else {
-            let newAsset = Asset(
-                name: name,
-                currency: currency,
-                type: type,
-                initialBalance: initialBalance ?? 0.0
-            )
             
-            modelContext.insert(newAsset)
-            
-            dismiss()
+            return
         }
+        
+        let newAsset = Asset(
+            name: name,
+            currency: currency,
+            type: type,
+            initialBalance: initialBalance ?? 0.0
+        )
+        
+        modelContext.insert(newAsset)
+        
+        dismiss()
     }
     
     private func deleteAsset(asset: Asset) {
