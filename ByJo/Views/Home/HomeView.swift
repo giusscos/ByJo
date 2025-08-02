@@ -16,6 +16,8 @@ struct HomeView: View {
     
     @Query var assets: [Asset]
     
+    @Query var goals: [Goal]
+    
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
@@ -23,6 +25,10 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                if !goals.isEmpty {
+                    GoalListStackView(goals: goals)
+                }
+            
                 Section {
                     VStack (alignment: .leading, spacing: 24) {
                         HStack (alignment: .center, spacing: 4) {

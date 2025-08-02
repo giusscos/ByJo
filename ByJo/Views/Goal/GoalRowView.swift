@@ -70,9 +70,9 @@ struct GoalRowView: View {
             }
         }
         .padding()
-        .background(.thinMaterial)
+        .background(.ultraThinMaterial)
         .clipShape(.rect(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+        .shadow(color: .black.opacity(0.12), radius: 6, y: 4)
     }
 }
 
