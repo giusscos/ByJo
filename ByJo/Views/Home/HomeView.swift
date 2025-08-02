@@ -56,11 +56,17 @@ struct HomeView: View {
         return netWorth
     }
     
+    var ongoingGoals: [Goal] {
+        goals.filter { goal in
+            goal.completedGoal == nil
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
-                if !goals.isEmpty {
-                    GoalListStackView(goals: goals)
+                if !ongoingGoals.isEmpty {
+                    GoalListStackView(goals: ongoingGoals)
                 }
             
                 Section {

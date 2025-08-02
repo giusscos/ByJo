@@ -38,16 +38,23 @@ final class Goal {
     }
 }
 
+enum StatusGoal: String, Codable, CaseIterable {
+    case completed = "Completed"
+    case suspended = "Suspended"
+}
+
 @Model
 final class CompletedGoal {
     var id: UUID = UUID()
     var completedDate: Date = Date()
+    var status: StatusGoal = StatusGoal.suspended
     
     @Relationship var goal: Goal?
     
-    init(id: UUID, completedDate: Date, goal: Goal?) {
-        self.id = id
+    init(completedDate: Date, status: StatusGoal = StatusGoal.suspended, goal: Goal?) {
+        self.id = UUID()
         self.completedDate = completedDate
+        self.status = status
         self.goal = goal
     }
 }

@@ -27,22 +27,17 @@ struct GoalListView: View {
     
     @Query var assets: [Asset]
     @Query(sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
+    @Query(sort: \CompletedGoal.completedDate, order: .reverse) var completedGoals: [CompletedGoal]
     
     @State var activeSheet: ActiveSheet?
     
     var body: some View {
         NavigationStack {
             List {
-                if goals.isEmpty {
-                    ContentUnavailableView(
-                        "No Goals Found",
-                        systemImage: "exclamationmark",
-                        description: Text("You need to add a goal tapping the plus button on the top right corner")
-                    )
-                } else {
-                    Section {
+                if !goals.isEmpty {
+                    Section("Ongoning") {
                         ForEach (goals) { goal in
-                            if let asset = goal.asset {
+                            if let asset = goal.asset, goal.completedGoal == nil {
                                 GoalRowView(goal: goal, asset: asset)
                                     .swipeActions(edge: .trailing) {
                                         Button(role: .destructive) {
@@ -57,8 +52,32 @@ struct GoalListView: View {
                                             Label("Edit", systemImage: "pencil")
                                         }
                                         .tint(.blue)
+                                        
+                                        Button {
+                                            setStatusGoal(goal: goal, status: .completed)
+                                        } label: {
+                                            Label("Complete", systemImage: "inset.filled.circle")
+                                        }
+                                        .tint(Color.accentColor)
                                     }
                             }
+                        }
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                }
+                
+                if !completedGoals.isEmpty {
+                    Section("Completed") {
+                        ForEach (completedGoals) { goal in
+                            GoalCompletedRowView(completedGoal: goal)
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        modelContext.delete(goal)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
                         }
                     }
                     .listRowSeparator(.hidden)
@@ -87,6 +106,16 @@ struct GoalListView: View {
                         }
                 }
             }
+        }
+    }
+    
+    private func setStatusGoal(goal: Goal, status: StatusGoal) {
+        withAnimation {
+            let newCompletedGoal = CompletedGoal(completedDate: Date(), status: status, goal: goal)
+            
+            modelContext.insert(newCompletedGoal)
+            
+            modelContext.delete(goal)
         }
     }
 }

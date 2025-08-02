@@ -43,16 +43,6 @@ final class AssetOperation {
     }
 }
 
-//extension AssetOperation: Hashable {
-//    static func == (lhs: AssetOperation, rhs: AssetOperation) -> Bool {
-//        lhs.id == rhs.id
-//    }
-//    
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
-//}
-
 func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {
     let calendar = Calendar.current
     let now = Date()

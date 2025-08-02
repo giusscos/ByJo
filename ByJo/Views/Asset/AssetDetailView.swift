@@ -44,7 +44,17 @@ struct AssetDetailView: View {
     @Query var categories: [CategoryOperation]
     
     @State private var activeSheet: ActiveSheet?
-        
+    
+    var ongoingGoals: [Goal] {
+        if let goals = asset.goals {
+            return goals.filter { goal in
+                goal.completedGoal == nil
+            }
+        } else {
+            return []
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
