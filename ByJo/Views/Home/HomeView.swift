@@ -5,11 +5,33 @@
 //  Created by Giuseppe Cosenza on 04/11/24.
 //
 
-import SwiftUI
 import SwiftData
-import Charts
+import SwiftUI
 
 struct HomeView: View {
+    enum ActiveSheet: Identifiable {
+        case createOperation
+        case createAsset
+        case createGoal
+        case viewGoal
+        case viewCategories
+        
+        var id: String {
+            switch self {
+                case .createOperation:
+                    return "createOperation"
+                case .createAsset:
+                    return "createAsset"
+                case .createGoal:
+                    return "createGoal"
+                case .viewGoal:
+                    return "viewGoal"
+                case .viewCategories:
+                    return "viewCategories"
+            }
+        }
+    }
+    
     @Environment(\.modelContext) var modelContext
     
     @Namespace private var namespace
@@ -21,6 +43,18 @@ struct HomeView: View {
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
+    
+    @State var activeSheet: ActiveSheet?
+    
+    var netWorth: Decimal {
+        var netWorth: Decimal = 0.0
+        
+        for asset in assets {
+                netWorth += asset.calculateCurrentBalance()
+        }
+        
+        return netWorth
+    }
     
     var body: some View {
         NavigationStack {
@@ -162,11 +196,11 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationTitle("$100.000")
+            .navigationTitle(Text(netWorth, format: .currency(code: "EUR").notation(.compactName)))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-
+                        activeSheet = .createOperation
                     } label: {
                         Label("Add operation", systemImage: "plus.circle.fill")
                     }
@@ -174,14 +208,57 @@ struct HomeView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        NavigationLink {
-                            GoalListView()
-                        } label: {
-                            Label("Goal list", systemImage: "list.bullet")
+                        Section {
+                            Button {
+                                activeSheet = .createAsset
+                            } label: {
+                                Label("Create asset", systemImage: "plus")
+                            }
                         }
+                        
+                        Section {
+                            Button {
+                                activeSheet = .createGoal
+                            } label: {
+                                Label("Create goal", systemImage: "plus")
+                            }
+                            
+                            Button {
+                                activeSheet = .viewGoal
+                            } label: {
+                                Label("Goal list", systemImage: "list.bullet")
+                            }
+                        }
+                        
+                        Section {
+                            Button {
+                                activeSheet = .viewCategories
+                            } label: {
+                                Label("Category list", systemImage: "list.bullet")
+                            }
+                        }
+                        
                     } label: {
                         Label("Menu", systemImage: "ellipsis.circle")
                     }
+                }
+            }
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                    case .createOperation:
+                        if let asset = assets.first, let category = categories.first {
+                            EditAssetOperationView(asset: asset, category: category)
+                        }
+                    case .createAsset:
+                        EditAssetView()
+                    case .createGoal:
+                        if let asset = assets.first {
+                            EditGoalView(asset: asset)
+                        }
+                    case .viewGoal:
+                        GoalListView()
+                    case .viewCategories:
+                        CategoryOperationView()
                 }
             }
         }

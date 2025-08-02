@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct OperationView: View {
-    enum ActiveOperationsSheet: Identifiable {
+    enum ActiveSheet: Identifiable {
         case create
         case edit(AssetOperation)
         case viewCategories
@@ -34,7 +34,7 @@ struct OperationView: View {
     
     @Query var categories: [CategoryOperation]
     
-    @State private var activeSheet: ActiveOperationsSheet?
+    @State private var activeSheet: ActiveSheet?
     @State private var operationToDelete: AssetOperation?
     @State private var showingDeleteAlert = false
     @State private var showingBulkDeleteAlert = false
