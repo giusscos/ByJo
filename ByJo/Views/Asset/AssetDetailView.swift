@@ -45,25 +45,13 @@ struct AssetDetailView: View {
     
     @State private var activeSheet: ActiveSheet?
     
-    var ongoingGoals: [Goal] {
-        if let goals = asset.goals {
-            return goals.filter { goal in
-                goal.completedGoal == nil
-            }
-        } else {
-            return []
-        }
-    }
-    
     var body: some View {
         NavigationStack {
             List {
-                if let goals = asset.goals, !goals.isEmpty {
-                    GoalListStackView(goals: goals)
-                        .onTapGesture {
-                            activeSheet = .viewGoal
-                        }
-                }
+                GoalListStackView()
+                    .onTapGesture {
+                        activeSheet = .viewGoal
+                    }
                 
                 if let operations = asset.operations {
                     Section {

@@ -29,9 +29,23 @@ struct EditGoalView:View {
     @State private var date: Date = .now
     @State private var hasDueDate: Bool = false
     
+    @State private var isGoalCompleted: StatusGoal = .completed
+    
     var body: some View {
         NavigationStack {
             Form {
+                if let goal = goal, let _ = goal.completedGoal {
+                    Section {
+                        Picker("Is Goal completed?", selection: $isGoalCompleted) {
+                            ForEach(StatusGoal.allCases, id: \.self) { status in
+                                Text("\(status.rawValue)")
+                                    .tag(status)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                }
+                
                 Section {
                     TextField("Title", text: $title)
                         .autocorrectionDisabled()
@@ -109,6 +123,11 @@ struct EditGoalView:View {
                     hasDueDate = true
                     date = goalDate
                 }
+                
+                if let completedGoal = goal.completedGoal {
+                    isGoalCompleted = completedGoal.status
+                }
+                
                 return
             }
         }
@@ -128,6 +147,10 @@ struct EditGoalView:View {
             goal.startingAmount = asset.calculateCurrentBalance()
             
             goal.dueDate = hasDueDate ? date : nil
+            
+            if let completedGoal = goal.completedGoal {
+                completedGoal.status = isGoalCompleted
+            }
             
             dismiss()
             

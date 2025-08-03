@@ -24,6 +24,14 @@ struct GoalCompletedRowView: View {
                             .foregroundStyle(.secondary)
                             .font(.caption)
                         
+                            Group {
+                                Text("Completed date: ")
+                                +
+                                Text(completedGoal.completedDate, format: .dateTime.day().month().year())
+                            }
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                            
                             Text(goal.title)
                                 .font(.title)
                                 .fontWeight(.semibold)
@@ -60,10 +68,20 @@ struct GoalCompletedRowView: View {
                         .buttonStyle(.bordered)
                         .buttonBorderShape(.capsule)
                     } else {
-                        Text(goal.title)
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .lineLimit(3)
+                        VStack (alignment: .leading, spacing: 6) {
+                            Group {
+                                Text("Completed date: ")
+                                +
+                                Text(completedGoal.completedDate, format: .dateTime.day().month().year())
+                            }
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                            
+                            Text(goal.title)
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .lineLimit(3)
+                        }
                         
                         Spacer()
                         

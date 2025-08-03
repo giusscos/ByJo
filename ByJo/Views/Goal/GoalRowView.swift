@@ -69,7 +69,7 @@ struct GoalRowView: View {
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
-                .tint(.accent)
+                .tint(.primary)
                 .buttonBorderShape(.capsule)
                 .buttonStyle(.bordered)
             }
@@ -102,7 +102,7 @@ struct GoalRowView: View {
                     }
                 }
                 
-                ProgressView(value: progress, total: 1)
+                ProgressView(value: progress >= 1.0 ? 1 : progress, total: 1)
             }
         }
         .padding()
