@@ -52,6 +52,26 @@ final class Asset {
         
         return operationsInRange.reduce(initialBalance) { $0 + $1.amount }
     }
+    
+    func calculateBalanceForDateRangeWithoutInitialBalance(_ dateRange: DateRangeOption) -> Decimal {
+        let (startDate, endDate) = dateRange.dateRange
+        
+        let operationsInRange = operations?.filter { operation in
+            operation.date >= startDate && operation.date <= endDate
+        } ?? []
+        
+        return operationsInRange.reduce(0) { $0 + $1.amount }
+    }
+    
+    func calculatePreviousBalanceForDateRangeWithoutInitialBalance(_ dateRange: DateRangeOption) -> Decimal {
+        let (startDate, endDate) = dateRange.previousRange
+        
+        let operationsInRange = operations?.filter { operation in
+            operation.date >= startDate && operation.date <= endDate
+        } ?? []
+        
+        return operationsInRange.reduce(0) { $0 + $1.amount }
+    }
 }
 
 enum CurrencyCode: String, CaseIterable, Codable {

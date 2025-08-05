@@ -69,7 +69,7 @@ struct EditGoalView:View {
                 Section {
                     Text("Current Asset amount: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
                                             
-                    TextField("Target amount", value: $targetAmount, format: .number)
+                    TextField("Target amount", value: $targetAmount, format: .number.precision(.fractionLength(2)))
                         .keyboardType(.decimalPad)
                         .focused($focusedField, equals: .targetAmount)
                         .submitLabel(.done)

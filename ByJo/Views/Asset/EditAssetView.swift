@@ -66,7 +66,7 @@ struct EditAssetView: View {
                                 .foregroundStyle(nilBalance ? .secondary : .primary)
                                 .opacity(nilBalance ? 0.5 : 1)
                             
-                            TextField("Initial balance", value: $initialBalance, format: .number)
+                            TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
                                 .keyboardType(.decimalPad)
                                 .autocorrectionDisabled()
                                 .focused($focusedField, equals: .balance)

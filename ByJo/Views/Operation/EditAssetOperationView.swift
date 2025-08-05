@@ -75,7 +75,7 @@ struct EditAssetOperationView: View {
                                 .foregroundStyle(nilAmount ? .secondary : .primary)
                                 .opacity(nilAmount ? 0.5 : 1)
                                 
-                            TextField("Amount", value: $amount, format: .number)
+                            TextField("Amount", value: $amount, format: .number.precision(.fractionLength(2)))
                                 .keyboardType(.decimalPad)
                                 .focused($focusedField, equals: .amount)
                                 .submitLabel(.next)

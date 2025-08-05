@@ -8,6 +8,11 @@
 import SwiftData
 import SwiftUI
 
+struct NetWorthComparison {
+    var amount: Decimal
+    var percentage: Decimal
+}
+
 struct HomeView: View {
     enum ActiveSheet: Identifiable {
         case createOperation
@@ -46,6 +51,8 @@ struct HomeView: View {
     
     @State var activeSheet: ActiveSheet?
     
+    @State var compactNumber: Bool = true
+    
     var netWorth: Decimal {
         var netWorth: Decimal = 0.0
         
@@ -56,6 +63,30 @@ struct HomeView: View {
         return netWorth
     }
     
+    var currencyCode: String {
+        if let asset = assets.first {
+            return asset.currency.rawValue
+        } else {
+            return CurrencyCode.usd.rawValue
+        }
+    }
+    
+    var netWorthPreviousPeriod: NetWorthComparison {
+        var balancePreviousPeriod: Decimal = 0.0
+        var balanceCurrentPeriod: Decimal = 0.0
+        
+        let period: DateRangeOption = .month
+
+        for asset in assets {
+            balancePreviousPeriod += asset.calculatePreviousBalanceForDateRangeWithoutInitialBalance(period)
+            balanceCurrentPeriod += asset.calculateBalanceForDateRangeWithoutInitialBalance(period)
+        }
+        
+        let amount = balancePreviousPeriod + balanceCurrentPeriod
+        
+        return NetWorthComparison(amount: amount, percentage: amount == 0 ? 0 : (amount / (netWorth - amount)) * 100)
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -63,36 +94,45 @@ struct HomeView: View {
             
                 Section {
                     VStack (alignment: .leading, spacing: 24) {
-                        HStack (alignment: .center, spacing: 4) {
+                        HStack (spacing: 4) {
                             Text("VS last month")
-                            
-                            Image(systemName: "chevron.right")
                         }
                         .font(.headline)
                         .foregroundStyle(.secondary)
                         
                         HStack (spacing: 4) {
                             Group {
-                                if true {
+                                if netWorthPreviousPeriod.amount > 0 {
                                     Image(systemName: "arrow.up.circle.fill")
                                         .foregroundStyle(.green)
+                                } else if netWorthPreviousPeriod.amount == 0 {
+                                    Image(systemName: "equal.circle.fill")
+                                        .foregroundStyle(.gray)
                                 } else {
                                     Image(systemName: "arrow.down.circle.fill")
                                         .foregroundStyle(.red)
+
                                 }
+                                
                             }
                             .imageScale(.large)
                             .fontWeight(.semibold)
                             
                             HStack {
-                                Text("2000 EUR")
+                                Text(netWorthPreviousPeriod.amount, format: .currency(code: "EUR").notation(.compactName))
                                     .font(.title)
                                     .fontWeight(.semibold)
                                 
-                                Text("(20%)")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.secondary)
+                                Group {
+                                    Text("(")
+                                    +
+                                    Text(netWorthPreviousPeriod.percentage, format: .number.precision(.fractionLength(2)))
+                                    +
+                                    Text("%)")
+                                }
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
                             }
                         }
                     }
@@ -194,7 +234,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationTitle(Text(netWorth, format: .currency(code: "EUR").notation(.compactName)))
+            .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode).notation(.compactName ) : .currency(code: currencyCode)))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -206,6 +246,16 @@ struct HomeView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        Section {
+                            Button {
+                                withAnimation {
+                                    compactNumber.toggle()
+                                }
+                            } label: {
+                                Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "eye" : "eye.slash")
+                            }
+                        }
+                        
                         Section {
                             Button {
                                 activeSheet = .createAsset

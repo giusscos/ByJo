@@ -48,11 +48,6 @@ struct AssetDetailView: View {
     var body: some View {
         NavigationStack {
             List {
-                GoalListStackView()
-                    .onTapGesture {
-                        activeSheet = .viewGoal
-                    }
-                
                 if let operations = asset.operations {
                     Section {
                         ForEach(operations) { operation in
