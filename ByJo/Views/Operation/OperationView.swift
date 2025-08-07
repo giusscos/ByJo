@@ -93,11 +93,27 @@ struct OperationView: View {
         NavigationStack {
             List(selection: $selectedOperations) {
                 if filteredAndSortedOperations.isEmpty {
-                    ContentUnavailableView(
-                        "No Operations Found",
-                        systemImage: "exclamationmark",
-                        description: Text("You need to add an operation by clicking the plus button on the top right corner")
-                    )
+                    VStack {
+                        let text = categories.isEmpty ? "categories" : "operations"
+                        Text("No \(text) found 😕")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text("Start adding \(text)")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        Button {
+                            activeSheet = categories.isEmpty ? .viewCategories : .create
+                        } label: {
+                            Text("Add \(text)")
+                                .font(.headline)
+                        }
+                        .tint(.accent)
+                        .buttonBorderShape(.capsule)
+                        .buttonStyle(.bordered)
+                    }
+                    .frame(maxWidth: .infinity)
                 } else {
                     ForEach(filteredAndSortedOperations) { item in
                         Section {

@@ -18,11 +18,9 @@ struct CategoryOperationView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @Query(filter: #Predicate<CategoryOperation> { category in
-        category.name != ""
-    }, sort: \CategoryOperation.name) var categories: [CategoryOperation]
+    @Query(sort: \CategoryOperation.name) var categories: [CategoryOperation]
     
-    @State var categoryOperationName: String = ""
+    @State var newCategoryOperation: CategoryOperation = CategoryOperation(name: "")
     @State var showInsert: Bool = false
     @State var showingBulkDeleteAlert: Bool = false
     
@@ -33,8 +31,44 @@ struct CategoryOperationView: View {
         NavigationStack {
             List(selection: $selectedCategories) {
                 Section {
+                    ForEach(categories) { category in
+                        Text(category.name)
+                            .tag(category)
+                            .onTapGesture(perform: {
+                                    if showInsert { return }
+                                    
+                                withAnimation {
+                                    newCategoryOperation = category
+                                    
+                                    showInsert = true
+                                }
+                            })
+                            .swipeActions {
+                                Button (role: .destructive) {
+                                    modelContext.delete(category)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                
+                                Button {
+                                    if showInsert { return }
+                                    
+                                    withAnimation {
+                                        newCategoryOperation = category
+                                        
+                                        showInsert = true
+                                    }
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                                .disabled(showInsert)
+                            }
+                    }
+                }
+                .sectionActions {
                     if showInsert {
-                        TextField("Name", text: $categoryOperationName)
+                        TextField("Name", text: $newCategoryOperation.name)
                             .autocorrectionDisabled()
                             .submitLabel(.done)
                             .focused($focusedField, equals: .name)
@@ -48,39 +82,16 @@ struct CategoryOperationView: View {
                             }
                     }
                     
-                    ForEach(categories) { category in
-                        Text(category.name)
-                            .tag(category)
-                            .swipeActions {
-                                Button (role: .destructive) {
-                                    modelContext.delete(category)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                
-                                Button {
-                                    if showInsert { return }
-                                    
-                                    categoryOperationName = category.name
-                                    
-                                    showInsert = true
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
-                                .tint(.blue)
-                                .disabled(showInsert)
-                            }
-                    }
-                }
-                .sectionActions {
                     Button {
                         withAnimation {
+                            newCategoryOperation.name = ""
+                            
                             showInsert = true
                         }
                     } label: {
                         Label("Add", systemImage: "plus")
                     }
-                    .disabled(isEditMode == .active)
+                    .disabled(isEditMode == .active || showInsert)
                 }
             }
             .navigationTitle("Categories")
@@ -97,7 +108,7 @@ struct CategoryOperationView: View {
                             withAnimation {
                                 showInsert = false
                                 
-                                categoryOperationName = ""
+                                newCategoryOperation.name = ""
                             }
                         } label: {
                             Label("Cancel", systemImage: "xmark")
@@ -111,7 +122,7 @@ struct CategoryOperationView: View {
                             } label: {
                                 Label("Save", systemImage: "checkmark")
                             }
-                            .disabled(categoryOperationName.isEmpty)
+                            .disabled(newCategoryOperation.name.isEmpty)
                         }
                     }
                 }
@@ -140,14 +151,12 @@ struct CategoryOperationView: View {
     }
     
     func addCategory() {
-        if !categoryOperationName.isEmpty {
+        if !newCategoryOperation.name.isEmpty {
             withAnimation {
-                modelContext.insert(CategoryOperation(name: categoryOperationName))
+                modelContext.insert(newCategoryOperation)
             
                 showInsert = false
             }
-            
-            categoryOperationName = ""            
         }
     }
     

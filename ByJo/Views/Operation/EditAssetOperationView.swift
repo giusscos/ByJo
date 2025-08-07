@@ -32,8 +32,6 @@ struct EditAssetOperationView: View {
     @State var category: CategoryOperation
     @State private var note: String = ""
     
-    @State private var isExpense: Bool = false
-    
     var nilAmount: Bool {
         amount == .zero || amount == nil
     }
@@ -54,35 +52,18 @@ struct EditAssetOperationView: View {
                 }
                 
                 Section {
-                    VStack(spacing: 24) {
-                        Picker("Amount Type", selection: $isExpense.animation()) {
-                            Text("Positive")
-                                .tag(false)
+                    HStack (spacing: 6) {
+                        Text(asset.currency.symbol)
+                            .foregroundStyle(nilAmount ? .secondary : .primary)
+                            .opacity(nilAmount ? 0.5 : 1)
                             
-                            Text("Negative")
-                                .tag(true)
-                        }
-                        .pickerStyle(.segmented)
-                        .disabled(nilAmount)
-                        .onChange(of: isExpense) { _, _ in
-                            let calculatedAmount = amount ?? .zero
-                            
-                            amount = calculatedAmount * -1
-                        }
-                        
-                        HStack (spacing: 6) {
-                            Text(asset.currency.symbol)
-                                .foregroundStyle(nilAmount ? .secondary : .primary)
-                                .opacity(nilAmount ? 0.5 : 1)
-                                
-                            TextField("Amount", value: $amount, format: .number.precision(.fractionLength(2)))
-                                .keyboardType(.decimalPad)
-                                .focused($focusedField, equals: .amount)
-                                .submitLabel(.next)
-                                .onSubmit {
-                                    focusedField = .note
-                                }
-                        }
+                        TextField("Amount", value: $amount, format: .number.precision(.fractionLength(2)))
+                            .keyboardType(.numbersAndPunctuation)
+                            .focused($focusedField, equals: .amount)
+                            .submitLabel(.next)
+                            .onSubmit {
+                                focusedField = .note
+                            }
                     }
                 }
                 
@@ -160,7 +141,6 @@ struct EditAssetOperationView: View {
                 name = operation.name
                 date = operation.date
                 amount = operation.amount
-                isExpense = operation.amount < 0
                 note = operation.note
                 
                 if operation.asset == nil {

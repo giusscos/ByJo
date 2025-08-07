@@ -45,43 +45,26 @@ struct EditAssetView: View {
                 }
                 
                 Section {
-                    VStack (spacing: 24) {
-                        Picker("Balance Type", selection: $isNegative.animation()) {
-                            Text("Positive")
-                                .tag(false)
-                            
-                            Text("Negative")
-                                .tag(true)
-                        }
-                        .pickerStyle(.segmented)
-                        .disabled(nilBalance)
-                        .onChange(of: isNegative) { _, _ in
-                            let calculatedAmount = initialBalance ?? .zero
-                            
-                            initialBalance = calculatedAmount * -1
-                        }
+                    HStack (spacing: 6) {
+                        Text(currency.symbol)
+                            .foregroundStyle(nilBalance ? .secondary : .primary)
+                            .opacity(nilBalance ? 0.5 : 1)
                         
-                        HStack (spacing: 6) {
-                            Text(currency.symbol)
-                                .foregroundStyle(nilBalance ? .secondary : .primary)
-                                .opacity(nilBalance ? 0.5 : 1)
-                            
-                            TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
-                                .keyboardType(.decimalPad)
-                                .autocorrectionDisabled()
-                                .focused($focusedField, equals: .balance)
-                                .submitLabel(.done)
-                                .onSubmit {
-                                    focusedField = .none
-                                }
-                            
-                            Picker("Currency", selection: $currency) {
-                                ForEach(CurrencyCode.allCases, id: \.self) { value in
-                                    Text(value.rawValue)
-                                }
+                        TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
+                            .keyboardType(.numbersAndPunctuation)
+                            .autocorrectionDisabled()
+                            .focused($focusedField, equals: .balance)
+                            .submitLabel(.done)
+                            .onSubmit {
+                                focusedField = .none
                             }
-                            .labelsHidden()
+                        
+                        Picker("Currency", selection: $currency) {
+                            ForEach(CurrencyCode.allCases, id: \.self) { value in
+                                Text(value.rawValue)
+                            }
                         }
+                        .labelsHidden()
                     }
                 }
                 

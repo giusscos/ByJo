@@ -82,11 +82,26 @@ struct AssetView: View {
         NavigationStack {
             List(selection: $selectedAssets) {
                 if filteredAndSortedAssets.isEmpty {
-                    ContentUnavailableView(
-                        "No Assets Found",
-                        systemImage: "exclamationmark",
-                        description: Text("You need to add an asset by clicking the plus button on the top right corner")
-                    )
+                    VStack {
+                        Text("No asset found 😕")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text("Start adding assets")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        Button {
+                            activeSheet = .createAsset
+                        } label: {
+                            Text("Add asset")
+                                .font(.headline)
+                        }
+                        .tint(.accent)
+                        .buttonBorderShape(.capsule)
+                        .buttonStyle(.bordered)
+                    }
+                    .frame(maxWidth: .infinity)
                 } else {
                     Section {
                         ForEach(filteredAndSortedAssets) { asset in
