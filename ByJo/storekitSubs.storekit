@@ -14,13 +14,42 @@
 
   ],
   "products" : [
-
+    {
+      "displayPrice" : "119.99",
+      "familyShareable" : true,
+      "internalID" : "6749497387",
+      "localizations" : [
+        {
+          "description" : "Lifetime unlimited access for your family",
+          "displayName" : "ByJo Family Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.giusscos.byjoFamilyLifetime",
+      "referenceName" : "ByJo Family Lifetime",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "49.99",
+      "familyShareable" : false,
+      "internalID" : "6749497343",
+      "localizations" : [
+        {
+          "description" : "Lifetime unlimited access",
+          "displayName" : "ByJo Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.giusscos.byjoLifetime",
+      "referenceName" : "ByJo Lifetime",
+      "type" : "NonConsumable"
+    }
   ],
   "settings" : {
     "_applicationInternalID" : "6738330716",
     "_developerTeamID" : "MA7MBQ947C",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 753980354.33600295,
+    "_lastSynchronizedDate" : 776333750.81584501,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -86,26 +115,21 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "49.99",
-          "familyShareable" : false,
-          "groupNumber" : 2,
-          "internalID" : "6738363154",
-          "introductoryOffer" : {
-            "internalID" : "A7DB6F38",
-            "numberOfPeriods" : 1,
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
-          },
+          "displayPrice" : "9.99",
+          "familyShareable" : true,
+          "groupNumber" : 5,
+          "internalID" : "6749497578",
+          "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "Full app access for 1 year",
-              "displayName" : "Annual Pro Access",
+              "description" : "Get unlimited family access for this month",
+              "displayName" : "ByJo Family Pro",
               "locale" : "en_US"
             }
           ],
-          "productID" : "bj_4999_1y_v1",
-          "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "ByJo Annual $49.99",
+          "productID" : "bjpro_999_1m_fa",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "ByJo Family Pro, 9.99, 1 month",
           "subscriptionGroupID" : "21584181",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -119,26 +143,77 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "4.99",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "6738356827",
-          "introductoryOffer" : {
-            "internalID" : "FD6F0A5E",
-            "numberOfPeriods" : 1,
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
-          },
+          "displayPrice" : "99.99",
+          "familyShareable" : true,
+          "groupNumber" : 6,
+          "internalID" : "6749497859",
+          "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "Full app access for 1 month",
-              "displayName" : "Monthly Pro Access",
+              "description" : "Get unlimited family access for this year",
+              "displayName" : "ByJo Family Pro",
               "locale" : "en_US"
             }
           ],
-          "productID" : "bj_499_1m",
+          "productID" : "bjpro_9999_1y_fa",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "ByJo Family Pro, 99.99, 1 year",
+          "subscriptionGroupID" : "21584181",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6749497653",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get unlimited access for this month",
+              "displayName" : "ByJo Pro",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bjpro_399_1m",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "ByJo Monthly $4.99",
+          "referenceName" : "ByJo Pro, 3.99, 1 month",
+          "subscriptionGroupID" : "21584181",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : false,
+          "groupNumber" : 4,
+          "internalID" : "6749497774",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get unlimited access for this year",
+              "displayName" : "ByJo Pro",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "bjpro_3999_1y",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "ByJo Pro, 39.99, 1 year",
           "subscriptionGroupID" : "21584181",
           "type" : "RecurringSubscription",
           "winbackOffers" : [

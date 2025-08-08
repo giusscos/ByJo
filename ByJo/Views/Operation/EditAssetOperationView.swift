@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct EditAssetOperationView: View {
     enum FocusField: Hashable {
@@ -31,7 +32,8 @@ struct EditAssetOperationView: View {
     @State var asset: Asset
     @State var category: CategoryOperation
     @State private var note: String = ""
-    
+    @State private var frequency: RecurrenceFrequency = .single
+
     var nilAmount: Bool {
         amount == .zero || amount == nil
     }
@@ -49,6 +51,33 @@ struct EditAssetOperationView: View {
                         }
                     
                     DatePicker("Date", selection: $date)
+                    
+                    VStack(alignment: .leading) {
+                        Picker("Recurring", selection: $frequency) {
+                            ForEach(RecurrenceFrequency.allCases, id: \.self) { frequencyType in
+                                Text(frequencyType.rawValue)
+                            }
+                        }
+                        
+                        if frequency != .single, let nextDate = frequency.nextPaymentDate(from: date) {
+                            Group {
+                                Text("Next occurrence: ")
+                                +
+                                Text(nextDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits))
+                            }
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .onAppear() {
+                                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                                    if success {
+                                        print("All set!")
+                                    } else if let error {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 Section {
@@ -123,9 +152,7 @@ struct EditAssetOperationView: View {
                     .disabled(name.isEmpty)
                 }
                 
-                ToolbarItem(placement: .keyboard) {
-                    Spacer()
-                    
+                ToolbarItem(placement: .keyboard) {                    
                     Button {
                         focusedField = .none
                     } label: {
@@ -142,6 +169,7 @@ struct EditAssetOperationView: View {
                 date = operation.date
                 amount = operation.amount
                 note = operation.note
+                frequency = operation.frequency
                 
                 if operation.asset == nil {
                     if let asset = assets.first {
@@ -169,15 +197,21 @@ struct EditAssetOperationView: View {
     }
     
     private func deleteOperation(operation: AssetOperation) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
+        
         modelContext.delete(operation)
         
         dismiss()
     }
     
     private func saveOperation() {
+        let uuid = UUID()
+        
         if let operation = operation {
             operation.name = name
             operation.date = date
+            operation.frequency = frequency
             
             if let amount = amount {
                 operation.amount = amount
@@ -190,6 +224,8 @@ struct EditAssetOperationView: View {
 
             operation.category = category
             
+            scheduleNotification(uuid: operation.id)
+            
             dismiss()
             return
         }
@@ -197,6 +233,7 @@ struct EditAssetOperationView: View {
         let calculatedAmount = amount ?? .zero
         
         let newOperation = AssetOperation(
+            id: uuid,
             name: name,
             currency: asset.currency,
             date: date,
@@ -207,8 +244,31 @@ struct EditAssetOperationView: View {
         )
         
         modelContext.insert(newOperation)
+
+        scheduleNotification(uuid: newOperation.id)
         
-        dismiss()   
+        dismiss()
+    }
+    
+    private func scheduleNotification(uuid: UUID) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [uuid.uuidString])
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Recurring operation"
+        if let amount = amount {
+            content.subtitle = "\(name) \(amount.formatted(.currency(code: asset.currency.rawValue).notation(.compactName)))"
+        } else {
+            content.subtitle = name
+        }
+                
+        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: uuid.uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
 }
 

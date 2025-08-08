@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct OperationView: View {
+struct OperationListView: View {
     enum ActiveSheet: Identifiable {
         case create
         case edit(AssetOperation)
@@ -127,7 +127,7 @@ struct OperationView: View {
                                     .tag(operation)
                                     .swipeActions(edge: .trailing) {
                                         Button(role: .destructive) {
-                                            modelContext.delete(operation)
+                                            deleteOperation(operation: operation)
                                         } label: {
                                             Label("Delete", systemImage: "trash")
                                         }
@@ -243,6 +243,13 @@ struct OperationView: View {
         }
     }
     
+    private func deleteOperation(operation: AssetOperation) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
+        
+        modelContext.delete(operation)
+    }
+    
     private func deleteSelectedOperations() {
         for operation in selectedOperations {
             modelContext.delete(operation)
@@ -262,6 +269,6 @@ struct OperationByDate: Identifiable {
 }
 
 #Preview {
-    OperationView()
+    OperationListView()
 }
 

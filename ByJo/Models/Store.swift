@@ -19,15 +19,15 @@ final class Store {
     private var subscriptionGroupStatus: RenewalState?
     var isLoading: Bool = true
     
-    let productIds: [String] = ["bj_499_1m_3d", "bj_4999_1y_1w", "bj_1499_1m_3d_fa", "bj_9999_1y_1w_fa"] // test
-    let groupId: String = "0C83600A" // test
+//    let productIds: [String] = ["bj_499_1m_3d", "bj_4999_1y_1w", "bj_1499_1m_3d_fa", "bj_9999_1y_1w_fa"] // test
+//    let groupId: String = "0C83600A" // test
+//    
+//    let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"] // test
     
-    let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"] // test
+        let productIds: [String] = ["bjpro_999_1m_fa", "bjpro_9999_1y_fa", "bjpro_399_1m", "bjpro_3999_1y"]
+        let groupId: String = "21742027"
     
-    //    let productIds: [String] = ["f_199_1m_3d", "f_999_1y_1w", "f_fa_2999_1y_1w", "f_fa_399_1m_3d"]
-    //    let groupId: String = "21742027"
-    //
-    //    let productLifetimeIds: [String] = ["com.giusscos.fooFamilyLifetime", "com.giusscos.fooLifetime"]
+        let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"]
     
     // if there are multiple product types - create multiple variable for each .consumable, .nonconsumable, .autoRenewable, .nonRenewable.
     private var storeProducts: [Product] = []

@@ -18,19 +18,15 @@ struct OperationRow: View {
                     .font(.title3)
                     .fontWeight(.semibold)
 
-                HStack (alignment: .lastTextBaseline) {
+                HStack (alignment: .lastTextBaseline, spacing: 4) {
                     Text(operation.date, format: .dateTime.hour().minute())
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    
-                    HStack (spacing: 6) {
-                        Text("on")
 
-                        Text(asset.name)
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    Text("on")
+
+                    Text(asset.name)
                 }
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
             .lineLimit(1)
             

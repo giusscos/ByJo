@@ -140,60 +140,59 @@ struct HomeView: View {
                 
                 Section {
                     VStack (alignment: .leading, spacing: 24) {
-                        HStack (spacing: 8) {
-                            HStack (alignment: .center, spacing: 4) {
-                                Text("Recurring operation")
+                        NavigationLink {
+                            RecurringOperationListView()
+                        } label: {
+                            Text("Recurring operation")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        HStack (alignment: .lastTextBaseline, spacing: 6) {
+                            VStack (alignment: .leading) {
+                                Text("📡 Internet provider")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
                                 
-                                Image(systemName: "chevron.right")
+                                Text("16,99 EUR/mo")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
                             }
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                            
                             Spacer()
                             
                             Text("Aug 10, 25")
                                 .font(.headline)
                                 .foregroundStyle(.secondary)
                         }
-                        
-                        VStack (alignment: .leading) {
-                            Text("📡 Internet provider")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                            
-                            Text("16,99 EUR/mo")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                        }
                     }
                 }
                 
                 Section {
                     VStack (alignment: .leading, spacing: 24) {
-                        HStack (spacing: 8) {
-                            HStack (alignment: .center, spacing: 4) {
-                                Text("Scheduled expense")
+                        NavigationLink {
+                            
+                        } label: {
+                            Text("Scheduled expense")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        HStack (alignment: .lastTextBaseline, spacing: 8) {
+                            VStack (alignment: .leading) {
+                                Text("🧾Tax payments")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
                                 
-                                Image(systemName: "chevron.right")
+                                Text("1.714,50 EUR")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
                             }
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
                             
                             Spacer()
                             
                             Text("Aug 15, 25")
                                 .font(.headline)
                                 .foregroundStyle(.secondary)
-                        }
-                        
-                        VStack (alignment: .leading) {
-                            Text("🧾Tax payments")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                            
-                            Text("1.714,50 EUR")
-                                .font(.title)
-                                .fontWeight(.semibold)
                         }
                     }
                 }
@@ -307,6 +306,15 @@ struct HomeView: View {
                         GoalListView()
                     case .viewCategories:
                         CategoryOperationView()
+                }
+            }
+            .onAppear() {
+                let recurringOperations = operations.filter { operation in
+                    operation.frequency != RecurrenceFrequency.single
+                }
+                
+                for recurringOperation in recurringOperations {
+                    // TODO: Make a new AssetOperation + schedule new notification
                 }
             }
         }

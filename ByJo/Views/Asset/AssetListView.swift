@@ -9,7 +9,7 @@ import Charts
 import SwiftData
 import SwiftUI
 
-struct AssetView: View {
+struct AssetListView: View {
     enum AssetSortOrder {
         case name
         case balance
@@ -303,5 +303,5 @@ struct AssetView: View {
 }
 
 #Preview {
-    AssetView()
+    AssetListView()
 }

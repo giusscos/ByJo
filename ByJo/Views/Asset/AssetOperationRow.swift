@@ -19,7 +19,7 @@ struct AssetOperationRow: View {
                     .fontWeight(.semibold)
                 
                 Text(operation.date, format: .dateTime.hour().minute())
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
             .lineLimit(1)

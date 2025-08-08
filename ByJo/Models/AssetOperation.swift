@@ -17,21 +17,24 @@ final class AssetOperation {
     var amount: Decimal = 0
     var note: String = ""
     var frequency: RecurrenceFrequency = RecurrenceFrequency.single
+    var isFilled: Bool = false
     
     var asset: Asset?
     var category: CategoryOperation?
     
     init (
-         name: String = "",
-         currency: CurrencyCode = CurrencyCode.usd,
-         date: Date = .now,
-         amount: Decimal = 0,
-         asset: Asset? = nil,
-         category: CategoryOperation? = nil,
-         note: String = "",
-         frequency: RecurrenceFrequency = RecurrenceFrequency.single
+        id: UUID = UUID(),
+        name: String = "",
+        currency: CurrencyCode = CurrencyCode.usd,
+        date: Date = .now,
+        amount: Decimal = 0,
+        asset: Asset? = nil,
+        category: CategoryOperation? = nil,
+        note: String = "",
+        frequency: RecurrenceFrequency = RecurrenceFrequency.single,
+        isFilled: Bool = true
     ) {
-        self.id = UUID()
+        self.id = id
         self.name = name
         self.currency = currency
         self.date = date
@@ -40,6 +43,7 @@ final class AssetOperation {
         self.category = category
         self.note = note
         self.frequency = frequency
+        self.isFilled = isFilled
     }
 }
 
@@ -74,6 +78,28 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
     case weekly = "Weekly"
     case monthly = "Monthly"
     case yearly = "Yearly"
+    
+    var dateComponents: DateComponents {
+        switch self {
+            case .single:
+                // Nessun pagamento successivo
+                return DateComponents()
+            case .daily:
+                return DateComponents(day: 1)
+            case .weekly:
+                return DateComponents(day: 7)
+            case .monthly:
+                return DateComponents(month: 1)
+            case .yearly:
+                return DateComponents(year: 1)
+        }
+    }
+    
+    func nextPaymentDate(from date: Date) -> Date? {
+        guard self != .single else { return nil }
+        
+        return Calendar.current.date(byAdding: dateComponents, to: date)
+    }
 }
 
 enum DateRangeOption: Identifiable, Hashable {

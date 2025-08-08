@@ -28,11 +28,11 @@ struct ContentView: View {
                 }
                 
                 Tab("Assets", systemImage: "briefcase.fill") {
-                    AssetView()
+                    AssetListView()
                 }
                 
                 Tab("Operations", systemImage: "book.pages") {
-                    OperationView()
+                    OperationListView()
                 }
                 
                 Tab("Settings", systemImage: "gear") {
@@ -43,11 +43,13 @@ struct ContentView: View {
                 PaywallView()
             })
             .onAppear {
-                UITextField.appearance().clearButtonMode = .whileEditing
-                
                 if hasntPaid {
                     showPaywallSheet = false
+                    
+                    return
                 }
+                
+                UITextField.appearance().clearButtonMode = .whileEditing
             }
         }
     }
