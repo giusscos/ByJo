@@ -122,7 +122,7 @@ struct HomeView: View {
                             .fontWeight(.semibold)
                             
                             HStack {
-                                Text(netWorthPreviousPeriod.amount, format: .currency(code: "EUR").notation(.compactName))
+                                Text(netWorthPreviousPeriod.amount, format: .currency(code: currencyCode).notation(.compactName))
                                     .font(.title)
                                     .fontWeight(.semibold)
                                 
@@ -141,64 +141,38 @@ struct HomeView: View {
                     }
                 }
                 
-                Section {
-                    VStack (alignment: .leading, spacing: 24) {
-                        NavigationLink {
-                            RecurringOperationListView()
-                        } label: {
-                            Text("Recurring operation")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                        }
-                        
-                        HStack (alignment: .lastTextBaseline, spacing: 6) {
-                            VStack (alignment: .leading) {
-                                Text("📡 Internet provider")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                
-                                Text("16,99 EUR/mo")
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                            }
-                            Spacer()
-                            
-                            Text("Aug 10, 25")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
+                RecurringOperationWidgetView()
                 
-                Section {
-                    VStack (alignment: .leading, spacing: 24) {
-                        NavigationLink {
-                            
-                        } label: {
-                            Text("Scheduled expense")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                        }
-                        
-                        HStack (alignment: .lastTextBaseline, spacing: 8) {
-                            VStack (alignment: .leading) {
-                                Text("🧾Tax payments")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                
-                                Text("1.714,50 EUR")
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                            }
-                            
-                            Spacer()
-                            
-                            Text("Aug 15, 25")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
+//                TODO: scheduled payments
+//                Section {
+//                    VStack (alignment: .leading, spacing: 24) {
+//                        NavigationLink {
+//                            
+//                        } label: {
+//                            Text("Scheduled expense")
+//                                .font(.headline)
+//                                .foregroundStyle(.secondary)
+//                        }
+//                        
+//                        HStack (alignment: .lastTextBaseline, spacing: 8) {
+//                            VStack (alignment: .leading) {
+//                                Text("🧾Tax payments")
+//                                    .font(.title3)
+//                                    .fontWeight(.semibold)
+//                                
+//                                Text("1.714,50 EUR")
+//                                    .font(.title)
+//                                    .fontWeight(.semibold)
+//                            }
+//                            
+//                            Spacer()
+//                            
+//                            Text("Aug 15, 25")
+//                                .font(.headline)
+//                                .foregroundStyle(.secondary)
+//                        }
+//                    }
+//                }
                 
                 Section {
                     VStack (alignment: .leading, spacing: 24) {
@@ -236,7 +210,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode).notation(.compactName ) : .currency(code: currencyCode)))
+            .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode).notation(.compactName) : .currency(code: currencyCode)))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -244,6 +218,7 @@ struct HomeView: View {
                     } label: {
                         Label("Add operation", systemImage: "plus.circle.fill")
                     }
+                    .disabled(assets.count == 0 || categories.count == 0)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -355,7 +330,8 @@ struct HomeView: View {
                             amount: operation.amount,
                             asset: operation.asset,
                             category: category,
-                            note: operation.note
+                            note: operation.note,
+                            frequency: operation.frequency
                         )
                         
                         toAdd.append(newOperation)
