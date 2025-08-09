@@ -53,6 +53,9 @@ struct HomeView: View {
     
     @State var compactNumber: Bool = true
     
+    @State private var pendingOperations: [AssetOperation] = []
+    @State private var showRecurringAlert = false
+    
     var netWorth: Decimal {
         var netWorth: Decimal = 0.0
         
@@ -309,14 +312,63 @@ struct HomeView: View {
                 }
             }
             .onAppear() {
-                let recurringOperations = operations.filter { operation in
-                    operation.frequency != RecurrenceFrequency.single
+                processRecurringOperations()
+            }
+            .alert("New recurring operations",
+                   isPresented: $showRecurringAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Add", role: .none) {
+                    addPendingOperations()
                 }
-                
-                for recurringOperation in recurringOperations {
-                    // TODO: Make a new AssetOperation + schedule new notification
+            } message: {
+                Text("\(pendingOperations.count) new \(pendingOperations.count == 1 ? "operation" : "operations") will be added to your operations list.")
+            }
+        }
+    }
+    
+    private func addPendingOperations() {
+        for op in pendingOperations {
+            modelContext.insert(op)
+        }
+        
+        pendingOperations.removeAll()
+    }
+    
+    func processRecurringOperations() {
+        let recurringOperations = operations.filter { operation in
+            operation.frequency != RecurrenceFrequency.single
+        }
+        
+        var toAdd: [AssetOperation] = []
+        
+        for operation in recurringOperations {
+            var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
+            
+            if let asset = operation.asset, let category = operation.category {
+                while let dueDate = nextDate, dueDate <= Date() {
+                    if operations.filter({ $0.name == operation.name && $0.date == dueDate }).count == 0 {
+                        let newOperation = AssetOperation(
+                            id: UUID(),
+                            name: operation.name,
+                            currency: asset.currency,
+                            date: dueDate,
+                            amount: operation.amount,
+                            asset: operation.asset,
+                            category: category,
+                            note: operation.note
+                        )
+                        
+                        toAdd.append(newOperation)
+                    }
+                    
+                    nextDate = operation.frequency.nextPaymentDate(from: dueDate)
                 }
             }
+        }
+        
+        if !toAdd.isEmpty {
+            pendingOperations = toAdd
+            showRecurringAlert = true
         }
     }
 }

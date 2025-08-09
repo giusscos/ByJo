@@ -13,11 +13,10 @@ final class AssetOperation {
     var id: UUID = UUID()
     var name: String = ""
     var currency: CurrencyCode = CurrencyCode.usd
-    var date: Date = Date.now
+    var date: Date = Date()
     var amount: Decimal = 0
     var note: String = ""
     var frequency: RecurrenceFrequency = RecurrenceFrequency.single
-    var isFilled: Bool = false
     
     var asset: Asset?
     var category: CategoryOperation?
@@ -32,7 +31,6 @@ final class AssetOperation {
         category: CategoryOperation? = nil,
         note: String = "",
         frequency: RecurrenceFrequency = RecurrenceFrequency.single,
-        isFilled: Bool = true
     ) {
         self.id = id
         self.name = name
@@ -43,7 +41,6 @@ final class AssetOperation {
         self.category = category
         self.note = note
         self.frequency = frequency
-        self.isFilled = isFilled
     }
 }
 
