@@ -26,23 +26,43 @@ struct RecurringOperationWidgetView: View {
                             .foregroundStyle(.secondary)
                     }
                     
-                    HStack (alignment: .lastTextBaseline, spacing: 6) {
-                        VStack (alignment: .leading) {
-                            Text(recurringOperation.name)
-                                .font(.title3)
+                    VStack (alignment: .leading) {
+                        Text(recurringOperation.name)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .lineLimit(1)
+                        
+                        HStack (alignment: .lastTextBaseline) {
+                            HStack (spacing: 4) {
+                                Group {
+                                    if recurringOperation.amount > 0 {
+                                        Image(systemName: "arrow.up.circle.fill")
+                                            .foregroundStyle(.green)
+                                    } else if recurringOperation.amount == 0 {
+                                        Image(systemName: "equal.circle.fill")
+                                            .foregroundStyle(.gray)
+                                    } else {
+                                        Image(systemName: "arrow.down.circle.fill")
+                                            .foregroundStyle(.red)
+                                    }
+                                    
+                                }
+                                .imageScale(.large)
                                 .fontWeight(.semibold)
+                                
+                                Text(abs(recurringOperation.amount), format: .currency(code: asset.currency.rawValue))
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                            }
                             
-                            Text(recurringOperation.amount, format: .currency(code: asset.currency.rawValue))
-                                .font(.title)
-                                .fontWeight(.semibold)
-                        }
-                        
-                        Spacer()
-                        
-                        if let nextPaymentDate = recurringOperation.frequency.nextPaymentDate(from: recurringOperation.date) {
-                            Text(nextPaymentDate, format: .dateTime.day().month(.abbreviated).year())
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
+                            Spacer()
+                            
+                            if let nextPaymentDate = recurringOperation.frequency.nextPaymentDate(from: recurringOperation.date) {
+                                Text(nextPaymentDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits).hour().minute())
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }

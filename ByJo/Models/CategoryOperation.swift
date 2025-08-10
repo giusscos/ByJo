@@ -14,7 +14,7 @@ final class CategoryOperation {
     var name: String = ""
     var id: UUID = UUID()
     
-    @Relationship var assetOperation: [AssetOperation]?
+    @Relationship var assetOperations: [AssetOperation]?
     
     init(name: String) {
         self.id = UUID()

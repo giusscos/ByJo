@@ -8,11 +8,6 @@
 import SwiftData
 import SwiftUI
 
-struct NetWorthComparison {
-    var amount: Decimal
-    var percentage: Decimal
-}
-
 struct HomeView: View {
     enum ActiveSheet: Identifiable {
         case createOperation
@@ -39,11 +34,7 @@ struct HomeView: View {
     
     @Environment(\.modelContext) var modelContext
     
-    @Namespace private var namespace
-    
     @Query var assets: [Asset]
-    
-    @Query var goals: [Goal]
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
@@ -74,72 +65,12 @@ struct HomeView: View {
         }
     }
     
-    var netWorthPreviousPeriod: NetWorthComparison {
-        var balancePreviousPeriod: Decimal = 0.0
-        var balanceCurrentPeriod: Decimal = 0.0
-        
-        let period: DateRangeOption = .month
-
-        for asset in assets {
-            balancePreviousPeriod += asset.calculatePreviousBalanceForDateRangeWithoutInitialBalance(period)
-            balanceCurrentPeriod += asset.calculateBalanceForDateRangeWithoutInitialBalance(period)
-        }
-        
-        let amount = balancePreviousPeriod + balanceCurrentPeriod
-        
-        return NetWorthComparison(amount: amount, percentage: amount == 0 ? 0 : (amount / (netWorth - amount)) * 100)
-    }
-    
     var body: some View {
         NavigationStack {
             List {
                 GoalListStackView()
             
-                Section {
-                    VStack (alignment: .leading, spacing: 24) {
-                        HStack (spacing: 4) {
-                            Text("VS last month")
-                        }
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                        
-                        HStack (spacing: 4) {
-                            Group {
-                                if netWorthPreviousPeriod.amount > 0 {
-                                    Image(systemName: "arrow.up.circle.fill")
-                                        .foregroundStyle(.green)
-                                } else if netWorthPreviousPeriod.amount == 0 {
-                                    Image(systemName: "equal.circle.fill")
-                                        .foregroundStyle(.gray)
-                                } else {
-                                    Image(systemName: "arrow.down.circle.fill")
-                                        .foregroundStyle(.red)
-
-                                }
-                                
-                            }
-                            .imageScale(.large)
-                            .fontWeight(.semibold)
-                            
-                            HStack {
-                                Text(netWorthPreviousPeriod.amount, format: .currency(code: currencyCode).notation(.compactName))
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                                
-                                Group {
-                                    Text("(")
-                                    +
-                                    Text(netWorthPreviousPeriod.percentage, format: .number.precision(.fractionLength(2)))
-                                    +
-                                    Text("%)")
-                                }
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                }
+                PeriodComparisonWidgetView()
                 
                 RecurringOperationWidgetView()
                 
@@ -174,41 +105,7 @@ struct HomeView: View {
 //                    }
 //                }
                 
-                Section {
-                    VStack (alignment: .leading, spacing: 24) {
-                        HStack (alignment: .center, spacing: 4) {
-                            Text("Category")
-                            
-                            Image(systemName: "chevron.right")
-                        }
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                        
-                        VStack (alignment: .leading) {
-                            Text("🚗 Transport")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                            
-                            HStack (spacing: 4) {
-                                Group {
-                                    if false {
-                                        Image(systemName: "arrow.up.circle.fill")
-                                            .foregroundStyle(.green)
-                                    } else {
-                                        Image(systemName: "arrow.down.circle.fill")
-                                            .foregroundStyle(.red)
-                                    }
-                                }
-                                .imageScale(.large)
-                                .fontWeight(.semibold)
-                                
-                                Text("150 EUR")
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                    }
-                }
+                CategoryWidgetView()
             }
             .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode).notation(.compactName) : .currency(code: currencyCode)))
             .toolbar {
@@ -291,8 +188,8 @@ struct HomeView: View {
             }
             .alert("New recurring operations",
                    isPresented: $showRecurringAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Add", role: .none) {
+                Button("Cancel", role: .cancel) {}
+                Button("Add") {
                     addPendingOperations()
                 }
             } message: {
@@ -302,8 +199,8 @@ struct HomeView: View {
     }
     
     private func addPendingOperations() {
-        for op in pendingOperations {
-            modelContext.insert(op)
+        for operation in pendingOperations {
+            modelContext.insert(operation)
         }
         
         pendingOperations.removeAll()
@@ -318,7 +215,6 @@ struct HomeView: View {
         
         for operation in recurringOperations {
             var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
-            
             if let asset = operation.asset, let category = operation.category {
                 while let dueDate = nextDate, dueDate <= Date() {
                     if operations.filter({ $0.name == operation.name && $0.date == dueDate }).count == 0 {

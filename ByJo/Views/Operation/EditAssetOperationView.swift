@@ -58,12 +58,13 @@ struct EditAssetOperationView: View {
                                 Text(frequencyType.rawValue)
                             }
                         }
+                        .pickerStyle(.menu)
                         
                         if frequency != .single, let nextDate = frequency.nextPaymentDate(from: date) {
                             Group {
                                 Text("Next occurrence: ")
                                 +
-                                Text(nextDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits))
+                                Text(nextDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits).hour().minute())
                             }
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -149,7 +150,7 @@ struct EditAssetOperationView: View {
                         Label("Save", systemImage: "checkmark.circle")
                             .labelStyle(.titleOnly)
                     }
-                    .disabled(name.isEmpty)
+                    .disabled(name.isEmpty || amount == nil)
                 }
                 
                 ToolbarItem(placement: .keyboard) {                    

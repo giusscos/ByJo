@@ -79,7 +79,6 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
     var dateComponents: DateComponents {
         switch self {
             case .single:
-                // Nessun pagamento successivo
                 return DateComponents()
             case .daily:
                 return DateComponents(day: 1)
