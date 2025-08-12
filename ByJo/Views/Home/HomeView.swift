@@ -68,6 +68,54 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                Group {
+                    if assets.isEmpty {
+                        VStack {
+                            Text("No assets found 😕")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            
+                            Text("Start adding assets")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                            
+                            Button {
+                                activeSheet = .createAsset
+                            } label: {
+                                Text("Add asset")
+                                    .font(.headline)
+                            }
+                            .tint(.accent)
+                            .buttonBorderShape(.capsule)
+                            .buttonStyle(.bordered)
+                        }
+                    } else if categories.isEmpty || operations.isEmpty {
+                        VStack {
+                            let text = categories.isEmpty ? "categories" : "operations"
+                            
+                            Text("No \(text) found 😕")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            
+                            Text("Start adding \(text)")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                            
+                            Button {
+                                activeSheet = categories.isEmpty ? .viewCategories : .createOperation
+                            } label: {
+                                Text("Add \(text)")
+                                    .font(.headline)
+                            }
+                            .tint(.accent)
+                            .buttonBorderShape(.capsule)
+                            .buttonStyle(.bordered)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity)
+
+                
                 GoalListStackView()
             
                 PeriodComparisonWidgetView()

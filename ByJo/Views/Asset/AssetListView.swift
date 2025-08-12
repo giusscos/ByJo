@@ -83,7 +83,7 @@ struct AssetListView: View {
             List(selection: $selectedAssets) {
                 if filteredAndSortedAssets.isEmpty {
                     VStack {
-                        Text("No asset found 😕")
+                        Text("No assets found 😕")
                             .font(.title2)
                             .fontWeight(.semibold)
                         
