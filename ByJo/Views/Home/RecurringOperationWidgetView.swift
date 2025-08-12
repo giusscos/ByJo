@@ -15,7 +15,6 @@ struct RecurringOperationWidgetView: View {
         if let recurringOperation = operations.first(where: { operation in
             operation.frequency != .single
         }), let asset = recurringOperation.asset {
-            
             Section {
                 VStack (alignment: .leading, spacing: 24) {
                     NavigationLink {

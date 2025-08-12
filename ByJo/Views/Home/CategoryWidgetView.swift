@@ -22,9 +22,39 @@ struct CategoryWidgetView: View {
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     private var mostRelevantCategory: CategoryWithAmount? {
-        categories
+        if categories.isEmpty { return nil }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        let currentMonth = calendar.component(.month, from: now)
+        let currentYear = calendar.component(.year, from: now)
+        
+        return categories
+            .filter { category in
+                if let assetOperations = category.assetOperations, !assetOperations.isEmpty {
+                    return assetOperations.contains { operation in
+                        let date = operation.date
+                        
+                        return calendar.component(.month, from: date) == currentMonth &&
+                        calendar.component(.year, from: date) == currentYear
+                    }
+                }
+                return false
+            }
             .map { category in
-                let total = category.assetOperations?.reduce(Decimal(0)) { $0 + $1.amount } ?? 0
+                guard let assetOperations = category.assetOperations else {
+                    return CategoryWithAmount(category: CategoryOperation(name: "No category"), amount: 0.0)
+                }
+                
+                let total = assetOperations
+                    .filter { operation in
+                        let date = operation.date
+                        
+                        return calendar.component(.month, from: date) == currentMonth &&
+                        calendar.component(.year, from: date) == currentYear
+                    }
+                    .reduce(Decimal(0)) { $0 + $1.amount }
+                
                 return CategoryWithAmount(category: category, amount: total)
             }
             .max(by: { abs($0.amount) < abs($1.amount) })
@@ -35,7 +65,7 @@ struct CategoryWidgetView: View {
             if let topCategory = mostRelevantCategory {
                 VStack(alignment: .leading, spacing: 24) {
                     NavigationLink {
-                        
+                        OperationsGroupedByCategoryListView()
                     } label: {
                         Text("Category")
                             .font(.headline)
@@ -51,11 +81,14 @@ struct CategoryWidgetView: View {
                         HStack(spacing: 4) {
                             Group {
                                 if topCategory.amount > 0 {
-                                    Image(systemName: "arrow.up.circle.fill").foregroundStyle(.green)
+                                    Image(systemName: "arrow.up.circle.fill")
+                                        .foregroundStyle(.green)
                                 } else if topCategory.amount == 0 {
-                                    Image(systemName: "equal.circle.fill").foregroundStyle(.gray)
+                                    Image(systemName: "equal.circle.fill")
+                                        .foregroundStyle(.gray)
                                 } else {
-                                    Image(systemName: "arrow.down.circle.fill").foregroundStyle(.red)
+                                    Image(systemName: "arrow.down.circle.fill")
+                                        .foregroundStyle(.red)
                                 }
                             }
                             .imageScale(.large)
