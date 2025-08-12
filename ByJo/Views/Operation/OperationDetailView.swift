@@ -11,6 +11,8 @@ import SwiftUI
 struct OperationDetailView: View {
     @Environment(\.modelContext) var modelContext
     
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    
     var operation: AssetOperation
     var asset: Asset
     
@@ -46,7 +48,7 @@ struct OperationDetailView: View {
                 }
             }
         }
-        .navigationTitle(Text(operation.amount, format: .currency(code: asset.currency.rawValue)))
+        .navigationTitle(Text(operation.amount, format: .currency(code: currency.rawValue)))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

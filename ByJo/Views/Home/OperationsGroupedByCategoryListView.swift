@@ -9,6 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct OperationsGroupedByCategoryListView: View {
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     @State var addCategory: Bool = false
@@ -50,7 +52,7 @@ struct OperationsGroupedByCategoryListView: View {
                             .imageScale(.large)
                             .fontWeight(.semibold)
                             
-                            Text(abs(total), format: .currency(code: "EUR"))
+                            Text(abs(total), format: .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
                         }

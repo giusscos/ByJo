@@ -18,6 +18,8 @@ struct EditAssetOperationView: View {
     
     @FocusState private var focusedField: FocusField?
     
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
@@ -83,7 +85,7 @@ struct EditAssetOperationView: View {
                 
                 Section {
                     HStack (spacing: 6) {
-                        Text(asset.currency.symbol)
+                        Text(currency.symbol)
                             .foregroundStyle(nilAmount ? .secondary : .primary)
                             .opacity(nilAmount ? 0.5 : 1)
                             
@@ -175,7 +177,7 @@ struct EditAssetOperationView: View {
                 if operation.asset == nil {
                     if let asset = assets.first {
                         operation.asset = asset
-                        operation.currency = asset.currency
+//                        operation.currency = asset.currency
                     }
                 }
                 
@@ -187,7 +189,7 @@ struct EditAssetOperationView: View {
             } else {
                 if let asset = assets.first {
                     self.asset = asset
-                    self.asset.currency = asset.currency
+//                    self.asset.currency = asset.currency
                 }
                 
                 if let category = categoriesOperation.first {
@@ -221,7 +223,7 @@ struct EditAssetOperationView: View {
             operation.note = note
 
             operation.asset = asset
-            operation.currency = asset.currency
+//            operation.currency = asset.currency
 
             operation.category = category
             
@@ -236,7 +238,7 @@ struct EditAssetOperationView: View {
         let newOperation = AssetOperation(
             id: uuid,
             name: name,
-            currency: asset.currency,
+//            currency: asset.currency,
             date: date,
             amount: calculatedAmount,
             asset: asset,
@@ -258,7 +260,7 @@ struct EditAssetOperationView: View {
         let content = UNMutableNotificationContent()
         content.title = "Recurring operation"
         if let amount = amount {
-            content.subtitle = "\(name) \(amount.formatted(.currency(code: asset.currency.rawValue).notation(.compactName)))"
+            content.subtitle = "\(name) \(amount.formatted(.currency(code: currency.rawValue).notation(.compactName)))"
         } else {
             content.subtitle = name
         }

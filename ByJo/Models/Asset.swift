@@ -12,7 +12,7 @@ import SwiftData
 final class Asset {
     var id: UUID = UUID()
     var name: String = ""
-    var currency: CurrencyCode = CurrencyCode.usd
+//    var currency: CurrencyCode = CurrencyCode.usd
     var type: AssetType = AssetType.cash
     var initialBalance: Decimal = 0
     var timestamp: Date = Date.now
@@ -20,10 +20,9 @@ final class Asset {
     @Relationship(deleteRule: .cascade) var operations: [AssetOperation]?
     @Relationship(deleteRule: .cascade) var goals: [Goal]?
     
-    init(name: String, currency: CurrencyCode = CurrencyCode.usd, type: AssetType = AssetType.cash, initialBalance: Decimal) {
+    init(name: String, type: AssetType = AssetType.cash, initialBalance: Decimal) {
         self.id = UUID()
         self.name = name
-        self.currency = currency
         self.type = type
         self.initialBalance = initialBalance
         self.timestamp = Date.now

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AssetRowView: View {
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+
     var asset: Asset
     
     var body: some View {
@@ -25,7 +27,7 @@ struct AssetRowView: View {
             
             Spacer()
             
-            Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue).notation(.compactName))
+            Text(asset.calculateCurrentBalance(), format: .currency(code: currency.rawValue).notation(.compactName))
                 .lineLimit(1)
                 .truncationMode(.middle)
                 .font(.title)

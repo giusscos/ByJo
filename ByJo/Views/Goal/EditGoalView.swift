@@ -19,6 +19,8 @@ struct EditGoalView:View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    
     @Query var assets: [Asset]
     
     var goal: Goal?
@@ -67,7 +69,7 @@ struct EditGoalView:View {
                 }
                 
                 Section {
-                    Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: asset.currency.rawValue))
+                    Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: currency.rawValue))
                                             
                     TextField("Target amount", value: $targetAmount, format: .number.precision(.fractionLength(2)))
                         .keyboardType(.numbersAndPunctuation)

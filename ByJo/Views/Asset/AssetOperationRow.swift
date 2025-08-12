@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AssetOperationRow: View {
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+
     var operation: AssetOperation
     var asset: Asset
     
@@ -38,7 +40,7 @@ struct AssetOperationRow: View {
             .imageScale(.large)
             .fontWeight(.semibold)
             
-            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: .currency(code: asset.currency.rawValue).notation(.compactName))
+            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: .currency(code: currency.rawValue).notation(.compactName))
                 .font(.title)
                 .fontWeight(.semibold)
         }

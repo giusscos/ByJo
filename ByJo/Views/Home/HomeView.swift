@@ -34,6 +34,8 @@ struct HomeView: View {
     
     @Environment(\.modelContext) var modelContext
     
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+
     @Query var assets: [Asset]
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
@@ -55,14 +57,6 @@ struct HomeView: View {
         }
         
         return netWorth
-    }
-    
-    var currencyCode: String {
-        if let asset = assets.first {
-            return asset.currency.rawValue
-        } else {
-            return CurrencyCode.usd.rawValue
-        }
     }
     
     var body: some View {
@@ -155,7 +149,7 @@ struct HomeView: View {
                 
                 CategoryWidgetView()
             }
-            .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode).notation(.compactName) : .currency(code: currencyCode)))
+            .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue)))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -263,13 +257,13 @@ struct HomeView: View {
         
         for operation in recurringOperations {
             var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
-            if let asset = operation.asset, let category = operation.category {
+            if let category = operation.category {
                 while let dueDate = nextDate, dueDate <= Date() {
                     if operations.filter({ $0.name == operation.name && $0.date == dueDate }).count == 0 {
                         let newOperation = AssetOperation(
                             id: UUID(),
                             name: operation.name,
-                            currency: asset.currency,
+//                            currency: asset.currency,
                             date: dueDate,
                             amount: operation.amount,
                             asset: operation.asset,

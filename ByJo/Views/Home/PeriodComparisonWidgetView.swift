@@ -16,6 +16,8 @@ struct NetWorthComparison {
 struct PeriodComparisonWidgetView: View {
     @Query var assets: [Asset]
     
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    
     var netWorth: Decimal {
         var netWorth: Decimal = 0.0
         
@@ -24,14 +26,6 @@ struct PeriodComparisonWidgetView: View {
         }
         
         return netWorth
-    }
-    
-    var currencyCode: String {
-        if let asset = assets.first {
-            return asset.currency.rawValue
-        } else {
-            return CurrencyCode.usd.rawValue
-        }
     }
     
     var netWorthPreviousPeriod: NetWorthComparison {
@@ -77,7 +71,7 @@ struct PeriodComparisonWidgetView: View {
                     .fontWeight(.semibold)
                     
                     HStack {
-                        Text(abs(netWorthPreviousPeriod.amount), format: .currency(code: currencyCode).notation(.compactName))
+                        Text(abs(netWorthPreviousPeriod.amount), format: .currency(code: currencyCode.rawValue).notation(.compactName))
                             .font(.title)
                             .fontWeight(.semibold)
                         

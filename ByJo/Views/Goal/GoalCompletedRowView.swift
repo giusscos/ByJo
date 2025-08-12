@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GoalCompletedRowView: View {
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+
     var completedGoal: CompletedGoal
     
     var body: some View {
@@ -116,7 +118,7 @@ struct GoalCompletedRowView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 
-                                Text(goal.startingAmount, format: .currency(code: asset.currency.rawValue))
+                                Text(goal.startingAmount, format: .currency(code: currency.rawValue))
                                     .font(.headline)
                             }
                             
@@ -132,7 +134,7 @@ struct GoalCompletedRowView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 
-                                Text(goal.targetAmount, format: .currency(code: asset.currency.rawValue))
+                                Text(goal.targetAmount, format: .currency(code: currency.rawValue))
                                     .font(.headline)
                             }
                         }

@@ -19,6 +19,8 @@ private struct Accumulator {
 }
 
 struct CategoryWidgetView: View {
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     private var mostRelevantCategory: CategoryWithAmount? {
@@ -94,7 +96,7 @@ struct CategoryWidgetView: View {
                             .imageScale(.large)
                             .fontWeight(.semibold)
                             
-                            Text(topCategory.amount, format: .currency(code: CurrencyCode.usd.rawValue))
+                            Text(topCategory.amount, format: .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
                         }

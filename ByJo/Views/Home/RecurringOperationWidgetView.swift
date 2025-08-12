@@ -9,12 +9,14 @@ import SwiftData
 import SwiftUI
 
 struct RecurringOperationWidgetView: View {
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
 
     var body: some View {
         if let recurringOperation = operations.first(where: { operation in
             operation.frequency != .single
-        }), let asset = recurringOperation.asset {
+        }) {
             Section {
                 VStack (alignment: .leading, spacing: 24) {
                     NavigationLink {
@@ -49,7 +51,7 @@ struct RecurringOperationWidgetView: View {
                                 .imageScale(.large)
                                 .fontWeight(.semibold)
                                 
-                                Text(abs(recurringOperation.amount), format: .currency(code: asset.currency.rawValue))
+                                Text(abs(recurringOperation.amount), format: .currency(code: currency.rawValue))
                                     .font(.title)
                                     .fontWeight(.semibold)
                             }

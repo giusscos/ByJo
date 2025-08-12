@@ -19,10 +19,12 @@ struct EditAssetView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    
     var asset: Asset?
     
     @State private var name: String = ""
-    @State private var currency: CurrencyCode = .usd
+//    @State private var currency: CurrencyCode = .usd
     @State private var initialBalance: Decimal?
     @State private var type: AssetType = .bankAccount
     @State private var isNegative: Bool = false
@@ -45,26 +47,32 @@ struct EditAssetView: View {
                 }
                 
                 Section {
-                    HStack (spacing: 6) {
-                        Text(currency.symbol)
-                            .foregroundStyle(nilBalance ? .secondary : .primary)
-                            .opacity(nilBalance ? 0.5 : 1)
-                        
-                        TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
-                            .keyboardType(.numbersAndPunctuation)
-                            .autocorrectionDisabled()
-                            .focused($focusedField, equals: .balance)
-                            .submitLabel(.done)
-                            .onSubmit {
-                                focusedField = .none
-                            }
-                        
-                        Picker("Currency", selection: $currency) {
-                            ForEach(CurrencyCode.allCases, id: \.self) { value in
-                                Text(value.rawValue)
-                            }
+                    VStack (alignment: .leading) {
+                        HStack (spacing: 6) {
+                            Text(currencyCode.symbol)
+                                .foregroundStyle(nilBalance ? .secondary : .primary)
+                                .opacity(nilBalance ? 0.5 : 1)
+                            
+                            TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
+                                .keyboardType(.numbersAndPunctuation)
+                                .autocorrectionDisabled()
+                                .focused($focusedField, equals: .balance)
+                                .submitLabel(.done)
+                                .onSubmit {
+                                    focusedField = .none
+                                }
+                            
+//                            Picker("Currency", selection: $currency) {
+//                                ForEach(CurrencyCode.allCases, id: \.self) { value in
+//                                    Text(value.rawValue)
+//                                }
+//                            }
+//                            .labelsHidden()
                         }
-                        .labelsHidden()
+                        
+//                        Text("Currently, there’s no support for multi-currency assets. If you set a different currency for this asset, it will be calculated based on the currency set up during the onboarding process or in the settings tab.")
+//                            .font(.caption)
+//                            .foregroundStyle(.secondary)
                     }
                 }
                 
@@ -112,7 +120,7 @@ struct EditAssetView: View {
                 
                 if let asset = asset {
                     name = asset.name
-                    currency = asset.currency
+//                    currency = asset.currency
                     initialBalance = asset.initialBalance
                     type = asset.type
                 }
@@ -123,7 +131,7 @@ struct EditAssetView: View {
     private func saveAsset() {
         if let asset = asset {
             asset.name = name
-            asset.currency = currency
+//            asset.currency = currency
             if let initialBalance = initialBalance {
                 asset.initialBalance = initialBalance
             }
@@ -136,7 +144,7 @@ struct EditAssetView: View {
         
         let newAsset = Asset(
             name: name,
-            currency: currency,
+//            currency: currency,
             type: type,
             initialBalance: initialBalance ?? 0.0
         )
@@ -154,6 +162,6 @@ struct EditAssetView: View {
 }
 
 #Preview {
-    EditAssetView(asset: Asset(name: "Bank", currency: .usd, type: .bankAccount, initialBalance: 100))
+    EditAssetView(asset: Asset(name: "Bank", type: .bankAccount, initialBalance: 100))
         .modelContainer(for: Asset.self, inMemory: true)
 }

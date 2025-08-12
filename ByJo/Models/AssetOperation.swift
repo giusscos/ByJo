@@ -12,7 +12,7 @@ import SwiftData
 final class AssetOperation {
     var id: UUID = UUID()
     var name: String = ""
-    var currency: CurrencyCode = CurrencyCode.usd
+//    var currency: CurrencyCode = CurrencyCode.usd
     var date: Date = Date()
     var amount: Decimal = 0
     var note: String = ""
@@ -24,7 +24,7 @@ final class AssetOperation {
     init (
         id: UUID = UUID(),
         name: String = "",
-        currency: CurrencyCode = CurrencyCode.usd,
+//        currency: CurrencyCode = CurrencyCode.usd,
         date: Date = .now,
         amount: Decimal = 0,
         asset: Asset? = nil,
@@ -34,7 +34,7 @@ final class AssetOperation {
     ) {
         self.id = id
         self.name = name
-        self.currency = currency
+//        self.currency = currency
         self.date = date
         self.amount = amount
         self.asset = asset

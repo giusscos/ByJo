@@ -12,12 +12,22 @@ import SwiftData
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     
+    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    
     @State private var manageSubscription: Bool = false
     
     var body: some View {
         NavigationStack {
             List {
-                Section {
+                Section("Currency") {
+                    Picker("Currency", selection: $currency) {
+                        ForEach(CurrencyCode.allCases, id: \.self) { value in
+                            Text(value.rawValue)
+                        }
+                    }
+                }
+                
+                Section("Support") {
                     Button("Manage subscription") {
                         manageSubscription.toggle()
                     }
@@ -30,8 +40,6 @@ struct SettingsView: View {
                     
                     Link("Privacy Policy", destination: URL(string: "https://giusscos.it/privacy")!)
                         .foregroundColor(.blue)
-                } header: {
-                    Text("Support")
                 }
             }
             .manageSubscriptionsSheet(isPresented: $manageSubscription, subscriptionGroupID: Store().groupId)
