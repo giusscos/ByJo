@@ -20,12 +20,18 @@ struct SettingsView: View {
         NavigationStack {
             List {
                 Section("Currency") {
-                    Picker("Currency", selection: $currency) {
-                        ForEach(CurrencyCode.allCases, id: \.self) { value in
-                            Text(value.rawValue)
+                    VStack (alignment: .leading) {
+                        Picker("Currency", selection: $currency) {
+                            ForEach(CurrencyCode.allCases, id: \.self) { value in
+                                Text(value.rawValue)
+                            }
                         }
+                        .pickerStyle(.menu)
+                        
+                        Text("There is no currency conversion for now")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    .pickerStyle(.menu)
                 }
                 
                 Section("Support") {

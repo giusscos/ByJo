@@ -21,34 +21,59 @@ struct OperationDetailView: View {
     var body: some View {
         List {
             Section {
-                Text(operation.name)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                HStack {
+                    Text("Amount")
+                    
+                    Spacer()
+                    
+                    Text(operation.amount, format: .currency(code: currency.rawValue))
+                        .foregroundStyle(.secondary)
+                }
                 
-                Text("\(asset.name)")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Text("Asset")
+                    
+                    Spacer()
+                    
+                    Text("\(asset.name)")
+                        .foregroundStyle(.secondary)
+                }
+                            
+                HStack {
+                    Text("Added on")
+                    
+                    Spacer()
+                    
+                    Text(operation.date, format: .dateTime.day().month().year().hour().minute())
+                        .foregroundStyle(.secondary)
+                }
                 
-                Text(operation.date, format: .dateTime.day().month().year().hour().minute())
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                if let nextPaymentDate = operation.frequency.nextPaymentDate(from: operation.date) {
+                    HStack {
+                        Text("Next payment date")
+                        
+                        Spacer()
+                        
+                        Text(nextPaymentDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits).hour().minute())
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             
             if !operation.note.isEmpty {
                 Section {
                     VStack (alignment: .leading) {
-                        Text("Note: ")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Text("Note")
                         
                         Text(operation.note)
                             .font(.body)
                             .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
         }
-        .navigationTitle(Text(operation.amount, format: .currency(code: currency.rawValue)))
+        .navigationTitle(operation.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
