@@ -16,24 +16,19 @@ struct PaywallView: View {
     
     private let contentData = [
         (
+            title: "Privacy first",
+            description: "ByJo do not collect or track any type of data",
+            imageName: "lock.shield"
+        ),
+        (
             title: "Achieve Your Goals",
-            description: "Set goals to achieve and enhance your performance",
+            description: "Set goals to achieve your financial freedom",
             imageName: "target"
         ),
         (
-            title: "Consult Your Progress",
-            description: "View fantastic charts to track your progress and view your results more easily",
-            imageName: "chart.bar.fill"
-        ),
-        (
-            title: "Manage Your Assets easily",
-            description: "View, filter and manage your asset operations",
+            title: "Manage Your Assets with ease",
+            description: "View, filter and manage your assets in a single place",
             imageName: "book.pages"
-        ),
-        (
-            title: "Privacy first",
-            description: "ByJo do not collect any personal data, you can export and import csv files to manage your data locally",
-            imageName: "lock.shield"
         )
     ]
     
@@ -42,7 +37,7 @@ struct PaywallView: View {
     var body: some View {
         NavigationStack {
             SubscriptionStoreView(groupID: Store().groupId) {
-                VStack {
+                VStack (alignment: .leading) {
                     Button {
                         showLifetimePlans = true
                     } label: {
@@ -52,21 +47,24 @@ struct PaywallView: View {
                     .tint(.green)
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.capsule)
+                    .frame(maxWidth: .infinity, alignment: .center)
                     
                     TabView(selection: $currentIndex) {
                         ForEach(0..<contentData.count, id: \.self) { index in
-                            VStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 12) {
                                 Image(systemName: contentData[index].imageName)
                                     .font(.largeTitle)
                                     .foregroundStyle(Color.accentColor)
                                 
                                 Text(contentData[index].title)
                                     .font(.title)
+                                    .multilineTextAlignment(.leading)
                                     .bold()
                                 
                                 Text(contentData[index].description)
                                     .font(.headline)
-                                    .multilineTextAlignment(.center)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.leading)
                             }
                             .tag(index)
                         }
@@ -75,6 +73,8 @@ struct PaywallView: View {
                     .indexViewStyle(.page(backgroundDisplayMode: .always))
                     
                     HStack {
+                        Spacer()
+                        
                         Link("Terms of use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
                             .foregroundColor(.primary)
                             .buttonStyle(.plain)
@@ -85,13 +85,17 @@ struct PaywallView: View {
                         Link("Privacy Policy", destination: URL(string: "https://giusscos.it/privacy")!)
                             .foregroundColor(.primary)
                             .buttonStyle(.plain)
+                        
+                        Spacer()
                     }
                     .font(.caption)
                 }
+                .padding()
             }
             .subscriptionStoreControlStyle(.pagedProminentPicker, placement: .bottomBar)
             .subscriptionStoreButtonLabel(.multiline)
             .storeButton(.visible, for: .restorePurchases)
+            .storeButton(.hidden, for: .cancellation)
             .interactiveDismissDisabled()
             .sheet(isPresented: $showLifetimePlans) {
                 PaywallLifetimeView()

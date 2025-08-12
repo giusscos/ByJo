@@ -108,44 +108,12 @@ struct HomeView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-
                 
                 GoalListStackView()
             
                 PeriodComparisonWidgetView()
                 
                 RecurringOperationWidgetView()
-                
-//                TODO: scheduled payments
-//                Section {
-//                    VStack (alignment: .leading, spacing: 24) {
-//                        NavigationLink {
-//                            
-//                        } label: {
-//                            Text("Scheduled expense")
-//                                .font(.headline)
-//                                .foregroundStyle(.secondary)
-//                        }
-//                        
-//                        HStack (alignment: .lastTextBaseline, spacing: 8) {
-//                            VStack (alignment: .leading) {
-//                                Text("🧾Tax payments")
-//                                    .font(.title3)
-//                                    .fontWeight(.semibold)
-//                                
-//                                Text("1.714,50 EUR")
-//                                    .font(.title)
-//                                    .fontWeight(.semibold)
-//                            }
-//                            
-//                            Spacer()
-//                            
-//                            Text("Aug 15, 25")
-//                                .font(.headline)
-//                                .foregroundStyle(.secondary)
-//                        }
-//                    }
-//                }
                 
                 CategoryWidgetView()
             }

@@ -12,6 +12,7 @@ struct OperationListView: View {
     enum ActiveSheet: Identifiable {
         case create
         case edit(AssetOperation)
+        case createAsset
         case viewCategories
         
         var id: String {
@@ -20,6 +21,8 @@ struct OperationListView: View {
                     return "create"
                 case .edit(let operation):
                     return "edit-\(operation.id)"
+                case .createAsset:
+                    return "createAsset"
                 case .viewCategories:
                     return "viewCategories"
             }
@@ -92,7 +95,28 @@ struct OperationListView: View {
     var body: some View {
         NavigationStack {
             List(selection: $selectedOperations) {
-                if filteredAndSortedOperations.isEmpty {
+                if assets.isEmpty {
+                    VStack {
+                        Text("No assets found 😕")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text("Start adding assets")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        Button {
+                            activeSheet = .createAsset
+                        } label: {
+                            Text("Add asset")
+                                .font(.headline)
+                        }
+                        .tint(.accent)
+                        .buttonBorderShape(.capsule)
+                        .buttonStyle(.bordered)
+                    }
+                    .frame(maxWidth: .infinity)
+                } else if filteredAndSortedOperations.isEmpty {
                     VStack {
                         let text = categories.isEmpty ? "categories" : "operations"
                         Text("No \(text) found 😕")
@@ -230,6 +254,8 @@ struct OperationListView: View {
                         if let asset = assets.first, let category = categories.first {
                             EditAssetOperationView(operation: operation, asset: asset, category: category)
                         }
+                    case .createAsset:
+                        EditAssetView()
                     case .viewCategories:
                         CategoryOperationView()
                 }

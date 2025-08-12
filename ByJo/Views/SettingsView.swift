@@ -25,6 +25,7 @@ struct SettingsView: View {
                             Text(value.rawValue)
                         }
                     }
+                    .pickerStyle(.menu)
                 }
                 
                 Section("Support") {

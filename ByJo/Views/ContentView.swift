@@ -10,12 +10,28 @@ import SwiftData
 import StoreKit
 
 struct ContentView: View {
-    @State var store = Store()
+    enum ActiveSheet: Identifiable {
+        case currencyPicker
+        case paywall
+        
+        var id: String {
+            switch self {
+                case .currencyPicker:
+                    return "currencyPicker"
+                case .paywall:
+                    return "paywall"
+            }
+        }
+    }
     
-    @State var showPaywallSheet: Bool = true
+    @AppStorage("showCurrencyPicker") var showCurrencyPicker: Bool = true
+    
+    @State var activeSheet: ActiveSheet?
+    
+    @State var store = Store()
    
-    var hasntPaid: Bool {
-        store.purchasedSubscriptions.isEmpty || store.purchasedProducts.isEmpty
+    var hasPaid: Bool {
+        !store.purchasedSubscriptions.isEmpty || !store.purchasedProducts.isEmpty
     }
     
     var body: some View {
@@ -39,17 +55,33 @@ struct ContentView: View {
                     SettingsView()
                 }
             }
-            .fullScreenCover(isPresented: $showPaywallSheet, content: {
-                PaywallView()
+            .fullScreenCover(item: $activeSheet, content: { sheet in
+                switch sheet {
+                    case .currencyPicker:
+                        CurrencyPickerView()
+                    case .paywall:
+                        PaywallView()
+                }
+            })
+            .onChange(of: hasPaid, { _, _ in
+                activeSheet = .none
+                
+                if showCurrencyPicker {
+                    activeSheet = .currencyPicker
+                }
             })
             .onAppear {
-                if hasntPaid {
-                    showPaywallSheet = false
+                if hasPaid {
+                    if showCurrencyPicker {
+                        activeSheet = .currencyPicker
+                    }
+                    
+                    UITextField.appearance().clearButtonMode = .whileEditing
                     
                     return
                 }
                 
-                UITextField.appearance().clearButtonMode = .whileEditing
+                activeSheet = .paywall
             }
         }
     }

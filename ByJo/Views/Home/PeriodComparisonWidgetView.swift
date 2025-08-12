@@ -45,46 +45,48 @@ struct PeriodComparisonWidgetView: View {
     }
     
     var body: some View {
-        Section {
-            VStack (alignment: .leading, spacing: 24) {
-                HStack (spacing: 4) {
-                    Text("VS last month")
-                }
-                .font(.headline)
-                .foregroundStyle(.secondary)
-                
-                HStack (spacing: 4) {
-                    Group {
-                        if netWorthPreviousPeriod.amount > 0 {
-                            Image(systemName: "arrow.up.circle.fill")
-                                .foregroundStyle(.green)
-                        } else if netWorthPreviousPeriod.amount == 0 {
-                            Image(systemName: "equal.circle.fill")
-                                .foregroundStyle(.gray)
-                        } else {
-                            Image(systemName: "arrow.down.circle.fill")
-                                .foregroundStyle(.red)
-                        }
-                        
+        if !assets.isEmpty {
+            Section {
+                VStack (alignment: .leading, spacing: 24) {
+                    HStack (spacing: 4) {
+                        Text("VS last month")
                     }
-                    .imageScale(.large)
-                    .fontWeight(.semibold)
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
                     
-                    HStack {
-                        Text(abs(netWorthPreviousPeriod.amount), format: .currency(code: currencyCode.rawValue).notation(.compactName))
-                            .font(.title)
-                            .fontWeight(.semibold)
-                        
+                    HStack (spacing: 4) {
                         Group {
-                            Text("(")
-                            +
-                            Text(netWorthPreviousPeriod.percentage, format: .number.precision(.fractionLength(2)))
-                            +
-                            Text("%)")
+                            if netWorthPreviousPeriod.amount > 0 {
+                                Image(systemName: "arrow.up.circle.fill")
+                                    .foregroundStyle(.green)
+                            } else if netWorthPreviousPeriod.amount == 0 {
+                                Image(systemName: "equal.circle.fill")
+                                    .foregroundStyle(.gray)
+                            } else {
+                                Image(systemName: "arrow.down.circle.fill")
+                                    .foregroundStyle(.red)
+                            }
+                            
                         }
-                        .font(.title2)
+                        .imageScale(.large)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        
+                        HStack {
+                            Text(abs(netWorthPreviousPeriod.amount), format: .currency(code: currencyCode.rawValue).notation(.compactName))
+                                .font(.title)
+                                .fontWeight(.semibold)
+                            
+                            Group {
+                                Text("(")
+                                +
+                                Text(netWorthPreviousPeriod.percentage, format: .number.precision(.fractionLength(2)))
+                                +
+                                Text("%)")
+                            }
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
