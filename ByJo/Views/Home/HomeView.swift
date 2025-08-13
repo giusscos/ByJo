@@ -44,9 +44,10 @@ struct HomeView: View {
     
     @State var activeSheet: ActiveSheet?
     
+    @State var toAddOperations: [AssetOperation] = []
+    
     @State var compactNumber: Bool = true
     
-    @State private var pendingOperations: [AssetOperation] = []
     @State private var showRecurringAlert = false
     
     var netWorth: Decimal {
@@ -196,42 +197,30 @@ struct HomeView: View {
             .onAppear() {
                 processRecurringOperations()
             }
-            .alert("New recurring \(pendingOperations.count == 1 ? "operation" : "operations")", isPresented: $showRecurringAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Add") {
-                    addPendingOperations()
-                }
+            .alert("New recurring \(toAddOperations.count == 1 ? "operation" : "operations")", isPresented: $showRecurringAlert) {
+                Button("Continue", role: .cancel) {}
             } message: {
-                Text("\(pendingOperations.count) new \(pendingOperations.count == 1 ? "operation" : "operations") will be added to your operations list.")
+                Text("\(toAddOperations.count) new \(toAddOperations.count == 1 ? "operation" : "operations") will be added to your operations list.")
             }
         }
     }
-    
-    private func addPendingOperations() {
-        for operation in pendingOperations {
-            modelContext.insert(operation)
-        }
-        
-        pendingOperations.removeAll()
-    }
-    
+  
     func processRecurringOperations() {
+        toAddOperations.removeAll()
+        
         let recurringOperations = operations.filter { operation in
             operation.frequency != RecurrenceFrequency.single
         }
-        
-        var toAdd: [AssetOperation] = []
-        
+                
         for operation in recurringOperations {
-            var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
-            
             if let category = operation.category {
+                var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
+                
                 while let dueDate = nextDate, dueDate <= Date() {
                     if operations.filter({ $0.name == operation.name && $0.date == dueDate }).count == 0 {
                         let newOperation = AssetOperation(
                             id: UUID(),
                             name: operation.name,
-//                            currency: asset.currency,
                             date: dueDate,
                             amount: operation.amount,
                             asset: operation.asset,
@@ -240,7 +229,9 @@ struct HomeView: View {
                             frequency: operation.frequency
                         )
                         
-                        toAdd.append(newOperation)
+                        toAddOperations.append(newOperation)
+                        
+                        scheduleNotification(operation: newOperation)
                     }
                     
                     nextDate = operation.frequency.nextPaymentDate(from: dueDate)
@@ -248,10 +239,27 @@ struct HomeView: View {
             }
         }
         
-        if !toAdd.isEmpty {
-            pendingOperations = toAdd
-//            showRecurringAlert = true
+        if toAddOperations.count > 0 {
+            showRecurringAlert = true
         }
+    }
+    
+    private func scheduleNotification(operation: AssetOperation) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Recurring operation"
+        
+        content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue).notation(.compactName)))"
+        
+        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: operation.date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: operation.id.uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
 }
 
