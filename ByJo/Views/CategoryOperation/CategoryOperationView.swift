@@ -29,7 +29,7 @@ struct CategoryOperationView: View {
     @State private var isEditCategory: CategoryOperation?
     
     var newCategoryComparison: Bool {
-        categories.first(where: { $0.name.lowercased().trimmingCharacters(in: .whitespaces) == newCategoryName.trimmingCharacters(in: .whitespaces).lowercased() }) != nil
+        categories.first(where: { $0.name.trimmingCharacters(in: .whitespaces) == newCategoryName.trimmingCharacters(in: .whitespaces) }) != nil
     }
     
     var body: some View {
@@ -45,14 +45,8 @@ struct CategoryOperationView: View {
                                 .onSubmit {
                                     focusedField = .none
                                     
-                                    withAnimation {
-                                        if let editCategory = isEditCategory {
-                                            editCategory.name = newCategoryName
-                                            
-                                            newCategoryName = ""
-                                            
-                                            isEditCategory = nil
-                                        }
+                                    if let editCategory = isEditCategory {
+                                        saveEditedCategory(category: editCategory)
                                     }
                                 }
                                 .onAppear() {
@@ -128,7 +122,11 @@ struct CategoryOperationView: View {
                     if isEditMode == .inactive {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button {
-                                addCategory()
+                                if let editCategory = isEditCategory {
+                                    saveEditedCategory(category: editCategory)
+                                } else {
+                                    addCategory()
+                                }
                             } label: {
                                 Label("Save", systemImage: "checkmark")
                             }
@@ -189,11 +187,17 @@ struct CategoryOperationView: View {
         }
     }
     
-    func addCategory() {
-        if let _ = isEditCategory {
+    func saveEditedCategory(category: CategoryOperation) {
+        withAnimation {
+            category.name = newCategoryName
+            
+            newCategoryName = ""
+            
             isEditCategory = nil
         }
-        
+    }
+    
+    func addCategory() {
         if !newCategoryName.isEmpty {
             if newCategoryComparison { return }
                 
