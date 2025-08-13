@@ -196,8 +196,7 @@ struct HomeView: View {
             .onAppear() {
                 processRecurringOperations()
             }
-            .alert("New recurring operations",
-                   isPresented: $showRecurringAlert) {
+            .alert("New recurring \(pendingOperations.count == 1 ? "operation" : "operations")", isPresented: $showRecurringAlert) {
                 Button("Cancel", role: .cancel) {}
                 Button("Add") {
                     addPendingOperations()
@@ -225,6 +224,7 @@ struct HomeView: View {
         
         for operation in recurringOperations {
             var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
+            
             if let category = operation.category {
                 while let dueDate = nextDate, dueDate <= Date() {
                     if operations.filter({ $0.name == operation.name && $0.date == dueDate }).count == 0 {
@@ -250,7 +250,7 @@ struct HomeView: View {
         
         if !toAdd.isEmpty {
             pendingOperations = toAdd
-            showRecurringAlert = true
+//            showRecurringAlert = true
         }
     }
 }

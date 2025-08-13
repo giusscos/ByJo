@@ -20,55 +20,71 @@ struct CategoryOperationView: View {
     
     @Query(sort: \CategoryOperation.name) var categories: [CategoryOperation]
     
-    @State var newCategoryOperation: CategoryOperation = CategoryOperation(name: "")
+    @State var newCategoryName: String = ""
     @State var showInsert: Bool = false
     @State var showingBulkDeleteAlert: Bool = false
     
     @State private var selectedCategories = Set<CategoryOperation>()
     @State private var isEditMode: EditMode = .inactive
+    @State private var isEditCategory: CategoryOperation?
+    
+    var newCategoryComparison: Bool {
+        categories.first(where: { $0.name.lowercased().trimmingCharacters(in: .whitespaces) == newCategoryName.trimmingCharacters(in: .whitespaces).lowercased() }) != nil
+    }
     
     var body: some View {
         NavigationStack {
             List(selection: $selectedCategories) {
                 Section {
                     ForEach(categories) { category in
-                        Text(category.name)
-                            .tag(category)
-                            .onTapGesture(perform: {
-                                    if showInsert { return }
-                                    
-                                withAnimation {
-                                    newCategoryOperation = category
-                                    
-                                    showInsert = true
-                                }
-                            })
-                            .swipeActions {
-                                Button (role: .destructive) {
-                                    modelContext.delete(category)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                
-                                Button {
-                                    if showInsert { return }
+                        if let editCategory = isEditCategory, editCategory === category {
+                            TextField("Name", text: $newCategoryName)
+                                .autocorrectionDisabled()
+                                .submitLabel(.done)
+                                .focused($focusedField, equals: .name)
+                                .onSubmit {
+                                    focusedField = .none
                                     
                                     withAnimation {
-                                        newCategoryOperation = category
-                                        
-                                        showInsert = true
+                                        if let editCategory = isEditCategory {
+                                            editCategory.name = newCategoryName
+                                            
+                                            newCategoryName = ""
+                                            
+                                            isEditCategory = nil
+                                        }
                                     }
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
                                 }
-                                .tint(.blue)
-                                .disabled(showInsert)
-                            }
+                                .onAppear() {
+                                    focusedField = .name
+                                }
+                        } else {
+                            Text(category.name)
+                                .tag(category)
+                                .onTapGesture(perform: {
+                                    handleEditing(category: category)
+                                })
+                                .swipeActions {
+                                    Button (role: .destructive) {
+                                        modelContext.delete(category)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                    
+                                    Button {
+                                        handleEditing(category: category)
+                                    } label: {
+                                        Label("Edit", systemImage: "pencil")
+                                    }
+                                    .tint(.blue)
+                                    .disabled(showInsert)
+                                }
+                        }
                     }
                 }
                 .sectionActions {
                     if showInsert {
-                        TextField("Name", text: $newCategoryOperation.name)
+                        TextField("Name", text: $newCategoryName)
                             .autocorrectionDisabled()
                             .submitLabel(.done)
                             .focused($focusedField, equals: .name)
@@ -82,34 +98,28 @@ struct CategoryOperationView: View {
                             }
                     }
                     
-                    Button {
-                        withAnimation {
-                            newCategoryOperation.name = ""
-                            
-                            showInsert = true
+                    if !showInsert && isEditCategory == nil && isEditMode != .active {
+                        Button {
+                            handleInsert()
+                        } label: {
+                            Label("Add", systemImage: "plus")
                         }
-                    } label: {
-                        Label("Add", systemImage: "plus")
+                        .disabled(isEditMode == .active || showInsert)
                     }
-                    .disabled(isEditMode == .active || showInsert)
                 }
             }
             .navigationTitle("Categories")
             .toolbar {
-                if !showInsert {
-                    if !categories.isEmpty {
-                        ToolbarItem(placement: .topBarLeading) {
-                            EditButton()
-                        }
+                if (!showInsert && isEditCategory == nil) && !categories.isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        EditButton()
                     }
-                } else {
+                }
+                
+                if showInsert || isEditCategory != nil {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
-                            withAnimation {
-                                showInsert = false
-                                
-                                newCategoryOperation.name = ""
-                            }
+                            handleInsert(reset: true)
                         } label: {
                             Label("Cancel", systemImage: "xmark")
                         }
@@ -122,7 +132,7 @@ struct CategoryOperationView: View {
                             } label: {
                                 Label("Save", systemImage: "checkmark")
                             }
-                            .disabled(newCategoryOperation.name.isEmpty)
+                            .disabled(newCategoryName.isEmpty || newCategoryComparison)
                         }
                     }
                 }
@@ -139,6 +149,13 @@ struct CategoryOperationView: View {
                     }
                 }
                 
+                ToolbarItem(placement: .keyboard) {
+                    Button {
+                        focusedField = .none
+                    } label: {
+                        Label("Hide keyboard", systemImage: "keyboard.chevron.compact.down")
+                    }
+                }
             }
             .environment(\.editMode, $isEditMode)
             .confirmationDialog("Delete Categories", isPresented: $showingBulkDeleteAlert) {
@@ -150,12 +167,40 @@ struct CategoryOperationView: View {
         }
     }
     
-    func addCategory() {
-        if !newCategoryOperation.name.isEmpty {
-            withAnimation {
-                modelContext.insert(newCategoryOperation)
+    func handleInsert(reset: Bool = false) {
+        withAnimation {
+            newCategoryName = ""
             
-                showInsert = false
+            showInsert = !reset
+            
+            if let _ = isEditCategory, reset {
+                isEditCategory = nil
+            }
+        }
+    }
+    
+    func handleEditing(category: CategoryOperation) {
+        if isEditMode == .active { return }
+        
+        withAnimation {
+            isEditCategory = category
+            
+            newCategoryName = category.name
+        }
+    }
+    
+    func addCategory() {
+        if let _ = isEditCategory {
+            isEditCategory = nil
+        }
+        
+        if !newCategoryName.isEmpty {
+            if newCategoryComparison { return }
+                
+            withAnimation {
+                modelContext.insert(CategoryOperation(name: newCategoryName))
+            
+                handleInsert(reset: true)
             }
         }
     }

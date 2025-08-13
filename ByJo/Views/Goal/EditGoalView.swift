@@ -109,6 +109,14 @@ struct EditGoalView:View {
                     }
                     .disabled(title.isEmpty)
                 }
+                
+                ToolbarItem(placement: .keyboard) {
+                    Button {
+                        focusedField = .none
+                    } label: {
+                        Label("Hide keyboard", systemImage: "keyboard.chevron.compact.down")
+                    }
+                }
             }
         }
         .onAppear() {
