@@ -137,7 +137,7 @@ struct HomeView: View {
                                     compactNumber.toggle()
                                 }
                             } label: {
-                                Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "eye" : "eye.slash")
+                                Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
                             }
                         }
                         
@@ -208,16 +208,20 @@ struct HomeView: View {
     func processRecurringOperations() {
         toAddOperations.removeAll()
         
-        let recurringOperations = operations.filter { operation in
-            operation.frequency != RecurrenceFrequency.single
+        let recurringOperations = operations.filter {
+            $0.frequency != RecurrenceFrequency.single
         }
-                
+        
         for operation in recurringOperations {
             if let category = operation.category {
-                var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
+                let nextDate = operation.frequency.nextPaymentDate(from: operation.date)
                 
-                while let dueDate = nextDate, dueDate <= Date() {
-                    if operations.filter({ $0.name == operation.name && $0.date == dueDate }).count == 0 {
+                if let dueDate = nextDate, dueDate <= Date() {
+                    let alreadyExists = operations.contains {
+                        $0.name == operation.name && $0.date == dueDate
+                    }
+                    
+                    if !alreadyExists {
                         let newOperation = AssetOperation(
                             id: UUID(),
                             name: operation.name,
@@ -233,13 +237,11 @@ struct HomeView: View {
                         
                         scheduleNotification(operation: newOperation)
                     }
-                    
-                    nextDate = operation.frequency.nextPaymentDate(from: dueDate)
                 }
             }
         }
         
-        if toAddOperations.count > 0 {
+        if !toAddOperations.isEmpty {
             showRecurringAlert = true
         }
     }
@@ -253,13 +255,17 @@ struct HomeView: View {
         
         content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue).notation(.compactName)))"
         
-        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: operation.date)
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: operation.id.uuidString, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
+        if let nextDate = operation.frequency.nextPaymentDate(from: operation.date) {
+            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: operation.id.uuidString, content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request)
+            
+            return
+        }
     }
 }
 

@@ -76,22 +76,6 @@ struct OperationListView: View {
         }.sorted { $0.date > $1.date }
     }
     
-    var dateBasedOperations: [OperationByDate] {
-        let calendar = Calendar.current
-        
-        let normalizedOperations = operations.map { operation -> (Date, AssetOperation) in
-            let components = calendar.dateComponents([.year, .month, .day], from: operation.date)
-            let normalizedDate = calendar.date(from: components)!
-            return (normalizedDate, operation)
-        }
-        
-        let groupedDict = Dictionary(grouping: normalizedOperations) { $0.0 }
-        
-        return groupedDict.map { (date, operationPairs) in
-            OperationByDate(date: date, operations: operationPairs.map { $0.1 })
-        }.sorted { $0.date > $1.date }
-    }
-    
     var body: some View {
         NavigationStack {
             List(selection: $selectedOperations) {

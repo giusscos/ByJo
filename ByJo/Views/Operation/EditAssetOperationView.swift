@@ -243,7 +243,8 @@ struct EditAssetOperationView: View {
             amount: calculatedAmount,
             asset: asset,
             category: category,
-            note: note
+            note: note,
+            frequency: frequency
         )
         
         modelContext.insert(newOperation)
