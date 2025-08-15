@@ -72,7 +72,7 @@ struct PeriodComparisonWidgetView: View {
                         .imageScale(.large)
                         .fontWeight(.semibold)
                         
-                        HStack {
+                        HStack (alignment: .lastTextBaseline) {
                             Text(abs(netWorthPreviousPeriod.amount), format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
@@ -85,8 +85,7 @@ struct PeriodComparisonWidgetView: View {
                                 +
                                 Text("%)")
                             }
-                            .font(.title2)
-                            .fontWeight(.semibold)
+                            .font(.headline)
                             .foregroundStyle(.secondary)
                         }
                     }

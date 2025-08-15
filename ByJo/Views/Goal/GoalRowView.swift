@@ -12,6 +12,7 @@ struct GoalRowView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @AppStorage("compactNumber") var compactNumber: Bool = true
     
     var goal: Goal
     var asset: Asset
@@ -83,8 +84,9 @@ struct GoalRowView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         
-                        Text(goal.startingAmount, format: .currency(code: currency.rawValue))
+                        Text(goal.startingAmount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
                             .font(.headline)
+                            .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
                     
                     Spacer()
@@ -99,8 +101,9 @@ struct GoalRowView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         
-                        Text(goal.targetAmount, format: .currency(code: currency.rawValue))
+                        Text(goal.targetAmount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
                             .font(.headline)
+                            .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
                 }
                 

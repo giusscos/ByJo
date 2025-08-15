@@ -32,8 +32,6 @@ struct HomeView: View {
         }
     }
     
-    @Environment(\.modelContext) var modelContext
-    
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
@@ -45,20 +43,12 @@ struct HomeView: View {
     
     @State var activeSheet: ActiveSheet?
     
-    var netWorth: Decimal {
-        var netWorth: Decimal = 0.0
-        
-        for asset in assets {
-                netWorth += asset.calculateCurrentBalance()
-        }
-        
-        return netWorth
-    }
-    
     var body: some View {
         NavigationStack {
             List {
                 GoalListStackView()
+                
+                NetWorthWidgetView()
                 
                 PeriodComparisonWidgetView()
                 
@@ -115,7 +105,7 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue)))
+            .navigationTitle("Home")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
