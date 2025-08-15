@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AssetRowView: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
-
+    @AppStorage("compactNumber") var compactNumber: Bool = true
+    
     var asset: Asset
     
     var body: some View {
@@ -27,11 +28,12 @@ struct AssetRowView: View {
             
             Spacer()
             
-            Text(asset.calculateCurrentBalance(), format: .currency(code: currency.rawValue).notation(.compactName))
+            Text(asset.calculateCurrentBalance(), format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
                 .lineLimit(1)
                 .truncationMode(.middle)
                 .font(.title)
                 .fontWeight(.semibold)
+                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
         }
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct OperationsGroupedByCategoryListView: View {
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    @AppStorage("compactNumber") var compactNumber: Bool = true
 
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
@@ -20,14 +21,12 @@ struct OperationsGroupedByCategoryListView: View {
             ForEach(categories) { category in
                 if let assetOperations = category.assetOperations, assetOperations.count > 0 {
                     let total = assetOperations.reduce(0) { $0 + $1.amount }
-                    
-                    VStack (alignment: .leading, spacing: 16) {
-                        HStack {
+
+                    HStack {
+                        VStack (alignment: .leading) {
                             Text(category.name)
                                 .font(.headline)
                                 .lineLimit(1)
-                            
-                            Spacer()
                             
                             if let assetOperations = category.assetOperations {
                                 Text("\(assetOperations.count == 1 ? "Operation" : "Operations"): \(assetOperations.count)")
@@ -35,6 +34,8 @@ struct OperationsGroupedByCategoryListView: View {
                                     .font(.caption)
                             }
                         }
+                        
+                        Spacer()
                         
                         HStack(spacing: 4) {
                             Group {
@@ -52,9 +53,10 @@ struct OperationsGroupedByCategoryListView: View {
                             .imageScale(.large)
                             .fontWeight(.semibold)
                             
-                            Text(abs(total), format: .currency(code: currencyCode.rawValue))
+                            Text(abs(total), format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
+                                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                         }
                     }
                 }
@@ -66,7 +68,25 @@ struct OperationsGroupedByCategoryListView: View {
                 Button {
                     addCategory = true
                 } label: {
-                    Label("Add", image: "plus.circle.fill")
+                    Label("Add", systemImage: "plus.circle.fill")
+                }
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Section {
+                        Button {
+                            withAnimation {
+                                withAnimation {
+                                    compactNumber.toggle()
+                                }
+                            }
+                        } label: {
+                            Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                        }
+                    }
+                } label: {
+                    Label("Menu", systemImage: "ellipsis.circle")
                 }
             }
         }

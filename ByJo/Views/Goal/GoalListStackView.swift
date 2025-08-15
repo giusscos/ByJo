@@ -11,7 +11,7 @@ import SwiftUI
 struct GoalListStackView: View {
     @Query(filter: #Predicate<Goal> { goal in
         goal.completedGoal == nil
-    }) var goals: [Goal]
+    }, sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
     
     @State private var xOffsets: [Double] = [0.0]
     @State private var zIndexes: [Double] = [0.0]
@@ -74,6 +74,8 @@ struct GoalListStackView: View {
                 for _ in goals {
                     rotates.append(.random(in: -4...4))
                 }
+                
+                print("Appear: ", goalsCount)
             }
             .onDisappear() {
                 let goalsCount = goals.count
@@ -81,6 +83,8 @@ struct GoalListStackView: View {
                 let startingArray = Array(repeating: 0.0, count: goalsCount)
                 
                 zIndexes = startingArray
+                
+                print("Disappear: ", goalsCount)
             }
         }
     }

@@ -17,6 +17,7 @@ struct AssetDetailView: View {
         case createGoal
         case editGoal(Goal)
         case viewGoal
+        case viewCategories
         
         var id: String {
             switch self {
@@ -32,6 +33,8 @@ struct AssetDetailView: View {
                     return "editGoal-\(goal.id)"
                 case .viewGoal:
                     return "viewGoal"
+                case .viewCategories:
+                    return "viewCategories"
             }
         }
     }
@@ -40,38 +43,95 @@ struct AssetDetailView: View {
     
     var asset: Asset
 
-    @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     @Query var categories: [CategoryOperation]
     
     @State private var activeSheet: ActiveSheet?
+    @State private var filterCategory: CategoryOperation?
+
+    
+    var filteredAndSortedOperations: [OperationByDate] {
+        guard let assetOperations = asset.operations else { return [] }
+        
+        var filteredOperations = assetOperations
+        
+        if let category = filterCategory {
+            filteredOperations = filteredOperations.filter { $0.category == category }
+        }
+        
+        return groupOperationsByDate(filteredOperations)
+    }
+    
+    func groupOperationsByDate(_ operations: [AssetOperation]) -> [OperationByDate] {
+        let calendar = Calendar.current
+        let normalizedOperations = operations.map { operation -> (Date, AssetOperation) in
+            let components = calendar.dateComponents([.year, .month, .day], from: operation.date)
+            let normalizedDate = calendar.date(from: components)!
+            return (normalizedDate, operation)
+        }
+        
+        let groupedDict = Dictionary(grouping: normalizedOperations) { $0.0 }
+        
+        return groupedDict.map { (date, operationPairs) in
+            OperationByDate(date: date, operations: operationPairs.map { $0.1 })
+        }.sorted { $0.date > $1.date }
+    }
     
     var body: some View {
         NavigationStack {
             List {
-                if let operations = asset.operations {
-                    Section {
-                        ForEach(operations) { operation in
-                            NavigationLink {
-                                OperationDetailView(operation: operation, asset: asset)
-                            } label: {
-                                AssetOperationRow(operation: operation, asset: asset)
-                            }
-                            .swipeActions (edge: .trailing) {
-                                Button (role: .destructive) {
-                                    modelContext.delete(operation)
+                if !filteredAndSortedOperations.isEmpty {
+                    ForEach(filteredAndSortedOperations) { item in
+                        Section {
+                            ForEach(item.operations) { operation in
+                                NavigationLink {
+                                    OperationDetailView(operation: operation, asset: asset)
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    AssetOperationRow(operation: operation, asset: asset)
                                 }
-                                
-                                Button {
-                                    activeSheet = .editOperation(operation)
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
+                                .swipeActions (edge: .trailing) {
+                                    Button (role: .destructive) {
+                                        modelContext.delete(operation)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                    
+                                    Button {
+                                        activeSheet = .editOperation(operation)
+                                    } label: {
+                                        Label("Edit", systemImage: "pencil")
+                                    }
+                                    .tint(.blue)
                                 }
-                                .tint(.blue)
                             }
+                        } header: {
+                            Text(item.date.formatted(.dateTime.day().month().year()))
+                                .headerProminence(.increased)
                         }
                     }
+                } else {
+                    VStack {
+                        let text = categories.isEmpty ? "categories" : "operations"
+                        
+                        Text("No \(text) found 😕")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text("Start adding \(text)")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        Button {
+                            activeSheet = categories.isEmpty ? .viewCategories : .createOperation
+                        } label: {
+                            Text("Add \(text)")
+                                .font(.headline)
+                        }
+                        .tint(.accent)
+                        .buttonBorderShape(.capsule)
+                        .buttonStyle(.bordered)
+                    }
+                    .frame(maxWidth: .infinity)
+
                 }
             }
             .navigationTitle(asset.name)
@@ -94,8 +154,6 @@ struct AssetDetailView: View {
                             }
                         }
                         
-                        Divider()
-                        
                         Section {
                             Button {
                                 activeSheet = .createGoal
@@ -110,9 +168,35 @@ struct AssetDetailView: View {
                             }
                         }
                         
-                        Divider()
+                        Section {
+                            Button {
+                                activeSheet = .viewCategories
+                            } label: {
+                                Label("Categories", systemImage: "list.bullet")
+                            }
+                        }
                         
-                        // TODO: filters and sorters
+                        if let operations = asset.operations, !operations.isEmpty {
+                            Section {
+                                Menu("By Category") {
+                                    ForEach(categories) { category in
+                                        Button(category.name) {
+                                            withAnimation {
+                                                filterCategory = category
+                                            }
+                                        }
+                                    }
+                                    
+                                    Button("Clear Filter") {
+                                        withAnimation {
+                                            filterCategory = nil
+                                        }
+                                    }
+                                }
+                            } header: {
+                                Text("Filters")
+                            }
+                        }
                     } label: {
                         Label("Menu", systemImage: "ellipsis.circle")
                     }
@@ -136,6 +220,8 @@ struct AssetDetailView: View {
                         }
                     case .viewGoal:
                         GoalListView()
+                    case .viewCategories:
+                        CategoryOperationView()
                 }
             }
         }

@@ -39,7 +39,6 @@ struct OperationListView: View {
     
     @State private var activeSheet: ActiveSheet?
     @State private var operationToDelete: AssetOperation?
-    @State private var showingDeleteAlert = false
     @State private var showingBulkDeleteAlert = false
     
     @State private var selectedAsset: Asset?
@@ -195,25 +194,34 @@ struct OperationListView: View {
                                 if !operations.isEmpty {
                                     Section {
                                         Menu("By Asset") {
-                                            ForEach(assets, id: \.id) { asset in
-                                                Button(asset.name) {
-                                                    selectedAsset = asset
+                                            Button("Clear Filter") {
+                                                withAnimation {
+                                                    selectedAsset = nil
                                                 }
                                             }
-                                            Button("Clear Filter") {
-                                                selectedAsset = nil
+                                            
+                                            ForEach(assets, id: \.id) { asset in
+                                                Button(asset.name) {
+                                                    withAnimation {
+                                                        selectedAsset = asset
+                                                    }
+                                                }
                                             }
                                         }
                                         
                                         Menu("By Category") {
-                                            ForEach(categories) { category in
-                                                Button(category.name) {
-                                                    filterCategory = category
+                                            Button("Clear Filter") {
+                                                withAnimation {
+                                                    filterCategory = nil
                                                 }
                                             }
                                             
-                                            Button("Clear Filter") {
-                                                filterCategory = nil
+                                            ForEach(categories) { category in
+                                                Button(category.name) {
+                                                    withAnimation {
+                                                        filterCategory = category
+                                                    }
+                                                }
                                             }
                                         }
                                     } header: {
@@ -235,7 +243,7 @@ struct OperationListView: View {
                             EditAssetOperationView(asset: asset, category: category)
                         }
                     case .edit(let operation):
-                        if let asset = assets.first, let category = categories.first {
+                        if let asset = operation.asset, let category = operation.category {
                             EditAssetOperationView(operation: operation, asset: asset, category: category)
                         }
                     case .createAsset:

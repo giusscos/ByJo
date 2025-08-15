@@ -20,7 +20,8 @@ private struct Accumulator {
 
 struct CategoryWidgetView: View {
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
-
+    @AppStorage("compactNumber") var compactNumber: Bool = true
+    
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     private var mostRelevantCategory: CategoryWithAmount? {
@@ -96,9 +97,10 @@ struct CategoryWidgetView: View {
                             .imageScale(.large)
                             .fontWeight(.semibold)
                             
-                            Text(topCategory.amount, format: .currency(code: currencyCode.rawValue))
+                            Text(topCategory.amount, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
+                                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                         }
                     }
                 }

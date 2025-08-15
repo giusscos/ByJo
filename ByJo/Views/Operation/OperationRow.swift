@@ -9,7 +9,8 @@ import SwiftUI
 
 struct OperationRow: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
-
+    @AppStorage("compactNumber") var compactNumber: Bool = true
+    
     var operation: AssetOperation
     var asset: Asset
     
@@ -46,9 +47,10 @@ struct OperationRow: View {
             .imageScale(.large)
             .fontWeight(.semibold)
             
-            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: .currency(code: currency.rawValue).notation(.compactName))
+            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
                 .font(.title)
                 .fontWeight(.semibold)
+                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
         }
     }
 }

@@ -17,6 +17,7 @@ struct PeriodComparisonWidgetView: View {
     @Query var assets: [Asset]
     
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    @AppStorage("compactNumber") var compactNumber: Bool = true
     
     var netWorth: Decimal {
         var netWorth: Decimal = 0.0
@@ -72,9 +73,10 @@ struct PeriodComparisonWidgetView: View {
                         .fontWeight(.semibold)
                         
                         HStack {
-                            Text(abs(netWorthPreviousPeriod.amount), format: .currency(code: currencyCode.rawValue).notation(.compactName))
+                            Text(abs(netWorthPreviousPeriod.amount), format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
+                                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                             
                             Group {
                                 Text("(")

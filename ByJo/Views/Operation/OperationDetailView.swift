@@ -60,6 +60,19 @@ struct OperationDetailView: View {
                 }
             }
             
+            if let category = operation.category {
+                Section {
+                    HStack {
+                        Text("Category")
+                        
+                        Spacer()
+                        
+                        Text(category.name)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            
             if !operation.note.isEmpty {
                 Section {
                     VStack (alignment: .leading) {

@@ -175,25 +175,11 @@ struct EditAssetOperationView: View {
                 frequency = operation.frequency
                 
                 if operation.asset == nil {
-                    if let asset = assets.first {
-                        operation.asset = asset
-//                        operation.currency = asset.currency
-                    }
+                    operation.asset = asset
                 }
                 
                 if operation.category == nil {
-                    if let category = categoriesOperation.first {
-                        operation.category = category
-                    }
-                }
-            } else {
-                if let asset = assets.first {
-                    self.asset = asset
-//                    self.asset.currency = asset.currency
-                }
-                
-                if let category = categoriesOperation.first {
-                    self.category = category
+                    operation.category = category
                 }
             }
         }
@@ -223,13 +209,13 @@ struct EditAssetOperationView: View {
             operation.note = note
 
             operation.asset = asset
-//            operation.currency = asset.currency
 
             operation.category = category
             
             scheduleNotification(uuid: operation.id)
             
             dismiss()
+            
             return
         }
         
@@ -238,7 +224,6 @@ struct EditAssetOperationView: View {
         let newOperation = AssetOperation(
             id: uuid,
             name: name,
-//            currency: asset.currency,
             date: date,
             amount: calculatedAmount,
             asset: asset,

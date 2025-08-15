@@ -35,7 +35,8 @@ struct HomeView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
-
+    @AppStorage("compactNumber") var compactNumber: Bool = true
+    
     @Query var assets: [Asset]
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
@@ -43,12 +44,6 @@ struct HomeView: View {
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     @State var activeSheet: ActiveSheet?
-    
-    @State var toAddOperations: [AssetOperation] = []
-    
-    @State var compactNumber: Bool = true
-    
-    @State private var showRecurringAlert = false
     
     var netWorth: Decimal {
         var netWorth: Decimal = 0.0
@@ -63,60 +58,62 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
-                Group {
-                    if assets.isEmpty {
-                        VStack {
-                            Text("No assets found 😕")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                            
-                            Text("Start adding assets")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                            
-                            Button {
-                                activeSheet = .createAsset
-                            } label: {
-                                Text("Add asset")
-                                    .font(.headline)
-                            }
-                            .tint(.accent)
-                            .buttonBorderShape(.capsule)
-                            .buttonStyle(.bordered)
-                        }
-                    } else if categories.isEmpty || operations.isEmpty {
-                        VStack {
-                            let text = categories.isEmpty ? "categories" : "operations"
-                            
-                            Text("No \(text) found 😕")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                            
-                            Text("Start adding \(text)")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                            
-                            Button {
-                                activeSheet = categories.isEmpty ? .viewCategories : .createOperation
-                            } label: {
-                                Text("Add \(text)")
-                                    .font(.headline)
-                            }
-                            .tint(.accent)
-                            .buttonBorderShape(.capsule)
-                            .buttonStyle(.bordered)
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                
                 GoalListStackView()
-            
+                
                 PeriodComparisonWidgetView()
                 
                 RecurringOperationWidgetView()
                 
                 CategoryWidgetView()
+                
+                Section {
+                    Group {
+                        if assets.isEmpty {
+                            VStack {
+                                Text("No assets found 😕")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                
+                                Text("Start adding assets")
+                                    .font(.headline)
+                                    .foregroundStyle(.secondary)
+                                
+                                Button {
+                                    activeSheet = .createAsset
+                                } label: {
+                                    Text("Add asset")
+                                        .font(.headline)
+                                }
+                                .tint(.accent)
+                                .buttonBorderShape(.capsule)
+                                .buttonStyle(.bordered)
+                            }
+                        } else if categories.isEmpty || operations.isEmpty {
+                            VStack {
+                                let text = categories.isEmpty ? "categories" : "operations"
+                                
+                                Text("No \(text) found 😕")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                
+                                Text("Start adding \(text)")
+                                    .font(.headline)
+                                    .foregroundStyle(.secondary)
+                                
+                                Button {
+                                    activeSheet = categories.isEmpty ? .viewCategories : .createOperation
+                                } label: {
+                                    Text("Add \(text)")
+                                        .font(.headline)
+                                }
+                                .tint(.accent)
+                                .buttonBorderShape(.capsule)
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
             }
             .navigationTitle(Text(netWorth, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue)))
             .toolbar {
@@ -134,7 +131,9 @@ struct HomeView: View {
                         Section {
                             Button {
                                 withAnimation {
-                                    compactNumber.toggle()
+                                    withAnimation {
+                                        compactNumber.toggle()
+                                    }
                                 }
                             } label: {
                                 Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
@@ -145,7 +144,7 @@ struct HomeView: View {
                             Button {
                                 activeSheet = .createAsset
                             } label: {
-                                Label("Create asset", systemImage: "plus")
+                                Label("Add asset", systemImage: "plus")
                             }
                         }
                         
@@ -153,7 +152,7 @@ struct HomeView: View {
                             Button {
                                 activeSheet = .createGoal
                             } label: {
-                                Label("Create goal", systemImage: "plus")
+                                Label("Add goal", systemImage: "plus")
                             }
                             
                             Button {
@@ -194,77 +193,6 @@ struct HomeView: View {
                         CategoryOperationView()
                 }
             }
-            .onAppear() {
-                processRecurringOperations()
-            }
-            .alert("New recurring \(toAddOperations.count == 1 ? "operation" : "operations")", isPresented: $showRecurringAlert) {
-                Button("Continue", role: .cancel) {}
-            } message: {
-                Text("\(toAddOperations.count) new \(toAddOperations.count == 1 ? "operation" : "operations") will be added to your operations list.")
-            }
-        }
-    }
-  
-    func processRecurringOperations() {
-        toAddOperations.removeAll()
-        
-        let recurringOperations = operations.filter {
-            $0.frequency != RecurrenceFrequency.single
-        }
-        
-        for operation in recurringOperations {
-            if let category = operation.category {
-                let nextDate = operation.frequency.nextPaymentDate(from: operation.date)
-                
-                if let dueDate = nextDate, dueDate <= Date() {
-                    let alreadyExists = operations.contains {
-                        $0.name == operation.name && $0.date == dueDate
-                    }
-                    
-                    if !alreadyExists {
-                        let newOperation = AssetOperation(
-                            id: UUID(),
-                            name: operation.name,
-                            date: dueDate,
-                            amount: operation.amount,
-                            asset: operation.asset,
-                            category: category,
-                            note: operation.note,
-                            frequency: operation.frequency
-                        )
-                        
-                        toAddOperations.append(newOperation)
-                        
-                        scheduleNotification(operation: newOperation)
-                    }
-                }
-            }
-        }
-        
-        if !toAddOperations.isEmpty {
-            showRecurringAlert = true
-        }
-    }
-    
-    private func scheduleNotification(operation: AssetOperation) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Recurring operation"
-        
-        content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue).notation(.compactName)))"
-        
-        if let nextDate = operation.frequency.nextPaymentDate(from: operation.date) {
-            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-            
-            let request = UNNotificationRequest(identifier: operation.id.uuidString, content: content, trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request)
-            
-            return
         }
     }
 }

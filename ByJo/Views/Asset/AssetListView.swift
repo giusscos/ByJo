@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct AssetListView: View {
-    enum AssetSortOrder {
+    enum AssetSortOrder: String, CaseIterable, Codable {
         case name
         case balance
         case type
@@ -29,6 +29,7 @@ struct AssetListView: View {
         case editAsset(Asset)
         case createGoal
         case editGoal(Goal)
+        case viewCategories
         
         var id: String {
             switch self {
@@ -40,12 +41,16 @@ struct AssetListView: View {
                     return "createGoal"
                 case .editGoal(let goal):
                     return "editGoal-\(goal.id)"
+                case .viewCategories:
+                    return "viewCategories"
             }
         }
     }
     
     @Environment(\.modelContext) var modelContext
 
+    @AppStorage("compactNumber") var compactNumber: Bool = true
+    
     @Query var assets: [Asset]
     
     @State private var isEditMode: EditMode = .inactive
@@ -126,22 +131,7 @@ struct AssetListView: View {
                                 .tint(.blue)
                             }
                         }
-                    } header: {
-                        HStack {
-                            Text("\(filteredAndSortedAssets.count) assets")
-                                .foregroundStyle(.secondary)
-                            
-                            Spacer()
-                            
-                            if let type = selectedType {
-                                Text("Filtered by: \(type.rawValue)")
-                                    .foregroundStyle(.secondary)
-                            }
-                            
-                            Text("Sorted by: \(sortOrder.displayName) \(isAscending ? "↑" : "↓")")
-                                .foregroundStyle(.secondary)
-                        }
-                    }
+                    } 
                 }
             }
             .navigationTitle("Assets")
@@ -175,26 +165,50 @@ struct AssetListView: View {
                         .disabled(selectedAssets.isEmpty)
                     } else {
                         Menu {
-                            Button {
-                                activeSheet = .createGoal
-                            } label: {
-                                Label("Add goal", systemImage: "plus")
+                            Section {
+                                Button {
+                                    withAnimation {
+                                        withAnimation {
+                                            compactNumber.toggle()
+                                        }
+                                    }
+                                } label: {
+                                    Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                                }
                             }
                             
-                            NavigationLink {
-                                GoalListView()
-                            } label: {
-                                Label("Goals", systemImage: "list.bullet")
+                            Section {
+                                Button {
+                                    activeSheet = .createGoal
+                                } label: {
+                                    Label("Add goal", systemImage: "plus")
+                                }
+                                
+                                NavigationLink {
+                                    GoalListView()
+                                } label: {
+                                    Label("Goals", systemImage: "list.bullet")
+                                }
+                            }
+                        
+                            Section {
+                                Button {
+                                    activeSheet = .viewCategories
+                                } label: {
+                                    Label("Categories", systemImage: "list.bullet")
+                                }
                             }
                             
                             Section("Filters") {
                                 Menu("By Type") {
                                     ForEach(AssetType.allCases, id: \.self) { type in
                                         Button {
-                                            if type != selectedType {
-                                                selectedType = type
-                                            } else {
-                                                selectedType = nil
+                                            withAnimation {
+                                                if type != selectedType {
+                                                    selectedType = type
+                                                } else {
+                                                    selectedType = nil
+                                                }
                                             }
                                         } label: {
                                             HStack {
@@ -211,50 +225,24 @@ struct AssetListView: View {
                             
                             Section("Sorters") {
                                 Menu("Sort By") {
-                                    Button {
-                                        sortOrder = .name
-                                    } label: {
-                                        HStack {
-                                            Text("Name")
-                                            
-                                            if sortOrder == .name {
-                                                Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                    ForEach(AssetSortOrder.allCases, id: \.self) { sort in
+                                        Button {
+                                            withAnimation {
+                                                if sortOrder == sort {
+                                                    isAscending.toggle()
+                                                } else {
+                                                    sortOrder = sort
+                                                    isAscending = true
+                                                }
                                             }
-                                        }
-                                    }
-                                    
-                                    Button {
-                                        sortOrder = .balance
-                                    } label: {
-                                        HStack {
-                                            Text("Balance")
-                                            
-                                            if sortOrder == .balance {
-                                                Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                        } label: {
+                                            HStack {
+                                                Text(sort.displayName)
+                                                
+                                                if sortOrder == sort {
+                                                    Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                }
                                             }
-                                        }
-                                    }
-                                    
-                                    Button {
-                                        sortOrder = .type
-                                    } label: {
-                                        HStack {
-                                            Text("Type")
-                                            
-                                            if sortOrder == .type {
-                                                Image(systemName: isAscending ? "arrow.up" : "arrow.down")
-                                            }
-                                        }
-                                    }
-                                    
-                                    Divider()
-                                    
-                                    Button {
-                                        isAscending.toggle()
-                                    } label: {
-                                        HStack {
-                                            Text(isAscending ? "Ascending" : "Descending")
-                                            Image(systemName: isAscending ? "arrow.up" : "arrow.down")
                                         }
                                     }
                                 }
@@ -280,6 +268,8 @@ struct AssetListView: View {
                         if let asset = goal.asset {
                             EditGoalView(goal: goal, asset: asset)
                         }
+                    case .viewCategories:
+                        CategoryOperationView()
                 }
             }
             .confirmationDialog("Delete Assets", isPresented: $showingBulkDeleteAlert) {

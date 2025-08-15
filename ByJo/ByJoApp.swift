@@ -11,13 +11,15 @@ import SwiftData
 @main
 struct ByJoApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Asset.self,
-        ])
+        let schema = Schema([Asset.self])
+        
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            container.mainContext.undoManager = UndoManager()
+            
+            return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
