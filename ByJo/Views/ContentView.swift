@@ -51,9 +51,9 @@ struct ContentView: View {
                     OperationListView()
                 }
                 
-                Tab("Settings", systemImage: "gear") {
-                    SettingsView()
-                }
+//                Tab("Settings", systemImage: "gear") {
+//                    SettingsView()
+//                }
             }
             .fullScreenCover(item: $activeSheet, content: { sheet in
                 switch sheet {

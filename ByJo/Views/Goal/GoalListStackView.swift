@@ -63,30 +63,37 @@ struct GoalListStackView: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .onChange(of: goals) { _, newValue in
+                calculateGoalsPositionAndRotation(goals: newValue)
+            }
             .onAppear() {
-                let goalsCount = goals.count
-
-                let startingArray = Array(repeating: 0.0, count: goalsCount)
-                
-                xOffsets = startingArray
-                zIndexes = startingArray
-                
-                for _ in goals {
-                    rotates.append(.random(in: -4...4))
-                }
-                
-                print("Appear: ", goalsCount)
+                calculateGoalsPositionAndRotation(goals: goals)
             }
             .onDisappear() {
-                let goalsCount = goals.count
-                
-                let startingArray = Array(repeating: 0.0, count: goalsCount)
-                
-                zIndexes = startingArray
-                
-                print("Disappear: ", goalsCount)
+                restoreGoalsZIndexes(goals: goals)
             }
         }
+    }
+    
+    private func calculateGoalsPositionAndRotation(goals: [Goal]) {
+        let goalsCount = goals.count
+        
+        let startingArray = Array(repeating: 0.0, count: goalsCount)
+        
+        xOffsets = startingArray
+        zIndexes = startingArray
+        
+        for _ in goals {
+            rotates.append(.random(in: -4...4))
+        }
+    }
+    
+    private func restoreGoalsZIndexes(goals: [Goal]) {
+        let goalsCount = goals.count
+        
+        let startingArray = Array(repeating: 0.0, count: goalsCount)
+        
+        zIndexes = startingArray
     }
 }
 

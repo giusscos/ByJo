@@ -148,7 +148,7 @@ struct HomeView: View {
                             Button {
                                 activeSheet = .viewGoal
                             } label: {
-                                Label("Goal list", systemImage: "list.bullet")
+                                Label("Goals", systemImage: "list.bullet")
                             }
                         }
                         
@@ -156,10 +156,28 @@ struct HomeView: View {
                             Button {
                                 activeSheet = .viewCategories
                             } label: {
-                                Label("Category list", systemImage: "list.bullet")
+                                Label("Categories", systemImage: "list.bullet")
                             }
                         }
-                        
+                        Section {
+                            Menu("Currency") {
+                                ForEach(CurrencyCode.allCases, id: \.self) { value in
+                                    Button {
+                                        withAnimation {
+                                            currencyCode = value
+                                        }
+                                    } label: {
+                                        HStack {
+                                            Text(value.rawValue)
+                                            
+                                            if value == currencyCode {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     } label: {
                         Label("Menu", systemImage: "ellipsis.circle")
                     }

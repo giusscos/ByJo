@@ -35,7 +35,7 @@ struct GoalListView: View {
         NavigationStack {
             List {
                 if !goals.isEmpty {
-                    Section("Ongoning") {
+                    Section("Ongoing") {
                         ForEach (goals) { goal in
                             if let asset = goal.asset, goal.completedGoal == nil {
                                 GoalRowView(goal: goal, asset: asset)
