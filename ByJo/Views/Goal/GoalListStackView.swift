@@ -20,45 +20,50 @@ struct GoalListStackView: View {
     var body: some View {
         if !goals.isEmpty {
             Section {
-                GeometryReader { geometry in
-                    let screenWidth = geometry.size.width
-                    
-                    ZStack(alignment: .top) {
-                        ForEach(Array(goals.enumerated()), id: \.offset) { index, goal in
-                            if let asset = goal.asset, xOffsets.count == goals.count, zIndexes.count == goals.count {
-                                GoalRowView(goal: goal, asset: asset)
-                                    .offset(x: xOffsets[index])
-                                    .rotationEffect(Angle(degrees: rotates[index]))
-                                    .zIndex(zIndexes[index])
-                                    .gesture(
-                                        DragGesture()
-                                            .onChanged { value in
-                                                withAnimation {
-                                                    xOffsets[index] = value.translation.width
-                                                }
-                                            }
-                                            .onEnded { value in
-                                                let threshold = screenWidth * 0.5
-                                                
-                                                if xOffsets[index] >= threshold || xOffsets[index] <= -threshold {
+                HStack {
+                    Spacer()
+                    GeometryReader { geometry in
+                        let screenWidth = geometry.size.width
+                        
+                        ZStack {
+                            ForEach(Array(goals.enumerated()), id: \.offset) { index, goal in
+                                if let asset = goal.asset, xOffsets.count == goals.count, zIndexes.count == goals.count {
+                                    GoalRowView(goal: goal, asset: asset)
+                                        .offset(x: xOffsets[index])
+                                        .rotationEffect(Angle(degrees: rotates[index]))
+                                        .zIndex(zIndexes[index])
+                                        .gesture(
+                                            DragGesture()
+                                                .onChanged { value in
                                                     withAnimation {
-                                                        zIndexes[index] = zIndexes[index] - 1
-                                                        xOffsets[index] = .zero
-                                                        rotates[index] = .random(in: -4...4)
+                                                        xOffsets[index] = value.translation.width
                                                     }
                                                 }
-                                                
-                                                withAnimation {
-                                                    xOffsets[index] = .zero
+                                                .onEnded { value in
+                                                    let threshold = screenWidth * 0.5
+                                                    
+                                                    if xOffsets[index] >= threshold || xOffsets[index] <= -threshold {
+                                                        withAnimation {
+                                                            zIndexes[index] = zIndexes[index] - 1
+                                                            xOffsets[index] = .zero
+                                                            rotates[index] = .random(in: -4...4)
+                                                        }
+                                                    }
+                                                    
+                                                    withAnimation {
+                                                        xOffsets[index] = .zero
+                                                    }
                                                 }
-                                            }
-                                    )
+                                        )
+                                }
                             }
                         }
+                        .padding()
                     }
-                    .padding()
+                    .frame(maxWidth: 500)
+                    Spacer()
                 }
-                .frame(height: 250)
+                .frame(height: 200)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)

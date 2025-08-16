@@ -52,6 +52,7 @@ struct AssetListView: View {
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
     @Query var assets: [Asset]
+    @Query var goals: [Goal]
     
     @State private var isEditMode: EditMode = .inactive
     
@@ -183,12 +184,14 @@ struct AssetListView: View {
                                 } label: {
                                     Label("Add goal", systemImage: "plus")
                                 }
+                                .disabled(assets.isEmpty)
                                 
                                 NavigationLink {
                                     GoalListView()
                                 } label: {
                                     Label("Goals", systemImage: "list.bullet")
                                 }
+                                .disabled(goals.isEmpty)
                             }
                         
                             Section {
@@ -199,48 +202,50 @@ struct AssetListView: View {
                                 }
                             }
                             
-                            Section("Filters") {
-                                Menu("By Type") {
-                                    ForEach(AssetType.allCases, id: \.self) { type in
-                                        Button {
-                                            withAnimation {
-                                                if type != selectedType {
-                                                    selectedType = type
-                                                } else {
-                                                    selectedType = nil
+                            if !assets.isEmpty {
+                                Section("Filters") {
+                                    Menu("By Type") {
+                                        ForEach(AssetType.allCases, id: \.self) { type in
+                                            Button {
+                                                withAnimation {
+                                                    if type != selectedType {
+                                                        selectedType = type
+                                                    } else {
+                                                        selectedType = nil
+                                                    }
                                                 }
-                                            }
-                                        } label: {
-                                            HStack {
-                                                Text(type.rawValue)
-                                                
-                                                if type == selectedType {
-                                                    Image(systemName: "checkmark")
+                                            } label: {
+                                                HStack {
+                                                    Text(type.rawValue)
+                                                    
+                                                    if type == selectedType {
+                                                        Image(systemName: "checkmark")
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            
-                            Section("Sorters") {
-                                Menu("Sort By") {
-                                    ForEach(AssetSortOrder.allCases, id: \.self) { sort in
-                                        Button {
-                                            withAnimation {
-                                                if sortOrder == sort {
-                                                    isAscending.toggle()
-                                                } else {
-                                                    sortOrder = sort
-                                                    isAscending = true
+                                
+                                Section("Sorters") {
+                                    Menu("Sort By") {
+                                        ForEach(AssetSortOrder.allCases, id: \.self) { sort in
+                                            Button {
+                                                withAnimation {
+                                                    if sortOrder == sort {
+                                                        isAscending.toggle()
+                                                    } else {
+                                                        sortOrder = sort
+                                                        isAscending = true
+                                                    }
                                                 }
-                                            }
-                                        } label: {
-                                            HStack {
-                                                Text(sort.displayName)
-                                                
-                                                if sortOrder == sort {
-                                                    Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                            } label: {
+                                                HStack {
+                                                    Text(sort.displayName)
+                                                    
+                                                    if sortOrder == sort {
+                                                        Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                    }
                                                 }
                                             }
                                         }

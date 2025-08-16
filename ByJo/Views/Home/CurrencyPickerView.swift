@@ -47,7 +47,7 @@ struct CurrencyPickerView: View {
             .buttonBorderShape(.capsule)
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .frame(maxWidth: 500, maxHeight: .infinity, alignment: .leading)
     }
 }
 

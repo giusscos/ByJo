@@ -134,7 +134,9 @@ struct RecurringOperationWidgetView: View {
         content.title = "Recurring operation"
         
         content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue).notation(.compactName)))"
-        
+
+        content.badge = NSNumber(value: 1)
+
         if let nextDate = operation.frequency.nextPaymentDate(from: operation.date) {
             let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
             
@@ -142,8 +144,8 @@ struct RecurringOperationWidgetView: View {
             
             let request = UNNotificationRequest(identifier: operation.id.uuidString, content: content, trigger: trigger)
             
-            UNUserNotificationCenter.current().add(request)
-            
+            center.add(request)
+
             return
         }
     }

@@ -32,10 +32,14 @@ struct HomeView: View {
         }
     }
     
+    @Environment(\.requestReview) var requestReview
+    
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
     @Query var assets: [Asset]
+    
+    @Query var goals: [Goal]
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
@@ -144,12 +148,14 @@ struct HomeView: View {
                             } label: {
                                 Label("Add goal", systemImage: "plus")
                             }
+                            .disabled(assets.isEmpty)
                             
                             Button {
                                 activeSheet = .viewGoal
                             } label: {
                                 Label("Goals", systemImage: "list.bullet")
                             }
+                            .disabled(goals.isEmpty)
                         }
                         
                         Section {
@@ -199,6 +205,11 @@ struct HomeView: View {
                         GoalListView()
                     case .viewCategories:
                         CategoryOperationView()
+                }
+            }
+            .onAppear() {
+                if assets.count > 0 && operations.count > 5 {
+                    requestReview()
                 }
             }
         }

@@ -250,14 +250,16 @@ struct EditAssetOperationView: View {
         } else {
             content.subtitle = name
         }
-                
+        
+        content.badge = NSNumber(value: 1)
+        
         let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
         
         let request = UNNotificationRequest(identifier: uuid.uuidString, content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().add(request)
+        center.add(request)
     }
 }
 
