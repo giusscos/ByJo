@@ -22,6 +22,7 @@ struct GoalListStackView: View {
             Section {
                 HStack {
                     Spacer()
+                    
                     GeometryReader { geometry in
                         let screenWidth = geometry.size.width
                         
@@ -61,6 +62,7 @@ struct GoalListStackView: View {
                         .padding()
                     }
                     .frame(maxWidth: 500)
+                    
                     Spacer()
                 }
                 .frame(height: 200)

@@ -16,18 +16,23 @@ struct PaywallView: View {
     
     private let contentData = [
         (
-            title: "Privacy first",
-            description: "ByJo do not collect or track any type of data",
-            imageName: "lock.shield"
+            title: "Privacy first.",
+            description: "ByJo do not collect, track or share any type of data.",
+            imageName: "lock.fill"
         ),
         (
-            title: "Achieve Your Goals",
-            description: "Set goals to achieve your financial freedom",
+            title: "Focus on what really matters.",
+            description: "Designed with simplicity in mind to help you manage your finances effectively.",
+            imageName: "brain.head.profile"
+        ),
+        (
+            title: "Achieve Your Goals.",
+            description: "Set goals to achieve your financial freedom.",
             imageName: "target"
         ),
         (
-            title: "Manage Your Assets with ease",
-            description: "View, filter and manage your assets in a single place",
+            title: "Manage Your Assets with ease.",
+            description: "View, filter and manage all your assets and operations in a single place.",
             imageName: "book.pages"
         )
     ]
@@ -37,7 +42,7 @@ struct PaywallView: View {
     var body: some View {
         NavigationStack {
             SubscriptionStoreView(groupID: Store().groupId) {
-                VStack (alignment: .leading) {
+                VStack (spacing: 16) {
                     Button {
                         showLifetimePlans = true
                     } label: {
@@ -47,30 +52,37 @@ struct PaywallView: View {
                     .tint(.green)
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.capsule)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    
+                    Spacer()
                     
                     TabView(selection: $currentIndex) {
                         ForEach(0..<contentData.count, id: \.self) { index in
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading) {
                                 Image(systemName: contentData[index].imageName)
+                                    .imageScale(.large)
                                     .font(.largeTitle)
                                     .foregroundStyle(Color.accentColor)
                                 
                                 Text(contentData[index].title)
                                     .font(.title)
+                                    .fontWeight(.semibold)
                                     .multilineTextAlignment(.leading)
-                                    .bold()
                                 
                                 Text(contentData[index].description)
-                                    .font(.headline)
+                                    .font(.title3)
+                                    .fontWeight(.medium)
                                     .foregroundStyle(.secondary)
                                     .multilineTextAlignment(.leading)
                             }
                             .tag(index)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     .tabViewStyle(.page)
-                    .indexViewStyle(.page(backgroundDisplayMode: .always))
+                    
+                    Spacer()
                     
                     HStack {
                         Spacer()
@@ -89,8 +101,9 @@ struct PaywallView: View {
                         Spacer()
                     }
                     .font(.caption)
+                    .padding()
                 }
-                .padding()
+                .frame(minHeight: 300)
             }
             .subscriptionStoreControlStyle(.pagedProminentPicker, placement: .bottomBar)
             .subscriptionStoreButtonLabel(.multiline)
