@@ -61,11 +61,11 @@ struct GoalListStackView: View {
                         }
                         .padding()
                     }
-                    .frame(maxWidth: 500)
+                    .frame(maxWidth: 650)
                     
                     Spacer()
                 }
-                .frame(height: 200)
+                .frame(height: 250)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)

@@ -115,7 +115,11 @@ struct HomeView: View {
                     Button {
                         activeSheet = .createOperation
                     } label: {
-                        Label("Add operation", systemImage: "plus.circle.fill")
+                        if #available(iOS 26, *) {
+                            Label("Add operation", systemImage: "plus")
+                        } else {
+                            Label("Add operation", systemImage: "plus.circle.fill")
+                        }
                     }
                     .disabled(assets.count == 0 || categories.count == 0)
                 }
@@ -125,9 +129,7 @@ struct HomeView: View {
                         Section {
                             Button {
                                 withAnimation {
-                                    withAnimation {
-                                        compactNumber.toggle()
-                                    }
+                                    compactNumber.toggle()
                                 }
                             } label: {
                                 Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
@@ -185,7 +187,11 @@ struct HomeView: View {
                             }
                         }
                     } label: {
-                        Label("Menu", systemImage: "ellipsis.circle")
+                        if #available(iOS 26, *) {
+                            Label("Menu", systemImage: "ellipsis")
+                        } else {
+                            Label("Menu", systemImage: "ellipsis.circle")
+                        }
                     }
                 }
             }

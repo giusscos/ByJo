@@ -140,7 +140,11 @@ struct AssetDetailView: View {
                     Button {
                         activeSheet = .createOperation
                     } label: {
-                        Label("Add operation", systemImage: "plus.circle.fill")
+                        if #available(iOS 26, *) {
+                            Label("Add operation", systemImage: "plus")
+                        } else {
+                            Label("Add operation", systemImage: "plus.circle.fill")
+                        }
                     }
                 }
                 
@@ -198,7 +202,11 @@ struct AssetDetailView: View {
                             }
                         }
                     } label: {
-                        Label("Menu", systemImage: "ellipsis.circle")
+                        if #available(iOS 26, *) {
+                            Label("Menu", systemImage: "ellipsis")
+                        } else {
+                            Label("Menu", systemImage: "ellipsis.circle")
+                        }
                     }
                 }
             }

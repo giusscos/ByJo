@@ -150,7 +150,11 @@ struct AssetListView: View {
                         Button {
                             activeSheet = .createAsset
                         } label: {
-                            Label("Add", systemImage: "plus.circle.fill")
+                            if #available(iOS 26, *) {
+                                Label("Add", systemImage: "plus")
+                            } else {
+                                Label("Add", systemImage: "plus.circle.fill")
+                            }
                         }
                     }
                 }
@@ -253,7 +257,11 @@ struct AssetListView: View {
                                 }
                             }
                         } label: {
-                            Label("Menu", systemImage: "ellipsis.circle")
+                            if #available(iOS 26, *) {
+                                Label("Menu", systemImage: "ellipsis")
+                            } else {
+                                Label("Menu", systemImage: "ellipsis.circle")
+                            }
                         }
                     }
                 }

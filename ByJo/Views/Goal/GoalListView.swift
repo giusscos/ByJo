@@ -87,10 +87,14 @@ struct GoalListView: View {
             .navigationTitle("Goals")
             .toolbar {
                 ToolbarItem {
-                    Button(action: {
+                    Button {
                         activeSheet = .create
-                    }) {
-                        Label("Add Goal", systemImage: "plus.circle.fill")
+                    } label: {
+                        if #available(iOS 26, *) {
+                            Label("Add Goal", systemImage: "plus")
+                        } else {
+                            Label("Add Goal", systemImage: "plus.circle.fill")
+                        }
                     }
                 }
             }
