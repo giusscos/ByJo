@@ -90,11 +90,7 @@ struct GoalListView: View {
                     Button {
                         activeSheet = .create
                     } label: {
-                        if #available(iOS 26, *) {
-                            Label("Add Goal", systemImage: "plus")
-                        } else {
-                            Label("Add Goal", systemImage: "plus.circle.fill")
-                        }
+                        VersionedLabel(title: "Add goal", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                     }
                 }
             }

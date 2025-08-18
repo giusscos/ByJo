@@ -68,7 +68,7 @@ struct OperationsGroupedByCategoryListView: View {
                 Button {
                     addCategory = true
                 } label: {
-                    Label("Add", systemImage: "plus.circle.fill")
+                    VersionedLabel(title: "Add category", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                 }
             }
             
@@ -86,7 +86,7 @@ struct OperationsGroupedByCategoryListView: View {
                         }
                     }
                 } label: {
-                    Label("Menu", systemImage: "ellipsis.circle")
+                    VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                 }
             }
         }

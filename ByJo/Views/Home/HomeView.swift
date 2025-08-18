@@ -115,11 +115,7 @@ struct HomeView: View {
                     Button {
                         activeSheet = .createOperation
                     } label: {
-                        if #available(iOS 26, *) {
-                            Label("Add operation", systemImage: "plus")
-                        } else {
-                            Label("Add operation", systemImage: "plus.circle.fill")
-                        }
+                        VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                     }
                     .disabled(assets.count == 0 || categories.count == 0)
                 }
@@ -187,11 +183,7 @@ struct HomeView: View {
                             }
                         }
                     } label: {
-                        if #available(iOS 26, *) {
-                            Label("Menu", systemImage: "ellipsis")
-                        } else {
-                            Label("Menu", systemImage: "ellipsis.circle")
-                        }
+                        VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                     }
                 }
             }

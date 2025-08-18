@@ -169,11 +169,7 @@ struct OperationListView: View {
                             Button {
                                 activeSheet = .create
                             } label: {
-                                if #available(iOS 26, *) {
-                                    Label("Add", systemImage: "plus")
-                                } else {
-                                    Label("Add", systemImage: "plus.circle.plus")
-                                }
+                                VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                             }
                         }
                     }
@@ -233,11 +229,7 @@ struct OperationListView: View {
                                     }
                                 }
                             } label: {
-                                if #available(iOS 26, *) {
-                                    Label("Menu", systemImage: "ellipsis")
-                                } else {
-                                    Label("Menu", systemImage: "ellipsis.circle")
-                                }
+                                VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                             }
                         }
                     }
