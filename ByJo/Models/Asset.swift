@@ -12,7 +12,6 @@ import SwiftData
 final class Asset {
     var id: UUID = UUID()
     var name: String = ""
-//    var currency: CurrencyCode = CurrencyCode.usd
     var type: AssetType = AssetType.cash
     var initialBalance: Decimal = 0
     var timestamp: Date = Date.now
@@ -71,6 +70,11 @@ final class Asset {
         
         return operationsInRange.reduce(0) { $0 + $1.amount }
     }
+}
+
+enum StatusBalance: String, Codable, CaseIterable {
+    case positive = "Positive"
+    case negative = "Negative"
 }
 
 enum CurrencyCode: String, CaseIterable, Codable {

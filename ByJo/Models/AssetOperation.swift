@@ -12,7 +12,6 @@ import SwiftData
 final class AssetOperation {
     var id: UUID = UUID()
     var name: String = ""
-//    var currency: CurrencyCode = CurrencyCode.usd
     var date: Date = Date()
     var amount: Decimal = 0
     var note: String = ""
@@ -24,7 +23,6 @@ final class AssetOperation {
     init (
         id: UUID = UUID(),
         name: String = "",
-//        currency: CurrencyCode = CurrencyCode.usd,
         date: Date = .now,
         amount: Decimal = 0,
         asset: Asset? = nil,
@@ -34,7 +32,6 @@ final class AssetOperation {
     ) {
         self.id = id
         self.name = name
-//        self.currency = currency
         self.date = date
         self.amount = amount
         self.asset = asset
@@ -67,6 +64,11 @@ func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOpe
         let startDate = calendar.date(byAdding: .year, value: -1, to: now) ?? now
         return data.filter { $0.date >= startDate }
     }
+}
+
+enum OperationType: String, Codable, CaseIterable {
+    case income = "Income"
+    case expense = "Expense"
 }
 
 enum RecurrenceFrequency: String, Codable, CaseIterable {

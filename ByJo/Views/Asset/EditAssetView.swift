@@ -24,8 +24,8 @@ struct EditAssetView: View {
     var asset: Asset?
     
     @State private var name: String = ""
-//    @State private var currency: CurrencyCode = .usd
     @State private var initialBalance: Decimal?
+    @State private var statusInitialBalance: StatusBalance = .positive
     @State private var type: AssetType = .bankAccount
     @State private var isNegative: Bool = false
     
@@ -47,34 +47,39 @@ struct EditAssetView: View {
                 }
                 
                 Section {
-                    VStack (alignment: .leading) {
-                        HStack (spacing: 6) {
-                            Text(currencyCode.symbol)
-                                .foregroundStyle(nilBalance ? .secondary : .primary)
-                                .opacity(nilBalance ? 0.5 : 1)
-                            
-                            TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
-                                .keyboardType(.numbersAndPunctuation)
-                                .autocorrectionDisabled()
-                                .focused($focusedField, equals: .balance)
-                                .submitLabel(.done)
-                                .onSubmit {
-                                    focusedField = .none
-                                }
-                            
-//                            Picker("Currency", selection: $currency) {
-//                                ForEach(CurrencyCode.allCases, id: \.self) { value in
-//                                    Text(value.rawValue)
-//                                }
-//                            }
-//                            .labelsHidden()
+                    Picker("Status initial balance", selection: $statusInitialBalance) {
+                        ForEach(StatusBalance.allCases, id: \.self) { status in
+                            Text(status.rawValue)
                         }
+                    }
+                    .pickerStyle(.segmented)
+                    .disabled(initialBalance == nil)
+                    .onChange(of: statusInitialBalance) { oldValue, newValue in
+                        if let amountValue = initialBalance {
+                            if amountValue > 0, newValue == .negative {
+                                initialBalance = amountValue * -1
+                            } else {
+                                initialBalance = abs(amountValue)
+                            }
+                        }
+                    }
+                    
+                    HStack (spacing: 6) {
+                        Text(currencyCode.symbol)
+                            .foregroundStyle(nilBalance ? .secondary : .primary)
+                            .opacity(nilBalance ? 0.5 : 1)
                         
-//                        Text("Currently, there’s no support for multi-currency assets. If you set a different currency for this asset, it will be calculated based on the currency set up during the onboarding process or in the settings tab.")
-//                            .font(.caption)
-//                            .foregroundStyle(.secondary)
+                        TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
+                            .keyboardType(.decimalPad)
+                            .autocorrectionDisabled()
+                            .focused($focusedField, equals: .balance)
+                            .submitLabel(.done)
+                            .onSubmit {
+                                focusedField = .none
+                            }
                     }
                 }
+                .listRowSeparator(.hidden)
                 
                 Section {
                     Picker("Asset type", selection: $type) {
@@ -99,12 +104,21 @@ struct EditAssetView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        saveAsset()
-                    } label: {
-                        Label("Save", systemImage: "checkmark")
+                    if #available(iOS 26, *) {
+                        Button(role: .confirm) {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(name.isEmpty || initialBalance == nil)
+                    } else {
+                        Button {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(name.isEmpty || initialBalance == nil)
                     }
-                    .disabled(name.isEmpty)
                 }
                 
                 ToolbarItem(placement: .keyboard) {
@@ -120,21 +134,34 @@ struct EditAssetView: View {
                 
                 if let asset = asset {
                     name = asset.name
-//                    currency = asset.currency
                     initialBalance = asset.initialBalance
+                    
+                    if asset.initialBalance < 0 {
+                        statusInitialBalance = .negative
+                    }
+                    
                     type = asset.type
                 }
             }
         }
     }
     
-    private func saveAsset() {
+    private func save() {
+        if let amountValue = initialBalance {
+            if amountValue < 0, statusInitialBalance == .positive {
+                initialBalance = abs(amountValue)
+            } else if amountValue > 0, statusInitialBalance == .negative {
+                initialBalance = amountValue * -1
+            }
+        }
+        
         if let asset = asset {
             asset.name = name
-//            asset.currency = currency
+            
             if let initialBalance = initialBalance {
                 asset.initialBalance = initialBalance
             }
+            
             asset.type = type
             
             dismiss()
@@ -144,7 +171,6 @@ struct EditAssetView: View {
         
         let newAsset = Asset(
             name: name,
-//            currency: currency,
             type: type,
             initialBalance: initialBalance ?? 0.0
         )

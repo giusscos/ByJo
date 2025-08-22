@@ -121,16 +121,29 @@ struct CategoryOperationView: View {
                     
                     if isEditMode == .inactive {
                         ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                if let editCategory = isEditCategory {
-                                    saveEditedCategory(category: editCategory)
-                                } else {
-                                    addCategory()
+                            if #available(iOS 26, *) {
+                                Button (role: .confirm) {
+                                    if let editCategory = isEditCategory {
+                                        saveEditedCategory(category: editCategory)
+                                    } else {
+                                        addCategory()
+                                    }
+                                } label: {
+                                    Label("Save", systemImage: "checkmark")
                                 }
-                            } label: {
-                                Label("Save", systemImage: "checkmark")
+                                .disabled(newCategoryName.isEmpty || newCategoryComparison)
+                            } else {
+                                Button {
+                                    if let editCategory = isEditCategory {
+                                        saveEditedCategory(category: editCategory)
+                                    } else {
+                                        addCategory()
+                                    }
+                                } label: {
+                                    Label("Save", systemImage: "checkmark")
+                                }
+                                .disabled(newCategoryName.isEmpty || newCategoryComparison)
                             }
-                            .disabled(newCategoryName.isEmpty || newCategoryComparison)
                         }
                     }
                 }

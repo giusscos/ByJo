@@ -19,7 +19,7 @@ struct EditGoalView:View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     
     @Query var assets: [Asset]
     
@@ -28,10 +28,15 @@ struct EditGoalView:View {
     @State private var title: String = ""
     @State var asset: Asset
     @State private var targetAmount: Decimal?
+    @State private var statusTargetAmount: StatusBalance = .positive
     @State private var date: Date = .now
     @State private var hasDueDate: Bool = false
     
     @State private var isGoalCompleted: StatusGoal = .completed
+    
+    var nilBalance: Bool {
+        targetAmount == nil || targetAmount == .zero
+    }
     
     var body: some View {
         NavigationStack {
@@ -69,16 +74,41 @@ struct EditGoalView:View {
                 }
                 
                 Section {
-                    Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: currency.rawValue))
-                                            
-                    TextField("Target amount", value: $targetAmount, format: .number.precision(.fractionLength(2)))
-                        .keyboardType(.numbersAndPunctuation)
-                        .focused($focusedField, equals: .targetAmount)
-                        .submitLabel(.done)
-                        .onSubmit {
-                            focusedField = .none
+                    Picker("Status target amount", selection: $statusTargetAmount) {
+                        ForEach(StatusBalance.allCases, id: \.self) { status in
+                            Text(status.rawValue)
                         }
+                    }
+                    .pickerStyle(.segmented)
+                    .disabled(targetAmount == nil)
+                    .onChange(of: statusTargetAmount) { oldValue, newValue in
+                        if let amountValue = targetAmount {
+                            if amountValue > 0, newValue == .negative {
+                                targetAmount = amountValue * -1
+                            } else {
+                                targetAmount = abs(amountValue)
+                            }
+                        }
+                    }
+                    
+                    Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: currencyCode.rawValue))
+                                 
+                    HStack (spacing: 6) {
+                        Text(currencyCode.symbol)
+                            .foregroundStyle(nilBalance ? .secondary : .primary)
+                            .opacity(nilBalance ? 0.5 : 1)
+                        
+                        TextField("Target amount", value: $targetAmount, format: .number.precision(.fractionLength(2)))
+                            .keyboardType(.decimalPad)
+                            .focused($focusedField, equals: .targetAmount)
+                            .submitLabel(.done)
+                            .onSubmit {
+                                focusedField = .none
+                            }
+                    }
                 }
+                .listRowSeparator(.hidden)
+                
                 Section {
                     Toggle("Due date", isOn: $hasDueDate.animation())
                     
@@ -102,12 +132,21 @@ struct EditGoalView:View {
                 }
                 
                 ToolbarItem (placement: .topBarTrailing) {
-                    Button {
-                        saveGoal()
-                    } label: {
-                        Label("Save", systemImage: "checkmark")
+                    if #available(iOS 26, *) {
+                        Button (role: .confirm) {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(title.isEmpty || targetAmount == nil)
+                    } else {
+                        Button {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(title.isEmpty || targetAmount == nil)
                     }
-                    .disabled(title.isEmpty)
                 }
                 
                 ToolbarItem(placement: .keyboard) {
@@ -129,6 +168,10 @@ struct EditGoalView:View {
                 
                 targetAmount = goal.targetAmount
                 
+                if goal.targetAmount < 0 {
+                    statusTargetAmount = .negative
+                }
+                
                 if let goalDate = goal.dueDate {
                     hasDueDate = true
                     date = goalDate
@@ -149,7 +192,15 @@ struct EditGoalView:View {
         dismiss()
     }
     
-    private func saveGoal() {
+    private func save() {
+        if let amountValue = targetAmount {
+            if amountValue < 0, statusTargetAmount == .positive {
+                targetAmount = abs(amountValue)
+            } else if amountValue > 0, statusTargetAmount == .negative {
+                targetAmount = amountValue * -1
+            }
+        }
+        
         if let goal = goal {
             goal.title = title
             goal.asset = asset

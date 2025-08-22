@@ -29,6 +29,20 @@ struct OperationListView: View {
         }
     }
     
+    enum OperationSortOrder: String, CaseIterable, Codable {
+        case date
+        case name
+        case amount
+    
+        var displayName: String {
+            switch self {
+                case .date: return "Date"
+                case .name: return "Name"
+                case .amount: return "Amount"
+            }
+        }
+    }
+    
     @Environment(\.modelContext) var modelContext
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
@@ -46,6 +60,9 @@ struct OperationListView: View {
     @State private var filterCategory: CategoryOperation?
     @State private var selectedOperations = Set<AssetOperation>()
     
+    @State private var sortOrder: OperationSortOrder = .date
+    @State private var isAscending: Bool = false
+    
     var filteredAndSortedOperations: [OperationByDate] {
         var filteredOperations = operations
         
@@ -55,6 +72,17 @@ struct OperationListView: View {
         
         if let category = filterCategory {
             filteredOperations = filteredOperations.filter { $0.category == category }
+        }
+        
+        switch sortOrder {
+        case .date:
+            filteredOperations = filteredOperations.sorted { isAscending ? $0.date < $1.date : $0.date > $1.date }
+        case .name:
+            filteredOperations = filteredOperations.sorted {
+                isAscending ? $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending : $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending
+            }
+        case .amount:
+            filteredOperations = filteredOperations.sorted { isAscending ? $0.amount < $1.amount : $0.amount > $1.amount }
         }
         
         return groupOperationsByDate(filteredOperations)
@@ -194,38 +222,77 @@ struct OperationListView: View {
                                 if !operations.isEmpty {
                                     Section {
                                         Menu("By Asset") {
-                                            Button("Clear Filter") {
-                                                withAnimation {
-                                                    selectedAsset = nil
-                                                }
-                                            }
-                                            
                                             ForEach(assets, id: \.id) { asset in
-                                                Button(asset.name) {
-                                                    withAnimation {
-                                                        selectedAsset = asset
+                                                Button {
+                                                    if selectedAsset == asset {
+                                                        withAnimation {
+                                                            selectedAsset = nil
+                                                        }
+                                                    } else {
+                                                        withAnimation {
+                                                            selectedAsset = asset
+                                                        }
+                                                    }
+                                                } label: {
+                                                    HStack {
+                                                        Text(asset.name)
+                                                        
+                                                        if selectedAsset == asset {
+                                                            Image(systemName: "checkmark")
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                         
                                         Menu("By Category") {
-                                            Button("Clear Filter") {
-                                                withAnimation {
-                                                    filterCategory = nil
-                                                }
-                                            }
-                                            
                                             ForEach(categories) { category in
-                                                Button(category.name) {
-                                                    withAnimation {
-                                                        filterCategory = category
+                                                Button {
+                                                    if filterCategory == category {
+                                                        withAnimation {
+                                                            filterCategory = nil
+                                                        }
+                                                    } else {
+                                                        withAnimation {
+                                                            filterCategory = category
+                                                        }
+                                                    }
+                                                } label: {
+                                                    HStack {
+                                                        Text(category.name)
+                                                        
+                                                        if filterCategory == category {
+                                                            Image(systemName: "checkmark")
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     } header: {
                                         Text("Filters")
+                                    }
+                                }
+                                
+                                Section("Sorters") {
+                                    Menu("Sort By") {
+                                        ForEach(OperationSortOrder.allCases, id: \.self) { sort in
+                                            Button {
+                                                if sortOrder == sort {
+                                                    isAscending.toggle()
+                                                } else {
+                                                    sortOrder = sort
+                                                    isAscending = false
+                                                }
+                                            } label: {
+                                                HStack {
+                                                    Text(sort.displayName)
+                                                    
+                                                    if sortOrder == sort {
+                                                        Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             } label: {

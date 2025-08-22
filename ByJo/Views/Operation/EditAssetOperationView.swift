@@ -30,6 +30,7 @@ struct EditAssetOperationView: View {
     
     @State private var name: String = ""
     @State private var date: Date = .now
+    @State private var operationType: OperationType = .income
     @State private var amount: Decimal?
     @State var asset: Asset
     @State var category: CategoryOperation
@@ -84,13 +85,30 @@ struct EditAssetOperationView: View {
                 }
                 
                 Section {
+                    Picker("Type of operation", selection: $operationType) {
+                        ForEach(OperationType.allCases, id: \.self) { operationType in
+                            Text(operationType.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .disabled(amount == nil)
+                    .onChange(of: operationType) { oldValue, newValue in
+                        if let amountValue = amount {
+                            if amountValue > 0, newValue == OperationType.expense {
+                                amount = amountValue * -1
+                            } else {
+                                amount = abs(amountValue)
+                            }
+                        }
+                    }
+                    
                     HStack (spacing: 6) {
                         Text(currency.symbol)
                             .foregroundStyle(nilAmount ? .secondary : .primary)
                             .opacity(nilAmount ? 0.5 : 1)
                             
                         TextField("Amount", value: $amount, format: .number.precision(.fractionLength(2)))
-                            .keyboardType(.numbersAndPunctuation)
+                            .keyboardType(.decimalPad)
                             .focused($focusedField, equals: .amount)
                             .submitLabel(.next)
                             .onSubmit {
@@ -98,6 +116,7 @@ struct EditAssetOperationView: View {
                             }
                     }
                 }
+                .listRowSeparator(.hidden)
                 
                 Section {
                     Picker("Asset", selection: $asset) {
@@ -146,16 +165,24 @@ struct EditAssetOperationView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        saveOperation()
-                    } label: {
-                        Label("Save", systemImage: "checkmark.circle")
-                            .labelStyle(.titleOnly)
+                    if #available(iOS 26, *) {
+                        Button(role: .confirm) {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(name.isEmpty || amount == nil)
+                    } else {
+                        Button {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(name.isEmpty || amount == nil)
                     }
-                    .disabled(name.isEmpty || amount == nil)
                 }
                 
-                ToolbarItem(placement: .keyboard) {                    
+                ToolbarItem(placement: .keyboard) {
                     Button {
                         focusedField = .none
                     } label: {
@@ -171,6 +198,11 @@ struct EditAssetOperationView: View {
                 name = operation.name
                 date = operation.date
                 amount = operation.amount
+                
+                if operation.amount < 0 {
+                    operationType = .expense
+                }
+                
                 note = operation.note
                 frequency = operation.frequency
                 
@@ -194,8 +226,16 @@ struct EditAssetOperationView: View {
         dismiss()
     }
     
-    private func saveOperation() {
+    private func save() {
         let uuid = UUID()
+        
+        if let amountValue = amount {
+            if amountValue < 0, operationType == .income {
+                amount = abs(amountValue)
+            } else if amountValue > 0, operationType == .expense {
+                amount = amountValue * -1
+            }
+        }
         
         if let operation = operation {
             operation.name = name
@@ -234,7 +274,9 @@ struct EditAssetOperationView: View {
         
         modelContext.insert(newOperation)
 
-        scheduleNotification(uuid: newOperation.id)
+        if frequency != .single {
+            scheduleNotification(uuid: newOperation.id)
+        }
         
         dismiss()
     }
@@ -245,6 +287,7 @@ struct EditAssetOperationView: View {
         
         let content = UNMutableNotificationContent()
         content.title = "Recurring operation"
+        
         if let amount = amount {
             content.subtitle = "\(name) \(amount.formatted(.currency(code: currency.rawValue).notation(.compactName)))"
         } else {
@@ -275,3 +318,4 @@ struct EditAssetOperationView: View {
         category: CategoryOperation(name: "Bank account")
     )
 }
+

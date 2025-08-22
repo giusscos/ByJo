@@ -58,29 +58,29 @@ struct PaywallView: View {
                     
                     TabView(selection: $currentIndex) {
                         ForEach(0..<contentData.count, id: \.self) { index in
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .center) {
                                 Image(systemName: contentData[index].imageName)
                                     .imageScale(.large)
-                                    .font(.largeTitle)
+                                    .font(.title)
                                     .foregroundStyle(Color.accentColor)
                                 
                                 Text(contentData[index].title)
                                     .font(.title)
                                     .fontWeight(.semibold)
-                                    .multilineTextAlignment(.leading)
+                                    .multilineTextAlignment(.center)
                                 
                                 Text(contentData[index].description)
                                     .font(.title3)
                                     .fontWeight(.medium)
                                     .foregroundStyle(.secondary)
-                                    .multilineTextAlignment(.leading)
+                                    .multilineTextAlignment(.center)
                             }
                             .tag(index)
                             .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
-                    .tabViewStyle(.page)
+                    .tabViewStyle(.page(indexDisplayMode: .never))
                     
                     Spacer()
                     
@@ -103,6 +103,7 @@ struct PaywallView: View {
                     .font(.caption)
                     .padding()
                 }
+                .frame(maxWidth: 650)
                 .frame(minHeight: 300)
             }
             .subscriptionStoreControlStyle(.pagedProminentPicker, placement: .bottomBar)
