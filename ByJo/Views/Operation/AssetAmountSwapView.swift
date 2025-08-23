@@ -44,7 +44,7 @@ struct AssetAmountSwapView: View {
                                     .tag(asset)
                             }
                         }
-                        .pickerStyle(.palette)
+                        .pickerStyle(.wheel)
                                                     
                         if let amount = amountToSwap {
                             let calculatedAmount = assetFrom.calculateCurrentBalance() - amount
@@ -74,14 +74,16 @@ struct AssetAmountSwapView: View {
                 .listRowSeparator(.hidden)
                 
                 Section {
-                    Spacer()
-                    
-                    Image(systemName: "arrow.down")
-                        .imageScale(.large)
-                        .font(.title)
-                        .fontWeight(.semibold)
-                    
-                    Spacer()
+                    HStack {
+                        Spacer()
+                        
+                        Image(systemName: "arrow.down")
+                            .imageScale(.large)
+                            .font(.title)
+                            .fontWeight(.semibold)
+                        
+                        Spacer()
+                    }
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
