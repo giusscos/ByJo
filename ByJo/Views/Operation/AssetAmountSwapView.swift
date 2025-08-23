@@ -35,16 +35,14 @@ struct AssetAmountSwapView: View {
         NavigationStack {
             List {
                 Section("From") {
-                    VStack {
-                        Picker("Select asset from", selection: $assetFrom) {
-                            ForEach(assets) { asset in
+                    VStack (alignment: .leading) {
+                        Picker("Asset from", selection: $assetFrom) {
+                            ForEach(assets.filter { $0.id != assetTo.id } ) { asset in
                                 Text(asset.name)
-                                    .font(.title)
-                                    .fontWeight(.semibold)
                                     .tag(asset)
                             }
                         }
-                        .pickerStyle(.wheel)
+                        .labelsHidden()
                                                     
                         if let amount = amountToSwap {
                             let calculatedAmount = assetFrom.calculateCurrentBalance() - amount
@@ -74,31 +72,26 @@ struct AssetAmountSwapView: View {
                 .listRowSeparator(.hidden)
                 
                 Section {
-                    HStack {
-                        Spacer()
-                        
+                    VStack {
                         Image(systemName: "arrow.down")
                             .imageScale(.large)
-                            .font(.title)
+                            .font(.title3)
                             .fontWeight(.semibold)
-                        
-                        Spacer()
                     }
                 }
+                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
                 
                 Section("To") {
-                    VStack {
-                        Picker("Select asset to", selection: $assetTo) {
-                            ForEach(assets) { asset in
+                    VStack (alignment: .leading) {
+                        Picker("Asset to", selection: $assetTo) {
+                            ForEach(assets.filter { $0.id != assetFrom.id } ) { asset in
                                 Text(asset.name)
-                                    .font(.title)
-                                    .fontWeight(.semibold)
                                     .tag(asset)
                             }
                         }
-                        .pickerStyle(.wheel)
+                        .labelsHidden()
                         
                         if let amount = amountToSwap {
                             let calculatedAmount = assetTo.calculateCurrentBalance() + amount
@@ -139,7 +132,6 @@ struct AssetAmountSwapView: View {
                     }
                 }
             }
-            .padding()
             .navigationTitle("Swap")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -153,7 +145,7 @@ struct AssetAmountSwapView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     if #available(iOS 26, *) {
                         Button (role: .confirm) {
-                            print("Save")
+                            save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
@@ -167,17 +159,33 @@ struct AssetAmountSwapView: View {
                         .disabled(nilAmount)
                     }
                 }
+                
+                ToolbarItem(placement: .keyboard) {
+                    Button {
+                        focusedField = .none
+                    } label: {
+                        Label("Hide keyboard", systemImage: "keyboard.chevron.compact.down")
+                    }
+                }
             }
             .onAppear() {
                 focusedField = .amount
             }
-            
-            Spacer()
         }
     }
     
     private func save() {
-        print("save")
+        guard let amount = amountToSwap, amount != 0, assetFrom.id != assetTo.id else { return }
+        
+        let swap = SwapOperation(
+            assetFrom: assetTo,
+            assetTo: assetFrom,
+            amount: amount
+        )
+        
+        modelContext.insert(swap)
+        
+        dismiss()
     }
 }
 
