@@ -18,7 +18,7 @@ struct EditAssetOperationView: View {
     
     @FocusState private var focusedField: FocusField?
     
-    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -103,7 +103,7 @@ struct EditAssetOperationView: View {
                     }
                     
                     HStack (spacing: 6) {
-                        Text(currency.symbol)
+                        Text(currencyCode.symbol)
                             .foregroundStyle(nilAmount ? .secondary : .primary)
                             .opacity(nilAmount ? 0.5 : 1)
                             
@@ -289,7 +289,7 @@ struct EditAssetOperationView: View {
         content.title = "Recurring operation"
         
         if let amount = amount {
-            content.subtitle = "\(name) \(amount.formatted(.currency(code: currency.rawValue).notation(.compactName)))"
+            content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
         } else {
             content.subtitle = name
         }

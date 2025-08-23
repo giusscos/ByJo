@@ -133,7 +133,7 @@ struct RecurringOperationWidgetView: View {
         let content = UNMutableNotificationContent()
         content.title = "Recurring operation"
         
-        content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue).notation(.compactName)))"
+        content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue)))"
 
         content.badge = NSNumber(value: 1)
 
