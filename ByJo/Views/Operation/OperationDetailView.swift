@@ -10,19 +10,27 @@ import SwiftUI
 import Foundation
 
 struct OperationDetailView: View {
-    @Environment(\.modelContext) var modelContext
+    enum DeleteAction {
+        case none
+        case current
+        case linked
+        case both
+    }
     
-    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
+    
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     
     @Query var operations: [AssetOperation]
     
     var operation: AssetOperation
-    
+    var linkedOperation: AssetOperation? = nil
     var asset: Asset
     
-    @State var linkedOperation: AssetOperation? = nil
-    
     @State var showEditSheet: Bool = false
+    @State var showDeleteDialog: Bool = false
+    @State var pendingDelete: DeleteAction = .none
     
     var body: some View {
         List {
@@ -41,7 +49,7 @@ struct OperationDetailView: View {
                     
                     Spacer()
                     
-                    Text(operation.amount, format: .currency(code: currency.rawValue))
+                    Text(operation.amount, format: .currency(code: currencyCode.rawValue))
                         .foregroundStyle(.secondary)
                 }
                 
@@ -75,14 +83,15 @@ struct OperationDetailView: View {
                 }
             }
             
-            if let linked = linkedOperation, let linkedAsset = linked.asset {
+            if let linkedOperation = linkedOperation, let linkedAsset = linkedOperation.asset {
                 Section("Linked Operation") {
                     HStack {
                         Text("Name")
                         
                         Spacer()
                         
-                        Text(linked.name).foregroundStyle(.secondary)
+                        Text(linkedOperation.name)
+                            .foregroundStyle(.secondary)
                     }
                     
                     HStack {
@@ -90,7 +99,8 @@ struct OperationDetailView: View {
                         
                         Spacer()
                         
-                        Text(linked.amount, format: .currency(code: currency.rawValue)).foregroundStyle(.secondary)
+                        Text(linkedOperation.amount, format: .currency(code: currencyCode.rawValue))
+                            .foregroundStyle(.secondary)
                     }
                     
                     HStack {
@@ -98,7 +108,8 @@ struct OperationDetailView: View {
                         
                         Spacer()
                         
-                        Text(linkedAsset.name).foregroundStyle(.secondary)
+                        Text(linkedAsset.name)
+                            .foregroundStyle(.secondary)
                     }
                     
                     HStack {
@@ -106,7 +117,8 @@ struct OperationDetailView: View {
                         
                         Spacer()
                         
-                        Text(linked.date, format: .dateTime.day().month().year().hour().minute()).foregroundStyle(.secondary)
+                        Text(linkedOperation.date, format: .dateTime.day().month().year().hour().minute())
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -128,13 +140,13 @@ struct OperationDetailView: View {
             }
         }
         .navigationTitle("Details")
-        .onAppear() {
-            if let swapId = operation.swapId {
-                linkedOperation = operations.first(where: { op in
-                    op.id != operation.id && op.swapId == swapId
-                })
-            }
-        }
+//        .onAppear() {
+//            if let swapId = operation.swapId {
+//                linkedOperation = operations.first(where: { op in
+//                    op.id != operation.id && op.swapId == swapId
+//                })
+//            }
+//        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -143,12 +155,69 @@ struct OperationDetailView: View {
                     Label("Edit", systemImage: "pencil")
                 }
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(role: .destructive) {
+                    showDeleteDialog = true
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
         }
         .sheet(isPresented: $showEditSheet, content: {
             if let category = operation.category {
                 EditAssetOperationView(operation: operation, asset: asset, category: category)
             }
         })
+        .confirmationDialog("Are you sure you want to delete?", isPresented: $showDeleteDialog) {
+            if let linkedOperation = linkedOperation {
+                Button("Delete current", role: .destructive) {
+                    pendingDelete = .current
+                    
+                    modelContext.delete(operation)
+                    
+                    linkedOperation.swapId = nil
+                    
+                    pendingDelete = .none
+                    
+                    dismiss()
+                }
+                
+                Button("Delete linked", role: .destructive) {
+                    pendingDelete = .linked
+                    
+                    modelContext.delete(linkedOperation)
+                    
+                    operation.swapId = nil
+                    
+                    pendingDelete = .none
+                    
+                    dismiss()
+                }
+                
+                Button("Delete both", role: .destructive) {
+                    pendingDelete = .both
+                    modelContext.delete(operation)
+                    modelContext.delete(linkedOperation)
+                    
+                    pendingDelete = .none
+                    
+                    dismiss()
+                }
+            } else {
+                Button("Delete", role: .destructive) {
+                    pendingDelete = .current
+                    modelContext.delete(operation)
+                    pendingDelete = .none
+                    
+                    dismiss()
+                }
+            }
+            
+            Button("Cancel", role: .cancel) {
+                pendingDelete = .none
+            }
+        }
     }
 }
 
@@ -158,4 +227,3 @@ struct OperationDetailView: View {
         asset: Asset(name: "BuddyBank", initialBalance: 10000.0)
     )
 }
-

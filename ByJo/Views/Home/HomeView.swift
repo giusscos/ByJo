@@ -15,7 +15,7 @@ struct HomeView: View {
         case createGoal
         case viewGoal
         case viewCategories
-        case assetAmountSwap
+        case swapAssetOperation
         
         var id: String {
             switch self {
@@ -29,7 +29,7 @@ struct HomeView: View {
                     return "viewGoal"
                 case .viewCategories:
                     return "viewCategories"
-                case .assetAmountSwap:
+                case .swapAssetOperation:
                     return "assetAmountSwap"
             }
         }
@@ -143,9 +143,9 @@ struct HomeView: View {
                             }
                             
                             Button {
-                                activeSheet = .assetAmountSwap
+                                activeSheet = .swapAssetOperation
                             } label: {
-                                Label("Swap asset amount", systemImage: "arrow.trianglehead.swap")
+                                Label("Swap", systemImage: "arrow.up.arrow.down")
                             }
                         }
                         
@@ -212,7 +212,7 @@ struct HomeView: View {
                         GoalListView()
                     case .viewCategories:
                         CategoryOperationView()
-                    case .assetAmountSwap:
+                    case .swapAssetOperation:
                         if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
                             AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
                         }

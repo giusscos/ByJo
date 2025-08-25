@@ -18,6 +18,7 @@ struct AssetDetailView: View {
         case editGoal(Goal)
         case viewGoal
         case viewCategories
+        case swapAssetOperation
         
         var id: String {
             switch self {
@@ -35,6 +36,8 @@ struct AssetDetailView: View {
                     return "viewGoal"
                 case .viewCategories:
                     return "viewCategories"
+                case .swapAssetOperation:
+                    return "swapAssetOperation"
             }
         }
     }
@@ -44,6 +47,7 @@ struct AssetDetailView: View {
     var asset: Asset
 
     @Query var categories: [CategoryOperation]
+    @Query var assets: [Asset]
     
     @State private var activeSheet: ActiveSheet?
     @State private var filterCategory: CategoryOperation?
@@ -152,6 +156,12 @@ struct AssetDetailView: View {
                             } label: {
                                 Label("Edit asset", systemImage: "pencil")
                             }
+                            
+                            Button {
+                                activeSheet = .swapAssetOperation
+                            } label: {
+                                Label("Swap", systemImage: "arrow.up.arrow.down")
+                            }
                         }
                         
                         Section {
@@ -222,6 +232,12 @@ struct AssetDetailView: View {
                         GoalListView()
                     case .viewCategories:
                         CategoryOperationView()
+                    case .swapAssetOperation:
+                        if assets.count > 1, let assetTo = assets.filter({ asset in
+                            asset != self.asset
+                        }).first {
+                            AssetAmountSwapView(assetFrom: asset, assetTo: assetTo)
+                        }
                 }
             }
         }

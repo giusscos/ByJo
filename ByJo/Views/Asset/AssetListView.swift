@@ -30,6 +30,7 @@ struct AssetListView: View {
         case createGoal
         case editGoal(Goal)
         case viewCategories
+        case swapAssetOperation
         
         var id: String {
             switch self {
@@ -43,6 +44,8 @@ struct AssetListView: View {
                     return "editGoal-\(goal.id)"
                 case .viewCategories:
                     return "viewCategories"
+                case .swapAssetOperation:
+                    return "swapAssetOperation"
             }
         }
     }
@@ -169,12 +172,18 @@ struct AssetListView: View {
                             Section {
                                 Button {
                                     withAnimation {
-                                        withAnimation {
-                                            compactNumber.toggle()
-                                        }
+                                        compactNumber.toggle()
                                     }
                                 } label: {
                                     Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                                }
+                            }
+                            
+                            Section {
+                                Button {
+                                    activeSheet = .swapAssetOperation
+                                } label: {
+                                    Label("Swap", systemImage: "arrow.up.arrow.down")
                                 }
                             }
                             
@@ -275,6 +284,10 @@ struct AssetListView: View {
                         }
                     case .viewCategories:
                         CategoryOperationView()
+                    case .swapAssetOperation:
+                        if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
+                            AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
+                        }
                 }
             }
             .confirmationDialog("Delete Assets", isPresented: $showingBulkDeleteAlert) {

@@ -13,6 +13,7 @@ enum OperationListViewSheet: Identifiable {
     case edit(AssetOperation)
     case createAsset
     case viewCategories
+    case swapAssetOperation
     
     var id: String {
         switch self {
@@ -24,6 +25,8 @@ enum OperationListViewSheet: Identifiable {
                 return "createAsset"
             case .viewCategories:
                 return "viewCategories"
+            case .swapAssetOperation:
+                return "swapAssetOperation"
         }
     }
 }
@@ -45,6 +48,8 @@ struct OperationListView: View {
     }
     
     @Environment(\.modelContext) var modelContext
+    
+    @AppStorage("compactNumber") var compactNumber: Bool = true
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
     
@@ -184,10 +189,30 @@ struct OperationListView: View {
                             .disabled(selectedOperations.isEmpty)
                         } else {
                             Menu {
-                                Button {
-                                    activeSheet = .viewCategories
-                                } label: {
-                                    Label("Categories", systemImage: "list.bullet")
+                                Section {
+                                    Button {
+                                        withAnimation {
+                                            compactNumber.toggle()
+                                        }
+                                    } label: {
+                                        Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                                    }
+                                }
+                                
+                                Section {
+                                    Button {
+                                        activeSheet = .swapAssetOperation
+                                    } label: {
+                                        Label("Swap", systemImage: "arrow.up.arrow.down")
+                                    }
+                                }
+                                
+                                Section {
+                                    Button {
+                                        activeSheet = .viewCategories
+                                    } label: {
+                                        Label("Categories", systemImage: "list.bullet")
+                                    }
                                 }
                                 
                                 if !operations.isEmpty {
@@ -288,6 +313,10 @@ struct OperationListView: View {
                         EditAssetView()
                     case .viewCategories:
                         CategoryOperationView()
+                    case .swapAssetOperation:
+                        if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
+                            AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
+                        }
                 }
             }
             .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
