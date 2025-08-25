@@ -132,21 +132,21 @@ struct EditGoalView:View {
                 }
                 
                 ToolbarItem (placement: .topBarTrailing) {
-                    if #available(iOS 26, *) {
-                        Button (role: .confirm) {
-                            save()
-                        } label: {
-                            Label("Save", systemImage: "checkmark")
-                        }
-                        .disabled(title.isEmpty || targetAmount == nil)
-                    } else {
+//                    if #available(iOS 26, *) {
+//                        Button (role: .confirm) {
+//                            save()
+//                        } label: {
+//                            Label("Save", systemImage: "checkmark")
+//                        }
+//                        .disabled(title.isEmpty || targetAmount == nil)
+//                    } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
                         .disabled(title.isEmpty || targetAmount == nil)
-                    }
+//                    }
                 }
                 
                 ToolbarItem(placement: .keyboard) {

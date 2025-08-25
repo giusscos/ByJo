@@ -223,7 +223,6 @@ enum AssetType: String, CaseIterable, Codable {
     // Retirement Accounts
     case ira = "IRA"
     case rothIra = "Roth IRA"
-//    case 401k = "401(k)"
     case pensionPlan = "Pension Plan"
     case annuity = "Annuity"
     

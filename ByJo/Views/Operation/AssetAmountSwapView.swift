@@ -185,21 +185,21 @@ struct AssetAmountSwapView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    if #available(iOS 26, *) {
-                        Button (role: .confirm) {
-                            save()
-                        } label: {
-                            Label("Save", systemImage: "checkmark")
-                        }
-                        .disabled(nilAmount)
-                    } else {
+//                    if #available(iOS 26, *) {
+//                        Button (role: .confirm) {
+//                            save()
+//                        } label: {
+//                            Label("Save", systemImage: "checkmark")
+//                        }
+//                        .disabled(nilAmount)
+//                    } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
                         .disabled(nilAmount)
-                    }
+//                    }
                 }
                 
                 ToolbarItem(placement: .keyboard) {

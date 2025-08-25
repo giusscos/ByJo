@@ -165,21 +165,21 @@ struct EditAssetOperationView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    if #available(iOS 26, *) {
-                        Button(role: .confirm) {
-                            save()
-                        } label: {
-                            Label("Save", systemImage: "checkmark")
-                        }
-                        .disabled(name.isEmpty || amount == nil)
-                    } else {
+//                    if #available(iOS 26, *) {
+//                        Button(role: .confirm) {
+//                            save()
+//                        } label: {
+//                            Label("Save", systemImage: "checkmark")
+//                        }
+//                        .disabled(name.isEmpty || amount == nil)
+//                    } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
                         .disabled(name.isEmpty || amount == nil)
-                    }
+//                    }
                 }
                 
                 ToolbarItem(placement: .keyboard) {

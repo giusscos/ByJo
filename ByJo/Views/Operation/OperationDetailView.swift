@@ -140,13 +140,6 @@ struct OperationDetailView: View {
             }
         }
         .navigationTitle("Details")
-//        .onAppear() {
-//            if let swapId = operation.swapId {
-//                linkedOperation = operations.first(where: { op in
-//                    op.id != operation.id && op.swapId == swapId
-//                })
-//            }
-//        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

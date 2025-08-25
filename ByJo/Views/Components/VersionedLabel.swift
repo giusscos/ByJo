@@ -13,10 +13,10 @@ struct VersionedLabel: View {
     let oldSystemImage: String
 
     var body: some View {
-        if #available(iOS 26, *) {
-            Label(title, systemImage: newSystemImage)
-        } else {
+//        if #available(iOS 26, *) {
+//            Label(title, systemImage: newSystemImage)
+//        } else {
             Label(title, systemImage: oldSystemImage)
-        }
+//        }
     }
 }

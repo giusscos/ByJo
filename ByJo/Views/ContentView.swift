@@ -50,10 +50,6 @@ struct ContentView: View {
                 Tab("Operations", systemImage: "book.pages") {
                     OperationListView()
                 }
-                
-//                Tab("Settings", systemImage: "gear") {
-//                    SettingsView()
-//                }
             }
             .fullScreenCover(item: $activeSheet, content: { sheet in
                 switch sheet {
