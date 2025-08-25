@@ -7,20 +7,35 @@
 
 import SwiftData
 import SwiftUI
+import Foundation
 
 struct OperationDetailView: View {
     @Environment(\.modelContext) var modelContext
     
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
     
+    @Query var operations: [AssetOperation]
+    
     var operation: AssetOperation
+    
     var asset: Asset
+    
+    @State var linkedOperation: AssetOperation? = nil
     
     @State var showEditSheet: Bool = false
     
     var body: some View {
         List {
             Section {
+                HStack {
+                    Text("Name")
+                    
+                    Spacer()
+                    
+                    Text(operation.name)
+                        .foregroundStyle(.secondary)
+                }
+
                 HStack {
                     Text("Amount")
                     
@@ -40,7 +55,7 @@ struct OperationDetailView: View {
                 }
                             
                 HStack {
-                    Text("Added on")
+                    Text("Date")
                     
                     Spacer()
                     
@@ -60,33 +75,66 @@ struct OperationDetailView: View {
                 }
             }
             
-            if let category = operation.category {
-                Section {
+            if let linked = linkedOperation, let linkedAsset = linked.asset {
+                Section("Linked Operation") {
                     HStack {
-                        Text("Category")
+                        Text("Name")
                         
                         Spacer()
                         
-                        Text(category.name)
-                            .foregroundStyle(.secondary)
+                        Text(linked.name).foregroundStyle(.secondary)
+                    }
+                    
+                    HStack {
+                        Text("Amount")
+                        
+                        Spacer()
+                        
+                        Text(linked.amount, format: .currency(code: currency.rawValue)).foregroundStyle(.secondary)
+                    }
+                    
+                    HStack {
+                        Text("Asset")
+                        
+                        Spacer()
+                        
+                        Text(linkedAsset.name).foregroundStyle(.secondary)
+                    }
+                    
+                    HStack {
+                        Text("Date")
+                        
+                        Spacer()
+                        
+                        Text(linked.date, format: .dateTime.day().month().year().hour().minute()).foregroundStyle(.secondary)
                     }
                 }
             }
             
+            if let category = operation.category {
+                Section("Category") {
+                    Text(category.name)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            
             if !operation.note.isEmpty {
-                Section {
-                    VStack (alignment: .leading) {
-                        Text("Note")
-                        
-                        Text(operation.note)
-                            .font(.body)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
-                    }
+                Section("Note") {
+                    Text(operation.note)
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
-        .navigationTitle(operation.name)
+        .navigationTitle("Details")
+        .onAppear() {
+            if let swapId = operation.swapId {
+                linkedOperation = operations.first(where: { op in
+                    op.id != operation.id && op.swapId == swapId
+                })
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -110,3 +158,4 @@ struct OperationDetailView: View {
         asset: Asset(name: "BuddyBank", initialBalance: 10000.0)
     )
 }
+

@@ -11,6 +11,7 @@ import SwiftUI
 struct AssetAmountSwapView: View {
     enum FocusField: Hashable {
         case amount
+        case note
     }
     
     @FocusState private var focusedField: FocusField?
@@ -21,11 +22,16 @@ struct AssetAmountSwapView: View {
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     
     @Query var assets: [Asset]
+    @Query var categoriesOperation: [CategoryOperation]
     
     @State var assetFrom: Asset
     @State var assetTo: Asset
     
     @State private var amountToSwap: Decimal?
+    
+    @State private var selectedCategory: CategoryOperation?
+    @State private var date: Date = .now
+    @State private var note: String = ""
     
     var nilAmount: Bool {
         amountToSwap == nil || amountToSwap == .zero
@@ -72,11 +78,22 @@ struct AssetAmountSwapView: View {
                 .listRowSeparator(.hidden)
                 
                 Section {
-                    VStack {
-                        Image(systemName: "arrow.down")
-                            .imageScale(.large)
-                            .font(.title3)
-                            .fontWeight(.semibold)
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            let temp = assetFrom
+                            
+                            assetFrom = assetTo
+                            assetTo = temp
+                        }) {
+                            Image(systemName: "arrow.up.arrow.down")
+                                .imageScale(.large)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                        }
+                        
+                        Spacer()
                     }
                 }
                 .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -118,7 +135,7 @@ struct AssetAmountSwapView: View {
                 }
                 .listRowSeparator(.hidden)
                 
-                Section {
+                Section("Details") {
                     HStack (spacing: 6) {
                         Text(currencyCode.symbol)
                             .foregroundStyle(nilAmount ? .secondary : .primary)
@@ -126,10 +143,35 @@ struct AssetAmountSwapView: View {
                         
                         TextField("Amount", value: $amountToSwap, format: .number.precision(.fractionLength(2)))
                             .keyboardType(.decimalPad)
-                            .font(.headline)
                             .focused($focusedField, equals: .amount)
-                            .submitLabel(.done)
+                            .submitLabel(.next)
+                            .onSubmit {
+                                focusedField = .note
+                            }
                     }
+                    
+                    Picker("Category", selection: $selectedCategory) {
+                        ForEach(categoriesOperation) { category in
+                            Text(category.name).tag(category as CategoryOperation?)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .disabled(categoriesOperation.isEmpty)
+                    
+                    DatePicker("Date", selection: $date)
+                    
+                    TextEditor(text: $note)
+                        .autocorrectionDisabled()
+                        .overlay(alignment: .topLeading) {
+                            if note.isEmpty {
+                                Text("Insert note")
+                                    .foregroundColor(.secondary.opacity(0.5))
+                                    .padding(.horizontal, 2)
+                                    .padding(.vertical, 8)
+                            }
+                        }
+                        .focused($focusedField, equals: .note)
+                        .frame(minHeight: 60, maxHeight: 180)
                 }
             }
             .navigationTitle("Swap")
@@ -170,20 +212,44 @@ struct AssetAmountSwapView: View {
             }
             .onAppear() {
                 focusedField = .amount
+                
+                if let firstCategory = categoriesOperation.first {
+                    selectedCategory = firstCategory
+                }
             }
         }
     }
     
     private func save() {
         guard let amount = amountToSwap, amount != 0, assetFrom.id != assetTo.id else { return }
+        guard let category = selectedCategory else { return }
         
-        let swap = SwapOperation(
-            assetFrom: assetTo,
-            assetTo: assetFrom,
-            amount: amount
-        )
+        let swapId = UUID()
+                
+        let swaps = [
+            AssetOperation(
+                name: "Swap",
+                date: date,
+                amount: amount,
+                asset: assetTo,
+                category: category,
+                note: note,
+                swapId: swapId,
+            ),
+            AssetOperation(
+                name: "Swap",
+                date: date,
+                amount: -amount,
+                asset: assetFrom,
+                category: category,
+                note: note,
+                swapId: swapId
+            ),
+        ]
         
-        modelContext.insert(swap)
+        for swap in swaps {
+            modelContext.insert(swap)
+        }
         
         dismiss()
     }

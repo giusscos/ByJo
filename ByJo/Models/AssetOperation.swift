@@ -20,6 +20,8 @@ final class AssetOperation {
     var asset: Asset?
     var category: CategoryOperation?
     
+    var swapId: UUID? = nil
+    
     init (
         id: UUID = UUID(),
         name: String = "",
@@ -29,6 +31,7 @@ final class AssetOperation {
         category: CategoryOperation? = nil,
         note: String = "",
         frequency: RecurrenceFrequency = RecurrenceFrequency.single,
+        swapId: UUID? = nil
     ) {
         self.id = id
         self.name = name
@@ -38,7 +41,15 @@ final class AssetOperation {
         self.category = category
         self.note = note
         self.frequency = frequency
+        self.swapId = swapId
     }
+}
+
+struct OperationByDate: Identifiable {
+    var date: Date
+    var operations: [AssetOperation]
+    
+    var id: Date { date }
 }
 
 func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {

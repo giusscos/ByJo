@@ -197,7 +197,7 @@ struct EditAssetOperationView: View {
             if let operation = operation {
                 name = operation.name
                 date = operation.date
-                amount = operation.amount
+                amount = abs(operation.amount)
                 
                 if operation.amount < 0 {
                     operationType = .expense

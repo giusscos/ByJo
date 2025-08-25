@@ -8,26 +8,27 @@
 import SwiftUI
 import SwiftData
 
-struct OperationListView: View {
-    enum ActiveSheet: Identifiable {
-        case create
-        case edit(AssetOperation)
-        case createAsset
-        case viewCategories
-        
-        var id: String {
-            switch self {
-                case .create:
-                    return "create"
-                case .edit(let operation):
-                    return "edit-\(operation.id)"
-                case .createAsset:
-                    return "createAsset"
-                case .viewCategories:
-                    return "viewCategories"
-            }
+enum OperationListViewSheet: Identifiable {
+    case create
+    case edit(AssetOperation)
+    case createAsset
+    case viewCategories
+    
+    var id: String {
+        switch self {
+            case .create:
+                return "create"
+            case .edit(let operation):
+                return "edit-\(operation.id)"
+            case .createAsset:
+                return "createAsset"
+            case .viewCategories:
+                return "viewCategories"
         }
     }
+}
+
+struct OperationListView: View {
     
     enum OperationSortOrder: String, CaseIterable, Codable {
         case date
@@ -51,7 +52,7 @@ struct OperationListView: View {
     
     @Query var categories: [CategoryOperation]
     
-    @State private var activeSheet: ActiveSheet?
+    @State private var activeSheet: OperationListViewSheet?
     @State private var operationToDelete: AssetOperation?
     @State private var showingBulkDeleteAlert = false
     
@@ -150,37 +151,7 @@ struct OperationListView: View {
                     }
                     .frame(maxWidth: .infinity)
                 } else {
-                    ForEach(filteredAndSortedOperations) { item in
-                        Section {
-                            ForEach(item.operations) { operation in
-                                if let asset = operation.asset {
-                                    NavigationLink {
-                                        OperationDetailView(operation: operation, asset: asset)
-                                    } label: {
-                                        OperationRow(operation: operation, asset: asset)
-                                    }
-                                    .tag(operation)
-                                    .swipeActions(edge: .trailing) {
-                                        Button(role: .destructive) {
-                                            deleteOperation(operation: operation)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                        
-                                        Button {
-                                            activeSheet = .edit(operation)
-                                        } label: {
-                                            Label("Edit", systemImage: "pencil")
-                                        }
-                                        .tint(.blue)
-                                    }
-                                }
-                            }
-                        } header: {
-                            Text(item.date.formatted(.dateTime.day().month().year()))
-                                .headerProminence(.increased)
-                        }
-                    }
+                    OperationByDateSectionView(filteredAndSortedOperations: filteredAndSortedOperations, activeSheet: $activeSheet)
                 }
             }
             .navigationTitle("Operations")
@@ -328,13 +299,6 @@ struct OperationListView: View {
         }
     }
     
-    private func deleteOperation(operation: AssetOperation) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
-        
-        modelContext.delete(operation)
-    }
-    
     private func deleteSelectedOperations() {
         for operation in selectedOperations {
             modelContext.delete(operation)
@@ -346,14 +310,6 @@ struct OperationListView: View {
     }
 }
 
-struct OperationByDate: Identifiable {
-    var date: Date
-    var operations: [AssetOperation]
-    
-    var id: Date { date }
-}
-
 #Preview {
     OperationListView()
 }
-

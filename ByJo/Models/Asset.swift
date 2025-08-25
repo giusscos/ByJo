@@ -18,8 +18,6 @@ final class Asset {
     
     @Relationship(deleteRule: .cascade) var operations: [AssetOperation]?
     @Relationship(deleteRule: .cascade) var goals: [Goal]?
-    @Relationship(deleteRule: .cascade, inverse: \SwapOperation.assetFrom) var swapsFrom: [SwapOperation]?
-    @Relationship(deleteRule: .cascade, inverse: \SwapOperation.assetTo) var swapsTo: [SwapOperation]?
     
     init(name: String, type: AssetType = AssetType.cash, initialBalance: Decimal) {
         self.id = UUID()
