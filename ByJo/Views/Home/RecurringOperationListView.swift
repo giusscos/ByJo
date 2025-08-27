@@ -40,19 +40,17 @@ struct RecurringOperationListView: View {
                 ForEach(filteredOperations) { item in
                     Section {
                         ForEach(item.operations) { operation in
-                            if let asset = operation.asset {
-                                NavigationLink {
-                                    OperationDetailView(operation: operation, asset: asset)
+                            NavigationLink {
+                                OperationDetailView(operation: operation)
+                            } label: {
+                                OperationRow(operation: operation)
+                            }
+                            .tag(operation)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    deleteOperation(operation: operation)
                                 } label: {
-                                    OperationRow(operation: operation, asset: asset)
-                                }
-                                .tag(operation)
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
-                                        deleteOperation(operation: operation)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                         }

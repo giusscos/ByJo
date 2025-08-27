@@ -32,7 +32,7 @@ struct EditAssetOperationView: View {
     @State private var date: Date = .now
     @State private var operationType: OperationType = .income
     @State private var amount: Decimal?
-    @State var asset: Asset
+    @State var asset: Asset?
     @State var category: CategoryOperation
     @State private var note: String = ""
     @State private var frequency: RecurrenceFrequency = .single
@@ -165,21 +165,21 @@ struct EditAssetOperationView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-//                    if #available(iOS 26, *) {
-//                        Button(role: .confirm) {
-//                            save()
-//                        } label: {
-//                            Label("Save", systemImage: "checkmark")
-//                        }
-//                        .disabled(name.isEmpty || amount == nil)
-//                    } else {
+                    if #available(iOS 26, *) {
+                        Button(role: .confirm) {
+                            save()
+                        } label: {
+                            Label("Save", systemImage: "checkmark")
+                        }
+                        .disabled(name.isEmpty || amount == nil)
+                    } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
                         .disabled(name.isEmpty || amount == nil)
-//                    }
+                    }
                 }
                 
                 ToolbarItem(placement: .keyboard) {
@@ -213,6 +213,10 @@ struct EditAssetOperationView: View {
                 if operation.category == nil {
                     operation.category = category
                 }
+            }
+            
+            if let firstAsset = assets.first {
+                asset = firstAsset
             }
         }
     }
@@ -314,7 +318,7 @@ struct EditAssetOperationView: View {
                 date: .now,
                 amount: 100.0,
                 asset: Asset(name: "Cash", initialBalance: 10000)),
-        asset: Asset(name: "Bank", initialBalance: 100.0),
+        asset: Asset(name: "Cash", initialBalance: 10000),
         category: CategoryOperation(name: "Bank account")
     )
 }

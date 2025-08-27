@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct AssetOperationRow: View {
-    @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
 
     var operation: AssetOperation
-    var asset: Asset
     
     var body: some View {
         HStack (spacing: 6) {
@@ -40,9 +39,10 @@ struct AssetOperationRow: View {
             .imageScale(.large)
             .fontWeight(.semibold)
             
-            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: .currency(code: currency.rawValue).notation(.compactName))
+            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: .currency(code: currencyCode.rawValue).notation(.compactName))
                 .font(.title)
                 .fontWeight(.semibold)
+                .lineLimit(1)
         }
     }
 }
@@ -56,6 +56,5 @@ struct AssetOperationRow: View {
                 amount: 100.0,
                 asset: Asset(name: "Cash", initialBalance: 10000.0)
             ),
-        asset: Asset(name: "BuddyBank", initialBalance: 1000.0)
     )
 }

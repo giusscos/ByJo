@@ -88,9 +88,9 @@ struct AssetDetailView: View {
                         Section {
                             ForEach(item.operations) { operation in
                                 NavigationLink {
-                                    OperationDetailView(operation: operation, asset: asset)
+                                    OperationDetailView(operation: operation)
                                 } label: {
-                                    AssetOperationRow(operation: operation, asset: asset)
+                                    AssetOperationRow(operation: operation)
                                 }
                                 .swipeActions (edge: .trailing) {
                                     Button (role: .destructive) {
@@ -154,7 +154,7 @@ struct AssetDetailView: View {
                             Button {
                                 activeSheet = .editAsset
                             } label: {
-                                Label("Edit asset", systemImage: "pencil")
+                                Label("Edit", systemImage: "pencil")
                             }
                             
                             Button {

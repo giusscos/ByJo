@@ -24,30 +24,27 @@ struct OperationByDateSectionView: View {
         ForEach(filteredAndSortedOperations) { item in
             Section {
                 ForEach(item.operations) { operation in
-                    if let asset = operation.asset {
-                                                
-                        let linkedOperation = linkedOperation(for: operation, in: item.operations)
-                        
-                        NavigationLink {
-                            OperationDetailView(operation: operation, linkedOperation: linkedOperation, asset: asset)
+                    let linkedOperation = linkedOperation(for: operation, in: item.operations)
+                    
+                    NavigationLink {
+                        OperationDetailView(operation: operation, linkedOperation: linkedOperation)
+                    } label: {
+                        OperationRow(operation: operation)
+                    }
+                    .tag(operation)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            deleteOperation(operation: operation, linkedOperation: linkedOperation)
                         } label: {
-                            OperationRow(operation: operation, asset: asset)
+                            Label("Delete", systemImage: "trash")
                         }
-                        .tag(operation)
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                deleteOperation(operation: operation, linkedOperation: linkedOperation)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                            
-                            Button {
-                                activeSheet = .edit(operation)
-                            } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }
-                            .tint(.blue)
+                        
+                        Button {
+                            activeSheet = .edit(operation)
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
                         }
+                        .tint(.blue)
                     }
                 }
             } header: {
@@ -67,7 +64,9 @@ struct OperationByDateSectionView: View {
             linkedOperation.swapId = nil
         }
         
-        modelContext.delete(operation)
+        withAnimation {
+            modelContext.delete(operation)
+        }
     }
 }
 

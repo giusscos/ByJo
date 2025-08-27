@@ -26,7 +26,6 @@ struct OperationDetailView: View {
     
     var operation: AssetOperation
     var linkedOperation: AssetOperation? = nil
-    var asset: Asset
     
     @State var showEditSheet: Bool = false
     @State var showDeleteDialog: Bool = false
@@ -53,13 +52,15 @@ struct OperationDetailView: View {
                         .foregroundStyle(.secondary)
                 }
                 
-                HStack {
-                    Text("Asset")
-                    
-                    Spacer()
-                    
-                    Text("\(asset.name)")
-                        .foregroundStyle(.secondary)
+                if let asset = operation.asset {
+                    HStack {
+                        Text("Asset")
+                        
+                        Spacer()
+                        
+                        Text("\(asset.name)")
+                            .foregroundStyle(.secondary)
+                    }
                 }
                             
                 HStack {
@@ -159,7 +160,7 @@ struct OperationDetailView: View {
         }
         .sheet(isPresented: $showEditSheet, content: {
             if let category = operation.category {
-                EditAssetOperationView(operation: operation, asset: asset, category: category)
+                EditAssetOperationView(operation: operation, category: category)
             }
         })
         .confirmationDialog("Are you sure you want to delete?", isPresented: $showDeleteDialog) {
@@ -216,7 +217,6 @@ struct OperationDetailView: View {
 
 #Preview {
     OperationDetailView(
-        operation: AssetOperation(date: .now, amount: 100.0),
-        asset: Asset(name: "BuddyBank", initialBalance: 10000.0)
+        operation: AssetOperation(date: .now, amount: 100.0)
     )
 }

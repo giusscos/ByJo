@@ -12,7 +12,6 @@ struct OperationRow: View {
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
     var operation: AssetOperation
-    var asset: Asset
     
     var body: some View {
         HStack (spacing: 6) {
@@ -24,9 +23,11 @@ struct OperationRow: View {
                 HStack (alignment: .lastTextBaseline, spacing: 4) {
                     Text(operation.date, format: .dateTime.hour().minute())
 
-                    Text("on")
-
-                    Text(asset.name)
+                    if let asset = operation.asset {
+                        Text("on")
+                        
+                        Text(asset.name)
+                    }
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -51,6 +52,7 @@ struct OperationRow: View {
                 .font(.title)
                 .fontWeight(.semibold)
                 .contentTransition(.numericText(value: compactNumber ? 0 : 1))
+                .lineLimit(1)
         }
     }
 }
@@ -64,6 +66,5 @@ struct OperationRow: View {
             asset: Asset(name: "BuddyBank", initialBalance: 10000.0),
             category: CategoryOperation(name: "Bank Accouunt")
         ),
-         asset: Asset(name: "BuddyBank", initialBalance: 10000.0)
     )
 }

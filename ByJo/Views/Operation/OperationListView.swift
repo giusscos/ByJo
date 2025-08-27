@@ -330,7 +330,9 @@ struct OperationListView: View {
     
     private func deleteSelectedOperations() {
         for operation in selectedOperations {
-            modelContext.delete(operation)
+            withAnimation {
+                modelContext.delete(operation)
+            }
         }
         
         selectedOperations.removeAll()
