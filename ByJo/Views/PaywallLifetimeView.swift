@@ -9,23 +9,41 @@ import StoreKit
 import SwiftUI
 
 struct PaywallLifetimeView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     @State var storeKit = Store()
-    
+
     var body: some View {
-        StoreView(ids: storeKit.productLifetimeIds) { product in
-            Image("paywall-lifetime")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 60, height: 60)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+        VStack(spacing: 0) {
+            VStack(spacing: 8) {
+                Image(systemName: "infinity.circle.fill")
+                    .font(.system(size: 44))
+                    .foregroundStyle(.green)
+
+                Text("Lifetime Access")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("Pay once. No renewals, no limits. Yours forever.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+            .padding(.top, 28)
+            .padding(.bottom, 8)
+
+            StoreView(ids: storeKit.productLifetimeIds) { _ in
+                Image("paywall-lifetime")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .clipShape(.rect(cornerRadius: 12))
+            }
+            .padding(.vertical)
+            .padding(.horizontal, 8)
+            .productViewStyle(.compact)
+            .storeButton(.visible, for: .restorePurchases)
+            .storeButton(.hidden, for: .cancellation)
         }
-        .padding(.vertical)
-        .padding(.horizontal, 8)
-        .productViewStyle(.compact)
-        .storeButton(.visible, for: .restorePurchases)
-        .storeButton(.hidden, for: .cancellation)
         .presentationDragIndicator(.visible)
     }
 }

@@ -218,11 +218,11 @@ struct HomeView: View {
                         }
                 }
             }
-            .onAppear() {
-                if assets.count > 0 && operations.count > 5 {
-                    requestReview()
-                }
-            }
+//            .onAppear() {
+//                if assets.count > 0 && operations.count > 5 {
+//                    requestReview()
+//                }
+//            }
         }
     }
 }

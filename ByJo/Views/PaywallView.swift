@@ -9,137 +9,98 @@ import StoreKit
 import SwiftUI
 
 struct PaywallView: View {
-    @State private var currentIndex: Int = 0
-    @State private var timer: Timer? = nil
-    
     @State private var showLifetimePlans: Bool = false
-    
-    private let contentData = [
-        (
-            title: "Privacy first.",
-            description: "ByJo do not collect, track or share any type of data.",
-            imageName: "lock.fill"
-        ),
-        (
-            title: "Focus on what really matters.",
-            description: "Designed with simplicity in mind to help you manage your finances effectively.",
-            imageName: "brain.head.profile"
-        ),
-        (
-            title: "Achieve Your Goals.",
-            description: "Set goals to achieve your financial freedom.",
-            imageName: "target"
-        ),
-        (
-            title: "Manage Your Assets with ease.",
-            description: "View, filter and manage all your assets and operations in a single place.",
-            imageName: "book.pages"
-        )
+
+    private let features = [
+        "Track every asset and account",
+        "Set goals and watch them grow",
+        "Never miss a scheduled payment",
+        "Your full net worth, at a glance"
     ]
-    
-    private let slideInterval: TimeInterval = 7
-    
+
     var body: some View {
         NavigationStack {
             SubscriptionStoreView(groupID: Store().groupId) {
-                VStack (spacing: 16) {
+                VStack(spacing: 24) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 22)
+                            .fill(LinearGradient(
+                                colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
+                            .frame(width: 88, height: 88)
+                            .shadow(color: Color.accentColor.opacity(0.4), radius: 16, y: 6)
+
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                            .font(.system(size: 38, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.top, 36)
+
+                    VStack(spacing: 2) {
+                        Text("Your Finances,")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+
+                        Text("Under Control.")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color.accentColor)
+                    }
+                    .multilineTextAlignment(.center)
+
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(features, id: \.self) { feature in
+                            Label {
+                                Text(feature)
+                                    .font(.subheadline)
+                            } icon: {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(Color.accentColor)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(20)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    .padding(.horizontal, 20)
+
+                    Spacer(minLength: 8)
+
                     Button {
                         showLifetimePlans = true
                     } label: {
-                        Label("Save with Lifetime plans", systemImage: "sparkle")
-                            .font(.headline)
+                        Label("Pay once, use forever", systemImage: "infinity")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                     }
                     .tint(.green)
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.capsule)
-                    .padding()
-                    
-                    Spacer()
-                    
-                    TabView(selection: $currentIndex) {
-                        ForEach(0..<contentData.count, id: \.self) { index in
-                            VStack(alignment: .center) {
-                                Image(systemName: contentData[index].imageName)
-                                    .imageScale(.large)
-                                    .font(.title)
-                                    .foregroundStyle(Color.accentColor)
-                                
-                                Text(contentData[index].title)
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                                    .multilineTextAlignment(.center)
-                                
-                                Text(contentData[index].description)
-                                    .font(.title3)
-                                    .fontWeight(.medium)
-                                    .foregroundStyle(.secondary)
-                                    .multilineTextAlignment(.center)
-                            }
-                            .tag(index)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        }
+
+                    HStack(spacing: 6) {
+                        Link("Terms", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                        Text("·")
+                        Link("Privacy", destination: URL(string: "https://giusscos.it/privacy")!)
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .never))
-                    
-                    Spacer()
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Link("Terms of use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-                            .foregroundColor(.primary)
-                            .buttonStyle(.plain)
-                        
-                        Text("and")
-                            .foregroundStyle(.secondary)
-                        
-                        Link("Privacy Policy", destination: URL(string: "https://giusscos.it/privacy")!)
-                            .foregroundColor(.primary)
-                            .buttonStyle(.plain)
-                        
-                        Spacer()
-                    }
-                    .font(.caption)
-                    .padding()
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .padding(.bottom, 12)
                 }
                 .frame(maxWidth: 650)
-                .frame(minHeight: 300)
             }
             .subscriptionStoreControlStyle(.pagedProminentPicker, placement: .bottomBar)
             .subscriptionStoreButtonLabel(.multiline)
             .storeButton(.visible, for: .restorePurchases)
             .storeButton(.hidden, for: .cancellation)
             .interactiveDismissDisabled()
+            .preferredColorScheme(.dark)
             .sheet(isPresented: $showLifetimePlans) {
                 PaywallLifetimeView()
                     .presentationDetents(.init([.medium]))
             }
-            .onAppear {
-                startTimer()
-            }
-            .onDisappear {
-                stopTimer()
-            }
         }
-    }
-    
-    private func startTimer() {
-        stopTimer()
-        timer = Timer.scheduledTimer(withTimeInterval: slideInterval, repeats: true) { _ in
-            withAnimation {
-                if currentIndex >= contentData.count - 1 {
-                    currentIndex = 0
-                } else {
-                    currentIndex += 1
-                }
-            }
-        }
-    }
-    
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
     }
 }
 
