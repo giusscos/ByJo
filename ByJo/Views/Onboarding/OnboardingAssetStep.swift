@@ -21,12 +21,7 @@ struct OnboardingAssetStep: View {
     private var isDisabled: Bool { name.isEmpty || balance == nil }
 
     var body: some View {
-        OnboardingStepLayout(
-            primaryLabel: "Save",
-            primaryDisabled: isDisabled,
-            primaryAction: onContinue,
-            primaryInToolbar: true
-        ) {
+        ScrollView(showsIndicators: false) {
             ScrollViewReader { proxy in
                 VStack(spacing: 30) {
                     VStack(spacing: 24) {
@@ -135,7 +130,16 @@ struct OnboardingAssetStep: View {
                 }
             }
         }
+        .background(KeyboardDismissOnAppear())
+        .scrollDismissesKeyboard(.interactively)
+        .ignoresSafeArea(.keyboard)
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save", action: onContinue)
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .disabled(isDisabled)
+            }
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button { focusedField = nil } label: {
@@ -147,5 +151,6 @@ struct OnboardingAssetStep: View {
             appeared = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { focusedField = .name }
         }
+        .onDisappear { focusedField = nil }
     }
 }

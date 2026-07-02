@@ -1,7 +1,6 @@
 //
 //  OnboardingCurrencyStep.swift
 //  ByJo
-//
 
 import SwiftUI
 
@@ -18,7 +17,7 @@ struct OnboardingCurrencyStep: View {
     ]
 
     var body: some View {
-        OnboardingStepLayout(primaryLabel: "Continue", primaryAction: onContinue) {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
                 VStack(spacing: 16) {
                     ZStack {
@@ -57,6 +56,9 @@ struct OnboardingCurrencyStep: View {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                                 currencyCode = currency
                             }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                                onContinue()
+                            }
                         } label: {
                             VStack(spacing: 4) {
                                 Text(currency.symbol)
@@ -80,6 +82,7 @@ struct OnboardingCurrencyStep: View {
                 .onboardingAppear(appeared, delay: 0.24)
             }
         }
+        .background(KeyboardDismissOnAppear())
         .onAppear { appeared = true }
     }
 }

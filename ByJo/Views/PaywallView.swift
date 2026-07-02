@@ -9,6 +9,8 @@ import StoreKit
 import SwiftUI
 
 struct PaywallView: View {
+    @Environment(\.dismiss) private var dismiss
+    var store: Store
     @State private var showLifetimePlans: Bool = false
 
     private let features = [
@@ -20,7 +22,7 @@ struct PaywallView: View {
 
     var body: some View {
         NavigationStack {
-            SubscriptionStoreView(groupID: Store().groupId) {
+            SubscriptionStoreView(groupID: store.groupId) {
                 VStack(spacing: 24) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 22)
@@ -66,8 +68,6 @@ struct PaywallView: View {
                     .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
                     .padding(.horizontal, 20)
 
-                    Spacer(minLength: 8)
-
                     Button {
                         showLifetimePlans = true
                     } label: {
@@ -75,29 +75,39 @@ struct PaywallView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                     }
-                    .tint(.green)
+                    .tint(.accentColor)
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.capsule)
 
                     HStack(spacing: 6) {
                         Link("Terms", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                            .buttonStyle(.borderless)
                         Text("·")
+                            .foregroundStyle(.secondary)
                         Link("Privacy", destination: URL(string: "https://giusscos.it/privacy")!)
+                            .buttonStyle(.borderless)
                     }
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .font(.caption)
                     .padding(.bottom, 12)
                 }
-                .frame(maxWidth: 650)
             }
             .subscriptionStoreControlStyle(.pagedProminentPicker, placement: .bottomBar)
             .subscriptionStoreButtonLabel(.multiline)
             .storeButton(.visible, for: .restorePurchases)
             .storeButton(.hidden, for: .cancellation)
+            .storeButton(.hidden, for: .policies)
             .interactiveDismissDisabled()
-            .preferredColorScheme(.dark)
+            .subscriptionStatusTask(for: store.groupId) { taskState in
+                if let statuses = taskState.value,
+                   statuses.contains(where: { $0.state == .subscribed || $0.state == .inGracePeriod }) {
+                    await MainActor.run { dismiss() }
+                }
+            }
+            .onChange(of: store.purchasedProducts) { _, products in
+                if !products.isEmpty { dismiss() }
+            }
             .sheet(isPresented: $showLifetimePlans) {
-                PaywallLifetimeView()
+                PaywallLifetimeView(store: store)
                     .presentationDetents(.init([.medium]))
             }
         }
@@ -105,5 +115,5 @@ struct PaywallView: View {
 }
 
 #Preview {
-    PaywallView()
+    PaywallView(store: Store())
 }

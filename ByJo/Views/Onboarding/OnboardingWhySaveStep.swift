@@ -11,7 +11,7 @@ struct OnboardingWhySaveStep: View {
     @State private var appeared = false
 
     var body: some View {
-        OnboardingStepLayout(primaryLabel: "Next", primaryAction: onContinue) {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 32) {
                 VStack(spacing: 16) {
                     ZStack {
@@ -62,6 +62,21 @@ struct OnboardingWhySaveStep: View {
                         .onboardingAppear(appeared, delay: 0.48)
                 }
                 .padding(.horizontal, 24)
+            }
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .ignoresSafeArea(.keyboard)
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
+                Button(action: onContinue) {
+                    Text("Next")
+                        .font(.headline)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .controlSize(.large)
+                Spacer()
             }
         }
         .onAppear { appeared = true }

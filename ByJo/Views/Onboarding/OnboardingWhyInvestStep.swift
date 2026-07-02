@@ -11,7 +11,7 @@ struct OnboardingWhyInvestStep: View {
     @State private var appeared = false
 
     var body: some View {
-        OnboardingStepLayout(primaryLabel: "Let's Set Up ByJo", primaryAction: onContinue) {
+        ScrollView(showsIndicators: false) {
             VStack(spacing: 30) {
                 VStack(spacing: 24) {
                     ZStack {
@@ -61,6 +61,21 @@ struct OnboardingWhyInvestStep: View {
                         .onboardingAppear(appeared, delay: 0.48)
                 }
                 .padding(.horizontal, 24)
+            }
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .ignoresSafeArea(.keyboard)
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
+                Button(action: onContinue) {
+                    Text("Let's Set Up ByJo")
+                        .font(.headline)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .controlSize(.large)
+                Spacer()
             }
         }
         .onAppear { appeared = true }

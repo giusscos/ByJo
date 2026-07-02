@@ -41,18 +41,21 @@ struct OnboardingWelcomeStep: View {
             }
 
             Spacer()
-
-            Button(action: onStart) {
-                Text("Get Started")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 4)
+        }
+        .background(KeyboardDismissOnAppear())
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
+                Button(action: onStart) {
+                    Text("Get Started")
+                        .font(.headline)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .controlSize(.large)
+                .onboardingAppear(appeared, delay: 0.30)
+                Spacer()
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.capsule)
-            .controlSize(.large)
-            .padding(.horizontal, 24)
-            .onboardingAppear(appeared, delay: 0.30)
         }
         .onAppear { appeared = true }
     }

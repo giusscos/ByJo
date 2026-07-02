@@ -9,7 +9,8 @@ import StoreKit
 import SwiftUI
 
 struct PaywallLifetimeView: View {
-    @State var storeKit = Store()
+    @Environment(\.dismiss) private var dismiss
+    var store: Store
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,7 +32,7 @@ struct PaywallLifetimeView: View {
             .padding(.top, 28)
             .padding(.bottom, 8)
 
-            StoreView(ids: storeKit.productLifetimeIds) { _ in
+            StoreView(ids: store.productLifetimeIds) { _ in
                 Image("paywall-lifetime")
                     .resizable()
                     .scaledToFit()
@@ -43,11 +44,14 @@ struct PaywallLifetimeView: View {
             .productViewStyle(.compact)
             .storeButton(.visible, for: .restorePurchases)
             .storeButton(.hidden, for: .cancellation)
+            .onChange(of: store.purchasedProducts) { _, products in
+                if !products.isEmpty { dismiss() }
+            }
         }
         .presentationDragIndicator(.visible)
     }
 }
 
 #Preview {
-    PaywallLifetimeView()
+    PaywallLifetimeView(store: Store())
 }

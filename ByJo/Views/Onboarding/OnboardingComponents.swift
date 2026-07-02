@@ -6,6 +6,20 @@
 import SwiftUI
 import UIKit
 
+// MARK: - Keyboard Dismiss on Appear
+
+private final class KeyboardDismissController: UIViewController {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.window?.endEditing(true)
+    }
+}
+
+struct KeyboardDismissOnAppear: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController { KeyboardDismissController() }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
+
 // MARK: - Animation Helper
 
 extension View {

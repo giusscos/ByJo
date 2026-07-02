@@ -20,12 +20,7 @@ struct OnboardingTransactionStep: View {
     @State private var appeared = false
 
     var body: some View {
-        OnboardingStepLayout(
-            primaryLabel: "Save",
-            primaryAction: onContinue,
-            skipAction: onSkip,
-            primaryInToolbar: true
-        ) {
+        ScrollView(showsIndicators: false) {
             ScrollViewReader { proxy in
                 VStack(spacing: 24) {
                     VStack(spacing: 16) {
@@ -124,11 +119,24 @@ struct OnboardingTransactionStep: View {
                 }
             }
         }
+        .background(KeyboardDismissOnAppear())
+        .scrollDismissesKeyboard(.interactively)
+        .ignoresSafeArea(.keyboard)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: onSkip) {
+                    Text("Skip")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Save", action: onContinue)
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+            }
+
             ToolbarItemGroup(placement: .keyboard) {
-                Button("Skip", action: onSkip)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
                 Spacer()
                 Button { focusedField = nil } label: {
                     Label("Dismiss keyboard", systemImage: "keyboard.chevron.compact.down")
@@ -140,5 +148,6 @@ struct OnboardingTransactionStep: View {
             appeared = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { focusedField = .name }
         }
+        .onDisappear { focusedField = nil }
     }
 }
