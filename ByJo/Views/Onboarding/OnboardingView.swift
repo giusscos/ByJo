@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftData
+import UserNotifications
 
 // MARK: - Navigation Step
 
@@ -22,6 +24,7 @@ private enum OnboardingStep: Hashable {
 // MARK: - Root Container
 
 struct OnboardingView: View {
+    @Environment(\.modelContext) private var modelContext
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     var onComplete: () -> Void
 
@@ -90,36 +93,64 @@ struct OnboardingView: View {
                 frequency: $recurringFrequency,
                 assetName: assetName,
                 currencyCode: currencyCode,
-                onContinue: {
-                    savePending()
-                    onComplete()
-                },
-                onSkip: {
-                    savePending()
-                    onComplete()
-                }
+                onContinue: { commitToSwiftData() },
+                onSkip: { commitToSwiftData() }
             )
         }
     }
 
-    // MARK: - Pending Save
+    // MARK: - SwiftData Commit
 
-    private func savePending() {
-        let trimmedCategory = categoryName.trimmingCharacters(in: .whitespaces)
-        PendingOnboardingData(
-            assetName: assetName,
-            assetType: assetType.rawValue,
-            assetBalance: assetBalance.map { "\($0)" } ?? "",
-            assetNegativeBalance: assetStatusBalance == .negative,
-            categoryName: trimmedCategory.isEmpty ? "General" : trimmedCategory,
-            operationName: operationName,
-            operationAmount: operationAmount.map { "\($0)" } ?? "",
-            operationIsExpense: operationType == .expense,
-            recurringName: recurringName,
-            recurringAmount: recurringAmount.map { "\($0)" } ?? "",
-            recurringIsExpense: recurringOperationType == .expense,
-            recurringFrequency: recurringFrequency.rawValue
-        ).save()
+    private func commitToSwiftData() {
+        let finalBalance: Decimal = {
+            guard let b = assetBalance else { return 0 }
+            return assetStatusBalance == .negative ? (b > 0 ? b * -1 : b) : abs(b)
+        }()
+
+        let asset = Asset(name: assetName, type: assetType, initialBalance: finalBalance)
+        modelContext.insert(asset)
+
+        let trimmed = categoryName.trimmingCharacters(in: .whitespaces)
+        let category = CategoryOperation(name: trimmed.isEmpty ? "General" : trimmed)
+        modelContext.insert(category)
+
+        if !operationName.isEmpty, let rawAmount = operationAmount {
+            let opAmount: Decimal = operationType == .expense
+                ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
+                : abs(rawAmount)
+            modelContext.insert(AssetOperation(
+                name: operationName, date: .now, amount: opAmount,
+                asset: asset, category: category
+            ))
+        }
+
+        if !recurringName.isEmpty, let rawAmount = recurringAmount {
+            let recAmount: Decimal = recurringOperationType == .expense
+                ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
+                : abs(rawAmount)
+            let uuid = UUID()
+            modelContext.insert(AssetOperation(
+                id: uuid, name: recurringName, date: .now, amount: recAmount,
+                asset: asset, category: category, frequency: recurringFrequency
+            ))
+            scheduleRecurringNotification(id: uuid, name: recurringName, amount: recAmount)
+        }
+
+        onComplete()
+    }
+
+    private func scheduleRecurringNotification(id: UUID, name: String, amount: Decimal) {
+        guard recurringFrequency != .single,
+              let nextDate = recurringFrequency.nextPaymentDate(from: .now) else { return }
+        let content = UNMutableNotificationContent()
+        content.title = "Recurring operation"
+        content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
+        content.badge = 1
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        UNUserNotificationCenter.current().add(
+            UNNotificationRequest(identifier: id.uuidString, content: content, trigger: trigger)
+        )
     }
 }
 

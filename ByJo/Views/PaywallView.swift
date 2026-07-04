@@ -9,7 +9,6 @@ import StoreKit
 import SwiftUI
 
 struct PaywallView: View {
-    @Environment(\.dismiss) private var dismiss
     var store: Store
     @State private var showLifetimePlans: Bool = false
 
@@ -97,15 +96,6 @@ struct PaywallView: View {
             .storeButton(.hidden, for: .cancellation)
             .storeButton(.hidden, for: .policies)
             .interactiveDismissDisabled()
-            .subscriptionStatusTask(for: store.groupId) { taskState in
-                if let statuses = taskState.value,
-                   statuses.contains(where: { $0.state == .subscribed || $0.state == .inGracePeriod }) {
-                    await MainActor.run { dismiss() }
-                }
-            }
-            .onChange(of: store.purchasedProducts) { _, products in
-                if !products.isEmpty { dismiss() }
-            }
             .sheet(isPresented: $showLifetimePlans) {
                 PaywallLifetimeView(store: store)
                     .presentationDetents(.init([.medium]))

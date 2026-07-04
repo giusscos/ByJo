@@ -7,23 +7,42 @@
 
 import SwiftUI
 import SwiftData
+import TipKit
 
 @main
 struct ByJoApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    init() {
+        try? Tips.configure([
+            .displayFrequency(.immediate),
+            .datastoreLocation(.applicationDefault)
+        ])
+    }
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([Asset.self])
-        
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        
+
         do {
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
             container.mainContext.undoManager = UndoManager()
-            
             return container
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // Existing store is incompatible with the new schema (e.g. removed entity).
+            // Wipe it and start fresh — acceptable during development.
+            let url = modelConfiguration.url
+            try? FileManager.default.removeItem(at: url)
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + "-shm"))
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + "-wal"))
+
+            do {
+                let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+                container.mainContext.undoManager = UndoManager()
+                return container
+            } catch {
+                fatalError("Could not create ModelContainer: \(error)")
+            }
         }
     }()
 
@@ -33,7 +52,7 @@ struct ByJoApp: App {
         }
         .modelContainer(sharedModelContainer)
     }
-    
+
     class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
         func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
             UNUserNotificationCenter.current().delegate = self

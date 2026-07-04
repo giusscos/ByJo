@@ -10,62 +10,59 @@ import SwiftUI
 
 struct GoalRowView: View {
     @Environment(\.modelContext) var modelContext
-    
+
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
-    
+
     var goal: Goal
     var asset: Asset
-    
+
     var progress: Double {
-        let current = (asset.calculateCurrentBalance()
-                       as NSDecimalNumber).doubleValue
+        let current = (asset.calculateCurrentBalance() as NSDecimalNumber).doubleValue
         let target = (goal.targetAmount as NSDecimalNumber).doubleValue
         return target > 0 ? current / target : 0
     }
-    
+
     @State var showEditGoal: Bool = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            HStack (alignment: .top, spacing: 6) {
-                VStack (alignment: .leading, spacing: 6) {
+            HStack(alignment: .top, spacing: 6) {
+                VStack(alignment: .leading, spacing: 6) {
                     if let dueDate = goal.dueDate {
                         Group {
                             Text("Due date: ")
-                            +
-                            Text(dueDate, format: .dateTime.day().month().year())
+                            + Text(dueDate, format: .dateTime.day().month().year())
                         }
                         .foregroundStyle(.secondary)
                         .font(.caption)
                     }
-                    
+
                     Text(goal.title)
                         .font(.title)
                         .fontWeight(.semibold)
                         .lineLimit(3)
                 }
-                
+
                 Spacer()
-                
+
                 Menu {
                     Button {
                         setStatusGoal(status: .completed)
                     } label: {
                         Label("Set as completed", systemImage: "inset.filled.circle")
                     }
-                    
+
                     Button {
                         setStatusGoal(status: .suspended)
                     } label: {
                         Label("Set as suspended", systemImage: "inset.filled.circle.dashed")
                     }
-                    
+
                     Button {
                         showEditGoal = true
                     } label: {
                         Label("Edit goal", systemImage: "pencil")
-                        
                     }
                 } label: {
                     Text("Handle")
@@ -76,39 +73,39 @@ struct GoalRowView: View {
                 .buttonBorderShape(.capsule)
                 .buttonStyle(.bordered)
             }
-            
+
             VStack {
-                HStack (alignment: .firstTextBaseline) {
-                    VStack (alignment: .leading) {
+                HStack(alignment: .firstTextBaseline) {
+                    VStack(alignment: .leading) {
                         Text("From")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        
+
                         Text(goal.startingAmount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
                             .font(.headline)
                             .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
-                    
+
                     Spacer()
-                    
+
                     Text(asset.name)
                         .font(.headline)
-                    
+
                     Spacer()
-                    
-                    VStack (alignment: .trailing) {
+
+                    VStack(alignment: .trailing) {
                         Text("Target")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        
+
                         Text(goal.targetAmount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
                             .font(.headline)
                             .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
                 }
-                
+
                 if progress >= 0 {
-                    ProgressView(value: progress >= 1.0  ? 1 : progress, total: 1)
+                    ProgressView(value: progress >= 1.0 ? 1 : progress, total: 1)
                 }
             }
         }
@@ -120,12 +117,11 @@ struct GoalRowView: View {
             EditGoalView(goal: goal, asset: asset)
         }
     }
-    
+
     private func setStatusGoal(status: StatusGoal) {
         withAnimation {
-            let newCompletedGoal = CompletedGoal(completedDate: Date(), status: status, goal: goal)
-            
-            modelContext.insert(newCompletedGoal)
+            goal.completedDate = Date.now
+            goal.completedStatus = status
         }
     }
 }

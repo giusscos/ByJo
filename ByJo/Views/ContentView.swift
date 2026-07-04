@@ -7,127 +7,58 @@
 
 import SwiftUI
 import SwiftData
-import StoreKit
-import UserNotifications
 
 struct ContentView: View {
-    enum ActiveSheet: Identifiable {
-        case onboarding
-        case paywall
-
-        var id: String {
-            switch self {
-            case .onboarding: return "onboarding"
-            case .paywall: return "paywall"
-            }
-        }
-    }
-
-    @Environment(\.modelContext) var modelContext
     @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding: Bool = false
-    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
 
-    @State var activeSheet: ActiveSheet?
     @State var store = Store()
 
-    var hasPaid: Bool {
+    private var hasPaid: Bool {
         !store.purchasedSubscriptions.isEmpty || !store.purchasedProducts.isEmpty
     }
 
     var body: some View {
-        if store.isLoading {
-            ProgressView()
-        } else {
-            TabView {
-                Tab("Home", systemImage: "house.fill") {
-                    HomeView()
-                }
-
-                Tab("Assets", systemImage: "briefcase.fill") {
-                    AssetListView()
-                }
-
-                Tab("Operations", systemImage: "book.pages") {
-                    OperationListView()
-                }
-            }
-            .fullScreenCover(item: $activeSheet, content: { sheet in
-                switch sheet {
-                case .onboarding:
+        Group {
+            if store.isLoading {
+                ProgressView()
+            } else if !hasPaid {
+                if !hasCompletedOnboarding {
                     OnboardingView {
                         hasCompletedOnboarding = true
-                        activeSheet = .paywall
                     }
-                case .paywall:
+                } else {
                     PaywallView(store: store)
                 }
-            })
-            .onChange(of: hasPaid) { _, paid in
-                if paid { migrateOnboardingDataIfNeeded() }
-                activeSheet = .none
+            } else {
+                mainTabView
             }
-            .onAppear {
-                UITextField.appearance().clearButtonMode = .whileEditing
-
-                if hasPaid {
-                    migrateOnboardingDataIfNeeded()
-                    return
-                }
-
-                activeSheet = hasCompletedOnboarding ? .paywall : .onboarding
-            }
+        }
+        // Placed here so the task is always alive regardless of which view is shown.
+        // Previously it was inside PaywallView, which caused a race: the task was
+        // cancelled mid-flight when hasPaid flipped and the view was torn down.
+        .subscriptionStatusTask(for: store.groupId) { taskState in
+            guard let statuses = taskState.value else { return }
+            await store.updateSubscriptionStatus(statuses: statuses)
+        }
+        .onAppear {
+            UITextField.appearance().clearButtonMode = .whileEditing
         }
     }
 
-    // MARK: - Onboarding Data Migration
+    private var mainTabView: some View {
+        TabView {
+            Tab("Home", systemImage: "house.fill") {
+                HomeView()
+            }
 
-    private func migrateOnboardingDataIfNeeded() {
-        guard let pending = PendingOnboardingData.load(), !pending.assetName.isEmpty else { return }
+            Tab("Assets", systemImage: "briefcase.fill") {
+                AssetListView()
+            }
 
-        var balance = Decimal(string: pending.assetBalance) ?? 0
-        if pending.assetNegativeBalance, balance > 0 { balance *= -1 }
-
-        let assetType = AssetType(rawValue: pending.assetType) ?? .bankAccount
-        let asset = Asset(name: pending.assetName, type: assetType, initialBalance: balance)
-        modelContext.insert(asset)
-
-        let category = CategoryOperation(name: pending.categoryName)
-        modelContext.insert(category)
-
-        if !pending.operationName.isEmpty, let opAmount = Decimal(string: pending.operationAmount) {
-            var amount = opAmount
-            if pending.operationIsExpense, amount > 0 { amount *= -1 }
-            modelContext.insert(AssetOperation(
-                name: pending.operationName, date: .now, amount: amount, asset: asset, category: category
-            ))
+            Tab("Operations", systemImage: "book.pages") {
+                OperationListView()
+            }
         }
-
-        if !pending.recurringName.isEmpty, let recAmount = Decimal(string: pending.recurringAmount) {
-            let frequency = RecurrenceFrequency(rawValue: pending.recurringFrequency) ?? .monthly
-            var amount = recAmount
-            if pending.recurringIsExpense, amount > 0 { amount *= -1 }
-            let uuid = UUID()
-            modelContext.insert(AssetOperation(
-                id: uuid, name: pending.recurringName, date: .now, amount: amount,
-                asset: asset, category: category, frequency: frequency
-            ))
-            scheduleNotification(id: uuid, name: pending.recurringName, amount: amount, frequency: frequency)
-        }
-
-        PendingOnboardingData.clear()
-    }
-
-    private func scheduleNotification(id: UUID, name: String, amount: Decimal, frequency: RecurrenceFrequency) {
-        guard frequency != .single, let nextDate = frequency.nextPaymentDate(from: .now) else { return }
-        let content = UNMutableNotificationContent()
-        content.title = "Recurring operation"
-        content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
-        content.badge = 1
-        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-        UNUserNotificationCenter.current().add(
-            UNNotificationRequest(identifier: id.uuidString, content: content, trigger: trigger)
-        )
     }
 }
 

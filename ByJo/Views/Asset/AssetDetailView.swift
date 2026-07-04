@@ -54,9 +54,7 @@ struct AssetDetailView: View {
 
     
     var filteredAndSortedOperations: [OperationByDate] {
-        guard let assetOperations = asset.operations else { return [] }
-        
-        var filteredOperations = assetOperations
+        var filteredOperations = asset.operations ?? []
         
         if let category = filterCategory {
             filteredOperations = filteredOperations.filter { $0.category == category }
@@ -186,7 +184,7 @@ struct AssetDetailView: View {
                             }
                         }
                         
-                        if let operations = asset.operations, !operations.isEmpty {
+                        if !(asset.operations ?? []).isEmpty {
                             Section {
                                 Menu("By Category") {
                                     ForEach(categories) { category in

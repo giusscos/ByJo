@@ -8,71 +8,67 @@
 import SwiftData
 import SwiftUI
 
-struct EditGoalView:View {
+struct EditGoalView: View {
     enum FocusField: Hashable {
         case title
         case targetAmount
     }
-    
+
     @FocusState private var focusedField: FocusField?
-    
+
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
-    
+
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
-    
+
     @Query var assets: [Asset]
-    
+
     var goal: Goal?
-    
+
     @State private var title: String = ""
     @State var asset: Asset
     @State private var targetAmount: Decimal?
     @State private var statusTargetAmount: StatusBalance = .positive
     @State private var date: Date = .now
     @State private var hasDueDate: Bool = false
-    
+
     @State private var isGoalCompleted: StatusGoal = .completed
-    
+
     var nilBalance: Bool {
         targetAmount == nil || targetAmount == .zero
     }
-    
+
     var body: some View {
         NavigationStack {
             Form {
-                if let goal = goal, let _ = goal.completedGoal {
+                if let goal, goal.isCompleted {
                     Section {
                         Picker("Is Goal completed?", selection: $isGoalCompleted) {
                             ForEach(StatusGoal.allCases, id: \.self) { status in
-                                Text("\(status.rawValue)")
-                                    .tag(status)
+                                Text(status.rawValue).tag(status)
                             }
                         }
                         .pickerStyle(.segmented)
                     }
                 }
-                
+
                 Section {
                     TextField("Title", text: $title)
                         .autocorrectionDisabled()
                         .focused($focusedField, equals: .title)
                         .submitLabel(.next)
-                        .onSubmit {
-                            focusedField = .targetAmount
-                        }
+                        .onSubmit { focusedField = .targetAmount }
                 }
-                
+
                 Section {
                     Picker("Asset", selection: $asset) {
                         ForEach(assets) { asset in
-                            Text(asset.name)
-                                .tag(asset)
+                            Text(asset.name).tag(asset)
                         }
                     }
                     .pickerStyle(.menu)
                 }
-                
+
                 Section {
                     Picker("Status target amount", selection: $statusTargetAmount) {
                         ForEach(StatusBalance.allCases, id: \.self) { status in
@@ -90,28 +86,26 @@ struct EditGoalView:View {
                             }
                         }
                     }
-                    
+
                     Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: currencyCode.rawValue))
-                                 
-                    HStack (spacing: 6) {
+
+                    HStack(spacing: 6) {
                         Text(currencyCode.symbol)
                             .foregroundStyle(nilBalance ? .secondary : .primary)
                             .opacity(nilBalance ? 0.5 : 1)
-                        
+
                         TextField("Target amount", value: $targetAmount, format: .number.precision(.fractionLength(2)))
                             .keyboardType(.decimalPad)
                             .focused($focusedField, equals: .targetAmount)
                             .submitLabel(.done)
-                            .onSubmit {
-                                focusedField = .none
-                            }
+                            .onSubmit { focusedField = .none }
                     }
                 }
                 .listRowSeparator(.hidden)
-                
+
                 Section {
                     Toggle("Due date", isOn: $hasDueDate.animation())
-                    
+
                     if hasDueDate {
                         DatePicker("Due date", selection: $date, displayedComponents: .date)
                             .datePickerStyle(.compact)
@@ -120,8 +114,8 @@ struct EditGoalView:View {
             }
             .navigationTitle(goal == nil ? "Create goal" : "Edit goal")
             .toolbar {
-                if let goal = goal {
-                    ToolbarItem (placement: .topBarLeading) {
+                if let goal {
+                    ToolbarItem(placement: .topBarLeading) {
                         Button(role: .destructive) {
                             deleteGoal(goal: goal)
                         } label: {
@@ -130,10 +124,10 @@ struct EditGoalView:View {
                         .tint(.red)
                     }
                 }
-                
-                ToolbarItem (placement: .topBarTrailing) {
+
+                ToolbarItem(placement: .topBarTrailing) {
                     if #available(iOS 26, *) {
-                        Button (role: .confirm) {
+                        Button(role: .confirm) {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
@@ -148,7 +142,7 @@ struct EditGoalView:View {
                         .disabled(title.isEmpty || targetAmount == nil)
                     }
                 }
-                
+
                 ToolbarItem(placement: .keyboard) {
                     Button {
                         focusedField = .none
@@ -158,40 +152,37 @@ struct EditGoalView:View {
                 }
             }
         }
-        .onAppear() {
-            if let goal = goal {
-                title = goal.title
-                
-                if let asset = goal.asset {
-                    self.asset = asset
-                }
-                
-                targetAmount = goal.targetAmount
-                
-                if goal.targetAmount < 0 {
-                    statusTargetAmount = .negative
-                }
-                
-                if let goalDate = goal.dueDate {
-                    hasDueDate = true
-                    date = goalDate
-                }
-                
-                if let completedGoal = goal.completedGoal {
-                    isGoalCompleted = completedGoal.status
-                }
-                
-                return
+        .onAppear {
+            guard let goal else { return }
+
+            title = goal.title
+
+            if let goalAsset = goal.asset {
+                self.asset = goalAsset
+            }
+
+            targetAmount = goal.targetAmount
+
+            if goal.targetAmount < 0 {
+                statusTargetAmount = .negative
+            }
+
+            if let goalDate = goal.dueDate {
+                hasDueDate = true
+                date = goalDate
+            }
+
+            if let status = goal.completedStatus {
+                isGoalCompleted = status
             }
         }
     }
-    
+
     private func deleteGoal(goal: Goal) {
         modelContext.delete(goal)
-        
         dismiss()
     }
-    
+
     private func save() {
         if let amountValue = targetAmount {
             if amountValue < 0, statusTargetAmount == .positive {
@@ -200,24 +191,22 @@ struct EditGoalView:View {
                 targetAmount = amountValue * -1
             }
         }
-        
-        if let goal = goal {
+
+        if let goal {
             goal.title = title
             goal.asset = asset
             goal.targetAmount = targetAmount ?? .zero
             goal.startingAmount = asset.calculateCurrentBalance()
-            
             goal.dueDate = hasDueDate ? date : nil
-            
-            if let completedGoal = goal.completedGoal {
-                completedGoal.status = isGoalCompleted
+
+            if goal.isCompleted {
+                goal.completedStatus = isGoalCompleted
             }
-            
+
             dismiss()
-            
             return
         }
-        
+
         let newGoal = Goal(
             title: title,
             startingAmount: asset.calculateCurrentBalance(),
@@ -225,9 +214,8 @@ struct EditGoalView:View {
             dueDate: hasDueDate ? date : nil,
             asset: asset
         )
-        
+
         modelContext.insert(newGoal)
-        
         dismiss()
     }
 }

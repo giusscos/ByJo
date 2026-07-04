@@ -19,20 +19,19 @@ struct OperationsGroupedByCategoryListView: View {
     var body: some View {
         List {
             ForEach(categories) { category in
-                if let assetOperations = category.assetOperations, assetOperations.count > 0 {
-                    let total = assetOperations.reduce(0) { $0 + $1.amount }
+                let ops = category.assetOperations ?? []
+                if !ops.isEmpty {
+                    let total = ops.reduce(0) { $0 + $1.amount }
 
                     HStack {
-                        VStack (alignment: .leading) {
+                        VStack(alignment: .leading) {
                             Text(category.name)
                                 .font(.headline)
                                 .lineLimit(1)
-                            
-                            if let assetOperations = category.assetOperations {
-                                Text("\(assetOperations.count == 1 ? "Operation" : "Operations"): \(assetOperations.count)")
-                                    .foregroundStyle(.secondary)
-                                    .font(.caption)
-                            }
+
+                            Text("\(ops.count == 1 ? "Operation" : "Operations"): \(ops.count)")
+                                .foregroundStyle(.secondary)
+                                .font(.caption)
                         }
                         
                         Spacer()

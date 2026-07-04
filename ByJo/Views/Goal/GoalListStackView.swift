@@ -10,22 +10,22 @@ import SwiftUI
 
 struct GoalListStackView: View {
     @Query(filter: #Predicate<Goal> { goal in
-        goal.completedGoal == nil
+        goal.completedDate == nil
     }, sort: \Goal.dueDate, order: .reverse) var goals: [Goal]
-    
+
     @State private var xOffsets: [Double] = [0.0]
     @State private var zIndexes: [Double] = [0.0]
     @State private var rotates: [Double] = [0.0]
-    
+
     var body: some View {
         if !goals.isEmpty {
             Section {
                 HStack {
                     Spacer()
-                    
+
                     GeometryReader { geometry in
                         let screenWidth = geometry.size.width
-                        
+
                         ZStack {
                             ForEach(Array(goals.enumerated()), id: \.offset) { index, goal in
                                 if let asset = goal.asset, xOffsets.count == goals.count, zIndexes.count == goals.count {
@@ -42,7 +42,7 @@ struct GoalListStackView: View {
                                                 }
                                                 .onEnded { value in
                                                     let threshold = screenWidth * 0.5
-                                                    
+
                                                     if xOffsets[index] >= threshold || xOffsets[index] <= -threshold {
                                                         withAnimation {
                                                             zIndexes[index] = zIndexes[index] - 1
@@ -50,7 +50,7 @@ struct GoalListStackView: View {
                                                             rotates[index] = .random(in: -4...4)
                                                         }
                                                     }
-                                                    
+
                                                     withAnimation {
                                                         xOffsets[index] = .zero
                                                     }
@@ -62,7 +62,7 @@ struct GoalListStackView: View {
                         .padding()
                     }
                     .frame(maxWidth: 650)
-                    
+
                     Spacer()
                 }
                 .frame(height: 250)
@@ -81,26 +81,19 @@ struct GoalListStackView: View {
             }
         }
     }
-    
+
     private func calculateGoalsPositionAndRotation(goals: [Goal]) {
         let goalsCount = goals.count
-        
         let startingArray = Array(repeating: 0.0, count: goalsCount)
-        
         xOffsets = startingArray
         zIndexes = startingArray
-        
         for _ in goals {
             rotates.append(.random(in: -4...4))
         }
     }
-    
+
     private func restoreGoalsZIndexes(goals: [Goal]) {
-        let goalsCount = goals.count
-        
-        let startingArray = Array(repeating: 0.0, count: goalsCount)
-        
-        zIndexes = startingArray
+        zIndexes = Array(repeating: 0.0, count: goals.count)
     }
 }
 

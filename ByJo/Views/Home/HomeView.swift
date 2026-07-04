@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct HomeView: View {
     enum ActiveSheet: Identifiable {
@@ -49,71 +50,53 @@ struct HomeView: View {
     @Query(sort: \CategoryOperation.name, order: .reverse) var categories: [CategoryOperation]
     
     @State var activeSheet: ActiveSheet?
-    
+
+    private let addAssetTip = AddAssetTip()
+    private let addOperationTip = AddOperationTip()
+
+    var netWorth: Decimal {
+        assets.reduce(Decimal(0)) { $0 + $1.calculateCurrentBalance() }
+    }
+
     var body: some View {
         NavigationStack {
             List {
                 GoalListStackView()
-                
-                NetWorthWidgetView()
-                
-                PeriodComparisonWidgetView()
-                
+
+                FinancialSummaryWidgetView()
+
+                SaveToSpendGaugeView()
+
                 RecurringOperationWidgetView()
-                
+
                 CategoryWidgetView()
-                
-                Section {
-                    Group {
-                        if assets.isEmpty {
-                            VStack {
-                                Text("No assets found 😕")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                
-                                Text("Start adding assets")
-                                    .font(.headline)
-                                    .foregroundStyle(.secondary)
-                                
-                                Button {
-                                    activeSheet = .createAsset
-                                } label: {
-                                    Text("Add asset")
-                                        .font(.headline)
-                                }
-                                .tint(.accent)
-                                .buttonBorderShape(.capsule)
-                                .buttonStyle(.bordered)
-                            }
-                        } else if categories.isEmpty || operations.isEmpty {
-                            VStack {
-                                let text = categories.isEmpty ? "categories" : "operations"
-                                
-                                Text("No \(text) found 😕")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                
-                                Text("Start adding \(text)")
-                                    .font(.headline)
-                                    .foregroundStyle(.secondary)
-                                
-                                Button {
-                                    activeSheet = categories.isEmpty ? .viewCategories : .createOperation
-                                } label: {
-                                    Text("Add \(text)")
-                                        .font(.headline)
-                                }
-                                .tint(.accent)
-                                .buttonBorderShape(.capsule)
-                                .buttonStyle(.bordered)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                }
+
             }
-            .navigationTitle("Home")
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                AddAssetTip.hasAssets = !assets.isEmpty
+                AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && operations.isEmpty
+            }
+            .onChange(of: assets) { _, new in
+                AddAssetTip.hasAssets = !new.isEmpty
+                AddOperationTip.isReady = !new.isEmpty && !categories.isEmpty && operations.isEmpty
+            }
+            .onChange(of: categories) { _, new in
+                AddOperationTip.isReady = !assets.isEmpty && !new.isEmpty && operations.isEmpty
+            }
+            .onChange(of: operations) { _, new in
+                AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && new.isEmpty
+            }
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(netWorth, format: compactNumber
+                         ? .currency(code: currencyCode.rawValue).notation(.compactName)
+                         : .currency(code: currencyCode.rawValue))
+                        .font(.headline)
+                        .contentTransition(.numericText(value: Double(truncating: netWorth as NSDecimalNumber)))
+                }
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         activeSheet = .createOperation
@@ -121,8 +104,9 @@ struct HomeView: View {
                         VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                     }
                     .disabled(assets.count == 0 || categories.count == 0)
+                    .popoverTip(addOperationTip)
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Section {
@@ -194,6 +178,7 @@ struct HomeView: View {
                     } label: {
                         VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                     }
+                    .popoverTip(addAssetTip)
                 }
             }
             .sheet(item: $activeSheet) { sheet in

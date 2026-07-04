@@ -34,22 +34,15 @@ struct CategoryWidgetView: View {
         
         return categories
             .filter { category in
-                if let assetOperations = category.assetOperations, !assetOperations.isEmpty {
-                    return assetOperations.contains { operation in
-                        let date = operation.date
-                        
-                        return calendar.component(.month, from: date) == currentMonth &&
-                        calendar.component(.year, from: date) == currentYear
-                    }
+                let ops = category.assetOperations ?? []
+                return !ops.isEmpty && ops.contains { operation in
+                    let date = operation.date
+                    return calendar.component(.month, from: date) == currentMonth &&
+                           calendar.component(.year, from: date) == currentYear
                 }
-                return false
             }
             .map { category in
-                guard let assetOperations = category.assetOperations else {
-                    return CategoryWithAmount(category: CategoryOperation(name: "No category"), amount: 0.0)
-                }
-                
-                let total = assetOperations
+                let total = (category.assetOperations ?? [])
                     .filter { operation in
                         let date = operation.date
                         

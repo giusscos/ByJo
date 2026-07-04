@@ -16,13 +16,13 @@ final class AssetOperation {
     var amount: Decimal = 0
     var note: String = ""
     var frequency: RecurrenceFrequency = RecurrenceFrequency.single
-    
+
     var asset: Asset?
     var category: CategoryOperation?
-    
+
     var swapId: UUID? = nil
-    
-    init (
+
+    init(
         id: UUID = UUID(),
         name: String = "",
         date: Date = .now,
@@ -48,33 +48,8 @@ final class AssetOperation {
 struct OperationByDate: Identifiable {
     var date: Date
     var operations: [AssetOperation]
-    
-    var id: Date { date }
-}
 
-func filterData(for range: DateRangeOption, data: [AssetOperation]) -> [AssetOperation] {
-    let calendar = Calendar.current
-    let now = Date()
-    
-    switch range {
-    case .all:
-        return data
-    case .week:
-        let startDate = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-        return data.filter { $0.date >= startDate }
-    case .month:
-        let startDate = calendar.date(byAdding: .month, value: -1, to: now) ?? now
-        return data.filter { $0.date >= startDate }
-    case .threeMonths:
-        let startDate = calendar.date(byAdding: .month, value: -3, to: now) ?? now
-        return data.filter { $0.date >= startDate }
-    case .sixMonths:
-        let startDate = calendar.date(byAdding: .month, value: -6, to: now) ?? now
-        return data.filter { $0.date >= startDate }
-    case .year:
-        let startDate = calendar.date(byAdding: .year, value: -1, to: now) ?? now
-        return data.filter { $0.date >= startDate }
-    }
+    var id: Date { date }
 }
 
 enum OperationType: String, Codable, CaseIterable {
@@ -88,25 +63,19 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
     case weekly = "Weekly"
     case monthly = "Monthly"
     case yearly = "Yearly"
-    
+
     var dateComponents: DateComponents {
         switch self {
-            case .single:
-                return DateComponents()
-            case .daily:
-                return DateComponents(day: 1)
-            case .weekly:
-                return DateComponents(day: 7)
-            case .monthly:
-                return DateComponents(month: 1)
-            case .yearly:
-                return DateComponents(year: 1)
+        case .single: return DateComponents()
+        case .daily: return DateComponents(day: 1)
+        case .weekly: return DateComponents(day: 7)
+        case .monthly: return DateComponents(month: 1)
+        case .yearly: return DateComponents(year: 1)
         }
     }
-    
+
     func nextPaymentDate(from date: Date) -> Date? {
         guard self != .single else { return nil }
-        
         return Calendar.current.date(byAdding: dateComponents, to: date)
     }
 }
@@ -118,9 +87,9 @@ enum DateRangeOption: Identifiable, Hashable {
     case sixMonths
     case year
     case all
-    
+
     var id: String { label }
-    
+
     var label: String {
         switch self {
         case .week: return "1W"
@@ -131,105 +100,104 @@ enum DateRangeOption: Identifiable, Hashable {
         case .all: return "All"
         }
     }
-    
+
     var dateRange: (startDate: Date, endDate: Date) {
         let calendar = Calendar.current
         let now = Date()
-        
+
         switch self {
         case .week:
             let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
             let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek)!
             return (startOfWeek, endOfWeek)
-            
+
         case .month:
             let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
             let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth)!
             return (startOfMonth, endOfMonth)
-            
+
         case .threeMonths:
             let startOfQuarter = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: ((calendar.component(.month, from: now) - 1) / 3) * 3 + 1))!
             let endOfQuarter = calendar.date(byAdding: DateComponents(month: 3, day: -1), to: startOfQuarter)!
             return (startOfQuarter, endOfQuarter)
-            
+
         case .sixMonths:
             let startOfHalfYear = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: ((calendar.component(.month, from: now) - 1) / 6) * 6 + 1))!
             let endOfHalfYear = calendar.date(byAdding: DateComponents(month: 6, day: -1), to: startOfHalfYear)!
             return (startOfHalfYear, endOfHalfYear)
-            
+
         case .year:
             let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now))!
             let endOfYear = calendar.date(byAdding: DateComponents(year: 1, day: -1), to: startOfYear)!
             return (startOfYear, endOfYear)
-            
+
         case .all:
             return (Date.distantPast, Date.distantFuture)
         }
     }
-    
+
     var previousRange: (startDate: Date, endDate: Date) {
         let calendar = Calendar.current
         let now = Date()
-        
+
         switch self {
         case .week:
             let startOfCurrentWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
             let startOfPreviousWeek = calendar.date(byAdding: .day, value: -7, to: startOfCurrentWeek)!
             let endOfPreviousWeek = calendar.date(byAdding: .day, value: 6, to: startOfPreviousWeek)!
             return (startOfPreviousWeek, endOfPreviousWeek)
-            
+
         case .month:
             let startOfCurrentMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
             let startOfPreviousMonth = calendar.date(byAdding: .month, value: -1, to: startOfCurrentMonth)!
             let endOfPreviousMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfPreviousMonth)!
             return (startOfPreviousMonth, endOfPreviousMonth)
-            
+
         case .threeMonths:
             let currentQuarter = (calendar.component(.month, from: now) - 1) / 3
             let startOfCurrentQuarter = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: currentQuarter * 3 + 1))!
             let startOfPreviousQuarter = calendar.date(byAdding: .month, value: -3, to: startOfCurrentQuarter)!
             let endOfPreviousQuarter = calendar.date(byAdding: DateComponents(month: 3, day: -1), to: startOfPreviousQuarter)!
             return (startOfPreviousQuarter, endOfPreviousQuarter)
-            
+
         case .sixMonths:
             let currentHalfYear = (calendar.component(.month, from: now) - 1) / 6
             let startOfCurrentHalfYear = calendar.date(from: DateComponents(year: calendar.component(.year, from: now), month: currentHalfYear * 6 + 1))!
             let startOfPreviousHalfYear = calendar.date(byAdding: .month, value: -6, to: startOfCurrentHalfYear)!
             let endOfPreviousHalfYear = calendar.date(byAdding: DateComponents(month: 6, day: -1), to: startOfPreviousHalfYear)!
             return (startOfPreviousHalfYear, endOfPreviousHalfYear)
-            
+
         case .year:
             let startOfCurrentYear = calendar.date(from: calendar.dateComponents([.year], from: now))!
             let startOfPreviousYear = calendar.date(byAdding: .year, value: -1, to: startOfCurrentYear)!
             let endOfPreviousYear = calendar.date(byAdding: DateComponents(year: 1, day: -1), to: startOfPreviousYear)!
             return (startOfPreviousYear, endOfPreviousYear)
-            
+
         case .all:
             return (Date.distantPast, Date.distantFuture)
         }
     }
-    
+
     static func availableRanges(for operations: [AssetOperation], maxOptions: Int = 6) -> [DateRangeOption] {
         guard !operations.isEmpty else { return [.all] }
-        
+
         let calendar = Calendar.current
         let now = Date()
         let oldestDate = operations.map { $0.date }.min() ?? now
         let timeSpan = calendar.dateComponents([.day], from: oldestDate, to: now).day ?? 0
-        
+
         var ranges: [DateRangeOption] = [.all]
-        
+
         if timeSpan >= 7 { ranges.append(.week) }
         if timeSpan >= 30 { ranges.append(.month) }
         if timeSpan >= 90 { ranges.append(.threeMonths) }
         if timeSpan >= 180 { ranges.append(.sixMonths) }
         if timeSpan >= 365 { ranges.append(.year) }
-        
-        // Ensure we don't exceed maxOptions
+
         if ranges.count > maxOptions {
             ranges = Array(ranges.prefix(maxOptions))
         }
-        
+
         return ranges
     }
 }
