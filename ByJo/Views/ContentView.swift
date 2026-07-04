@@ -58,6 +58,10 @@ struct ContentView: View {
             Tab("Operations", systemImage: "book.pages") {
                 OperationListView()
             }
+
+            Tab(role: .search) {
+                SearchView()
+            }
         }
     }
 }

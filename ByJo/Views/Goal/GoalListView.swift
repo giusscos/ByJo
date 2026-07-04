@@ -39,78 +39,86 @@ struct GoalListView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            List {
-                if !ongoingGoals.isEmpty {
-                    Section("Ongoing") {
-                        ForEach(ongoingGoals) { goal in
-                            if let asset = goal.asset {
+        List {
+            if !ongoingGoals.isEmpty {
+                Section("Ongoing") {
+                    ForEach(ongoingGoals) { goal in
+                        if let asset = goal.asset {
+                            NavigationLink {
+                                GoalDetailView(goal: goal, asset: asset)
+                            } label: {
                                 GoalRowView(goal: goal, asset: asset)
-                                    .swipeActions(edge: .trailing) {
-                                        Button(role: .destructive) {
-                                            modelContext.delete(goal)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    modelContext.delete(goal)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
 
-                                        Button {
-                                            activeSheet = .edit(goal)
-                                        } label: {
-                                            Label("Edit", systemImage: "pencil")
-                                        }
-                                        .tint(.blue)
+                                Button {
+                                    activeSheet = .edit(goal)
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.blue)
 
-                                        Button {
-                                            setStatusGoal(goal: goal, status: .completed)
-                                        } label: {
-                                            Label("Complete", systemImage: "inset.filled.circle")
-                                        }
-                                        .tint(Color.accentColor)
-                                    }
+                                Button {
+                                    setStatusGoal(goal: goal, status: .completed)
+                                } label: {
+                                    Label("Complete", systemImage: "inset.filled.circle")
+                                }
+                                .tint(Color.accentColor)
                             }
                         }
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
                 }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+            }
 
-                if !completedGoals.isEmpty {
-                    Section("Completed") {
-                        ForEach(completedGoals) { goal in
-                            GoalCompletedRowView(goal: goal)
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
-                                        modelContext.delete(goal)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
+            if !completedGoals.isEmpty {
+                Section("Completed") {
+                    ForEach(completedGoals) { goal in
+                        if let asset = goal.asset {
+                            NavigationLink {
+                                GoalDetailView(goal: goal, asset: asset)
+                            } label: {
+                                GoalCompletedRowView(goal: goal)
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    modelContext.delete(goal)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
+                            }
                         }
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+            }
+        }
+        .navigationTitle("Goals")
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    activeSheet = .create
+                } label: {
+                    VersionedLabel(title: "Add goal", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                 }
             }
-            .navigationTitle("Goals")
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        activeSheet = .create
-                    } label: {
-                        VersionedLabel(title: "Add goal", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
-                    }
+        }
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .create:
+                if let asset = assets.first {
+                    EditGoalView(asset: asset)
                 }
-            }
-            .sheet(item: $activeSheet) { sheet in
-                switch sheet {
-                case .create:
-                    if let asset = assets.first {
-                        EditGoalView(asset: asset)
-                    }
-                case .edit(let goal):
-                    if let asset = goal.asset {
-                        EditGoalView(goal: goal, asset: asset)
-                    }
+            case .edit(let goal):
+                if let asset = goal.asset {
+                    EditGoalView(goal: goal, asset: asset)
                 }
             }
         }

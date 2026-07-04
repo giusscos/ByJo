@@ -16,9 +16,9 @@ private enum OnboardingStep: Hashable {
     case whyInvest
     case currency
     case createAsset
-    case createCategory
     case addTransaction
     case addRecurring
+    case success
 }
 
 // MARK: - Root Container
@@ -33,7 +33,6 @@ struct OnboardingView: View {
     @State private var assetType: AssetType = .bankAccount
     @State private var assetBalance: Decimal? = nil
     @State private var assetStatusBalance: StatusBalance = .positive
-    @State private var categoryName = "General"
     @State private var operationName = ""
     @State private var operationAmount: Decimal? = nil
     @State private var operationType: OperationType = .income
@@ -69,10 +68,6 @@ struct OnboardingView: View {
                 statusBalance: $assetStatusBalance,
                 currencyCode: currencyCode
             ) {
-                path.append(.createCategory)
-            }
-        case .createCategory:
-            OnboardingCategoryStep(name: $categoryName) {
                 path.append(.addTransaction)
             }
         case .addTransaction:
@@ -96,6 +91,8 @@ struct OnboardingView: View {
                 onContinue: { commitToSwiftData() },
                 onSkip: { commitToSwiftData() }
             )
+        case .success:
+            OnboardingSuccessStep(onComplete: onComplete)
         }
     }
 
@@ -107,36 +104,67 @@ struct OnboardingView: View {
             return assetStatusBalance == .negative ? (b > 0 ? b * -1 : b) : abs(b)
         }()
 
-        let asset = Asset(name: assetName, type: assetType, initialBalance: finalBalance)
-        modelContext.insert(asset)
+        // Reuse existing asset with same name to prevent duplicates on re-entry
+        let assetDescriptor = FetchDescriptor<Asset>(
+            predicate: #Predicate { $0.name == assetName }
+        )
+        let asset: Asset
+        if let existing = (try? modelContext.fetch(assetDescriptor))?.first {
+            asset = existing
+        } else {
+            let newAsset = Asset(name: assetName, type: assetType, initialBalance: finalBalance)
+            modelContext.insert(newAsset)
+            asset = newAsset
+        }
 
-        let trimmed = categoryName.trimmingCharacters(in: .whitespaces)
-        let category = CategoryOperation(name: trimmed.isEmpty ? "General" : trimmed)
-        modelContext.insert(category)
+        // Reuse existing "General" category or create it once
+        let categoryDescriptor = FetchDescriptor<CategoryOperation>(
+            predicate: #Predicate { $0.name == "General" }
+        )
+        let category: CategoryOperation
+        if let existing = (try? modelContext.fetch(categoryDescriptor))?.first {
+            category = existing
+        } else {
+            let newCategory = CategoryOperation(name: "General")
+            modelContext.insert(newCategory)
+            category = newCategory
+        }
 
+        // Only add the transaction if it doesn't already exist on this asset
         if !operationName.isEmpty, let rawAmount = operationAmount {
             let opAmount: Decimal = operationType == .expense
                 ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
                 : abs(rawAmount)
-            modelContext.insert(AssetOperation(
-                name: operationName, date: .now, amount: opAmount,
-                asset: asset, category: category
-            ))
+            let alreadyExists = (asset.operations ?? []).contains {
+                $0.name == operationName && $0.frequency == .single
+            }
+            if !alreadyExists {
+                modelContext.insert(AssetOperation(
+                    name: operationName, date: .now, amount: opAmount,
+                    asset: asset, category: category
+                ))
+            }
         }
 
+        // Only add the recurring operation if it doesn't already exist on this asset
         if !recurringName.isEmpty, let rawAmount = recurringAmount {
             let recAmount: Decimal = recurringOperationType == .expense
                 ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
                 : abs(rawAmount)
-            let uuid = UUID()
-            modelContext.insert(AssetOperation(
-                id: uuid, name: recurringName, date: .now, amount: recAmount,
-                asset: asset, category: category, frequency: recurringFrequency
-            ))
-            scheduleRecurringNotification(id: uuid, name: recurringName, amount: recAmount)
+            let alreadyExists = (asset.operations ?? []).contains {
+                $0.name == recurringName && $0.frequency != .single
+            }
+            if !alreadyExists {
+                let uuid = UUID()
+                modelContext.insert(AssetOperation(
+                    id: uuid, name: recurringName, date: .now, amount: recAmount,
+                    asset: asset, category: category, frequency: recurringFrequency
+                ))
+                scheduleRecurringNotification(id: uuid, name: recurringName, amount: recAmount)
+            }
         }
 
-        onComplete()
+        path.append(.success)
     }
 
     private func scheduleRecurringNotification(id: UUID, name: String, amount: Decimal) {

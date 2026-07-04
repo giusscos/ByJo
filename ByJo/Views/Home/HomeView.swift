@@ -17,7 +17,8 @@ struct HomeView: View {
         case viewGoal
         case viewCategories
         case swapAssetOperation
-        
+        case customize
+
         var id: String {
             switch self {
                 case .createOperation:
@@ -32,6 +33,8 @@ struct HomeView: View {
                     return "viewCategories"
                 case .swapAssetOperation:
                     return "assetAmountSwap"
+                case .customize:
+                    return "customize"
             }
         }
     }
@@ -40,6 +43,8 @@ struct HomeView: View {
     
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
+    @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
+    @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
     
     @Query var assets: [Asset]
     
@@ -58,19 +63,33 @@ struct HomeView: View {
         assets.reduce(Decimal(0)) { $0 + $1.calculateCurrentBalance() }
     }
 
+    var visibleSections: [HomeSection] {
+        let hidden = Set(sectionHiddenString.split(separator: ",").compactMap { HomeSection(rawValue: String($0)) })
+        let ordered = sectionOrderString.split(separator: ",").compactMap { HomeSection(rawValue: String($0)) }
+        let missing = HomeSection.allCases.filter { s in !ordered.contains(s) }
+        return (ordered + missing).filter { !hidden.contains($0) }
+    }
+
+    @ViewBuilder
+    private func sectionView(for section: HomeSection) -> some View {
+        switch section {
+        case .goals:            GoalListStackView()
+        case .monthSummary:     FinancialSummaryWidgetView()
+        case .spendmeter:       SaveToSpendGaugeView()
+        case .recurring:        RecurringOperationWidgetView()
+        case .category:         CategoryWidgetView()
+        case .savingsRate:      SavingsRateWidgetView()
+        case .topExpenses:      TopExpensesWidgetView()
+        case .assetAllocation:  AssetAllocationWidgetView()
+        }
+    }
+
     var body: some View {
         NavigationStack {
             List {
-                GoalListStackView()
-
-                FinancialSummaryWidgetView()
-
-                SaveToSpendGaugeView()
-
-                RecurringOperationWidgetView()
-
-                CategoryWidgetView()
-
+                ForEach(visibleSections) { section in
+                    sectionView(for: section)
+                }
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
@@ -110,6 +129,12 @@ struct HomeView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Section {
+                            Button {
+                                activeSheet = .customize
+                            } label: {
+                                Label("Customize Home", systemImage: "slider.horizontal.3")
+                            }
+
                             Button {
                                 withAnimation {
                                     compactNumber.toggle()
@@ -194,13 +219,15 @@ struct HomeView: View {
                             EditGoalView(asset: asset)
                         }
                     case .viewGoal:
-                        GoalListView()
+                        NavigationStack { GoalListView() }
                     case .viewCategories:
                         CategoryOperationView()
                     case .swapAssetOperation:
                         if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
                             AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
                         }
+                    case .customize:
+                        CustomizeHomeView()
                 }
             }
 //            .onAppear() {
