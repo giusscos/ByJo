@@ -37,7 +37,10 @@ struct OperationRow: View {
             Spacer()            
 
             Group {
-                if operation.amount > 0 {
+                if operation.swapId != nil {
+                    Image(systemName: "arrow.left.arrow.right.circle.fill")
+                        .foregroundStyle(.blue)
+                } else if operation.amount > 0 {
                     Image(systemName: "arrow.up.circle.fill")
                         .foregroundStyle(.green)
                 } else {

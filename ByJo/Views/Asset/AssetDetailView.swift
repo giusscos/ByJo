@@ -48,6 +48,7 @@ struct AssetDetailView: View {
 
     @Query var categories: [CategoryOperation]
     @Query var assets: [Asset]
+    @Query var allOperations: [AssetOperation]
     
     @State private var activeSheet: ActiveSheet?
     @State private var filterCategory: CategoryOperation?
@@ -92,7 +93,7 @@ struct AssetDetailView: View {
                                 }
                                 .swipeActions (edge: .trailing) {
                                     Button (role: .destructive) {
-                                        modelContext.delete(operation)
+                                        deleteOperation(operation)
                                     } label: {
                                         Label("Delete", systemImage: "trash")
                                     }
@@ -240,6 +241,14 @@ struct AssetDetailView: View {
                 }
             }
         }
+    }
+    
+    private func deleteOperation(_ operation: AssetOperation) {
+        if let swapId = operation.swapId,
+           let linked = allOperations.first(where: { $0.id != operation.id && $0.swapId == swapId }) {
+            modelContext.delete(linked)
+        }
+        modelContext.delete(operation)
     }
 }
 

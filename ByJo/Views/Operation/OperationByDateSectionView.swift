@@ -15,26 +15,27 @@ struct OperationByDateSectionView: View {
     
     @Binding var activeSheet: OperationListViewSheet?
     
-    func linkedOperation(for operation: AssetOperation, in operations: [AssetOperation]) -> AssetOperation? {
+    @Query var allOperations: [AssetOperation]
+    
+    func linkedOperation(for operation: AssetOperation) -> AssetOperation? {
         guard let swapId = operation.swapId else { return nil }
-        return operations.first(where: { $0.id != operation.id && $0.swapId == swapId })
+        return allOperations.first(where: { $0.id != operation.id && $0.swapId == swapId })
     }
     
     var body: some View {
         ForEach(filteredAndSortedOperations) { item in
             Section {
                 ForEach(item.operations) { operation in
-                    let linkedOperation = linkedOperation(for: operation, in: item.operations)
-                    
+                    let linked = linkedOperation(for: operation)
                     NavigationLink {
-                        OperationDetailView(operation: operation, linkedOperation: linkedOperation)
+                        OperationDetailView(operation: operation, linkedOperation: linked)
                     } label: {
                         OperationRow(operation: operation)
                     }
                     .tag(operation)
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-                            deleteOperation(operation: operation, linkedOperation: linkedOperation)
+                            deleteOperation(operation: operation, linkedOperation: linked)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
@@ -60,11 +61,10 @@ struct OperationByDateSectionView: View {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
         
-        if let linkedOperation = linkedOperation {
-            linkedOperation.swapId = nil
-        }
-        
         withAnimation {
+            if let linkedOperation = linkedOperation {
+                modelContext.delete(linkedOperation)
+            }
             modelContext.delete(operation)
         }
     }
