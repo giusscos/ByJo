@@ -35,10 +35,10 @@ struct OnboardingView: View {
     @State private var assetStatusBalance: StatusBalance = .positive
     @State private var operationName = ""
     @State private var operationAmount: Decimal? = nil
-    @State private var operationType: OperationType = .income
+    @State private var operationType: OperationType = .inflow
     @State private var recurringName = ""
     @State private var recurringAmount: Decimal? = nil
-    @State private var recurringOperationType: OperationType = .income
+    @State private var recurringOperationType: OperationType = .inflow
     @State private var recurringFrequency: RecurrenceFrequency = .monthly
 
     var body: some View {
@@ -132,7 +132,7 @@ struct OnboardingView: View {
 
         // Only add the transaction if it doesn't already exist on this asset
         if !operationName.isEmpty, let rawAmount = operationAmount {
-            let opAmount: Decimal = operationType == .expense
+            let opAmount: Decimal = operationType == .outflow
                 ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
                 : abs(rawAmount)
             let alreadyExists = (asset.operations ?? []).contains {
@@ -148,7 +148,7 @@ struct OnboardingView: View {
 
         // Only add the recurring operation if it doesn't already exist on this asset
         if !recurringName.isEmpty, let rawAmount = recurringAmount {
-            let recAmount: Decimal = recurringOperationType == .expense
+            let recAmount: Decimal = recurringOperationType == .outflow
                 ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
                 : abs(rawAmount)
             let alreadyExists = (asset.operations ?? []).contains {

@@ -39,7 +39,7 @@ struct AddOperationTip: Tip {
     }
 
     var message: Text? {
-        Text("Tap + to record income or expenses and keep your balances up to date.")
+        Text("Tap + to record inflows or outflows and keep your balances up to date.")
     }
 
     var image: Image? {

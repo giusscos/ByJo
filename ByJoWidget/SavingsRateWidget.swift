@@ -10,7 +10,7 @@ struct SavingsRateEntry: TimelineEntry {
     let date: Date
     let data: WSavingsRateData
     static var placeholder: SavingsRateEntry {
-        SavingsRateEntry(date: Date(), data: WSavingsRateData(rate: 0.32, income: 3200, expenses: 2176, currencyCode: "USD", updatedAt: Date()))
+        SavingsRateEntry(date: Date(), data: WSavingsRateData(rate: 0.32, inflow: 3200, outflow: 2176, currencyCode: "USD", updatedAt: Date()))
     }
 }
 
@@ -122,12 +122,12 @@ private struct SRMedium: View {
             Divider()
             VStack(alignment: .leading, spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Income", systemImage: "arrow.up.circle.fill").font(.caption2).foregroundStyle(.green)
-                    Text(srFmt(entry.data.income, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Label("Inflow", systemImage: "arrow.up.circle.fill").font(.caption2).foregroundStyle(.green)
+                    Text(srFmt(entry.data.inflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Expenses", systemImage: "arrow.down.circle.fill").font(.caption2).foregroundStyle(.red)
-                    Text(srFmt(entry.data.expenses, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Label("Outflow", systemImage: "arrow.down.circle.fill").font(.caption2).foregroundStyle(.red)
+                    Text(srFmt(entry.data.outflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
             }
         }
@@ -138,7 +138,7 @@ private struct SRMedium: View {
 private struct SRLarge: View {
     let entry: SavingsRateEntry
     var pct: Int { Int((entry.data.rate * 100).rounded()) }
-    var saved: Double { entry.data.income - entry.data.expenses }
+    var saved: Double { entry.data.inflow - entry.data.outflow }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Monthly Savings Rate", systemImage: "percent")
@@ -163,14 +163,14 @@ private struct SRLarge: View {
                 Spacer()
                 VStack(spacing: 2) {
                     Image(systemName: "arrow.up.circle.fill").foregroundStyle(.green)
-                    Text("Income").font(.caption2).foregroundStyle(.secondary)
-                    Text(srFmt(entry.data.income, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Text("Inflow").font(.caption2).foregroundStyle(.secondary)
+                    Text(srFmt(entry.data.inflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 Spacer(); Divider().frame(height: 44); Spacer()
                 VStack(spacing: 2) {
                     Image(systemName: "arrow.down.circle.fill").foregroundStyle(.red)
-                    Text("Expenses").font(.caption2).foregroundStyle(.secondary)
-                    Text(srFmt(entry.data.expenses, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Text("Outflow").font(.caption2).foregroundStyle(.secondary)
+                    Text(srFmt(entry.data.outflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 Spacer(); Divider().frame(height: 44); Spacer()
                 VStack(spacing: 2) {

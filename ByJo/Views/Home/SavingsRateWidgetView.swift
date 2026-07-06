@@ -13,14 +13,14 @@ struct SavingsRateWidgetView: View {
         assets.flatMap { $0.operations ?? [] }
     }
 
-    private var income: Decimal {
+    private var inflow: Decimal {
         let range = DateRangeOption.month.dateRange
         return allOperations
             .filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
             .reduce(Decimal(0)) { $0 + $1.amount }
     }
 
-    private var expenses: Decimal {
+    private var outflow: Decimal {
         let range = DateRangeOption.month.dateRange
         return allOperations
             .filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
@@ -28,8 +28,8 @@ struct SavingsRateWidgetView: View {
     }
 
     private var savingsRate: Double {
-        guard income > 0 else { return 0 }
-        return max(0, NSDecimalNumber(decimal: (income - expenses) / income).doubleValue)
+        guard inflow > 0 else { return 0 }
+        return max(0, NSDecimalNumber(decimal: (inflow - outflow) / inflow).doubleValue)
     }
 
     private var savingsRatePercent: Int {
@@ -43,7 +43,7 @@ struct SavingsRateWidgetView: View {
     }
 
     private var hasData: Bool {
-        income > 0
+        inflow > 0
     }
 
     var body: some View {

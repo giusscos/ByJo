@@ -71,7 +71,7 @@ struct OnboardingRecurringStep: View {
                             }
                             .pickerStyle(.segmented)
                             .onChange(of: operationType) { _, newValue in
-                                if let a = amount { amount = newValue == .expense ? (a > 0 ? a * -1 : a) : abs(a) }
+                                if let a = amount { amount = newValue == .outflow ? (a > 0 ? a * -1 : a) : abs(a) }
                             }
                         }
                         .onboardingAppear(appeared, delay: 0.24)
@@ -82,7 +82,7 @@ struct OnboardingRecurringStep: View {
                                 .foregroundStyle(.secondary)
 
                             TextField(
-                                operationType == .income ? "e.g. Monthly Salary" : "e.g. Netflix",
+                                operationType == .inflow ? "e.g. Monthly Salary" : "e.g. Netflix",
                                 text: $name
                             )
                             .padding(14)

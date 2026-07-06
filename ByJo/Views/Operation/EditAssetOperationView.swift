@@ -31,7 +31,7 @@ struct EditAssetOperationView: View {
 
     @State private var name: String = ""
     @State private var date: Date = .now
-    @State private var operationType: OperationType = .income
+    @State private var operationType: OperationType = .inflow
     @State private var amountString: String = ""
     @State var asset: Asset?
     @State var category: CategoryOperation
@@ -119,9 +119,9 @@ struct EditAssetOperationView: View {
                         }
 
                         if let value = parsedAmount {
-                            Text((operationType == .expense ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
+                            Text((operationType == .outflow ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
                                 .font(.callout)
-                                .foregroundStyle(operationType == .expense ? .red : .secondary)
+                                .foregroundStyle(operationType == .outflow ? .red : .secondary)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -129,28 +129,28 @@ struct EditAssetOperationView: View {
 
                     HStack(spacing: 8) {
                         Button {
-                            operationType = .income
+                            operationType = .inflow
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "arrow.down.circle.fill")
-                                Text(OperationType.income.rawValue)
+                                Text(OperationType.inflow.rawValue)
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
-                        .tint(operationType == .income ? .green : .secondary)
+                        .tint(operationType == .inflow ? .green : .secondary)
 
                         Button {
-                            operationType = .expense
+                            operationType = .outflow
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "arrow.up.circle.fill")
-                                Text(OperationType.expense.rawValue)
+                                Text(OperationType.outflow.rawValue)
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
-                        .tint(operationType == .expense ? .red : .secondary)
+                        .tint(operationType == .outflow ? .red : .secondary)
                     }
                 }
                 .listRowSeparator(.hidden)
@@ -257,7 +257,7 @@ struct EditAssetOperationView: View {
                 amountString = NSDecimalNumber(decimal: abs(operation.amount)).stringValue
 
                 if operation.amount < 0 {
-                    operationType = .expense
+                    operationType = .outflow
                 }
 
                 note = operation.note
@@ -293,7 +293,7 @@ struct EditAssetOperationView: View {
 
     private func save() {
         var calculatedAmount = parsedAmount ?? .zero
-        if operationType == .expense && calculatedAmount > 0 {
+        if operationType == .outflow && calculatedAmount > 0 {
             calculatedAmount = calculatedAmount * -1
         }
 

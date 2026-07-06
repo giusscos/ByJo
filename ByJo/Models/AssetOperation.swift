@@ -57,8 +57,8 @@ struct OperationByDate: Identifiable {
 }
 
 enum OperationType: String, Codable, CaseIterable {
-    case income = "Income"
-    case expense = "Expense"
+    case inflow = "Inflow"
+    case outflow = "Outflow"
 }
 
 enum RecurrenceFrequency: String, Codable, CaseIterable {

@@ -239,7 +239,7 @@ struct GoalDetailView: View {
                             }
                         }
                     } else if pace <= 0 && remaining > 0 {
-                        Label("Balance not growing — add income to this asset", systemImage: "exclamationmark.triangle.fill")
+                        Label("Balance not growing — add an inflow to this asset", systemImage: "exclamationmark.triangle.fill")
                             .font(.caption)
                             .foregroundStyle(.orange)
                     }

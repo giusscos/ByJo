@@ -32,8 +32,8 @@ struct OperationDetailView: View {
     @State var showStopDialog: Bool = false
     @State var pendingDelete: DeleteAction = .none
 
-    private var isIncome: Bool { operation.amount >= 0 }
-    private var accentColor: Color { isIncome ? .green : .red }
+    private var isInflow: Bool { operation.amount >= 0 }
+    private var accentColor: Color { isInflow ? .green : .red }
 
     private var seriesHistory: [AssetOperation] {
         guard operation.frequency != .single else { return [] }
@@ -64,8 +64,8 @@ struct OperationDetailView: View {
                         .foregroundStyle(.secondary)
 
                     Label(
-                        isIncome ? "Income" : "Expense",
-                        systemImage: isIncome ? "arrow.down.circle.fill" : "arrow.up.circle.fill"
+                        isInflow ? "Inflow" : "Outflow",
+                        systemImage: isInflow ? "arrow.down.circle.fill" : "arrow.up.circle.fill"
                     )
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(accentColor)

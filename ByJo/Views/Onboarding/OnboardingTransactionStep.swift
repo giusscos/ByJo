@@ -1,9 +1,9 @@
 //
 //  OnboardingTransactionStep.swift
 //  ByJo
-//
 
 import SwiftUI
+import UIKit
 
 struct OnboardingTransactionStep: View {
     enum FocusField: Hashable { case name, amount }
@@ -18,6 +18,13 @@ struct OnboardingTransactionStep: View {
 
     @FocusState private var focusedField: FocusField?
     @State private var appeared = false
+    @State private var amountString = ""
+
+    private var parsedAmount: Decimal? {
+        guard !amountString.isEmpty else { return nil }
+        let normalized = amountString.replacingOccurrences(of: ",", with: ".")
+        return Decimal(string: normalized)
+    }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -42,7 +49,7 @@ struct OnboardingTransactionStep: View {
                                 .multilineTextAlignment(.center)
 
                             Group {
-                                Text("Record an income or expense for ") +
+                                Text("Record an inflow or outflow for ") +
                                 Text(assetName.isEmpty ? "your asset" : assetName).fontWeight(.semibold) +
                                 Text(".")
                             }
@@ -57,27 +64,12 @@ struct OnboardingTransactionStep: View {
 
                     VStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Type")
-                                .font(.subheadline).fontWeight(.medium)
-                                .foregroundStyle(.secondary)
-
-                            Picker("Type", selection: $operationType) {
-                                ForEach(OperationType.allCases, id: \.self) { Text($0.rawValue) }
-                            }
-                            .pickerStyle(.segmented)
-                            .onChange(of: operationType) { _, newValue in
-                                if let a = amount { amount = newValue == .expense ? (a > 0 ? a * -1 : a) : abs(a) }
-                            }
-                        }
-                        .onboardingAppear(appeared, delay: 0.24)
-
-                        VStack(alignment: .leading, spacing: 8) {
                             Text("Description")
                                 .font(.subheadline).fontWeight(.medium)
                                 .foregroundStyle(.secondary)
 
                             TextField(
-                                operationType == .income ? "e.g. Monthly Salary" : "e.g. Grocery Shopping",
+                                operationType == .inflow ? "e.g. Monthly Salary" : "e.g. Grocery Shopping",
                                 text: $name
                             )
                             .padding(14)
@@ -87,26 +79,75 @@ struct OnboardingTransactionStep: View {
                             .submitLabel(.next)
                             .onSubmit { focusedField = .amount }
                         }
-                        .onboardingAppear(appeared, delay: 0.32)
+                        .onboardingAppear(appeared, delay: 0.24)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 12) {
                             Text("Amount")
                                 .font(.subheadline).fontWeight(.medium)
                                 .foregroundStyle(.secondary)
 
-                            HStack(spacing: 8) {
-                                Text(currencyCode.symbol)
-                                    .foregroundStyle(amount == nil ? .secondary : .primary)
+                            VStack(spacing: 6) {
+                                ZStack {
+                                    TextField("0", text: $amountString)
+                                        .font(.system(size: 52, weight: .bold, design: .rounded))
+                                        .multilineTextAlignment(.center)
+                                        .keyboardType(.decimalPad)
+                                        .focused($focusedField, equals: .amount)
 
-                                TextField("0.00", value: $amount, format: .number.precision(.fractionLength(2)))
-                                    .keyboardType(.decimalPad)
-                                    .focused($focusedField, equals: .amount)
+                                    if !amountString.isEmpty {
+                                        HStack {
+                                            Spacer()
+                                            Button {
+                                                amountString = ""
+                                            } label: {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .font(.callout)
+                                                    .foregroundStyle(.tertiary)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                }
+
+                                if let value = parsedAmount {
+                                    Text((operationType == .outflow ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
+                                        .font(.callout)
+                                        .foregroundStyle(operationType == .outflow ? .red : .secondary)
+                                }
                             }
-                            .padding(14)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 14)
                             .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+
+                            HStack(spacing: 8) {
+                                Button {
+                                    operationType = .inflow
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "arrow.down.circle.fill")
+                                        Text(OperationType.inflow.rawValue)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+                                .tint(operationType == .inflow ? .green : .secondary)
+
+                                Button {
+                                    operationType = .outflow
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "arrow.up.circle.fill")
+                                        Text(OperationType.outflow.rawValue)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+                                .tint(operationType == .outflow ? .red : .secondary)
+                            }
                         }
                         .id("amountField")
-                        .onboardingAppear(appeared, delay: 0.40)
+                        .onboardingAppear(appeared, delay: 0.32)
                     }
                     .padding(.horizontal, 24)
                 }
@@ -116,6 +157,9 @@ struct OnboardingTransactionStep: View {
                             proxy.scrollTo("amountField", anchor: .bottom)
                         }
                     }
+                }
+                .onChange(of: amountString) { _, _ in
+                    amount = parsedAmount
                 }
             }
         }
@@ -143,6 +187,7 @@ struct OnboardingTransactionStep: View {
             }
         }
         .onAppear {
+            UITextField.appearance().clearButtonMode = .never
             appeared = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { focusedField = .name }
         }

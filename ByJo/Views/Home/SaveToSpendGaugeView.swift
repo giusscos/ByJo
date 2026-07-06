@@ -67,42 +67,42 @@ struct SaveToSpendGaugeView: View {
         assets.flatMap { $0.operations ?? [] }
     }
 
-    private var income: Decimal {
+    private var inflow: Decimal {
         let range = selectedTimeframe.dateRange
         return allOperations
             .filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
             .reduce(Decimal(0)) { $0 + $1.amount }
     }
 
-    private var expenses: Decimal {
+    private var outflow: Decimal {
         let range = selectedTimeframe.dateRange
         return allOperations
             .filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
             .reduce(Decimal(0)) { $0 + abs($1.amount) }
     }
 
-    private var savedAmount: Decimal { income - expenses }
+    private var savedAmount: Decimal { inflow - outflow }
 
     private var spendingRatio: Double {
-        guard income > 0 else { return expenses > 0 ? 1.0 : 0.0 }
-        return min(max(NSDecimalNumber(decimal: expenses / income).doubleValue, 0), 1)
+        guard inflow > 0 else { return outflow > 0 ? 1.0 : 0.0 }
+        return min(max(NSDecimalNumber(decimal: outflow / inflow).doubleValue, 0), 1)
     }
 
-    private var previousIncome: Decimal {
+    private var previousInflow: Decimal {
         let range = selectedTimeframe.previousRange
         return allOperations
             .filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
             .reduce(Decimal(0)) { $0 + $1.amount }
     }
 
-    private var previousExpenses: Decimal {
+    private var previousOutflow: Decimal {
         let range = selectedTimeframe.previousRange
         return allOperations
             .filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
             .reduce(Decimal(0)) { $0 + abs($1.amount) }
     }
 
-    private var previousSavedAmount: Decimal { previousIncome - previousExpenses }
+    private var previousSavedAmount: Decimal { previousInflow - previousOutflow }
 
     private var hasPreviousData: Bool {
         let range = selectedTimeframe.previousRange

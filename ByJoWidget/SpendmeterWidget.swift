@@ -11,7 +11,7 @@ struct SpendmeterEntry: TimelineEntry {
     let data: WSpendmeterData
     static var placeholder: SpendmeterEntry {
         SpendmeterEntry(date: Date(), data: WSpendmeterData(
-            income: 3200, expenses: 1800, savedAmount: 1400, ratio: 0.56, currencyCode: "USD", updatedAt: Date()))
+            inflow: 3200, outflow: 1800, savedAmount: 1400, ratio: 0.56, currencyCode: "USD", updatedAt: Date()))
     }
 }
 
@@ -35,7 +35,7 @@ struct SpendmeterWidget: Widget {
             SpendmeterWidgetView(entry: entry).containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Spendmeter")
-        .description("This month's income vs. expenses ratio.")
+        .description("This month's inflow vs. outflow ratio.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
@@ -226,12 +226,12 @@ private struct SMMedium: View {
             Divider()
             VStack(alignment: .leading, spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Income", systemImage: "arrow.up.circle.fill").font(.caption2).foregroundStyle(.green)
-                    Text(sFmt(entry.data.income, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Label("Inflow", systemImage: "arrow.up.circle.fill").font(.caption2).foregroundStyle(.green)
+                    Text(sFmt(entry.data.inflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Expenses", systemImage: "arrow.down.circle.fill").font(.caption2).foregroundStyle(.red)
-                    Text(sFmt(entry.data.expenses, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Label("Outflow", systemImage: "arrow.down.circle.fill").font(.caption2).foregroundStyle(.red)
+                    Text(sFmt(entry.data.outflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
             }
         }
@@ -251,14 +251,14 @@ private struct SMLarge: View {
                 Spacer()
                 VStack(spacing: 2) {
                     Image(systemName: "arrow.up.circle.fill").foregroundStyle(.green)
-                    Text("Income").font(.caption2).foregroundStyle(.secondary)
-                    Text(sFmt(entry.data.income, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Text("Inflow").font(.caption2).foregroundStyle(.secondary)
+                    Text(sFmt(entry.data.inflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 Spacer(); Divider().frame(height: 44); Spacer()
                 VStack(spacing: 2) {
                     Image(systemName: "arrow.down.circle.fill").foregroundStyle(.red)
-                    Text("Expenses").font(.caption2).foregroundStyle(.secondary)
-                    Text(sFmt(entry.data.expenses, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
+                    Text("Outflow").font(.caption2).foregroundStyle(.secondary)
+                    Text(sFmt(entry.data.outflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 Spacer()
             }

@@ -1,9 +1,9 @@
 //
 //  OnboardingAssetStep.swift
 //  ByJo
-//
 
 import SwiftUI
+import UIKit
 
 struct OnboardingAssetStep: View {
     enum FocusField: Hashable { case name, balance }
@@ -17,8 +17,15 @@ struct OnboardingAssetStep: View {
 
     @FocusState private var focusedField: FocusField?
     @State private var appeared = false
+    @State private var balanceString = ""
 
-    private var isDisabled: Bool { name.isEmpty || balance == nil }
+    private var parsedBalance: Decimal? {
+        guard !balanceString.isEmpty else { return nil }
+        let normalized = balanceString.replacingOccurrences(of: ",", with: ".")
+        return Decimal(string: normalized)
+    }
+
+    private var isDisabled: Bool { name.isEmpty || balanceString.isEmpty }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -89,32 +96,70 @@ struct OnboardingAssetStep: View {
                         }
                         .onboardingAppear(appeared, delay: 0.32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 12) {
                             Text("Current Balance")
                                 .font(.subheadline).fontWeight(.medium)
                                 .foregroundStyle(.secondary)
 
-                            Picker("Balance status", selection: $statusBalance) {
-                                ForEach(StatusBalance.allCases, id: \.self) { Text($0.rawValue) }
-                            }
-                            .pickerStyle(.segmented)
-                            .disabled(balance == nil)
-                            .onChange(of: statusBalance) { _, newValue in
-                                if let b = balance {
-                                    balance = newValue == .negative ? (b > 0 ? b * -1 : b) : abs(b)
+                            VStack(spacing: 6) {
+                                ZStack {
+                                    TextField("0", text: $balanceString)
+                                        .font(.system(size: 52, weight: .bold, design: .rounded))
+                                        .multilineTextAlignment(.center)
+                                        .keyboardType(.decimalPad)
+                                        .focused($focusedField, equals: .balance)
+
+                                    if !balanceString.isEmpty {
+                                        HStack {
+                                            Spacer()
+                                            Button {
+                                                balanceString = ""
+                                            } label: {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .font(.callout)
+                                                    .foregroundStyle(.tertiary)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                }
+
+                                if let value = parsedBalance {
+                                    Text((statusBalance == .negative ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
+                                        .font(.callout)
+                                        .foregroundStyle(statusBalance == .negative ? .red : .secondary)
                                 }
                             }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 14)
+                            .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
 
                             HStack(spacing: 8) {
-                                Text(currencyCode.symbol)
-                                    .foregroundStyle(balance == nil ? .secondary : .primary)
+                                Button {
+                                    statusBalance = .positive
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "plus.circle.fill")
+                                        Text("Positive")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+                                .tint(statusBalance == .positive ? .green : .secondary)
 
-                                TextField("0.00", value: $balance, format: .number.precision(.fractionLength(2)))
-                                    .keyboardType(.decimalPad)
-                                    .focused($focusedField, equals: .balance)
+                                Button {
+                                    statusBalance = .negative
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "minus.circle.fill")
+                                        Text("Negative")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+                                .tint(statusBalance == .negative ? .red : .secondary)
                             }
-                            .padding(14)
-                            .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                         }
                         .id("balanceField")
                         .onboardingAppear(appeared, delay: 0.40)
@@ -127,6 +172,9 @@ struct OnboardingAssetStep: View {
                             proxy.scrollTo("balanceField", anchor: .bottom)
                         }
                     }
+                }
+                .onChange(of: balanceString) { _, _ in
+                    balance = parsedBalance
                 }
             }
         }
@@ -146,6 +194,7 @@ struct OnboardingAssetStep: View {
             }
         }
         .onAppear {
+            UITextField.appearance().clearButtonMode = .never
             appeared = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { focusedField = .name }
         }

@@ -38,13 +38,13 @@ struct WidgetDataBridge {
 
     private static func writeSpendmeter(allOps: [AssetOperation], currencyCode: CurrencyCode, to defaults: UserDefaults) {
         let range = DateRangeOption.month.dateRange
-        let income   = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
+        let inflow   = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
                              .reduce(Decimal(0)) { $0 + $1.amount }
-        let expenses = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
+        let outflow  = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
                              .reduce(Decimal(0)) { $0 + abs($1.amount) }
-        let inc = d(income), exp = d(expenses)
+        let inc = d(inflow), exp = d(outflow)
         let ratio = inc > 0 ? min(max(exp / inc, 0), 1) : (exp > 0 ? 1.0 : 0.0)
-        defaults.encode(WSpendmeterData(income: inc, expenses: exp, savedAmount: inc - exp,
+        defaults.encode(WSpendmeterData(inflow: inc, outflow: exp, savedAmount: inc - exp,
                                          ratio: ratio, currencyCode: currencyCode.rawValue, updatedAt: Date()), forKey: .spendmeter)
     }
 
@@ -71,7 +71,7 @@ struct WidgetDataBridge {
             seen.insert(key)
             items.append(WRecurringData.Item(id: op.id.uuidString, name: op.name, amount: d(abs(op.amount)),
                                               nextDate: next, frequencyLabel: op.frequency.rawValue,
-                                              assetName: op.asset?.name ?? "", isIncome: op.amount > 0))
+                                              assetName: op.asset?.name ?? "", isInflow: op.amount > 0))
         }
         items.sort { $0.nextDate < $1.nextDate }
         defaults.encode(WRecurringData(items: items, currencyCode: currencyCode.rawValue, updatedAt: Date()), forKey: .recurring)
@@ -79,13 +79,13 @@ struct WidgetDataBridge {
 
     private static func writeSavingsRate(allOps: [AssetOperation], currencyCode: CurrencyCode, to defaults: UserDefaults) {
         let range = DateRangeOption.month.dateRange
-        let income   = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
+        let inflow   = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount > 0 }
                              .reduce(Decimal(0)) { $0 + $1.amount }
-        let expenses = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
+        let outflow  = allOps.filter { $0.date >= range.startDate && $0.date <= range.endDate && $0.amount < 0 }
                              .reduce(Decimal(0)) { $0 + abs($1.amount) }
-        let inc = d(income), exp = d(expenses)
+        let inc = d(inflow), exp = d(outflow)
         let rate = inc > 0 ? max(0, (inc - exp) / inc) : 0
-        defaults.encode(WSavingsRateData(rate: rate, income: inc, expenses: exp,
+        defaults.encode(WSavingsRateData(rate: rate, inflow: inc, outflow: exp,
                                           currencyCode: currencyCode.rawValue, updatedAt: Date()), forKey: .savingsRate)
     }
 

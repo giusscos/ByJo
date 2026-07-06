@@ -33,7 +33,7 @@ struct WNetWorthData: Codable {
 }
 
 struct WSpendmeterData: Codable {
-    var income: Double; var expenses: Double; var savedAmount: Double
+    var inflow: Double; var outflow: Double; var savedAmount: Double
     var ratio: Double; var currencyCode: String; var updatedAt: Date
 }
 
@@ -47,13 +47,13 @@ struct WAssetAllocData: Codable {
 struct WRecurringData: Codable {
     struct Item: Codable, Identifiable {
         var id: String; var name: String; var amount: Double
-        var nextDate: Date; var frequencyLabel: String; var assetName: String; var isIncome: Bool
+        var nextDate: Date; var frequencyLabel: String; var assetName: String; var isInflow: Bool
     }
     var items: [Item]; var currencyCode: String; var updatedAt: Date
 }
 
 struct WSavingsRateData: Codable {
-    var rate: Double; var income: Double; var expenses: Double
+    var rate: Double; var inflow: Double; var outflow: Double
     var currencyCode: String; var updatedAt: Date
 }
 
