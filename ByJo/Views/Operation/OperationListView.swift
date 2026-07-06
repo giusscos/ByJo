@@ -68,6 +68,7 @@ struct OperationListView: View {
     
     @State private var sortOrder: OperationSortOrder = .date
     @State private var isAscending: Bool = false
+    @State private var showRecurringOnly: Bool = false
     
     var filteredAndSortedOperations: [OperationByDate] {
         var filteredOperations = operations
@@ -78,6 +79,10 @@ struct OperationListView: View {
         
         if let category = filterCategory {
             filteredOperations = filteredOperations.filter { $0.category == category }
+        }
+
+        if showRecurringOnly {
+            filteredOperations = filteredOperations.filter { $0.frequency != .single }
         }
         
         switch sortOrder {
@@ -205,6 +210,7 @@ struct OperationListView: View {
                                     } label: {
                                         Label("Swap", systemImage: "arrow.up.arrow.down")
                                     }
+                                    .disabled(assets.count < 2)
                                 }
                                 
                                 Section {
@@ -216,6 +222,21 @@ struct OperationListView: View {
                                 }
                                 
                                 if !operations.isEmpty {
+                                    Section {
+                                        Button {
+                                            withAnimation {
+                                                showRecurringOnly.toggle()
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Label("Recurring only", systemImage: "repeat")
+                                                if showRecurringOnly {
+                                                    Image(systemName: "checkmark")
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     Section {
                                         Menu("By Asset") {
                                             ForEach(assets, id: \.id) { asset in

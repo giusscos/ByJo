@@ -51,7 +51,7 @@ struct ContentView: View {
                 HomeView()
             }
 
-            Tab("Assets", systemImage: "briefcase.fill") {
+            Tab("Assets", systemImage: "banknote.fill") {
                 AssetListView()
             }
 

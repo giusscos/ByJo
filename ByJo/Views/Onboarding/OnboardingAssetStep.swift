@@ -131,8 +131,6 @@ struct OnboardingAssetStep: View {
             }
         }
         .background(KeyboardDismissOnAppear())
-        .scrollDismissesKeyboard(.interactively)
-        .ignoresSafeArea(.keyboard)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save", action: onContinue)

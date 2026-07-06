@@ -150,8 +150,6 @@ struct OnboardingRecurringStep: View {
             }
         }
         .background(KeyboardDismissOnAppear())
-        .scrollDismissesKeyboard(.interactively)
-        .ignoresSafeArea(.keyboard)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: onSkip) {

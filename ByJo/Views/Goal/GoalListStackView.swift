@@ -40,12 +40,14 @@ struct GoalListStackView: View {
                     HStack {
                         Text("Goals")
                             .font(.headline)
+                            .foregroundStyle(.secondary)
                         Spacer()
                         Text("\(goals.count) active")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
+                .buttonStyle(.plain)
 
                 if let goal = featuredGoal, let asset = goal.asset {
                     NavigationLink {
@@ -53,6 +55,7 @@ struct GoalListStackView: View {
                     } label: {
                         GoalHomeSummary(goal: goal, asset: asset)
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -81,39 +84,75 @@ private struct GoalHomeSummary: View {
 
     var progressPercent: Int { Int((progress * 100).rounded()) }
 
+    var daysLeft: Int? {
+        guard let due = goal.dueDate, !goal.isExpired else { return nil }
+        return Calendar.current.dateComponents([.day], from: .now, to: due).day
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(goal.title)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
+        VStack(alignment: .leading, spacing: 12) {
+            // Asset name + urgency badge
+            HStack(spacing: 6) {
+                Text(asset.name)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
 
                 if goal.isExpired {
-                    Label("Expired", systemImage: "clock.badge.xmark")
-                        .font(.subheadline)
-                        .foregroundStyle(.red)
-                } else if remaining > 0 {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(remaining, format: compactNumber
-                             ? .currency(code: currency.rawValue).notation(.compactName)
-                             : .currency(code: currency.rawValue))
-                            .font(.system(size: 34, weight: .black, design: .rounded))
-                            .foregroundStyle(.primary)
-                            .contentTransition(.numericText(value: Double(truncating: remaining as NSDecimalNumber)))
-
-                        Text("left to go")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                } else {
-                    Label("Goal reached!", systemImage: "checkmark.circle.fill")
-                        .font(.headline)
-                        .foregroundStyle(.green)
+                    Text("Expired")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2)
+                        .background(Color.red, in: Capsule())
+                } else if let days = daysLeft, days <= 7 {
+                    Text(days == 0 ? "Today" : "\(days)d left")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2)
+                        .background(Color.orange, in: Capsule())
                 }
             }
 
+            // Goal title
+            Text(goal.title)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
+                .lineLimit(2)
+
+            // Hero amount
+            if goal.isExpired {
+                Label("Expired", systemImage: "clock.badge.xmark")
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            } else if remaining > 0 {
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                    Text(remaining, format: compactNumber
+                         ? .currency(code: currency.rawValue).notation(.compactName)
+                         : .currency(code: currency.rawValue))
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .contentTransition(.numericText(value: Double(truncating: remaining as NSDecimalNumber)))
+
+                    Text("left to go")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                Label("Goal reached!", systemImage: "checkmark.circle.fill")
+                    .font(.headline)
+                    .foregroundStyle(.green)
+            }
+
+            // Progress bar
+            ProgressView(value: progress)
+                .tint(goal.isExpired ? .red : (remaining == 0 ? .green : .accentColor))
+
+            // Footer stats
             HStack(spacing: 3) {
                 Text(goal.startingAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)
@@ -134,16 +173,18 @@ private struct GoalHomeSummary: View {
                      : .currency(code: currency.rawValue))
                     .foregroundStyle(.secondary)
 
+                Spacer()
+
                 if let dueDate = goal.dueDate {
-                    Text("·")
-                        .foregroundStyle(Color.secondary.opacity(0.4))
-                    Text(dueDate, format: .dateTime.month(.abbreviated).year())
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 3) {
+                        Image(systemName: "calendar")
+                        Text(dueDate, format: .dateTime.month(.abbreviated).year())
+                    }
+                    .foregroundStyle(.secondary)
                 }
             }
             .font(.caption)
         }
-        .padding(.vertical, 4)
     }
 }
 

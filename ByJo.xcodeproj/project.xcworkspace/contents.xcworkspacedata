@@ -4,4 +4,8 @@
    <FileRef
       location = "self:">
    </FileRef>
+   <Group
+      location = "group:ByJoWidget"
+      name = "ByJoWidget">
+   </Group>
 </Workspace>

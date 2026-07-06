@@ -9,21 +9,19 @@ import SwiftData
 import SwiftUI
 
 struct RecurringOperationWidgetView: View {
+    @Environment(\.modelContext) var modelContext
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
 
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
 
-    @State var toAddOperations: [AssetOperation] = []
-    
-    @State private var showRecurringAlert = false
-    
+    @State private var toAddOperations: [AssetOperation] = []
+    @State private var showPreviewSheet = false
+
     var body: some View {
-        if let recurringOperation = operations.first(where: { operation in
-            operation.frequency != .single
-        }) {
+        if let recurringOperation = operations.first(where: { $0.frequency != .single }) {
             Section {
-                VStack (alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 24) {
                     NavigationLink {
                         RecurringOperationListView()
                     } label: {
@@ -31,15 +29,15 @@ struct RecurringOperationWidgetView: View {
                             .font(.headline)
                             .foregroundStyle(.secondary)
                     }
-                    
-                    VStack (alignment: .leading) {
+
+                    VStack(alignment: .leading) {
                         Text(recurringOperation.name)
                             .font(.title3)
                             .fontWeight(.semibold)
                             .lineLimit(1)
-                        
-                        HStack (alignment: .lastTextBaseline) {
-                            HStack (spacing: 4) {
+
+                        HStack(alignment: .lastTextBaseline) {
+                            HStack(spacing: 4) {
                                 Group {
                                     if recurringOperation.amount > 0 {
                                         Image(systemName: "arrow.up.circle.fill")
@@ -51,19 +49,18 @@ struct RecurringOperationWidgetView: View {
                                         Image(systemName: "arrow.down.circle.fill")
                                             .foregroundStyle(.red)
                                     }
-                                    
                                 }
                                 .imageScale(.large)
                                 .fontWeight(.semibold)
-                                
+
                                 Text(abs(recurringOperation.amount), format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                     .font(.title)
                                     .fontWeight(.semibold)
                                     .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                             }
-                            
+
                             Spacer()
-                            
+
                             if let nextPaymentDate = recurringOperation.frequency.nextPaymentDate(from: recurringOperation.date) {
                                 Text(nextPaymentDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits).hour().minute())
                                     .font(.subheadline)
@@ -74,79 +71,174 @@ struct RecurringOperationWidgetView: View {
                     }
                 }
             }
-            .onAppear() {
+            .onAppear {
                 processRecurringOperations()
             }
-            .alert("New recurring \(toAddOperations.count == 1 ? "operation" : "operations")", isPresented: $showRecurringAlert) {
-                Button("Continue", role: .cancel) {}
-            } message: {
-                Text("\(toAddOperations.count) new \(toAddOperations.count == 1 ? "operation" : "operations") will be added to your operations list.")
-            }
-        }
-    }
-    
-    func processRecurringOperations() {
-        toAddOperations.removeAll()
-        
-        let recurringOperations = operations.filter {
-            $0.frequency != RecurrenceFrequency.single
-        }
-        
-        for operation in recurringOperations {
-            if let category = operation.category {
-                let nextDate = operation.frequency.nextPaymentDate(from: operation.date)
-                
-                if let dueDate = nextDate, dueDate <= Date() {
-                    let alreadyExists = operations.contains {
-                        $0.name == operation.name && $0.date == dueDate
-                    }
-                    
-                    if !alreadyExists {
-                        let newOperation = AssetOperation(
-                            id: UUID(),
-                            name: operation.name,
-                            date: dueDate,
-                            amount: operation.amount,
-                            asset: operation.asset,
-                            category: category,
-                            note: operation.note,
-                            frequency: operation.frequency
-                        )
-                        
-                        toAddOperations.append(newOperation)
-                        
-                        scheduleNotification(operation: newOperation)
-                    }
+            .sheet(isPresented: $showPreviewSheet) {
+                RecurringOperationsPreviewSheet(operations: toAddOperations) {
+                    insertPendingOperations()
                 }
             }
         }
-        
-        if !toAddOperations.isEmpty {
-            showRecurringAlert = true
+    }
+
+    // Assigns a shared seriesId to legacy recurring operations that predate V2,
+    // grouping them by name + asset + frequency so they form a proper series.
+    private func repairLegacySeriesIds() {
+        let legacy = operations.filter { $0.frequency != .single && $0.seriesId == nil }
+        guard !legacy.isEmpty else { return }
+
+        var groups: [String: UUID] = [:]
+        for op in legacy {
+            let key = "\(op.name)|\(op.asset?.id.uuidString ?? "nil")|\(op.frequency.rawValue)"
+            if let existingId = groups[key] {
+                op.seriesId = existingId
+            } else {
+                let newId = UUID()
+                groups[key] = newId
+                op.seriesId = newId
+            }
         }
     }
-    
-    private func scheduleNotification(operation: AssetOperation) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Recurring operation"
-        
-        content.subtitle = "\(operation.name) \(operation.amount.formatted(.currency(code: currencyCode.rawValue)))"
 
-        content.badge = NSNumber(value: 1)
+    private func processRecurringOperations() {
+        repairLegacySeriesIds()
+        toAddOperations.removeAll()
 
-        if let nextDate = operation.frequency.nextPaymentDate(from: operation.date) {
-            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-            
-            let request = UNNotificationRequest(identifier: operation.id.uuidString, content: content, trigger: trigger)
-            
-            center.add(request)
+        let calendar = Calendar.current
+        let recurringOperations = operations.filter { $0.frequency != .single }
 
-            return
+        for operation in recurringOperations {
+            guard let category = operation.category, let seriesId = operation.seriesId else { continue }
+
+            var nextDate = operation.frequency.nextPaymentDate(from: operation.date)
+
+            while let dueDate = nextDate, dueDate <= Date() {
+                let dueDateDay = calendar.startOfDay(for: dueDate)
+
+                let alreadyExists = operations.contains {
+                    $0.seriesId == seriesId &&
+                    calendar.startOfDay(for: $0.date) == dueDateDay
+                }
+
+                let alreadyQueued = toAddOperations.contains {
+                    $0.seriesId == seriesId &&
+                    calendar.startOfDay(for: $0.date) == dueDateDay
+                }
+
+                if !alreadyExists && !alreadyQueued {
+                    toAddOperations.append(AssetOperation(
+                        name: operation.name,
+                        date: dueDate,
+                        amount: operation.amount,
+                        asset: operation.asset,
+                        category: category,
+                        note: operation.note,
+                        frequency: operation.frequency,
+                        seriesId: seriesId
+                    ))
+                }
+
+                nextDate = operation.frequency.nextPaymentDate(from: dueDate)
+            }
+        }
+
+        if !toAddOperations.isEmpty {
+            showPreviewSheet = true
+        }
+    }
+
+    private func insertPendingOperations() {
+        var latestPerSeries: [UUID: AssetOperation] = [:]
+
+        for operation in toAddOperations {
+            modelContext.insert(operation)
+            if let seriesId = operation.seriesId {
+                let current = latestPerSeries[seriesId]
+                if current == nil || operation.date > current!.date {
+                    latestPerSeries[seriesId] = operation
+                }
+            }
+        }
+
+        // Refresh the notification window for each affected series
+        for (seriesId, latest) in latestPerSeries {
+            scheduleRecurringNotifications(
+                seriesId: seriesId,
+                name: latest.name,
+                amount: latest.amount,
+                startingFrom: latest.date,
+                frequency: latest.frequency,
+                currencyCode: currencyCode
+            )
+        }
+
+        toAddOperations.removeAll()
+    }
+}
+
+private struct RecurringOperationsPreviewSheet: View {
+    @Environment(\.dismiss) var dismiss
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    @AppStorage("compactNumber") var compactNumber: Bool = true
+
+    let operations: [AssetOperation]
+    let onConfirm: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(operations) { operation in
+                    HStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(operation.name)
+                                .font(.body)
+                                .fontWeight(.semibold)
+
+                            HStack(spacing: 6) {
+                                if let assetName = operation.asset?.name {
+                                    Text(assetName)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+
+                                    Text("·")
+                                        .font(.caption)
+                                        .foregroundStyle(.tertiary)
+                                }
+
+                                Text(operation.date, format: .dateTime.day().month(.abbreviated).year())
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+
+                        Spacer()
+
+                        Text(operation.amount, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
+                            .font(.body)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(operation.amount >= 0 ? .green : .red)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+            .navigationTitle("\(operations.count) pending \(operations.count == 1 ? "operation" : "operations")")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Skip") {
+                        dismiss()
+                    }
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add All") {
+                        onConfirm()
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
         }
     }
 }

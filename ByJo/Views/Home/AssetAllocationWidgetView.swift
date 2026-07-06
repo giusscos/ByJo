@@ -50,13 +50,9 @@ struct AssetAllocationWidgetView: View {
         if !slices.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    NavigationLink {
-                        AssetListView()
-                    } label: {
-                        Text("Asset allocation")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text("Asset allocation")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
 
                     HStack(alignment: .center, spacing: 24) {
                         Chart(slices) { slice in

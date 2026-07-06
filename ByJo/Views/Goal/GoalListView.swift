@@ -73,8 +73,6 @@ struct GoalListView: View {
                         }
                     }
                 }
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
             }
 
             if !completedGoals.isEmpty {

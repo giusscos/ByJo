@@ -27,15 +27,17 @@ struct EditGoalView: View {
 
     @State private var title: String = ""
     @State var asset: Asset
-    @State private var targetAmount: Decimal?
+    @State private var targetAmountString: String = ""
     @State private var statusTargetAmount: StatusBalance = .positive
     @State private var date: Date = .now
     @State private var hasDueDate: Bool = false
 
     @State private var isGoalCompleted: StatusGoal = .completed
 
-    var nilBalance: Bool {
-        targetAmount == nil || targetAmount == .zero
+    private var parsedTargetAmount: Decimal? {
+        guard !targetAmountString.isEmpty else { return nil }
+        let normalized = targetAmountString.replacingOccurrences(of: ",", with: ".")
+        return Decimal(string: normalized)
     }
 
     var body: some View {
@@ -67,38 +69,69 @@ struct EditGoalView: View {
                         }
                     }
                     .pickerStyle(.menu)
+
+                    Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: currencyCode.rawValue))
                 }
 
                 Section {
-                    Picker("Status target amount", selection: $statusTargetAmount) {
-                        ForEach(StatusBalance.allCases, id: \.self) { status in
-                            Text(status.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .disabled(targetAmount == nil)
-                    .onChange(of: statusTargetAmount) { oldValue, newValue in
-                        if let amountValue = targetAmount {
-                            if amountValue > 0, newValue == .negative {
-                                targetAmount = amountValue * -1
-                            } else {
-                                targetAmount = abs(amountValue)
+                    VStack(spacing: 6) {
+                        ZStack {
+                            TextField("0", text: $targetAmountString)
+                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .multilineTextAlignment(.center)
+                                .keyboardType(.decimalPad)
+                                .focused($focusedField, equals: .targetAmount)
+                                .submitLabel(.done)
+                                .onSubmit { focusedField = .none }
+
+                            if !targetAmountString.isEmpty {
+                                HStack {
+                                    Spacer()
+                                    Button {
+                                        targetAmountString = ""
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.callout)
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
+
+                        if let value = parsedTargetAmount {
+                            Text((statusTargetAmount == .negative ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
+                                .font(.callout)
+                                .foregroundStyle(statusTargetAmount == .negative ? .red : .secondary)
+                        }
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
 
-                    Text("Current: ") + Text(asset.calculateCurrentBalance(), format: .currency(code: currencyCode.rawValue))
+                    HStack(spacing: 8) {
+                        Button {
+                            statusTargetAmount = .positive
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Positive")
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(statusTargetAmount == .positive ? .green : .secondary)
 
-                    HStack(spacing: 6) {
-                        Text(currencyCode.symbol)
-                            .foregroundStyle(nilBalance ? .secondary : .primary)
-                            .opacity(nilBalance ? 0.5 : 1)
-
-                        TextField("Target amount", value: $targetAmount, format: .number.precision(.fractionLength(2)))
-                            .keyboardType(.decimalPad)
-                            .focused($focusedField, equals: .targetAmount)
-                            .submitLabel(.done)
-                            .onSubmit { focusedField = .none }
+                        Button {
+                            statusTargetAmount = .negative
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "minus.circle.fill")
+                                Text("Negative")
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(statusTargetAmount == .negative ? .red : .secondary)
                     }
                 }
                 .listRowSeparator(.hidden)
@@ -132,14 +165,14 @@ struct EditGoalView: View {
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(title.isEmpty || targetAmount == nil)
+                        .disabled(title.isEmpty || targetAmountString.isEmpty)
                     } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(title.isEmpty || targetAmount == nil)
+                        .disabled(title.isEmpty || targetAmountString.isEmpty)
                     }
                 }
 
@@ -153,6 +186,9 @@ struct EditGoalView: View {
             }
         }
         .onAppear {
+            UITextField.appearance().clearButtonMode = .never
+            focusedField = .title
+
             guard let goal else { return }
 
             title = goal.title
@@ -161,7 +197,7 @@ struct EditGoalView: View {
                 self.asset = goalAsset
             }
 
-            targetAmount = goal.targetAmount
+            targetAmountString = NSDecimalNumber(decimal: abs(goal.targetAmount)).stringValue
 
             if goal.targetAmount < 0 {
                 statusTargetAmount = .negative
@@ -184,18 +220,15 @@ struct EditGoalView: View {
     }
 
     private func save() {
-        if let amountValue = targetAmount {
-            if amountValue < 0, statusTargetAmount == .positive {
-                targetAmount = abs(amountValue)
-            } else if amountValue > 0, statusTargetAmount == .negative {
-                targetAmount = amountValue * -1
-            }
+        var amount = parsedTargetAmount ?? .zero
+        if statusTargetAmount == .negative && amount > 0 {
+            amount = amount * -1
         }
 
         if let goal {
             goal.title = title
             goal.asset = asset
-            goal.targetAmount = targetAmount ?? .zero
+            goal.targetAmount = amount
             goal.startingAmount = asset.calculateCurrentBalance()
             goal.dueDate = hasDueDate ? date : nil
 
@@ -210,7 +243,7 @@ struct EditGoalView: View {
         let newGoal = Goal(
             title: title,
             startingAmount: asset.calculateCurrentBalance(),
-            targetAmount: targetAmount ?? 0.0,
+            targetAmount: amount,
             dueDate: hasDueDate ? date : nil,
             asset: asset
         )

@@ -137,7 +137,7 @@ struct SaveToSpendGaugeView: View {
                     )
                     .frame(maxWidth: .infinity)
                 }
-                .padding(.top, 8)
+                .padding(.top)
                 .listRowInsets(EdgeInsets())
             }
         }

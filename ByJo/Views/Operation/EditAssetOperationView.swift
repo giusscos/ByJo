@@ -15,32 +15,38 @@ struct EditAssetOperationView: View {
         case amount
         case note
     }
-    
+
     @FocusState private var focusedField: FocusField?
-    
+
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
-    
+
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
-    
+
     @Query var assets: [Asset]
     @Query var categoriesOperation: [CategoryOperation]
-    
+    @Query var allOperations: [AssetOperation]
+
     var operation: AssetOperation?
-    
+
     @State private var name: String = ""
     @State private var date: Date = .now
     @State private var operationType: OperationType = .income
-    @State private var amount: Decimal?
+    @State private var amountString: String = ""
     @State var asset: Asset?
     @State var category: CategoryOperation
     @State private var note: String = ""
     @State private var frequency: RecurrenceFrequency = .single
 
-    var nilAmount: Bool {
-        amount == .zero || amount == nil
+    @State private var showUpdateScopeDialog = false
+    @State private var pendingAmount: Decimal = 0
+
+    private var parsedAmount: Decimal? {
+        guard !amountString.isEmpty else { return nil }
+        let normalized = amountString.replacingOccurrences(of: ",", with: ".")
+        return Decimal(string: normalized)
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -52,9 +58,9 @@ struct EditAssetOperationView: View {
                         .onSubmit {
                             focusedField = .amount
                         }
-                    
+
                     DatePicker("Date", selection: $date)
-                    
+
                     VStack(alignment: .leading) {
                         Picker("Recurring", selection: $frequency) {
                             ForEach(RecurrenceFrequency.allCases, id: \.self) { frequencyType in
@@ -62,7 +68,7 @@ struct EditAssetOperationView: View {
                             }
                         }
                         .pickerStyle(.menu)
-                        
+
                         if frequency != .single, let nextDate = frequency.nextPaymentDate(from: date) {
                             Group {
                                 Text("Next occurrence: ")
@@ -83,41 +89,72 @@ struct EditAssetOperationView: View {
                         }
                     }
                 }
-                
+
                 Section {
-                    Picker("Type of operation", selection: $operationType) {
-                        ForEach(OperationType.allCases, id: \.self) { operationType in
-                            Text(operationType.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .disabled(amount == nil)
-                    .onChange(of: operationType) { oldValue, newValue in
-                        if let amountValue = amount {
-                            if amountValue > 0, newValue == OperationType.expense {
-                                amount = amountValue * -1
-                            } else {
-                                amount = abs(amountValue)
+                    VStack(spacing: 6) {
+                        ZStack {
+                            TextField("0", text: $amountString)
+                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .multilineTextAlignment(.center)
+                                .keyboardType(.decimalPad)
+                                .focused($focusedField, equals: .amount)
+                                .submitLabel(.next)
+                                .onSubmit {
+                                    focusedField = .note
+                                }
+
+                            if !amountString.isEmpty {
+                                HStack {
+                                    Spacer()
+                                    Button {
+                                        amountString = ""
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.callout)
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
+
+                        if let value = parsedAmount {
+                            Text((operationType == .expense ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
+                                .font(.callout)
+                                .foregroundStyle(operationType == .expense ? .red : .secondary)
+                        }
                     }
-                    
-                    HStack (spacing: 6) {
-                        Text(currencyCode.symbol)
-                            .foregroundStyle(nilAmount ? .secondary : .primary)
-                            .opacity(nilAmount ? 0.5 : 1)
-                            
-                        TextField("Amount", value: $amount, format: .number.precision(.fractionLength(2)))
-                            .keyboardType(.decimalPad)
-                            .focused($focusedField, equals: .amount)
-                            .submitLabel(.next)
-                            .onSubmit {
-                                focusedField = .note
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+
+                    HStack(spacing: 8) {
+                        Button {
+                            operationType = .income
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "arrow.down.circle.fill")
+                                Text(OperationType.income.rawValue)
                             }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(operationType == .income ? .green : .secondary)
+
+                        Button {
+                            operationType = .expense
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "arrow.up.circle.fill")
+                                Text(OperationType.expense.rawValue)
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(operationType == .expense ? .red : .secondary)
                     }
                 }
                 .listRowSeparator(.hidden)
-                
+
                 Section {
                     Picker("Asset", selection: $asset) {
                         ForEach(assets) { asset in
@@ -126,7 +163,7 @@ struct EditAssetOperationView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    
+
                     Picker("Category", selection: $category) {
                         ForEach(categoriesOperation) { category in
                             Text(category.name)
@@ -135,19 +172,21 @@ struct EditAssetOperationView: View {
                     }
                     .pickerStyle(.menu)
                 }
-                
+
                 Section {
-                    TextEditor(text: $note)
+                    TextField("Insert note", text: $note, axis: .vertical)
                         .autocorrectionDisabled()
-                        .overlay(alignment: .topLeading, content: {
-                            if note.isEmpty {
-                                Text("Insert note")
-                                    .foregroundColor(.secondary.opacity(0.5))
-                                    .padding(.horizontal, 2)
-                                    .padding(.vertical, 8)
+                        .lineLimit(3...8)
+                        .focused($focusedField, equals: .note)
+                        .mask {
+                            VStack(spacing: 0) {
+                                LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom)
+                                    .frame(height: 10)
+                                Color.black
+                                LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
+                                    .frame(height: 10)
                             }
-                        })
-                        .frame(maxHeight: 256)
+                        }
                 }
                 .listRowInsets(.init(top: 16, leading: 14, bottom: 16, trailing: 16))
             }
@@ -163,7 +202,7 @@ struct EditAssetOperationView: View {
                         .tint(.red)
                     }
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     if #available(iOS 26, *) {
                         Button(role: .confirm) {
@@ -171,17 +210,17 @@ struct EditAssetOperationView: View {
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(name.isEmpty || amount == nil)
+                        .disabled(name.isEmpty || amountString.isEmpty)
                     } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(name.isEmpty || amount == nil)
+                        .disabled(name.isEmpty || amountString.isEmpty)
                     }
                 }
-                
+
                 ToolbarItem(placement: .keyboard) {
                     Button {
                         focusedField = .none
@@ -191,123 +230,163 @@ struct EditAssetOperationView: View {
                 }
             }
         }
+        .confirmationDialog("Update recurring operation", isPresented: $showUpdateScopeDialog) {
+            Button("Update this occurrence only") {
+                if let op = operation {
+                    applyChanges(to: op, amount: pendingAmount)
+                }
+                dismiss()
+            }
+            Button("Update all occurrences") {
+                if let op = operation {
+                    applyChangesToAll(to: op, amount: pendingAmount)
+                }
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Do you want to update only this occurrence or all \(siblings.count + 1) occurrences in the series?")
+        }
         .onAppear {
+            UITextField.appearance().clearButtonMode = .never
             focusedField = .name
-            
+
             if let operation = operation {
                 name = operation.name
                 date = operation.date
-                amount = abs(operation.amount)
-                
+                amountString = NSDecimalNumber(decimal: abs(operation.amount)).stringValue
+
                 if operation.amount < 0 {
                     operationType = .expense
                 }
-                
+
                 note = operation.note
                 frequency = operation.frequency
-                
+
                 if operation.asset == nil {
                     operation.asset = asset
                 }
-                
+
                 if operation.category == nil {
                     operation.category = category
                 }
             }
-            
+
             if let firstAsset = assets.first {
                 asset = firstAsset
             }
         }
     }
-    
+
     private func deleteOperation(operation: AssetOperation) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
-        
+        if let seriesId = operation.seriesId {
+            cancelRecurringNotifications(seriesId: seriesId)
+        }
         modelContext.delete(operation)
-        
         dismiss()
     }
-    
+
+    private var siblings: [AssetOperation] {
+        guard let op = operation, let seriesId = op.seriesId else { return [] }
+        return allOperations.filter { $0.id != op.id && $0.seriesId == seriesId }
+    }
+
     private func save() {
-        let uuid = UUID()
-        
-        if let amountValue = amount {
-            if amountValue < 0, operationType == .income {
-                amount = abs(amountValue)
-            } else if amountValue > 0, operationType == .expense {
-                amount = amountValue * -1
-            }
+        var calculatedAmount = parsedAmount ?? .zero
+        if operationType == .expense && calculatedAmount > 0 {
+            calculatedAmount = calculatedAmount * -1
         }
-        
-        if let operation = operation {
-            operation.name = name
-            operation.date = date
-            operation.frequency = frequency
-            
-            if let amount = amount {
-                operation.amount = amount
+
+        if let op = operation {
+            if !siblings.isEmpty {
+                pendingAmount = calculatedAmount
+                showUpdateScopeDialog = true
+                return
             }
-            
-            operation.note = note
-
-            operation.asset = asset
-
-            operation.category = category
-            
-            scheduleNotification(uuid: operation.id)
-            
+            applyChanges(to: op, amount: calculatedAmount)
+            if let seriesId = op.seriesId {
+                scheduleRecurringNotifications(
+                    seriesId: seriesId,
+                    name: name,
+                    amount: calculatedAmount,
+                    startingFrom: date,
+                    frequency: frequency,
+                    currencyCode: currencyCode
+                )
+            }
             dismiss()
-            
             return
         }
-        
-        let calculatedAmount = amount ?? .zero
-        
+
+        let newSeriesId: UUID? = frequency != .single ? UUID() : nil
         let newOperation = AssetOperation(
-            id: uuid,
+            id: UUID(),
             name: name,
             date: date,
             amount: calculatedAmount,
             asset: asset,
             category: category,
             note: note,
-            frequency: frequency
+            frequency: frequency,
+            seriesId: newSeriesId
         )
-        
+
         modelContext.insert(newOperation)
 
-        if frequency != .single {
-            scheduleNotification(uuid: newOperation.id)
+        if let seriesId = newSeriesId {
+            scheduleRecurringNotifications(
+                seriesId: seriesId,
+                name: name,
+                amount: calculatedAmount,
+                startingFrom: date,
+                frequency: frequency,
+                currencyCode: currencyCode
+            )
         }
-        
+
         dismiss()
     }
-    
-    private func scheduleNotification(uuid: UUID) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [uuid.uuidString])
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Recurring operation"
-        
-        if let amount = amount {
-            content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
-        } else {
-            content.subtitle = name
-        }
-        
-        content.badge = NSNumber(value: 1)
-        
-        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: uuid.uuidString, content: content, trigger: trigger)
-        
-        center.add(request)
+
+    private func applyChanges(to op: AssetOperation, amount: Decimal) {
+        op.name = name
+        op.date = date
+        op.frequency = frequency
+        op.amount = amount
+        op.note = note
+        op.asset = asset
+        op.category = category
     }
+
+    private func applyChangesToAll(to op: AssetOperation, amount: Decimal) {
+        applyChanges(to: op, amount: amount)
+        let calendar = Calendar.current
+        let newTime = calendar.dateComponents([.hour, .minute, .second], from: date)
+        for sibling in siblings {
+            sibling.name = name
+            sibling.amount = amount
+            sibling.note = note
+            sibling.category = category
+            if let updatedDate = calendar.date(
+                bySettingHour: newTime.hour ?? 0,
+                minute: newTime.minute ?? 0,
+                second: newTime.second ?? 0,
+                of: sibling.date
+            ) {
+                sibling.date = updatedDate
+            }
+        }
+        if let seriesId = op.seriesId {
+            scheduleRecurringNotifications(
+                seriesId: seriesId,
+                name: name,
+                amount: amount,
+                startingFrom: op.date,
+                frequency: frequency,
+                currencyCode: currencyCode
+            )
+        }
+    }
+
 }
 
 #Preview {
@@ -322,4 +401,3 @@ struct EditAssetOperationView: View {
         category: CategoryOperation(name: "Bank account")
     )
 }
-

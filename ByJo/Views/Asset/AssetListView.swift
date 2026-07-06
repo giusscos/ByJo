@@ -185,6 +185,7 @@ struct AssetListView: View {
                                 } label: {
                                     Label("Swap", systemImage: "arrow.up.arrow.down")
                                 }
+                                .disabled(assets.count < 2)
                             }
                             
                             Section {

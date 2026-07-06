@@ -65,9 +65,9 @@ struct RecurringOperationListView: View {
     }
     
     private func deleteOperation(operation: AssetOperation) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
-        
+        if let seriesId = operation.seriesId {
+            cancelRecurringNotifications(seriesId: seriesId)
+        }
         modelContext.delete(operation)
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import UserNotifications
 
 @Model
 final class AssetOperation {
@@ -21,6 +22,7 @@ final class AssetOperation {
     var category: CategoryOperation?
 
     var swapId: UUID? = nil
+    var seriesId: UUID? = nil
 
     init(
         id: UUID = UUID(),
@@ -31,7 +33,8 @@ final class AssetOperation {
         category: CategoryOperation? = nil,
         note: String = "",
         frequency: RecurrenceFrequency = RecurrenceFrequency.single,
-        swapId: UUID? = nil
+        swapId: UUID? = nil,
+        seriesId: UUID? = nil
     ) {
         self.id = id
         self.name = name
@@ -42,6 +45,7 @@ final class AssetOperation {
         self.note = note
         self.frequency = frequency
         self.swapId = swapId
+        self.seriesId = seriesId
     }
 }
 
@@ -78,6 +82,68 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
         guard self != .single else { return nil }
         return Calendar.current.date(byAdding: dateComponents, to: date)
     }
+
+    // How many future notifications to pre-schedule per series
+    var notificationCount: Int {
+        switch self {
+        case .single:  return 0
+        case .daily:   return 30
+        case .weekly:  return 26
+        case .monthly: return 12
+        case .yearly:  return 5
+        }
+    }
+}
+
+// Schedules N future local notifications for a recurring series, replacing any
+// previously scheduled ones for that seriesId. Safe to call on create and edit.
+func scheduleRecurringNotifications(
+    seriesId: UUID,
+    name: String,
+    amount: Decimal,
+    startingFrom date: Date,
+    frequency: RecurrenceFrequency,
+    currencyCode: CurrencyCode
+) {
+    cancelRecurringNotifications(seriesId: seriesId)
+    guard frequency != .single else { return }
+
+    let content = UNMutableNotificationContent()
+    content.title = "Recurring operation"
+    content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
+    content.badge = NSNumber(value: 1)
+    content.sound = .default
+
+    let now = Date()
+    var currentDate = date
+
+    // Fast-forward to just before the first future occurrence
+    while let candidate = frequency.nextPaymentDate(from: currentDate), candidate <= now {
+        currentDate = candidate
+    }
+
+    let center = UNUserNotificationCenter.current()
+    let maxCount = frequency.notificationCount
+    var scheduled = 0
+
+    while scheduled < maxCount, let nextDate = frequency.nextPaymentDate(from: currentDate) {
+        currentDate = nextDate
+        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+        let request = UNNotificationRequest(
+            identifier: "\(seriesId.uuidString)-\(scheduled)",
+            content: content,
+            trigger: trigger
+        )
+        center.add(request)
+        scheduled += 1
+    }
+}
+
+// Removes all pending notifications for a recurring series.
+func cancelRecurringNotifications(seriesId: UUID) {
+    let identifiers = (0..<64).map { "\(seriesId.uuidString)-\($0)" }
+    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
 }
 
 enum DateRangeOption: Identifiable, Hashable {

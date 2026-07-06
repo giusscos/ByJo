@@ -9,8 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct GoalRowView: View {
-    @Environment(\.modelContext) var modelContext
-
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
 
@@ -39,86 +37,52 @@ struct GoalRowView: View {
         return Calendar.current.dateComponents([.day], from: .now, to: due).day
     }
 
-    @State private var showEditGoal: Bool = false
-
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 12) {
             // Header
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Text(asset.name)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                Text(asset.name)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
 
-                        if goal.isExpired {
-                            Text("Expired")
-                                .font(.caption2)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2)
-                                .background(Color.red, in: Capsule())
-                        } else if let days = daysLeft, days <= 7 {
-                            Text(days == 0 ? "Today" : "\(days)d left")
-                                .font(.caption2)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2)
-                                .background(Color.orange, in: Capsule())
-                        }
-                    }
-
-                    Text(goal.title)
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .lineLimit(2)
-                }
-
-                Spacer()
-
-                Menu {
-                    Button {
-                        setStatusGoal(status: .completed)
-                    } label: {
-                        Label("Mark completed", systemImage: "inset.filled.circle")
-                    }
-
-                    Button {
-                        setStatusGoal(status: .suspended)
-                    } label: {
-                        Label("Suspend", systemImage: "inset.filled.circle.dashed")
-                    }
-
-                    Divider()
-
-                    Button {
-                        showEditGoal = true
-                    } label: {
-                        Label("Edit", systemImage: "pencil")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle.fill")
-                        .symbolRenderingMode(.hierarchical)
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
+                if goal.isExpired {
+                    Text("Expired")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2)
+                        .background(Color.red, in: Capsule())
+                } else if let days = daysLeft, days <= 7 {
+                    Text(days == 0 ? "Today" : "\(days)d left")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2)
+                        .background(Color.orange, in: Capsule())
                 }
             }
 
-            Spacer(minLength: 12)
+            Text(goal.title)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .lineLimit(2)
 
             // Hero number
-            if remaining > 0 {
-                VStack(alignment: .leading, spacing: 2) {
+            if goal.isExpired {
+                Label("Expired", systemImage: "clock.badge.xmark")
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            } else if remaining > 0 {
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
                     Text(remaining, format: compactNumber
                          ? .currency(code: currency.rawValue).notation(.compactName)
                          : .currency(code: currency.rawValue))
-                        .font(.system(size: 34, weight: .black, design: .rounded))
-                        .foregroundStyle(goal.isExpired ? .red : .primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .contentTransition(.numericText(value: Double(truncating: remaining as NSDecimalNumber)))
 
                     Text("left to go")
                         .font(.caption)
@@ -131,31 +95,30 @@ struct GoalRowView: View {
                     .foregroundStyle(.green)
             }
 
-            Spacer(minLength: 12)
+            // Progress bar
+            ProgressView(value: progress)
+                .tint(goal.isExpired ? .red : (remaining == 0 ? .green : .accentColor))
 
             // Footer: from · % · to + due date
-            HStack {
-                HStack(spacing: 3) {
-                    Text(goal.startingAmount, format: compactNumber
-                         ? .currency(code: currency.rawValue).notation(.compactName)
-                         : .currency(code: currency.rawValue))
-                        .foregroundStyle(.secondary)
+            HStack(spacing: 3) {
+                Text(goal.startingAmount, format: compactNumber
+                     ? .currency(code: currency.rawValue).notation(.compactName)
+                     : .currency(code: currency.rawValue))
+                    .foregroundStyle(.secondary)
 
-                    Text("·")
-                        .foregroundStyle(Color.secondary.opacity(0.5))
+                Text("·")
+                    .foregroundStyle(Color.secondary.opacity(0.4))
 
-                    Text("\(progressPercent)%")
-                        .fontWeight(.semibold)
+                Text("\(progressPercent)%")
+                    .fontWeight(.semibold)
 
-                    Text("·")
-                        .foregroundStyle(Color.secondary.opacity(0.5))
+                Text("·")
+                    .foregroundStyle(Color.secondary.opacity(0.4))
 
-                    Text(goal.targetAmount, format: compactNumber
-                         ? .currency(code: currency.rawValue).notation(.compactName)
-                         : .currency(code: currency.rawValue))
-                        .foregroundStyle(.secondary)
-                }
-                .font(.caption)
+                Text(goal.targetAmount, format: compactNumber
+                     ? .currency(code: currency.rawValue).notation(.compactName)
+                     : .currency(code: currency.rawValue))
+                    .foregroundStyle(.secondary)
 
                 Spacer()
 
@@ -164,24 +127,10 @@ struct GoalRowView: View {
                         Image(systemName: "calendar")
                         Text(dueDate, format: .dateTime.month(.abbreviated).year())
                     }
-                    .font(.caption2)
                     .foregroundStyle(.secondary)
                 }
             }
-        }
-        .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(.rect(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.1), radius: 8, y: 4)
-        .sheet(isPresented: $showEditGoal) {
-            EditGoalView(goal: goal, asset: asset)
-        }
-    }
-
-    private func setStatusGoal(status: StatusGoal) {
-        withAnimation {
-            goal.completedDate = Date.now
-            goal.completedStatus = status
+            .font(.caption)
         }
     }
 }

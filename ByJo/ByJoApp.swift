@@ -29,20 +29,7 @@ struct ByJoApp: App {
             container.mainContext.undoManager = UndoManager()
             return container
         } catch {
-            // Existing store is incompatible with the new schema (e.g. removed entity).
-            // Wipe it and start fresh — acceptable during development.
-            let url = modelConfiguration.url
-            try? FileManager.default.removeItem(at: url)
-            try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + "-shm"))
-            try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + "-wal"))
-
-            do {
-                let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-                container.mainContext.undoManager = UndoManager()
-                return container
-            } catch {
-                fatalError("Could not create ModelContainer: \(error)")
-            }
+            fatalError("Could not create ModelContainer: \(error)")
         }
     }()
 

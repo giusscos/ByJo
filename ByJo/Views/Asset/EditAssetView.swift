@@ -13,26 +13,27 @@ struct EditAssetView: View {
         case name
         case balance
     }
-    
+
     @FocusState private var focusedField: FocusField?
-    
+
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
-    
+
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
-    
+
     var asset: Asset?
-    
+
     @State private var name: String = ""
-    @State private var initialBalance: Decimal?
+    @State private var initialBalanceString: String = ""
     @State private var statusInitialBalance: StatusBalance = .positive
     @State private var type: AssetType = .bankAccount
-    @State private var isNegative: Bool = false
-    
-    private var nilBalance: Bool {
-        initialBalance == nil || initialBalance == .zero
+
+    private var parsedBalance: Decimal? {
+        guard !initialBalanceString.isEmpty else { return nil }
+        let normalized = initialBalanceString.replacingOccurrences(of: ",", with: ".")
+        return Decimal(string: normalized)
     }
-    
+
     var body: some View {
         NavigationStack {
             Form {
@@ -45,42 +46,72 @@ struct EditAssetView: View {
                             focusedField = .balance
                         }
                 }
-                
+
                 Section {
-                    Picker("Status initial balance", selection: $statusInitialBalance) {
-                        ForEach(StatusBalance.allCases, id: \.self) { status in
-                            Text(status.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .disabled(initialBalance == nil)
-                    .onChange(of: statusInitialBalance) { oldValue, newValue in
-                        if let amountValue = initialBalance {
-                            if amountValue > 0, newValue == .negative {
-                                initialBalance = amountValue * -1
-                            } else {
-                                initialBalance = abs(amountValue)
+                    VStack(spacing: 6) {
+                        ZStack {
+                            TextField("0", text: $initialBalanceString)
+                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .multilineTextAlignment(.center)
+                                .keyboardType(.decimalPad)
+                                .focused($focusedField, equals: .balance)
+                                .submitLabel(.done)
+                                .onSubmit {
+                                    focusedField = .none
+                                }
+
+                            if !initialBalanceString.isEmpty {
+                                HStack {
+                                    Spacer()
+                                    Button {
+                                        initialBalanceString = ""
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.callout)
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
+
+                        if let value = parsedBalance {
+                            Text((statusInitialBalance == .negative ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
+                                .font(.callout)
+                                .foregroundStyle(statusInitialBalance == .negative ? .red : .secondary)
+                        }
                     }
-                    
-                    HStack (spacing: 6) {
-                        Text(currencyCode.symbol)
-                            .foregroundStyle(nilBalance ? .secondary : .primary)
-                            .opacity(nilBalance ? 0.5 : 1)
-                        
-                        TextField("Initial balance", value: $initialBalance, format: .number.precision(.fractionLength(2)))
-                            .keyboardType(.decimalPad)
-                            .autocorrectionDisabled()
-                            .focused($focusedField, equals: .balance)
-                            .submitLabel(.done)
-                            .onSubmit {
-                                focusedField = .none
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+
+                    HStack(spacing: 8) {
+                        Button {
+                            statusInitialBalance = .positive
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Positive")
                             }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(statusInitialBalance == .positive ? .green : .secondary)
+
+                        Button {
+                            statusInitialBalance = .negative
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "minus.circle.fill")
+                                Text("Negative")
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(statusInitialBalance == .negative ? .red : .secondary)
                     }
                 }
                 .listRowSeparator(.hidden)
-                
+
                 Section {
                     Picker("Asset type", selection: $type) {
                         ForEach(AssetType.allCases, id: \.self) { value in
@@ -102,7 +133,7 @@ struct EditAssetView: View {
                         .tint(.red)
                     }
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     if #available(iOS 26, *) {
                         Button(role: .confirm) {
@@ -110,17 +141,17 @@ struct EditAssetView: View {
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(name.isEmpty || initialBalance == nil)
+                        .disabled(name.isEmpty || initialBalanceString.isEmpty)
                     } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(name.isEmpty || initialBalance == nil)
+                        .disabled(name.isEmpty || initialBalanceString.isEmpty)
                     }
                 }
-                
+
                 ToolbarItem(placement: .keyboard) {
                     Button {
                         focusedField = .none
@@ -130,59 +161,44 @@ struct EditAssetView: View {
                 }
             }
             .onAppear() {
+                UITextField.appearance().clearButtonMode = .never
                 focusedField = .name
-                
+
                 if let asset = asset {
                     name = asset.name
-                    initialBalance = asset.initialBalance
-                    
+                    initialBalanceString = NSDecimalNumber(decimal: abs(asset.initialBalance)).stringValue
+
                     if asset.initialBalance < 0 {
                         statusInitialBalance = .negative
                     }
-                    
+
                     type = asset.type
                 }
             }
         }
     }
-    
+
     private func save() {
-        if let amountValue = initialBalance {
-            if amountValue < 0, statusInitialBalance == .positive {
-                initialBalance = abs(amountValue)
-            } else if amountValue > 0, statusInitialBalance == .negative {
-                initialBalance = amountValue * -1
-            }
+        var balance = parsedBalance ?? .zero
+        if statusInitialBalance == .negative && balance > 0 {
+            balance = balance * -1
         }
-        
+
         if let asset = asset {
             asset.name = name
-            
-            if let initialBalance = initialBalance {
-                asset.initialBalance = initialBalance
-            }
-            
+            asset.initialBalance = balance
             asset.type = type
-            
             dismiss()
-            
             return
         }
-        
-        let newAsset = Asset(
-            name: name,
-            type: type,
-            initialBalance: initialBalance ?? 0.0
-        )
-        
+
+        let newAsset = Asset(name: name, type: type, initialBalance: balance)
         modelContext.insert(newAsset)
-        
         dismiss()
     }
-    
+
     private func deleteAsset(asset: Asset) {
         modelContext.delete(asset)
-        
         dismiss()
     }
 }

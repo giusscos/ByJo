@@ -96,16 +96,19 @@ struct HomeView: View {
             .onAppear {
                 AddAssetTip.hasAssets = !assets.isEmpty
                 AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && operations.isEmpty
+                WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
             }
             .onChange(of: assets) { _, new in
                 AddAssetTip.hasAssets = !new.isEmpty
                 AddOperationTip.isReady = !new.isEmpty && !categories.isEmpty && operations.isEmpty
+                WidgetDataBridge.update(assets: new, currencyCode: currencyCode, compactNumber: compactNumber)
             }
             .onChange(of: categories) { _, new in
                 AddOperationTip.isReady = !assets.isEmpty && !new.isEmpty && operations.isEmpty
             }
             .onChange(of: operations) { _, new in
                 AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && new.isEmpty
+                WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -156,6 +159,7 @@ struct HomeView: View {
                             } label: {
                                 Label("Swap", systemImage: "arrow.up.arrow.down")
                             }
+                            .disabled(assets.count < 2)
                         }
                         
                         Section {
