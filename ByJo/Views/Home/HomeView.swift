@@ -45,7 +45,10 @@ struct HomeView: View {
     @AppStorage("compactNumber") var compactNumber: Bool = true
     @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
     @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
-    
+    @AppStorage("whatsNewVersion") var whatsNewVersion: String = ""
+
+    @State private var showWhatsNew: Bool = false
+
     @Query var assets: [Asset]
     
     @Query var goals: [Goal]
@@ -97,6 +100,10 @@ struct HomeView: View {
                 AddAssetTip.hasAssets = !assets.isEmpty
                 AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && operations.isEmpty
                 WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
+                if whatsNewVersion != "2.0" {
+                    showWhatsNew = true
+                    whatsNewVersion = "2.0"
+                }
             }
             .onChange(of: assets) { _, new in
                 AddAssetTip.hasAssets = !new.isEmpty
@@ -208,6 +215,11 @@ struct HomeView: View {
                         VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                     }
                     .popoverTip(addAssetTip)
+                }
+            }
+            .fullScreenCover(isPresented: $showWhatsNew) {
+                WhatsNewView {
+                    showWhatsNew = false
                 }
             }
             .sheet(item: $activeSheet) { sheet in
