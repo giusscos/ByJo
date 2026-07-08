@@ -1,0 +1,172 @@
+/* MARK: - Asset Types */
+"Cash" = "Cash";
+"Bank Account" = "Bank Account";
+"Savings Account" = "Savings Account";
+"Checking Account" = "Checking Account";
+"Credit Card" = "Credit Card";
+"Investment Account" = "Investment Account";
+"Brokerage Account" = "Brokerage Account";
+"Retirement Account" = "Retirement Account";
+"Pension" = "Pension";
+"Cryptocurrency" = "Cryptocurrency";
+"Stocks" = "Stocks";
+"Bonds" = "Bonds";
+"Mutual Funds" = "Mutual Funds";
+"ETFs" = "ETFs";
+"Real Estate" = "Real Estate";
+"Property" = "Property";
+"Vehicle" = "Vehicle";
+"Car" = "Car";
+"Motorcycle" = "Motorcycle";
+"Boat" = "Boat";
+"Jewelry" = "Jewelry";
+"Art" = "Art";
+"Collectibles" = "Collectibles";
+"Business" = "Business";
+"Partnership" = "Partnership";
+"Loan" = "Loan";
+"Mortgage" = "Mortgage";
+"Student Loan" = "Student Loan";
+"Personal Loan" = "Personal Loan";
+"Insurance" = "Insurance";
+"Life Insurance" = "Life Insurance";
+"Health Insurance" = "Health Insurance";
+"Annuity" = "Annuity";
+"Commodity" = "Commodity";
+"Precious Metals" = "Precious Metals";
+"Foreign Currency" = "Foreign Currency";
+"Options" = "Options";
+"Futures" = "Futures";
+"Private Equity" = "Private Equity";
+"Crowdfunding Investment" = "Crowdfunding Investment";
+"Other" = "Other";
+
+/* MARK: - Operation Types */
+"Inflow" = "Inflow";
+"Outflow" = "Outflow";
+
+/* MARK: - Recurrence Frequency */
+"Single" = "Single";
+"Daily" = "Daily";
+"Weekly" = "Weekly";
+"Monthly" = "Monthly";
+"Yearly" = "Yearly";
+
+/* MARK: - Goal Status */
+"Completed" = "Completed";
+"Suspended" = "Suspended";
+
+/* MARK: - Balance Status */
+"Positive" = "Positive";
+"Negative" = "Negative";
+
+/* MARK: - Spendmeter Timeframe */
+"Day" = "Day";
+"Week" = "Week";
+"Month" = "Month";
+"Year" = "Year";
+
+/* MARK: - Asset Sort Order */
+"Name" = "Name";
+"Balance" = "Balance";
+"Type" = "Type";
+
+/* MARK: - Home Sections */
+"Goals" = "Goals";
+"Monthly Summary" = "Monthly Summary";
+"Spendmeter" = "Spendmeter";
+"Recurring" = "Recurring";
+"Top Category" = "Top Category";
+"Savings Rate" = "Savings Rate";
+"Top Expenses" = "Top Expenses";
+"Asset Allocation" = "Asset Allocation";
+
+/* MARK: - Spendmeter Period Labels */
+"yesterday" = "yesterday";
+"last week" = "last week";
+"last month" = "last month";
+"last year" = "last year";
+
+/* MARK: - Spendmeter Insight Messages */
+"Same as %@" = "Same as %@";
+"%d%% more saved than %@" = "%d%% more saved than %@";
+"%d%% less saved than %@" = "%d%% less saved than %@";
+"More saved than %@" = "More saved than %@";
+"Less saved than %@" = "Less saved than %@";
+
+/* MARK: - Notifications */
+"Recurring operation" = "Recurring operation";
+
+/* MARK: - Assets */
+"Assets" = "Assets";
+"Add asset" = "Add asset";
+"No assets found 😕" = "No assets found 😕";
+"Start adding assets" = "Start adding assets";
+"Asset type" = "Asset type";
+"Long amount" = "Long amount";
+"Short amount" = "Short amount";
+"By Type" = "By Type";
+"Sort By" = "Sort By";
+"Filters" = "Filters";
+"Sorters" = "Sorters";
+"Menu" = "Menu";
+
+/* MARK: - Operations */
+"Edit operation" = "Edit operation";
+"Create operation" = "Create operation";
+"Update recurring operation" = "Update recurring operation";
+"Update this occurrence only" = "Update this occurrence only";
+"Update all occurrences" = "Update all occurrences";
+"Insert note" = "Insert note";
+"Next occurrence: " = "Next occurrence: ";
+
+/* MARK: - Goals */
+"Add goal" = "Add goal";
+"Is Goal completed?" = "Is Goal completed?";
+
+/* MARK: - Categories */
+"Categories" = "Categories";
+
+/* MARK: - Common Actions */
+"Save" = "Save";
+"Edit" = "Edit";
+"Delete" = "Delete";
+"Cancel" = "Cancel";
+"Skip" = "Skip";
+"Allow" = "Allow";
+
+/* MARK: - Operation Detail */
+"Asset" = "Asset";
+"Category" = "Category";
+"Next payment" = "Next payment";
+"From" = "From";
+"To" = "To";
+"Received" = "Received";
+"Transfer" = "Transfer";
+"Note" = "Note";
+"History" = "History";
+"Stop recurring" = "Stop recurring";
+"Delete current" = "Delete current";
+"Delete linked" = "Delete linked";
+"Delete both" = "Delete both";
+"Are you sure you want to delete?" = "Are you sure you want to delete?";
+"Stop recurring?" = "Stop recurring?";
+"No future occurrences will be generated. Past occurrences are kept." = "No future occurrences will be generated. Past occurrences are kept.";
+
+/* MARK: - Swap */
+"Swap" = "Swap";
+
+/* MARK: - Keyboard */
+"Hide keyboard" = "Hide keyboard";
+"Dismiss keyboard" = "Dismiss keyboard";
+
+/* MARK: - Onboarding */
+"Set Up a Recurring Payment" = "Set Up a Recurring Payment";
+"Log a Transaction" = "Log a Transaction";
+"Description" = "Description";
+"Amount" = "Amount";
+"Repeats" = "Repeats";
+"Enable Reminders" = "Enable Reminders";
+"Get notified when recurring payments are due." = "Get notified when recurring payments are due.";
+"Reminders enabled" = "Reminders enabled";
+"Date" = "Date";

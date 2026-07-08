@@ -107,7 +107,7 @@ struct OperationDetailView: View {
 
                 if operation.frequency != .single {
                     LabeledContent {
-                        Text(operation.frequency.rawValue)
+                        Text(operation.frequency.displayName)
                             .foregroundStyle(.secondary)
                     } label: {
                         Label("Recurring", systemImage: "repeat")

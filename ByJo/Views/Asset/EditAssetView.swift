@@ -115,7 +115,7 @@ struct EditAssetView: View {
                 Section {
                     Picker("Asset type", selection: $type) {
                         ForEach(AssetType.allCases, id: \.self) { value in
-                            Text(value.rawValue)
+                            Text(value.displayName)
                         }
                     }
                     .pickerStyle(.menu)

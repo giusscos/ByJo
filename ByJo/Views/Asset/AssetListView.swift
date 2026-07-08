@@ -17,9 +17,9 @@ struct AssetListView: View {
         
         var displayName: String {
             switch self {
-                case .name: return "Name"
-                case .balance: return "Balance"
-                case .type: return "Type"
+                case .name: return NSLocalizedString("Name", comment: "")
+                case .balance: return NSLocalizedString("Balance", comment: "")
+                case .type: return NSLocalizedString("Type", comment: "")
             }
         }
     }
@@ -226,8 +226,8 @@ struct AssetListView: View {
                                                 }
                                             } label: {
                                                 HStack {
-                                                    Text(type.rawValue)
-                                                    
+                                                    Text(type.displayName)
+
                                                     if type == selectedType {
                                                         Image(systemName: "checkmark")
                                                     }

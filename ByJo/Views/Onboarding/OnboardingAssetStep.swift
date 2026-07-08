@@ -81,11 +81,11 @@ struct OnboardingAssetStep: View {
 
                             Menu {
                                 ForEach(AssetType.allCases, id: \.self) { assetType in
-                                    Button(assetType.rawValue) { type = assetType }
+                                    Button(assetType.displayName) { type = assetType }
                                 }
                             } label: {
                                 HStack {
-                                    Text(type.rawValue).foregroundColor(.primary)
+                                    Text(type.displayName).foregroundColor(.primary)
                                     Spacer()
                                     Image(systemName: "chevron.up.chevron.down")
                                         .foregroundStyle(.secondary).font(.caption)

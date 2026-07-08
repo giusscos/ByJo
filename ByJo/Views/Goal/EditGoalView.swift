@@ -47,7 +47,7 @@ struct EditGoalView: View {
                     Section {
                         Picker("Is Goal completed?", selection: $isGoalCompleted) {
                             ForEach(StatusGoal.allCases, id: \.self) { status in
-                                Text(status.rawValue).tag(status)
+                                Text(status.displayName).tag(status)
                             }
                         }
                         .pickerStyle(.segmented)

@@ -64,7 +64,7 @@ struct EditAssetOperationView: View {
                     VStack(alignment: .leading) {
                         Picker("Recurring", selection: $frequency) {
                             ForEach(RecurrenceFrequency.allCases, id: \.self) { frequencyType in
-                                Text(frequencyType.rawValue)
+                                Text(frequencyType.displayName)
                             }
                         }
                         .pickerStyle(.menu)
@@ -133,7 +133,7 @@ struct EditAssetOperationView: View {
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "arrow.down.circle.fill")
-                                Text(OperationType.inflow.rawValue)
+                                Text(OperationType.inflow.displayName)
                             }
                             .frame(maxWidth: .infinity)
                         }
@@ -145,7 +145,7 @@ struct EditAssetOperationView: View {
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "arrow.up.circle.fill")
-                                Text(OperationType.outflow.rawValue)
+                                Text(OperationType.outflow.displayName)
                             }
                             .frame(maxWidth: .infinity)
                         }

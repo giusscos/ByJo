@@ -16,7 +16,7 @@ struct AssetRowView: View {
     var body: some View {
         HStack (alignment: .center) {
             VStack (alignment: .leading, spacing: 0) {
-                Text(asset.type.rawValue)
+                Text(asset.type.displayName)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 

@@ -63,4 +63,8 @@ enum AssetType: String, CaseIterable, Codable {
     case peerToPeerLending = "Peer-to-Peer Lending"
     case crowdfundingInvestment = "Crowdfunding Investment"
     case other = "Other"
+
+    var displayName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
 }

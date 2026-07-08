@@ -59,6 +59,10 @@ struct OperationByDate: Identifiable {
 enum OperationType: String, Codable, CaseIterable {
     case inflow = "Inflow"
     case outflow = "Outflow"
+
+    var displayName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
 }
 
 enum RecurrenceFrequency: String, Codable, CaseIterable {
@@ -67,6 +71,10 @@ enum RecurrenceFrequency: String, Codable, CaseIterable {
     case weekly = "Weekly"
     case monthly = "Monthly"
     case yearly = "Yearly"
+
+    var displayName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
 
     var dateComponents: DateComponents {
         switch self {
@@ -109,7 +117,7 @@ func scheduleRecurringNotifications(
     guard frequency != .single else { return }
 
     let content = UNMutableNotificationContent()
-    content.title = "Recurring operation"
+    content.title = NSLocalizedString("Recurring operation", comment: "")
     content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
     content.badge = NSNumber(value: 1)
     content.sound = .default

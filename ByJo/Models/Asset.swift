@@ -61,4 +61,8 @@ final class Asset {
 enum StatusBalance: String, Codable, CaseIterable {
     case positive = "Positive"
     case negative = "Negative"
+
+    var displayName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
 }

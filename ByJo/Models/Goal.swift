@@ -45,4 +45,8 @@ final class Goal {
 enum StatusGoal: String, Codable, CaseIterable {
     case completed = "Completed"
     case suspended = "Suspended"
+
+    var displayName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
 }

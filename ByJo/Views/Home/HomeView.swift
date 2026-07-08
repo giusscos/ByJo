@@ -40,7 +40,8 @@ struct HomeView: View {
     }
     
     @Environment(\.requestReview) var requestReview
-    
+    @Environment(\.modelContext) private var modelContext
+
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
     @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
@@ -202,7 +203,7 @@ struct HomeView: View {
                                     } label: {
                                         HStack {
                                             Text(value.rawValue)
-                                            
+
                                             if value == currencyCode {
                                                 Image(systemName: "checkmark")
                                             }
@@ -211,6 +212,15 @@ struct HomeView: View {
                                 }
                             }
                         }
+                        #if DEBUG
+                        Section {
+                            Button(role: .destructive) {
+                                MockDataGenerator.generate(in: modelContext)
+                            } label: {
+                                Label("Insert Mock Data", systemImage: "wand.and.stars")
+                            }
+                        }
+                        #endif
                     } label: {
                         VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                     }

@@ -126,7 +126,7 @@ struct OnboardingTransactionStep: View {
                                 } label: {
                                     HStack(spacing: 6) {
                                         Image(systemName: "arrow.down.circle.fill")
-                                        Text(OperationType.inflow.rawValue)
+                                        Text(OperationType.inflow.displayName)
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
@@ -138,7 +138,7 @@ struct OnboardingTransactionStep: View {
                                 } label: {
                                     HStack(spacing: 6) {
                                         Image(systemName: "arrow.up.circle.fill")
-                                        Text(OperationType.outflow.rawValue)
+                                        Text(OperationType.outflow.displayName)
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
@@ -165,13 +165,6 @@ struct OnboardingTransactionStep: View {
         }
         .background(KeyboardDismissOnAppear())
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: onSkip) {
-                    Text("Skip")
-                        .foregroundStyle(.secondary)
-                }
-            }
-
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save", action: onContinue)
                     .buttonStyle(.borderedProminent)

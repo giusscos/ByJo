@@ -19,14 +19,14 @@ enum HomeSection: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .goals:            return "Goals"
-        case .monthSummary:     return "Monthly Summary"
-        case .spendmeter:       return "Spendmeter"
-        case .recurring:        return "Recurring"
-        case .category:         return "Top Category"
-        case .savingsRate:      return "Savings Rate"
-        case .topExpenses:      return "Top Expenses"
-        case .assetAllocation:  return "Asset Allocation"
+        case .goals:            return NSLocalizedString("Goals", comment: "")
+        case .monthSummary:     return NSLocalizedString("Monthly Summary", comment: "")
+        case .spendmeter:       return NSLocalizedString("Spendmeter", comment: "")
+        case .recurring:        return NSLocalizedString("Recurring", comment: "")
+        case .category:         return NSLocalizedString("Top Category", comment: "")
+        case .savingsRate:      return NSLocalizedString("Savings Rate", comment: "")
+        case .topExpenses:      return NSLocalizedString("Top Expenses", comment: "")
+        case .assetAllocation:  return NSLocalizedString("Asset Allocation", comment: "")
         }
     }
 

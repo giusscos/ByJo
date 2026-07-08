@@ -225,12 +225,6 @@ private struct RecurringOperationsPreviewSheet: View {
             .navigationTitle("\(operations.count) pending \(operations.count == 1 ? "operation" : "operations")")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Skip") {
-                        dismiss()
-                    }
-                }
-
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add All") {
                         onConfirm()

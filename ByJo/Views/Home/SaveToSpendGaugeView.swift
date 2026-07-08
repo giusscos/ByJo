@@ -12,6 +12,10 @@ private enum SpendmeterTimeframe: String, CaseIterable {
     case month = "Month"
     case year = "Year"
 
+    var displayName: String {
+        NSLocalizedString(rawValue, comment: "")
+    }
+
     var dateRange: (startDate: Date, endDate: Date) {
         let calendar = Calendar.current
         let now = Date()
@@ -48,10 +52,10 @@ private enum SpendmeterTimeframe: String, CaseIterable {
 
     var previousPeriodLabel: String {
         switch self {
-        case .day:   return "yesterday"
-        case .week:  return "last week"
-        case .month: return "last month"
-        case .year:  return "last year"
+        case .day:   return NSLocalizedString("yesterday", comment: "")
+        case .week:  return NSLocalizedString("last week", comment: "")
+        case .month: return NSLocalizedString("last month", comment: "")
+        case .year:  return NSLocalizedString("last year", comment: "")
         }
     }
 }
@@ -120,7 +124,7 @@ struct SaveToSpendGaugeView: View {
 
                     Picker("Timeframe", selection: $selectedTimeframe) {
                         ForEach(SpendmeterTimeframe.allCases, id: \.self) { tf in
-                            Text(tf.rawValue).tag(tf)
+                            Text(tf.displayName).tag(tf)
                         }
                     }
                     .pickerStyle(.segmented)
@@ -253,14 +257,17 @@ struct SpendmeterView: View {
     private var insightMessage: String {
         let prevDouble = NSDecimalNumber(decimal: previousSavedAmount).doubleValue
         let diff = insightDiff
-        guard abs(diff) >= 0.01 else { return "Same as \(timeframeLabel)" }
-        let direction = diff > 0 ? "more" : "less"
+        guard abs(diff) >= 0.01 else {
+            return String(format: NSLocalizedString("Same as %@", comment: ""), timeframeLabel)
+        }
         let absPrev = abs(prevDouble)
         if absPrev >= 0.01 {
             let pct = Int(abs(diff / absPrev) * 100)
-            return "\(pct)% \(direction) saved than \(timeframeLabel)"
+            let key = diff > 0 ? "%d%% more saved than %@" : "%d%% less saved than %@"
+            return String(format: NSLocalizedString(key, comment: ""), pct, timeframeLabel)
         }
-        return "\(diff > 0 ? "More" : "Less") saved than \(timeframeLabel)"
+        let key = diff > 0 ? "More saved than %@" : "Less saved than %@"
+        return String(format: NSLocalizedString(key, comment: ""), timeframeLabel)
     }
 
     var body: some View {

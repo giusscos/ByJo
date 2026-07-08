@@ -67,7 +67,7 @@ struct OnboardingRecurringStep: View {
                                 .foregroundStyle(.secondary)
 
                             Picker("Type", selection: $operationType) {
-                                ForEach(OperationType.allCases, id: \.self) { Text($0.rawValue) }
+                                ForEach(OperationType.allCases, id: \.self) { Text($0.displayName) }
                             }
                             .pickerStyle(.segmented)
                             .onChange(of: operationType) { _, newValue in
@@ -120,11 +120,11 @@ struct OnboardingRecurringStep: View {
 
                             Menu {
                                 ForEach(recurringFrequencies, id: \.self) { freq in
-                                    Button(freq.rawValue) { frequency = freq }
+                                    Button(freq.displayName) { frequency = freq }
                                 }
                             } label: {
                                 HStack {
-                                    Text(frequency.rawValue).foregroundColor(.primary)
+                                    Text(frequency.displayName).foregroundColor(.primary)
                                     Spacer()
                                     Image(systemName: "chevron.up.chevron.down")
                                         .foregroundStyle(.secondary).font(.caption)
@@ -151,13 +151,6 @@ struct OnboardingRecurringStep: View {
         }
         .background(KeyboardDismissOnAppear())
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: onSkip) {
-                    Text("Skip")
-                        .foregroundStyle(.secondary)
-                }
-            }
-
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save", action: onContinue)
                     .buttonStyle(.borderedProminent)

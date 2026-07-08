@@ -1,0 +1,172 @@
+/* MARK: - Asset Types */
+"Cash" = "Efectivo";
+"Bank Account" = "Cuenta Bancaria";
+"Savings Account" = "Cuenta de Ahorros";
+"Checking Account" = "Cuenta Corriente";
+"Credit Card" = "Tarjeta de Crédito";
+"Investment Account" = "Cuenta de Inversión";
+"Brokerage Account" = "Cuenta de Corretaje";
+"Retirement Account" = "Cuenta de Jubilación";
+"Pension" = "Pensión";
+"Cryptocurrency" = "Criptomoneda";
+"Stocks" = "Acciones";
+"Bonds" = "Bonos";
+"Mutual Funds" = "Fondos Mutuos";
+"ETFs" = "ETFs";
+"Real Estate" = "Bienes Raíces";
+"Property" = "Propiedad";
+"Vehicle" = "Vehículo";
+"Car" = "Coche";
+"Motorcycle" = "Motocicleta";
+"Boat" = "Barco";
+"Jewelry" = "Joyería";
+"Art" = "Arte";
+"Collectibles" = "Coleccionables";
+"Business" = "Negocio";
+"Partnership" = "Sociedad";
+"Loan" = "Préstamo";
+"Mortgage" = "Hipoteca";
+"Student Loan" = "Préstamo Estudiantil";
+"Personal Loan" = "Préstamo Personal";
+"Insurance" = "Seguro";
+"Life Insurance" = "Seguro de Vida";
+"Health Insurance" = "Seguro de Salud";
+"Annuity" = "Renta Vitalicia";
+"Commodity" = "Materia Prima";
+"Precious Metals" = "Metales Preciosos";
+"Foreign Currency" = "Divisa Extranjera";
+"Options" = "Opciones";
+"Futures" = "Futuros";
+"Private Equity" = "Capital Privado";
+"Crowdfunding Investment" = "Inversión Crowdfunding";
+"Other" = "Otro";
+
+/* MARK: - Operation Types */
+"Inflow" = "Entrada";
+"Outflow" = "Salida";
+
+/* MARK: - Recurrence Frequency */
+"Single" = "Una vez";
+"Daily" = "Diario";
+"Weekly" = "Semanal";
+"Monthly" = "Mensual";
+"Yearly" = "Anual";
+
+/* MARK: - Goal Status */
+"Completed" = "Completado";
+"Suspended" = "Suspendido";
+
+/* MARK: - Balance Status */
+"Positive" = "Positivo";
+"Negative" = "Negativo";
+
+/* MARK: - Spendmeter Timeframe */
+"Day" = "Día";
+"Week" = "Semana";
+"Month" = "Mes";
+"Year" = "Año";
+
+/* MARK: - Asset Sort Order */
+"Name" = "Nombre";
+"Balance" = "Saldo";
+"Type" = "Tipo";
+
+/* MARK: - Home Sections */
+"Goals" = "Objetivos";
+"Monthly Summary" = "Resumen Mensual";
+"Spendmeter" = "Medidor de Gasto";
+"Recurring" = "Recurrentes";
+"Top Category" = "Categoría Principal";
+"Savings Rate" = "Tasa de Ahorro";
+"Top Expenses" = "Principales Gastos";
+"Asset Allocation" = "Asignación de Activos";
+
+/* MARK: - Spendmeter Period Labels */
+"yesterday" = "ayer";
+"last week" = "la semana pasada";
+"last month" = "el mes pasado";
+"last year" = "el año pasado";
+
+/* MARK: - Spendmeter Insight Messages */
+"Same as %@" = "Igual que %@";
+"%d%% more saved than %@" = "%d%% más ahorrado que %@";
+"%d%% less saved than %@" = "%d%% menos ahorrado que %@";
+"More saved than %@" = "Más ahorrado que %@";
+"Less saved than %@" = "Menos ahorrado que %@";
+
+/* MARK: - Notifications */
+"Recurring operation" = "Operación recurrente";
+
+/* MARK: - Assets */
+"Assets" = "Activos";
+"Add asset" = "Añadir activo";
+"No assets found 😕" = "No se encontraron activos 😕";
+"Start adding assets" = "Empieza a añadir activos";
+"Asset type" = "Tipo de activo";
+"Long amount" = "Importe largo";
+"Short amount" = "Importe corto";
+"By Type" = "Por tipo";
+"Sort By" = "Ordenar por";
+"Filters" = "Filtros";
+"Sorters" = "Ordenación";
+"Menu" = "Menú";
+
+/* MARK: - Operations */
+"Edit operation" = "Editar operación";
+"Create operation" = "Crear operación";
+"Update recurring operation" = "Actualizar operación recurrente";
+"Update this occurrence only" = "Actualizar solo esta ocurrencia";
+"Update all occurrences" = "Actualizar todas las ocurrencias";
+"Insert note" = "Insertar nota";
+"Next occurrence: " = "Próxima ocurrencia: ";
+
+/* MARK: - Goals */
+"Add goal" = "Añadir objetivo";
+"Is Goal completed?" = "¿El objetivo está completado?";
+
+/* MARK: - Categories */
+"Categories" = "Categorías";
+
+/* MARK: - Common Actions */
+"Save" = "Guardar";
+"Edit" = "Editar";
+"Delete" = "Eliminar";
+"Cancel" = "Cancelar";
+"Skip" = "Omitir";
+"Allow" = "Permitir";
+
+/* MARK: - Operation Detail */
+"Asset" = "Activo";
+"Category" = "Categoría";
+"Next payment" = "Próximo pago";
+"From" = "De";
+"To" = "A";
+"Received" = "Recibido";
+"Transfer" = "Transferencia";
+"Note" = "Nota";
+"History" = "Historial";
+"Stop recurring" = "Detener recurrencia";
+"Delete current" = "Eliminar actual";
+"Delete linked" = "Eliminar vinculada";
+"Delete both" = "Eliminar ambas";
+"Are you sure you want to delete?" = "¿Está seguro de que desea eliminar?";
+"Stop recurring?" = "¿Detener la recurrencia?";
+"No future occurrences will be generated. Past occurrences are kept." = "No se generarán ocurrencias futuras. Las ocurrencias pasadas se conservan.";
+
+/* MARK: - Swap */
+"Swap" = "Transferir";
+
+/* MARK: - Keyboard */
+"Hide keyboard" = "Ocultar teclado";
+"Dismiss keyboard" = "Cerrar teclado";
+
+/* MARK: - Onboarding */
+"Set Up a Recurring Payment" = "Configurar un Pago Recurrente";
+"Log a Transaction" = "Registrar una Transacción";
+"Description" = "Descripción";
+"Amount" = "Importe";
+"Repeats" = "Se repite";
+"Enable Reminders" = "Activar Recordatorios";
+"Get notified when recurring payments are due." = "Recibe notificaciones cuando los pagos recurrentes estén por vencer.";
+"Reminders enabled" = "Recordatorios activados";
+"Date" = "Fecha";
