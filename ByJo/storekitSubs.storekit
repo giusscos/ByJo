@@ -30,7 +30,7 @@
       "type" : "NonConsumable"
     },
     {
-      "displayPrice" : "49.99",
+      "displayPrice" : "69.99",
       "familyShareable" : false,
       "internalID" : "6749497343",
       "localizations" : [
@@ -47,64 +47,65 @@
   ],
   "settings" : {
     "_applicationInternalID" : "6738330716",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
     "_developerTeamID" : "MA7MBQ947C",
+    "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 776333750.81584501,
+    "_lastSynchronizedDate" : 805277672.35446298,
     "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
     "_storeKitErrors" : [
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Load Products"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Purchase"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Verification"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "App Store Sync"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Subscription Status"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "App Transaction"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Manage Subscriptions Sheet"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Refund Request Sheet"
       },
       {
-        "current" : null,
         "enabled" : false,
         "name" : "Offer Code Redeem Sheet"
       }
-    ]
+    ],
+    "_timeRate" : 0
   },
   "subscriptionGroups" : [
     {
       "id" : "21584181",
       "localizations" : [
-
+        {
+          "description" : "",
+          "displayName" : "Unlock Pro Access",
+          "locale" : "en_US"
+        }
       ],
       "name" : "ByJo Pro access",
       "subscriptions" : [
@@ -112,42 +113,25 @@
           "adHocOffers" : [
 
           ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "9.99",
-          "familyShareable" : true,
-          "groupNumber" : 5,
-          "internalID" : "6749497578",
-          "introductoryOffer" : null,
-          "localizations" : [
+          "billingPlans" : [
             {
-              "description" : "Get unlimited family access for this month",
-              "displayName" : "ByJo Family Pro",
-              "locale" : "en_US"
+              "billingPlanType" : "BILLED_UPFRONT",
+              "commitmentDisplayPrice" : "99.99",
+              "displayPrice" : "99.99",
+              "internalID" : "6749497859_BILLED_UPFRONT",
+              "isEnabled" : true
             }
-          ],
-          "productID" : "bjpro_999_1m_fa",
-          "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "ByJo Family Pro, 9.99, 1 month",
-          "subscriptionGroupID" : "21584181",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
-        },
-        {
-          "adHocOffers" : [
-
           ],
           "codeOffers" : [
 
           ],
           "displayPrice" : "99.99",
           "familyShareable" : true,
-          "groupNumber" : 6,
+          "groupNumber" : 2,
           "internalID" : "6749497859",
-          "introductoryOffer" : null,
+          "introductoryOffers" : [
+
+          ],
           "localizations" : [
             {
               "description" : "Get unlimited family access for this year",
@@ -168,24 +152,35 @@
           "adHocOffers" : [
 
           ],
+          "billingPlans" : [
+            {
+              "billingPlanType" : "BILLED_UPFRONT",
+              "commitmentDisplayPrice" : "3.99",
+              "displayPrice" : "3.99",
+              "internalID" : "6789044163_BILLED_UPFRONT",
+              "isEnabled" : true
+            }
+          ],
           "codeOffers" : [
 
           ],
           "displayPrice" : "3.99",
           "familyShareable" : false,
-          "groupNumber" : 3,
-          "internalID" : "6749497653",
-          "introductoryOffer" : null,
+          "groupNumber" : 1,
+          "internalID" : "6789044163",
+          "introductoryOffers" : [
+
+          ],
           "localizations" : [
             {
-              "description" : "Get unlimited access for this month",
+              "description" : "Get unlimited access for this week",
               "displayName" : "ByJo Pro",
               "locale" : "en_US"
             }
           ],
-          "productID" : "bjpro_399_1m",
-          "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "ByJo Pro, 3.99, 1 month",
+          "productID" : "byjo_399_1w",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "ByJo Pro, 3.99, 1 week",
           "subscriptionGroupID" : "21584181",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
@@ -196,14 +191,25 @@
           "adHocOffers" : [
 
           ],
+          "billingPlans" : [
+            {
+              "billingPlanType" : "BILLED_UPFRONT",
+              "commitmentDisplayPrice" : "39.99",
+              "displayPrice" : "39.99",
+              "internalID" : "6749497774_BILLED_UPFRONT",
+              "isEnabled" : true
+            }
+          ],
           "codeOffers" : [
 
           ],
           "displayPrice" : "39.99",
           "familyShareable" : false,
-          "groupNumber" : 4,
+          "groupNumber" : 2,
           "internalID" : "6749497774",
-          "introductoryOffer" : null,
+          "introductoryOffers" : [
+
+          ],
           "localizations" : [
             {
               "description" : "Get unlimited access for this year",
@@ -224,7 +230,7 @@
     }
   ],
   "version" : {
-    "major" : 4,
+    "major" : 5,
     "minor" : 0
   }
 }

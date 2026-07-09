@@ -18,7 +18,7 @@ final class Store {
     private var subscriptionGroupStatus: RenewalState?
     var isLoading: Bool = true
 
-    let productIds: [String] = ["bjpro_999_1m_fa", "bjpro_9999_1y_fa", "bjpro_399_1m", "bjpro_3999_1y"]
+    let productIds: [String] = ["bjpro_999_1m_fa", "bjpro_9999_1y_fa", "bjpro_399_1m", "bjpro_3999_1y", "byjo_399_1w"]
     let groupId: String = "21584181"
     let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"]
 

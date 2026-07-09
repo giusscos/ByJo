@@ -121,13 +121,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3B3213F42FFB074300BB05E3 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
 		68A4BD0E2CD8E7D100614F19 = {
 			isa = PBXGroup;
 			children = (
@@ -136,7 +129,6 @@
 				3B3214002FFB78D700BB05E3 /* ByJoWidget */,
 				68AFBC322CEBFD190086749E /* Frameworks */,
 				68A4BD182CD8E7D100614F19 /* Products */,
-				3B3213F42FFB074300BB05E3 /* Utilities */,
 			);
 			sourceTree = "<group>";
 		};

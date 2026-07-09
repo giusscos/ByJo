@@ -58,8 +58,9 @@ struct OperationByDateSectionView: View {
     }
     
     private func deleteOperation(operation: AssetOperation, linkedOperation: AssetOperation?) {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [operation.id.uuidString])
+        if let seriesId = operation.seriesId {
+            cancelRecurringNotifications(seriesId: seriesId)
+        }
         
         withAnimation {
             if let linkedOperation = linkedOperation {
