@@ -9,6 +9,23 @@ import SwiftUI
 import SwiftData
 import UserNotifications
 
+private struct SplitRow: Identifiable {
+    var id: UUID = UUID()
+    var category: CategoryOperation?
+    var amountString: String = ""
+
+    init(category: CategoryOperation? = nil, amountString: String = "") {
+        self.category = category
+        self.amountString = amountString
+    }
+
+    var amount: Decimal? {
+        let normalized = amountString.replacingOccurrences(of: ",", with: ".")
+        guard !normalized.isEmpty else { return nil }
+        return Decimal(string: normalized)
+    }
+}
+
 struct EditAssetOperationView: View {
     enum FocusField: Hashable {
         case name
@@ -37,6 +54,8 @@ struct EditAssetOperationView: View {
     @State var category: CategoryOperation
     @State private var note: String = ""
     @State private var frequency: RecurrenceFrequency = .single
+    @State private var isSplit: Bool = false
+    @State private var splitRows: [SplitRow] = []
 
     @State private var showUpdateScopeDialog = false
     @State private var pendingAmount: Decimal = 0
@@ -45,6 +64,21 @@ struct EditAssetOperationView: View {
         guard !amountString.isEmpty else { return nil }
         let normalized = amountString.replacingOccurrences(of: ",", with: ".")
         return Decimal(string: normalized)
+    }
+
+    private var splitTotal: Decimal {
+        splitRows.compactMap { $0.amount }.reduce(Decimal(0), +)
+    }
+
+    private var splitBalanced: Bool {
+        guard let parsed = parsedAmount else { return false }
+        return splitTotal == parsed
+    }
+
+    private var canSave: Bool {
+        guard !name.isEmpty, !amountString.isEmpty else { return false }
+        if isSplit { return !splitRows.isEmpty && splitBalanced }
+        return true
     }
 
     var body: some View {
@@ -164,13 +198,67 @@ struct EditAssetOperationView: View {
                     }
                     .pickerStyle(.menu)
 
-                    Picker("Category", selection: $category) {
-                        ForEach(categoriesOperation) { category in
-                            Text(category.name)
-                                .tag(category)
+                    if isSplit {
+                        ForEach($splitRows) { $row in
+                            HStack {
+                                Picker("Category", selection: $row.category) {
+                                    Text("—").tag(Optional<CategoryOperation>.none)
+                                    ForEach(categoriesOperation) { cat in
+                                        Text(cat.name).tag(Optional(cat))
+                                    }
+                                }
+                                .pickerStyle(.menu)
+                                .labelsHidden()
+
+                                TextField("Amount", text: $row.amountString)
+                                    .keyboardType(.decimalPad)
+                                    .multilineTextAlignment(.trailing)
+                                    .frame(width: 100)
+                            }
                         }
+                        .onDelete { indices in splitRows.remove(atOffsets: indices) }
+
+                        Button {
+                            splitRows.append(SplitRow(category: categoriesOperation.first))
+                        } label: {
+                            Label("Add split", systemImage: "plus")
+                        }
+
+                        Button {
+                            isSplit = false
+                            splitRows = []
+                        } label: {
+                            Label("Remove splits", systemImage: "xmark.circle")
+                        }
+                        .foregroundStyle(.red)
+                    } else {
+                        Picker("Category", selection: $category) {
+                            ForEach(categoriesOperation) { category in
+                                Text(category.name)
+                                    .tag(category)
+                            }
+                        }
+                        .pickerStyle(.menu)
+
+                        Button {
+                            isSplit = true
+                            splitRows = [SplitRow(category: category)]
+                        } label: {
+                            Label("Split transaction", systemImage: "arrow.triangle.branch")
+                        }
+                        .foregroundStyle(.secondary)
                     }
-                    .pickerStyle(.menu)
+                } footer: {
+                    if isSplit && parsedAmount != nil {
+                        Label(
+                            splitBalanced
+                                ? "Splits balanced"
+                                : "Remaining: \((parsedAmount! - splitTotal).formatted(.currency(code: currencyCode.rawValue)))",
+                            systemImage: splitBalanced ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(splitBalanced ? .green : .orange)
+                    }
                 }
 
                 Section {
@@ -210,14 +298,14 @@ struct EditAssetOperationView: View {
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(name.isEmpty || amountString.isEmpty)
+                        .disabled(!canSave)
                     } else {
                         Button {
                             save()
                         } label: {
                             Label("Save", systemImage: "checkmark")
                         }
-                        .disabled(name.isEmpty || amountString.isEmpty)
+                        .disabled(!canSave)
                     }
                 }
 
@@ -234,12 +322,14 @@ struct EditAssetOperationView: View {
             Button("Update this occurrence only") {
                 if let op = operation {
                     applyChanges(to: op, amount: pendingAmount)
+                    saveSplits(to: op)
                 }
                 dismiss()
             }
             Button("Update all occurrences") {
                 if let op = operation {
                     applyChangesToAll(to: op, amount: pendingAmount)
+                    saveSplits(to: op)
                 }
                 dismiss()
             }
@@ -269,6 +359,16 @@ struct EditAssetOperationView: View {
 
                 if operation.category == nil {
                     operation.category = category
+                }
+
+                if let existingSplits = operation.splits, !existingSplits.isEmpty {
+                    isSplit = true
+                    splitRows = existingSplits.map { split in
+                        SplitRow(
+                            category: split.category,
+                            amountString: NSDecimalNumber(decimal: abs(split.amount)).stringValue
+                        )
+                    }
                 }
             }
 
@@ -304,6 +404,7 @@ struct EditAssetOperationView: View {
                 return
             }
             applyChanges(to: op, amount: calculatedAmount)
+            saveSplits(to: op)
             if let seriesId = op.seriesId {
                 scheduleRecurringNotifications(
                     seriesId: seriesId,
@@ -332,6 +433,7 @@ struct EditAssetOperationView: View {
         )
 
         modelContext.insert(newOperation)
+        saveSplits(to: newOperation)
 
         if let seriesId = newSeriesId {
             scheduleRecurringNotifications(
@@ -384,6 +486,19 @@ struct EditAssetOperationView: View {
                 frequency: frequency,
                 currencyCode: currencyCode
             )
+        }
+    }
+
+    private func saveSplits(to op: AssetOperation) {
+        for split in op.splits ?? [] {
+            modelContext.delete(split)
+        }
+        guard isSplit else { return }
+        for row in splitRows {
+            guard let amt = row.amount, amt > 0 else { continue }
+            let split = OperationSplit(amount: amt, category: row.category)
+            split.operation = op
+            modelContext.insert(split)
         }
     }
 

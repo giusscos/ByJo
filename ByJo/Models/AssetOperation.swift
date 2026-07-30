@@ -23,6 +23,7 @@ final class AssetOperation {
 
     var swapId: UUID? = nil
     var seriesId: UUID? = nil
+    @Relationship(deleteRule: .cascade, inverse: \OperationSplit.operation) var splits: [OperationSplit]?
 
     init(
         id: UUID = UUID(),

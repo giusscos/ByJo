@@ -16,8 +16,8 @@ final class Asset {
     var initialBalance: Decimal = 0
     var timestamp: Date = Date()
 
-    @Relationship(deleteRule: .cascade) var operations: [AssetOperation]?
-    @Relationship(deleteRule: .cascade) var goals: [Goal]?
+    @Relationship(deleteRule: .cascade, inverse: \AssetOperation.asset) var operations: [AssetOperation]?
+    @Relationship(deleteRule: .cascade, inverse: \Goal.asset) var goals: [Goal]?
 
     init(name: String, type: AssetType = AssetType.cash, initialBalance: Decimal) {
         self.name = name

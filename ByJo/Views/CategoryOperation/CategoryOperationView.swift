@@ -11,16 +11,20 @@ import SwiftUI
 struct CategoryOperationView: View {
     enum FocusField: Hashable {
         case name
+        case budget
     }
-    
+
     @FocusState private var focusedField: FocusField?
-    
+
+    @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
     @Query(sort: \CategoryOperation.name) var categories: [CategoryOperation]
     
     @State var newCategoryName: String = ""
+    @State var newCategoryBudget: String = ""
     @State var showInsert: Bool = false
     @State var showingBulkDeleteAlert: Bool = false
     
@@ -38,41 +42,63 @@ struct CategoryOperationView: View {
                 Section {
                     ForEach(categories) { category in
                         if let editCategory = isEditCategory, editCategory === category {
-                            TextField("Name", text: $newCategoryName)
-                                .autocorrectionDisabled()
-                                .submitLabel(.done)
-                                .focused($focusedField, equals: .name)
-                                .onSubmit {
-                                    focusedField = .none
-                                    
-                                    if let editCategory = isEditCategory {
-                                        saveEditedCategory(category: editCategory)
+                            VStack(spacing: 8) {
+                                TextField("Name", text: $newCategoryName)
+                                    .autocorrectionDisabled()
+                                    .submitLabel(.next)
+                                    .focused($focusedField, equals: .name)
+                                    .onSubmit {
+                                        focusedField = .budget
                                     }
+                                    .onAppear {
+                                        focusedField = .name
+                                    }
+
+                                HStack {
+                                    Text("Budget / month")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                    TextField("0", text: $newCategoryBudget)
+                                        .keyboardType(.decimalPad)
+                                        .multilineTextAlignment(.trailing)
+                                        .focused($focusedField, equals: .budget)
+                                        .submitLabel(.done)
+                                        .onSubmit {
+                                            focusedField = .none
+                                            saveEditedCategory(category: editCategory)
+                                        }
+                                        .frame(maxWidth: 120)
                                 }
-                                .onAppear() {
-                                    focusedField = .name
-                                }
+                            }
                         } else {
-                            Text(category.name)
-                                .tag(category)
-                                .onTapGesture(perform: {
-                                    handleEditing(category: category)
-                                })
-                                .swipeActions {
-                                    Button (role: .destructive) {
-                                        modelContext.delete(category)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                    
-                                    Button {
-                                        handleEditing(category: category)
-                                    } label: {
-                                        Label("Edit", systemImage: "pencil")
-                                    }
-                                    .tint(.blue)
-                                    .disabled(showInsert)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(category.name)
+                                if category.monthlyBudget > 0 {
+                                    Text("\(category.monthlyBudget, format: .currency(code: currencyCode.rawValue)) / month")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
                                 }
+                            }
+                            .tag(category)
+                            .onTapGesture(perform: {
+                                handleEditing(category: category)
+                            })
+                            .swipeActions {
+                                Button (role: .destructive) {
+                                    modelContext.delete(category)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+
+                                Button {
+                                    handleEditing(category: category)
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                                .disabled(showInsert)
+                            }
                         }
                     }
                 }
@@ -181,7 +207,8 @@ struct CategoryOperationView: View {
     func handleInsert(reset: Bool = false) {
         withAnimation {
             newCategoryName = ""
-            
+            newCategoryBudget = ""
+
             showInsert = !reset
             
             if let _ = isEditCategory, reset {
@@ -195,17 +222,21 @@ struct CategoryOperationView: View {
         
         withAnimation {
             isEditCategory = category
-            
+
             newCategoryName = category.name
+            newCategoryBudget = category.monthlyBudget == 0 ? "" : NSDecimalNumber(decimal: category.monthlyBudget).stringValue
         }
     }
-    
+
     func saveEditedCategory(category: CategoryOperation) {
         withAnimation {
             category.name = newCategoryName
-            
+            let normalized = newCategoryBudget.replacingOccurrences(of: ",", with: ".")
+            category.monthlyBudget = Decimal(string: normalized) ?? 0
+
             newCategoryName = ""
-            
+            newCategoryBudget = ""
+
             isEditCategory = nil
         }
     }

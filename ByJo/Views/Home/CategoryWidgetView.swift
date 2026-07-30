@@ -55,7 +55,32 @@ struct CategoryWidgetView: View {
             }
             .max(by: { abs($0.amount) < abs($1.amount) })
     }
-    
+
+    private var topCategoryMonthlyExpenses: Decimal {
+        guard let topCategory = mostRelevantCategory else { return 0 }
+        let calendar = Calendar.current
+        let now = Date()
+        let currentMonth = calendar.component(.month, from: now)
+        let currentYear = calendar.component(.year, from: now)
+        return (topCategory.category.assetOperations ?? [])
+            .filter { op in
+                let d = op.date
+                return calendar.component(.month, from: d) == currentMonth &&
+                       calendar.component(.year, from: d) == currentYear &&
+                       op.amount < 0
+            }
+            .reduce(Decimal(0)) { $0 + abs($1.amount) }
+    }
+
+    private var topCategoryBudget: Decimal {
+        mostRelevantCategory?.category.monthlyBudget ?? 0
+    }
+
+    private var topCategoryBudgetRatio: Double {
+        guard topCategoryBudget > 0 else { return 0 }
+        return min(NSDecimalNumber(decimal: topCategoryMonthlyExpenses / topCategoryBudget).doubleValue, 1.0)
+    }
+
     var body: some View {
         Section {
             if let topCategory = mostRelevantCategory {
@@ -89,11 +114,44 @@ struct CategoryWidgetView: View {
                             }
                             .imageScale(.large)
                             .fontWeight(.semibold)
-                            
+
                             Text(topCategory.amount, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .contentTransition(.numericText(value: compactNumber ? 0 : 1))
+                        }
+                    }
+
+                    if topCategory.category.monthlyBudget > 0 {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Budget")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                HStack(spacing: 2) {
+                                    Text(topCategoryMonthlyExpenses, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(topCategoryMonthlyExpenses > topCategoryBudget ? Color.red : Color.primary)
+                                    Text("/")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text(topCategoryBudget, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+
+                            GeometryReader { geo in
+                                ZStack(alignment: .leading) {
+                                    Capsule().fill(Color.secondary.opacity(0.2))
+                                    Capsule()
+                                        .fill(topCategoryMonthlyExpenses > topCategoryBudget ? Color.red : Color.accentColor)
+                                        .frame(width: geo.size.width * topCategoryBudgetRatio)
+                                }
+                            }
+                            .frame(height: 4)
+                            .animation(.spring(duration: 0.6), value: topCategoryBudgetRatio)
                         }
                     }
                 }

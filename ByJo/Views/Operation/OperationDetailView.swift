@@ -190,6 +190,22 @@ struct OperationDetailView: View {
                     Label("Note", systemImage: "note.text")
                 }
             }
+            if let splits = operation.splits, !splits.isEmpty {
+                Section {
+                    ForEach(splits) { split in
+                        HStack {
+                            Label(split.category?.name ?? "—", systemImage: "tag")
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text(abs(split.amount), format: .currency(code: currencyCode.rawValue))
+                                .fontWeight(.semibold)
+                                .foregroundStyle(operation.amount < 0 ? .red : .green)
+                        }
+                    }
+                } header: {
+                    Label("Splits", systemImage: "arrow.triangle.branch")
+                }
+            }
             if !seriesHistory.isEmpty {
                 Section {
                     ForEach(seriesHistory) { sibling in
