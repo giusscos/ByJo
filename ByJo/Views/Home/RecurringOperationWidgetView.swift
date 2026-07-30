@@ -218,6 +218,7 @@ private struct RecurringOperationsPreviewSheet: View {
                             .font(.body)
                             .fontWeight(.semibold)
                             .foregroundStyle(operation.amount >= 0 ? .green : .red)
+                            .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
                     .padding(.vertical, 4)
                 }

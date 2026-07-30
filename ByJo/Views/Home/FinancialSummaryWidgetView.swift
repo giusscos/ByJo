@@ -42,7 +42,7 @@ struct FinancialSummaryWidgetView: View {
                          : .currency(code: currencyCode.rawValue))
                         .font(.system(size: 40, weight: .black, design: .rounded))
                         .foregroundStyle(netChangeThisMonth >= 0 ? Color.green : Color.red)
-                        .contentTransition(.numericText(value: Double(truncating: netChangeThisMonth as NSDecimalNumber)))
+                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                 }
             }
             .padding(.vertical, 8)

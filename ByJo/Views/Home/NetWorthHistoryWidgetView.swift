@@ -89,7 +89,7 @@ struct NetWorthHistoryWidgetView: View {
                                  : .currency(code: currencyCode.rawValue))
                                 .font(.title2)
                                 .fontWeight(.bold)
-                                .contentTransition(.numericText(value: currentNetWorth))
+                                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
 
                             if points.count > 1 {
                                 HStack(spacing: 3) {
@@ -97,6 +97,7 @@ struct NetWorthHistoryWidgetView: View {
                                     Text(abs(delta), format: compactNumber
                                          ? .currency(code: currencyCode.rawValue).notation(.compactName)
                                          : .currency(code: currencyCode.rawValue))
+                                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                 }
                                 .font(.caption)
                                 .fontWeight(.semibold)
@@ -153,8 +154,11 @@ struct NetWorthHistoryWidgetView: View {
                             AxisMarks { value in
                                 AxisValueLabel {
                                     if let d = value.as(Double.self) {
-                                        Text(d, format: .currency(code: currencyCode.rawValue).notation(.compactName))
+                                        Text(d, format: compactNumber
+                                             ? .currency(code: currencyCode.rawValue).notation(.compactName)
+                                             : .currency(code: currencyCode.rawValue))
                                             .font(.caption2)
+                                            .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                     }
                                 }
                                 AxisGridLine().foregroundStyle(Color.secondary.opacity(0.15))

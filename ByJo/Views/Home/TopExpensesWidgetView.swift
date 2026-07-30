@@ -54,6 +54,7 @@ struct TopExpensesWidgetView: View {
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.red)
+                                    .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                             }
 
                             GeometryReader { geo in

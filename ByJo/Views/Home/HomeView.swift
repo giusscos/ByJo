@@ -131,7 +131,7 @@ struct HomeView: View {
                          ? .currency(code: currencyCode.rawValue).notation(.compactName)
                          : .currency(code: currencyCode.rawValue))
                         .font(.headline)
-                        .contentTransition(.numericText(value: Double(truncating: netWorth as NSDecimalNumber)))
+                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {

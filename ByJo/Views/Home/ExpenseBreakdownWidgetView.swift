@@ -108,6 +108,7 @@ struct ExpenseBreakdownWidgetView: View {
                                         .font(.caption)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.secondary)
+                                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                 }
                             }
                         }

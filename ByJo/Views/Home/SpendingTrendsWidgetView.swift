@@ -90,8 +90,11 @@ struct SpendingTrendsWidgetView: View {
                         AxisMarks { value in
                             AxisValueLabel {
                                 if let d = value.as(Double.self) {
-                                    Text(d, format: .currency(code: currencyCode.rawValue).notation(.compactName))
+                                    Text(d, format: compactNumber
+                                         ? .currency(code: currencyCode.rawValue).notation(.compactName)
+                                         : .currency(code: currencyCode.rawValue))
                                         .font(.caption2)
+                                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                 }
                             }
                             AxisGridLine().foregroundStyle(Color.secondary.opacity(0.15))

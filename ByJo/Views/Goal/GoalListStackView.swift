@@ -136,7 +136,7 @@ private struct GoalHomeSummary: View {
                          : .currency(code: currency.rawValue))
                         .font(.title)
                         .fontWeight(.bold)
-                        .contentTransition(.numericText(value: Double(truncating: remaining as NSDecimalNumber)))
+                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
 
                     Text("left to go")
                         .font(.caption)
@@ -158,6 +158,7 @@ private struct GoalHomeSummary: View {
                      ? .currency(code: currency.rawValue).notation(.compactName)
                      : .currency(code: currency.rawValue))
                     .foregroundStyle(.secondary)
+                    .contentTransition(.numericText(value: compactNumber ? 0 : 1))
 
                 Text("·")
                     .foregroundStyle(Color.secondary.opacity(0.4))
@@ -172,6 +173,7 @@ private struct GoalHomeSummary: View {
                      ? .currency(code: currency.rawValue).notation(.compactName)
                      : .currency(code: currency.rawValue))
                     .foregroundStyle(.secondary)
+                    .contentTransition(.numericText(value: compactNumber ? 0 : 1))
 
                 Spacer()
 

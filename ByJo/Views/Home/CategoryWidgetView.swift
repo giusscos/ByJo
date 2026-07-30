@@ -133,12 +133,14 @@ struct CategoryWidgetView: View {
                                     Text(topCategoryMonthlyExpenses, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                         .font(.caption.weight(.semibold))
                                         .foregroundStyle(topCategoryMonthlyExpenses > topCategoryBudget ? Color.red : Color.primary)
+                                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                     Text("/")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                     Text(topCategoryBudget, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
+                                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                 }
                             }
 
