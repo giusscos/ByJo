@@ -19,6 +19,10 @@ struct WidgetDataBridge {
         writeRecurring(allOps: allOps, currencyCode: currencyCode, to: defaults)
         writeSavingsRate(allOps: allOps, currencyCode: currencyCode, to: defaults)
         writeGoals(assets: assets, currencyCode: currencyCode, to: defaults)
+        writeExpenseBreakdown(allOps: allOps, currencyCode: currencyCode, compactNumber: compactNumber, to: defaults)
+        writeNetWorthHistory(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber, to: defaults)
+        writeSpendingTrends(allOps: allOps, currencyCode: currencyCode, compactNumber: compactNumber, to: defaults)
+        writeSavingsRateTrend(allOps: allOps, to: defaults)
         WidgetCenter.shared.reloadAllTimelines()
     }
 
@@ -102,5 +106,119 @@ struct WidgetDataBridge {
             }
         }
         defaults.encode(WGoalData(goals: goals, currencyCode: currencyCode.rawValue, updatedAt: Date()), forKey: .goals)
+    }
+
+    private static func writeExpenseBreakdown(allOps: [AssetOperation], currencyCode: CurrencyCode, compactNumber: Bool, to defaults: UserDefaults) {
+        let range = DateRangeOption.month.dateRange
+        let expenses = allOps.filter { $0.amount < 0 && $0.date >= range.startDate && $0.date <= range.endDate }
+        guard !expenses.isEmpty else {
+            defaults.encode(WExpenseBreakdownData(slices: [], currencyCode: currencyCode.rawValue,
+                                                   compactNumber: compactNumber, updatedAt: Date()), forKey: .expenseBreakdown)
+            return
+        }
+        var byCategory: [String: Decimal] = [:]
+        for op in expenses {
+            let key = op.category?.name ?? "Other"
+            byCategory[key, default: 0] += op.amount
+        }
+        let total = byCategory.values.reduce(0.0) { $0 + abs(d($1)) }
+        guard total > 0 else {
+            defaults.encode(WExpenseBreakdownData(slices: [], currencyCode: currencyCode.rawValue,
+                                                   compactNumber: compactNumber, updatedAt: Date()), forKey: .expenseBreakdown)
+            return
+        }
+        let slices = byCategory
+            .map { (label: $0.key, amount: abs(d($0.value))) }
+            .sorted { $0.amount > $1.amount }
+            .enumerated()
+            .map { idx, entry in
+                WExpenseBreakdownData.Slice(
+                    id: entry.label, label: entry.label,
+                    value: entry.amount / total * 100, amount: entry.amount, colorIndex: idx % 8
+                )
+            }
+        defaults.encode(WExpenseBreakdownData(slices: slices, currencyCode: currencyCode.rawValue,
+                                               compactNumber: compactNumber, updatedAt: Date()), forKey: .expenseBreakdown)
+    }
+
+    private static func writeNetWorthHistory(assets: [Asset], currencyCode: CurrencyCode, compactNumber: Bool, to defaults: UserDefaults) {
+        let current = assets.reduce(0.0) { $0 + d($1.calculateCurrentBalance()) }
+        guard !assets.isEmpty else {
+            defaults.encode(WNetWorthHistoryData(points: [], currentNetWorth: 0, delta: 0,
+                                                  currencyCode: currencyCode.rawValue, compactNumber: compactNumber,
+                                                  updatedAt: Date()), forKey: .netWorthHistory)
+            return
+        }
+
+        let calendar = Calendar.current
+        let now = Date()
+        let start = DateRangeOption.month.dateRange.startDate
+
+        func netWorthAt(_ date: Date) -> Double {
+            assets.reduce(0.0) { sum, asset in
+                let balance = asset.initialBalance + (asset.operations ?? [])
+                    .filter { $0.date <= date }
+                    .reduce(Decimal(0)) { $0 + $1.amount }
+                return sum + d(balance)
+            }
+        }
+
+        var points: [WNetWorthHistoryData.Point] = []
+        if start < now {
+            let totalDays = calendar.dateComponents([.day], from: start, to: now).day ?? 0
+            let stepDays = totalDays <= 31 ? 1 : 3
+            var currentDate = start
+            while currentDate <= now {
+                points.append(.init(id: "\(currentDate.timeIntervalSince1970)", date: currentDate, value: netWorthAt(currentDate)))
+                guard let next = calendar.date(byAdding: .day, value: stepDays, to: currentDate), next <= now else { break }
+                currentDate = next
+            }
+            points.append(.init(id: "\(now.timeIntervalSince1970)", date: now, value: current))
+        } else {
+            points = [.init(id: "now", date: now, value: current)]
+        }
+
+        let delta = (points.first?.value).map { current - $0 } ?? 0
+        defaults.encode(WNetWorthHistoryData(points: points, currentNetWorth: current, delta: delta,
+                                              currencyCode: currencyCode.rawValue, compactNumber: compactNumber,
+                                              updatedAt: Date()), forKey: .netWorthHistory)
+    }
+
+    private static func writeSpendingTrends(allOps: [AssetOperation], currencyCode: CurrencyCode, compactNumber: Bool, to defaults: UserDefaults) {
+        let calendar = Calendar.current
+        let now = Date()
+        let lookback = 6
+        let buckets: [WSpendingTrendsData.Bucket] = (0..<lookback).compactMap { offset in
+            let monthsAgo = -(lookback - 1 - offset)
+            guard let monthDate = calendar.date(byAdding: .month, value: monthsAgo, to: now),
+                  let start = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
+                  let end = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: start)
+            else { return nil }
+            let total = allOps
+                .filter { $0.amount < 0 && $0.date >= start && $0.date <= end }
+                .reduce(0.0) { $0 + abs(d($1.amount)) }
+            return .init(id: "\(start.timeIntervalSince1970)", month: start, amount: total)
+        }
+        defaults.encode(WSpendingTrendsData(buckets: buckets, currencyCode: currencyCode.rawValue,
+                                             compactNumber: compactNumber, updatedAt: Date()), forKey: .spendingTrends)
+    }
+
+    private static func writeSavingsRateTrend(allOps: [AssetOperation], to defaults: UserDefaults) {
+        let calendar = Calendar.current
+        let now = Date()
+        let points: [WSavingsRateTrendData.Point] = (0..<6).compactMap { offset in
+            let monthsAgo = -(5 - offset)
+            guard let monthDate = calendar.date(byAdding: .month, value: monthsAgo, to: now),
+                  let start = calendar.date(from: calendar.dateComponents([.year, .month], from: monthDate)),
+                  let end = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: start)
+            else { return nil }
+            let ops = allOps.filter { $0.date >= start && $0.date <= end }
+            let inflow = ops.filter { $0.amount > 0 }.reduce(Decimal(0)) { $0 + $1.amount }
+            let outflow = ops.filter { $0.amount < 0 }.reduce(Decimal(0)) { $0 + abs($1.amount) }
+            guard inflow > 0 else { return nil }
+            let rate = max(0.0, min(1.0, d((inflow - outflow) / inflow)))
+            return .init(id: "\(start.timeIntervalSince1970)", month: start, rate: rate)
+        }
+        defaults.encode(WSavingsRateTrendData(points: points, updatedAt: Date()), forKey: .savingsRateTrend)
     }
 }

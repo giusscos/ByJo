@@ -11,12 +11,16 @@ let kAppGroupIdentifier = "group.com.giusscos.byjo"
 
 // MARK: - UserDefaults keys
 enum WidgetKey: String {
-    case netWorth    = "widget.netWorth"
-    case spendmeter  = "widget.spendmeter"
-    case assetAlloc  = "widget.assetAlloc"
-    case recurring   = "widget.recurring"
-    case savingsRate = "widget.savingsRate"
-    case goals       = "widget.goals"
+    case netWorth           = "widget.netWorth"
+    case spendmeter         = "widget.spendmeter"
+    case assetAlloc         = "widget.assetAlloc"
+    case recurring          = "widget.recurring"
+    case savingsRate        = "widget.savingsRate"
+    case goals              = "widget.goals"
+    case expenseBreakdown   = "widget.expenseBreakdown"
+    case netWorthHistory    = "widget.netWorthHistory"
+    case spendingTrends     = "widget.spendingTrends"
+    case savingsRateTrend   = "widget.savingsRateTrend"
 }
 
 // MARK: - Transfer objects
@@ -64,6 +68,39 @@ struct WGoalData: Codable {
         var assetName: String; var dueDate: Date?; var progress: Double
     }
     var goals: [GoalItem]; var currencyCode: String; var updatedAt: Date
+}
+
+struct WExpenseBreakdownData: Codable {
+    struct Slice: Codable, Identifiable {
+        var id: String; var label: String; var value: Double; var amount: Double; var colorIndex: Int
+    }
+    var slices: [Slice]; var currencyCode: String; var compactNumber: Bool; var updatedAt: Date
+}
+
+struct WNetWorthHistoryData: Codable {
+    struct Point: Codable, Identifiable {
+        var id: String; var date: Date; var value: Double
+    }
+    var points: [Point]
+    var currentNetWorth: Double
+    var delta: Double
+    var currencyCode: String
+    var compactNumber: Bool
+    var updatedAt: Date
+}
+
+struct WSpendingTrendsData: Codable {
+    struct Bucket: Codable, Identifiable {
+        var id: String; var month: Date; var amount: Double
+    }
+    var buckets: [Bucket]; var currencyCode: String; var compactNumber: Bool; var updatedAt: Date
+}
+
+struct WSavingsRateTrendData: Codable {
+    struct Point: Codable, Identifiable {
+        var id: String; var month: Date; var rate: Double
+    }
+    var points: [Point]; var updatedAt: Date
 }
 
 // MARK: - UserDefaults helpers

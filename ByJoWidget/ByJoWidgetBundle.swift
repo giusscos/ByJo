@@ -17,5 +17,9 @@ struct ByJoWidgetBundle: WidgetBundle {
         RecurringWidget()
         SavingsRateWidget()
         GoalWidget()
+        ExpenseBreakdownWidget()
+        NetWorthHistoryWidget()
+        SpendingTrendsWidget()
+        SavingsRateTrendWidget()
     }
 }
