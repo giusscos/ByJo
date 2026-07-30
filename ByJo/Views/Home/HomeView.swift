@@ -19,6 +19,7 @@ struct HomeView: View {
         case swapAssetOperation
         case customize
         case exportImport
+        case applePayShortcut
 
         var id: String {
             switch self {
@@ -38,6 +39,8 @@ struct HomeView: View {
                     return "customize"
                 case .exportImport:
                     return "exportImport"
+                case .applePayShortcut:
+                    return "applePayShortcut"
             }
         }
     }
@@ -50,6 +53,7 @@ struct HomeView: View {
     @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
     @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
     @AppStorage("whatsNewVersion") var whatsNewVersion: String = ""
+    @AppStorage("showApplePayShortcutBanner") var showApplePayShortcutBanner: Bool = true
 
     @State private var showWhatsNew: Bool = false
 
@@ -98,6 +102,12 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                if showApplePayShortcutBanner {
+                    ApplePayShortcutBannerView {
+                        activeSheet = .applePayShortcut
+                    }
+                }
+
                 ForEach(visibleSections) { section in
                     sectionView(for: section)
                 }
@@ -270,6 +280,8 @@ struct HomeView: View {
                         CustomizeHomeView()
                     case .exportImport:
                         ExportImportView()
+                    case .applePayShortcut:
+                        ApplePayShortcutSetupView()
                 }
             }
 //            .onAppear() {

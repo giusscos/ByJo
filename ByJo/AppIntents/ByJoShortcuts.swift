@@ -26,5 +26,14 @@ struct ByJoShortcuts: AppShortcutsProvider {
             shortTitle: "Transfer Funds",
             systemImageName: "arrow.left.arrow.right"
         )
+        AppShortcut(
+            intent: LogApplePayTransactionIntent(),
+            phrases: [
+                "Log Apple Pay in \(.applicationName)",
+                "Log Apple Pay transaction in \(.applicationName)"
+            ],
+            shortTitle: "Log Apple Pay",
+            systemImageName: "wallet.pass"
+        )
     }
 }

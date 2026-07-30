@@ -8,6 +8,7 @@ import SwiftUI
 struct CustomizeHomeView: View {
     @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
     @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
+    @AppStorage("showApplePayShortcutBanner") var showApplePayShortcutBanner: Bool = true
 
     @State private var sections: [HomeSection] = []
     @State private var hiddenSections: Set<HomeSection> = []
@@ -15,6 +16,28 @@ struct CustomizeHomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    HStack(spacing: 12) {
+                        Button {
+                            showApplePayShortcutBanner.toggle()
+                        } label: {
+                            Image(systemName: showApplePayShortcutBanner ? "eye" : "eye.slash")
+                                .foregroundStyle(showApplePayShortcutBanner ? Color.primary : Color.secondary)
+                                .frame(width: 28)
+                        }
+                        .buttonStyle(.plain)
+
+                        Image(systemName: "wallet.pass")
+                            .foregroundStyle(Color.secondary)
+                            .frame(width: 20)
+
+                        Text("Apple Pay Shortcut")
+                            .foregroundStyle(showApplePayShortcutBanner ? Color.primary : Color.secondary)
+                    }
+                } footer: {
+                    Text("Shown at the top of Home when enabled.")
+                }
+
                 Section {
                     ForEach(sections) { section in
                         HStack(spacing: 12) {
