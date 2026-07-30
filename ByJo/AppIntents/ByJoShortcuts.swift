@@ -27,12 +27,12 @@ struct ByJoShortcuts: AppShortcutsProvider {
             systemImageName: "arrow.left.arrow.right"
         )
         AppShortcut(
-            intent: LogApplePayTransactionIntent(),
+            intent: LogWalletTransactionIntent(),
             phrases: [
-                "Log Apple Pay in \(.applicationName)",
-                "Log Apple Pay transaction in \(.applicationName)"
+                "Log wallet transaction in \(.applicationName)",
+                "Auto-log card tap in \(.applicationName)"
             ],
-            shortTitle: "Log Apple Pay",
+            shortTitle: "Log Wallet Tap",
             systemImageName: "wallet.pass"
         )
     }

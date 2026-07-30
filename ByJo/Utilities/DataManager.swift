@@ -92,7 +92,7 @@ enum DataImportError: LocalizedError, Identifiable {
     case invalidJSON(String)
     case unsupportedVersion(Int)
 
-    var id: String { localizedDescription ?? "" }
+    var id: String { localizedDescription }
 
     var errorDescription: String? {
         switch self {

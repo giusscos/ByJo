@@ -19,7 +19,7 @@ struct HomeView: View {
         case swapAssetOperation
         case customize
         case exportImport
-        case applePayShortcut
+        case walletShortcut
 
         var id: String {
             switch self {
@@ -39,13 +39,12 @@ struct HomeView: View {
                     return "customize"
                 case .exportImport:
                     return "exportImport"
-                case .applePayShortcut:
-                    return "applePayShortcut"
+                case .walletShortcut:
+                    return "walletShortcut"
             }
         }
     }
     
-    @Environment(\.requestReview) var requestReview
     @Environment(\.modelContext) private var modelContext
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
@@ -53,7 +52,7 @@ struct HomeView: View {
     @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
     @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
     @AppStorage("whatsNewVersion") var whatsNewVersion: String = ""
-    @AppStorage("showApplePayShortcutBanner") var showApplePayShortcutBanner: Bool = true
+    @AppStorage("showApplePayShortcutBanner") var showWalletShortcutBanner: Bool = true
 
     @State private var showWhatsNew: Bool = false
 
@@ -102,9 +101,9 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
-                if showApplePayShortcutBanner {
-                    ApplePayShortcutBannerView {
-                        activeSheet = .applePayShortcut
+                if showWalletShortcutBanner {
+                    WalletShortcutBannerView {
+                        activeSheet = .walletShortcut
                     }
                 }
 
@@ -280,15 +279,10 @@ struct HomeView: View {
                         CustomizeHomeView()
                     case .exportImport:
                         ExportImportView()
-                    case .applePayShortcut:
-                        ApplePayShortcutSetupView()
+                    case .walletShortcut:
+                        WalletShortcutSetupView()
                 }
             }
-//            .onAppear() {
-//                if assets.count > 0 && operations.count > 5 {
-//                    requestReview()
-//                }
-//            }
         }
     }
 }

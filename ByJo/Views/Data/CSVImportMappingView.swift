@@ -173,7 +173,7 @@ struct CSVImportMappingView: View {
         Section {
             ForEach(validation.errors) { error in
                 Label {
-                    Text(error.localizedDescription ?? "Unknown error")
+                    Text(error.localizedDescription)
                         .font(.caption)
                 } icon: {
                     Image(systemName: "exclamationmark.triangle.fill")

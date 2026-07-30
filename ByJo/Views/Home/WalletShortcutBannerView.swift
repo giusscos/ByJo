@@ -1,11 +1,11 @@
 //
-//  ApplePayShortcutBannerView.swift
+//  WalletShortcutBannerView.swift
 //  ByJo
 //
 
 import SwiftUI
 
-struct ApplePayShortcutBannerView: View {
+struct WalletShortcutBannerView: View {
     var onTap: () -> Void
 
     var body: some View {
@@ -46,6 +46,6 @@ struct ApplePayShortcutBannerView: View {
 
 #Preview {
     List {
-        ApplePayShortcutBannerView(onTap: {})
+        WalletShortcutBannerView(onTap: {})
     }
 }

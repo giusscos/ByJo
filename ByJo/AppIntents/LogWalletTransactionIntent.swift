@@ -1,14 +1,14 @@
 //
-//  LogApplePayTransactionIntent.swift
+//  LogWalletTransactionIntent.swift
 //  ByJo
 //
 
 import AppIntents
 
-struct LogApplePayTransactionIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Apple Pay Transaction"
+struct LogWalletTransactionIntent: AppIntent {
+    static var title: LocalizedStringResource = "Log Wallet Transaction"
     static var description = IntentDescription(
-        "Log an Apple Pay tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass."
+        "Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass."
     )
 
     @Parameter(title: "Merchant")
@@ -27,7 +27,7 @@ struct LogApplePayTransactionIntent: AppIntent {
     var card: String
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Log Apple Pay \"\(\.$merchant)\" of \(\.$amount) to \(\.$assetName)") {
+        Summary("Log Wallet \"\(\.$merchant)\" of \(\.$amount) to \(\.$assetName)") {
             \.$categoryName
             \.$card
         }
@@ -40,15 +40,15 @@ struct LogApplePayTransactionIntent: AppIntent {
         }
 
         let trimmedMerchant = merchant.trimmingCharacters(in: .whitespacesAndNewlines)
-        let name = trimmedMerchant.isEmpty ? "Apple Pay" : trimmedMerchant
+        let name = trimmedMerchant.isEmpty ? "Card tap" : trimmedMerchant
         let expenseAmount = Decimal(-abs(amount))
         let trimmedCard = card.trimmingCharacters(in: .whitespacesAndNewlines)
-        let note = trimmedCard.isEmpty ? "Apple Pay" : "Apple Pay · \(trimmedCard)"
+        let note = trimmedCard.isEmpty ? "Wallet" : "Wallet · \(trimmedCard)"
         let trimmedCategory = categoryName.trimmingCharacters(in: .whitespacesAndNewlines)
 
         let container = try makeIntentModelContainer()
         let actor = ByJoDataActor(modelContainer: container)
-        let resolvedAssetName = try await actor.addApplePayOperation(
+        let resolvedAssetName = try await actor.addWalletOperation(
             merchant: name,
             amount: expenseAmount,
             assetName: trimmedAsset,

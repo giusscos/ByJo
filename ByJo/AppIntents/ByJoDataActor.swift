@@ -37,7 +37,7 @@ actor ByJoDataActor {
     }
 
     /// Finds an asset/category by name (case-insensitive) or creates them, then logs the expense.
-    func addApplePayOperation(
+    func addWalletOperation(
         merchant: String,
         amount: Decimal,
         assetName: String,

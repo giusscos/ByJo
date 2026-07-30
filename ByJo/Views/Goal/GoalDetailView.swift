@@ -364,7 +364,7 @@ struct GoalDetailView: View {
             EditGoalView(goal: goal, asset: asset)
         }
         .onAppear { checkAndCelebrateMilestone() }
-        .onChange(of: progressPercent) { checkAndCelebrateMilestone() }
+        .onChange(of: progressPercent) { _, _ in checkAndCelebrateMilestone() }
         .sensoryFeedback(.success, trigger: feedbackTrigger)
     }
 
