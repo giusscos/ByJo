@@ -11,9 +11,12 @@ import SwiftUI
 struct GoalRowView: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
+    @AppStorage("pinnedGoalId") private var pinnedGoalId: String = ""
 
     var goal: Goal
     var asset: Asset
+
+    private var isPinned: Bool { pinnedGoalId == goal.id.uuidString }
 
     var progress: Double {
         let current  = NSDecimalNumber(decimal: asset.calculateCurrentBalance()).doubleValue
@@ -45,6 +48,14 @@ struct GoalRowView: View {
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
+
+                if isPinned {
+                    Image(systemName: "pin.circle.fill")
+                        .font(.body)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.background, .yellow)
+                        .rotationEffect(.degrees(45))
+                }
 
                 if goal.isExpired {
                     Text("Expired")
