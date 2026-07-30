@@ -27,7 +27,8 @@ struct SearchView: View {
         return operations.filter {
             $0.name.localizedCaseInsensitiveContains(searchText) ||
             $0.asset?.name.localizedCaseInsensitiveContains(searchText) == true ||
-            $0.category?.name.localizedCaseInsensitiveContains(searchText) == true
+            $0.category?.name.localizedCaseInsensitiveContains(searchText) == true ||
+            $0.note.localizedCaseInsensitiveContains(searchText)
         }
     }
 

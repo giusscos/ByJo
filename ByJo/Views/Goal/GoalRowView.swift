@@ -95,9 +95,25 @@ struct GoalRowView: View {
                     .foregroundStyle(.green)
             }
 
-            // Progress bar
-            ProgressView(value: progress)
-                .tint(goal.isExpired ? .red : (remaining == 0 ? .green : .accentColor))
+            // Progress bar with milestone ticks at 25/50/75%
+            GeometryReader { geo in
+                let tint: Color = goal.isExpired ? .red : (remaining == 0 ? .green : .accentColor)
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.secondary.opacity(0.2))
+                    Capsule()
+                        .fill(tint)
+                        .frame(width: geo.size.width * CGFloat(min(max(progress, 0), 1)))
+                    ForEach([0.25, 0.50, 0.75], id: \.self) { milestone in
+                        Rectangle()
+                            .fill(Color(uiColor: .systemBackground).opacity(0.9))
+                            .frame(width: 2, height: 10)
+                            .offset(x: geo.size.width * milestone - 1)
+                    }
+                }
+            }
+            .frame(height: 6)
+            .animation(.spring(duration: 0.6), value: progress)
 
             // Footer: from · % · to + due date
             HStack(spacing: 3) {

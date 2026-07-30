@@ -18,6 +18,7 @@ struct GoalDetailView: View {
     var asset: Asset
 
     @State private var showEdit = false
+    @State private var feedbackTrigger = false
 
     // MARK: - Progress
 
@@ -39,6 +40,10 @@ struct GoalDetailView: View {
     var progressPercent: Int { Int((progress * 100).rounded()) }
 
     var isPinned: Bool { pinnedGoalId == goal.id.uuidString }
+
+    var currentMilestone: Int {
+        [100, 75, 50, 25].first { progressPercent >= $0 } ?? 0
+    }
 
     // MARK: - Pace (last 90 days net change on the asset)
 
@@ -108,6 +113,16 @@ struct GoalDetailView: View {
                             .frame(width: 160, height: 160)
                             .rotationEffect(.degrees(-90))
                             .animation(.spring(duration: 1.2, bounce: 0.2), value: progress)
+
+                        // Milestone markers at 25%, 50%, 75%
+                        ForEach([0.25, 0.50, 0.75], id: \.self) { milestone in
+                            let angleDeg = -90.0 + milestone * 360.0
+                            let angleRad = angleDeg * .pi / 180.0
+                            Circle()
+                                .fill(progress >= milestone ? Color.white.opacity(0.8) : Color.secondary.opacity(0.2))
+                                .frame(width: 7, height: 7)
+                                .offset(x: 80 * cos(angleRad), y: 80 * sin(angleRad))
+                        }
 
                         VStack(spacing: 2) {
                             Text("\(progressPercent)%")
@@ -348,6 +363,17 @@ struct GoalDetailView: View {
         .sheet(isPresented: $showEdit) {
             EditGoalView(goal: goal, asset: asset)
         }
+        .onAppear { checkAndCelebrateMilestone() }
+        .onChange(of: progressPercent) { checkAndCelebrateMilestone() }
+        .sensoryFeedback(.success, trigger: feedbackTrigger)
+    }
+
+    private func checkAndCelebrateMilestone() {
+        let key = "goalMilestone-\(goal.id.uuidString)"
+        let lastCelebrated = UserDefaults.standard.integer(forKey: key)
+        guard currentMilestone > lastCelebrated else { return }
+        UserDefaults.standard.set(currentMilestone, forKey: key)
+        feedbackTrigger.toggle()
     }
 
     private func setStatus(_ status: StatusGoal) {

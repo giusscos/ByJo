@@ -18,6 +18,7 @@ struct HomeView: View {
         case viewCategories
         case swapAssetOperation
         case customize
+        case exportImport
 
         var id: String {
             switch self {
@@ -35,6 +36,8 @@ struct HomeView: View {
                     return "assetAmountSwap"
                 case .customize:
                     return "customize"
+                case .exportImport:
+                    return "exportImport"
             }
         }
     }
@@ -85,6 +88,10 @@ struct HomeView: View {
         case .savingsRate:      SavingsRateWidgetView()
         case .topExpenses:      TopExpensesWidgetView()
         case .assetAllocation:  AssetAllocationWidgetView()
+        case .expenseBreakdown: ExpenseBreakdownWidgetView()
+        case .netWorthHistory:  NetWorthHistoryWidgetView()
+        case .spendingTrends:   SpendingTrendsWidgetView()
+        case .savingsRateTrend: SavingsRateTrendWidgetView()
         }
     }
 
@@ -212,6 +219,13 @@ struct HomeView: View {
                                 }
                             }
                         }
+                        Section {
+                            Button {
+                                activeSheet = .exportImport
+                            } label: {
+                                Label("Export & Import", systemImage: "arrow.up.arrow.down.square")
+                            }
+                        }
                         #if DEBUG
                         Section {
                             Button(role: .destructive) {
@@ -254,6 +268,8 @@ struct HomeView: View {
                         }
                     case .customize:
                         CustomizeHomeView()
+                    case .exportImport:
+                        ExportImportView()
                 }
             }
 //            .onAppear() {

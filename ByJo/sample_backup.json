@@ -1,0 +1,103 @@
+{
+  "version" : 1,
+  "exportDate" : "2026-07-01T00:00:00Z",
+  "categories" : [
+    { "id" : "11111111-0000-0000-0000-000000000001", "name" : "Income" },
+    { "id" : "11111111-0000-0000-0000-000000000002", "name" : "Housing" },
+    { "id" : "11111111-0000-0000-0000-000000000003", "name" : "Food" },
+    { "id" : "11111111-0000-0000-0000-000000000004", "name" : "Subscriptions" },
+    { "id" : "11111111-0000-0000-0000-000000000005", "name" : "Savings" },
+    { "id" : "11111111-0000-0000-0000-000000000006", "name" : "Health" },
+    { "id" : "11111111-0000-0000-0000-000000000007", "name" : "Utilities" }
+  ],
+  "assets" : [
+    {
+      "id" : "22222222-0000-0000-0000-000000000001",
+      "name" : "Checking Account",
+      "type" : "Bank Account",
+      "initialBalance" : "1000.00",
+      "timestamp" : "2025-01-01T00:00:00Z"
+    },
+    {
+      "id" : "22222222-0000-0000-0000-000000000002",
+      "name" : "Savings Account",
+      "type" : "Savings Account",
+      "initialBalance" : "5000.00",
+      "timestamp" : "2025-01-01T00:00:00Z"
+    }
+  ],
+  "operations" : [
+    {
+      "id" : "33333333-0000-0000-0000-000000000001",
+      "name" : "July Salary",
+      "date" : "2026-07-01T00:00:00Z",
+      "amount" : "3000.00",
+      "note" : "Main job paycheck",
+      "frequency" : "Monthly",
+      "assetId" : "22222222-0000-0000-0000-000000000001",
+      "categoryId" : "11111111-0000-0000-0000-000000000001",
+      "swapId" : null,
+      "seriesId" : null
+    },
+    {
+      "id" : "33333333-0000-0000-0000-000000000002",
+      "name" : "Rent",
+      "date" : "2026-07-01T00:00:00Z",
+      "amount" : "-1200.00",
+      "note" : "July rent payment",
+      "frequency" : "Monthly",
+      "assetId" : "22222222-0000-0000-0000-000000000001",
+      "categoryId" : "11111111-0000-0000-0000-000000000002",
+      "swapId" : null,
+      "seriesId" : null
+    },
+    {
+      "id" : "33333333-0000-0000-0000-000000000003",
+      "name" : "Savings Transfer",
+      "date" : "2026-07-05T00:00:00Z",
+      "amount" : "-500.00",
+      "note" : "",
+      "frequency" : "Monthly",
+      "assetId" : "22222222-0000-0000-0000-000000000001",
+      "categoryId" : "11111111-0000-0000-0000-000000000005",
+      "swapId" : null,
+      "seriesId" : null
+    },
+    {
+      "id" : "33333333-0000-0000-0000-000000000004",
+      "name" : "Savings Interest",
+      "date" : "2026-07-05T00:00:00Z",
+      "amount" : "2.50",
+      "note" : "Monthly interest",
+      "frequency" : "Monthly",
+      "assetId" : "22222222-0000-0000-0000-000000000002",
+      "categoryId" : "11111111-0000-0000-0000-000000000001",
+      "swapId" : null,
+      "seriesId" : null
+    },
+    {
+      "id" : "33333333-0000-0000-0000-000000000005",
+      "name" : "Groceries",
+      "date" : "2026-07-10T00:00:00Z",
+      "amount" : "-85.50",
+      "note" : "",
+      "frequency" : "Single",
+      "assetId" : "22222222-0000-0000-0000-000000000001",
+      "categoryId" : "11111111-0000-0000-0000-000000000003",
+      "swapId" : null,
+      "seriesId" : null
+    }
+  ],
+  "goals" : [
+    {
+      "id" : "44444444-0000-0000-0000-000000000001",
+      "title" : "Emergency Fund",
+      "startingAmount" : "5000.00",
+      "targetAmount" : "15000.00",
+      "dueDate" : "2026-12-31T00:00:00Z",
+      "assetId" : "22222222-0000-0000-0000-000000000002",
+      "completedDate" : null,
+      "completedStatus" : null
+    }
+  ]
+}

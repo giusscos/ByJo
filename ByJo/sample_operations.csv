@@ -1,0 +1,13 @@
+name,date,amount,asset,category,frequency,note
+July Salary,2026-07-01,3000.00,Checking Account,Income,Monthly,Main job paycheck
+Rent,2026-07-01,-1200.00,Checking Account,Housing,Monthly,July rent payment
+Groceries,2026-07-05,-85.50,Checking Account,Food,Single,Weekly shop
+Netflix,2026-07-08,-15.99,Checking Account,Subscriptions,Monthly,Streaming subscription
+Gym Membership,2026-07-10,-39.99,Checking Account,Health,Monthly,
+Savings Transfer,2026-07-10,-500.00,Checking Account,Savings,Monthly,Transfer to savings account
+Savings Interest,2026-07-10,2.50,Savings Account,Income,Monthly,Monthly interest earned
+Coffee,2026-07-12,-4.50,Checking Account,Food,Single,
+Freelance Payment,2026-07-15,450.00,Checking Account,Income,Single,Website project
+Phone Bill,2026-07-20,-29.99,Checking Account,Utilities,Monthly,
+Transport,2026-07-22,-45.00,Checking Account,Transport,Single,Monthly pass
+Dinner out,2026-07-25,-62.00,Checking Account,Food,Single,"Birthday dinner, split bill"

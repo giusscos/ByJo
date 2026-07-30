@@ -60,7 +60,8 @@ struct OperationListView: View {
     @State private var activeSheet: OperationListViewSheet?
     @State private var operationToDelete: AssetOperation?
     @State private var showingBulkDeleteAlert = false
-    
+    @State private var showingBulkCategorySheet = false
+
     @State private var selectedAsset: Asset?
     @State private var isEditMode: EditMode = .inactive
     @State private var filterCategory: CategoryOperation?
@@ -183,6 +184,17 @@ struct OperationListView: View {
                         }
                     }
                     
+                    ToolbarItem(placement: .topBarTrailing) {
+                        if isEditMode == .active {
+                            Button {
+                                showingBulkCategorySheet = true
+                            } label: {
+                                Label("Change Category", systemImage: "tag")
+                            }
+                            .disabled(selectedOperations.isEmpty)
+                        }
+                    }
+
                     ToolbarItem(placement: .topBarTrailing) {
                         if isEditMode == .active {
                             Button(role: .destructive) {
@@ -340,6 +352,26 @@ struct OperationListView: View {
                         }
                 }
             }
+            .sheet(isPresented: $showingBulkCategorySheet) {
+                NavigationStack {
+                    List(categories) { category in
+                        Button {
+                            reassignCategory(category)
+                        } label: {
+                            Label(category.name, systemImage: "tag")
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                    .navigationTitle("Change Category")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showingBulkCategorySheet = false }
+                        }
+                    }
+                }
+                .presentationDetents([.medium, .large])
+            }
             .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Delete", role: .destructive) {
@@ -348,7 +380,16 @@ struct OperationListView: View {
             }
         }
     }
-    
+
+    private func reassignCategory(_ category: CategoryOperation) {
+        for operation in selectedOperations {
+            operation.category = category
+        }
+        selectedOperations.removeAll()
+        isEditMode = .inactive
+        showingBulkCategorySheet = false
+    }
+
     private func deleteSelectedOperations() {
         for operation in selectedOperations {
             withAnimation {
