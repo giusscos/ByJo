@@ -61,6 +61,7 @@ struct OperationListView: View {
     @State private var operationToDelete: AssetOperation?
     @State private var showingBulkDeleteAlert = false
     @State private var showingBulkCategorySheet = false
+    @State private var showingBulkAssetSheet = false
 
     @State private var selectedAsset: Asset?
     @State private var isEditMode: EditMode = .inactive
@@ -186,10 +187,22 @@ struct OperationListView: View {
                     
                     ToolbarItem(placement: .topBarTrailing) {
                         if isEditMode == .active {
-                            Button {
-                                showingBulkCategorySheet = true
+                            Menu {
+                                Button {
+                                    showingBulkCategorySheet = true
+                                } label: {
+                                    Label("Change Category", systemImage: "tag")
+                                }
+                                .disabled(categories.isEmpty)
+
+                                Button {
+                                    showingBulkAssetSheet = true
+                                } label: {
+                                    Label("Change Asset", systemImage: "wallet.pass")
+                                }
+                                .disabled(assets.isEmpty)
                             } label: {
-                                Label("Change Category", systemImage: "tag")
+                                Label("Reassign", systemImage: "arrow.left.arrow.right")
                             }
                             .disabled(selectedOperations.isEmpty)
                         }
@@ -372,6 +385,26 @@ struct OperationListView: View {
                 }
                 .presentationDetents([.medium, .large])
             }
+            .sheet(isPresented: $showingBulkAssetSheet) {
+                NavigationStack {
+                    List(assets) { asset in
+                        Button {
+                            reassignAsset(asset)
+                        } label: {
+                            Label(asset.name, systemImage: "building.columns")
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                    .navigationTitle("Change Asset")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showingBulkAssetSheet = false }
+                        }
+                    }
+                }
+                .presentationDetents([.medium, .large])
+            }
             .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Delete", role: .destructive) {
@@ -388,6 +421,15 @@ struct OperationListView: View {
         selectedOperations.removeAll()
         isEditMode = .inactive
         showingBulkCategorySheet = false
+    }
+
+    private func reassignAsset(_ asset: Asset) {
+        for operation in selectedOperations {
+            operation.asset = asset
+        }
+        selectedOperations.removeAll()
+        isEditMode = .inactive
+        showingBulkAssetSheet = false
     }
 
     private func deleteSelectedOperations() {

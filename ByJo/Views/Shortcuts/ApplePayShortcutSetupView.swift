@@ -6,6 +6,9 @@
 import SwiftUI
 
 struct ApplePayShortcutSetupView: View {
+    private static let shortcutURL = URL(string: "https://www.icloud.com/shortcuts/03928890ce474e8aa1fecc57d03f5b60")!
+    private static let createAutomationURL = URL(string: "shortcuts://create-automation")!
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
@@ -15,7 +18,8 @@ struct ApplePayShortcutSetupView: View {
         NavigationStack {
             List {
                 introSection
-                openShortcutsSection
+                getShortcutSection
+                createAutomationSection
                 stepsSection
                 tipSection
                 completedSection
@@ -38,7 +42,7 @@ struct ApplePayShortcutSetupView: View {
                 Label("Auto-log Apple Pay taps", systemImage: "wallet.pass.fill")
                     .font(.headline)
 
-                Text("When you pay with Apple Pay (NFC), Shortcuts can send the merchant and amount to ByJo as an expense. Apple requires you to finish setup in the Shortcuts app.")
+                Text("Add the shared ByJo x Apple Pay shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -46,26 +50,37 @@ struct ApplePayShortcutSetupView: View {
         }
     }
 
-    private var openShortcutsSection: some View {
+    private var getShortcutSection: some View {
         Section {
             Button {
-                guard let url = URL(string: "shortcuts://create-automation") else { return }
-                openURL(url)
+                openURL(Self.shortcutURL)
             } label: {
-                Label("Open Shortcuts", systemImage: "arrow.up.forward.app")
+                Label("Get Shortcut", systemImage: "square.and.arrow.down")
             }
         } footer: {
-            Text("Opens the Shortcuts app so you can create a new Transaction automation.")
+            Text("Opens the shared ByJo x Apple Pay shortcut so you can add it to Shortcuts.")
+        }
+    }
+
+    private var createAutomationSection: some View {
+        Section {
+            Button {
+                openURL(Self.createAutomationURL)
+            } label: {
+                Label("Create Automation", systemImage: "arrow.up.forward.app")
+            }
+        } footer: {
+            Text("Opens Shortcuts to create a new Transaction / Wallet automation.")
         }
     }
 
     private var stepsSection: some View {
         Section("Setup steps") {
-            setupStep(number: 1, text: "Choose Transaction (or Wallet on newer iOS).")
-            setupStep(number: 2, text: "Select the cards to track, then choose Run Immediately.")
-            setupStep(number: 3, text: "Add Action → Apps → ByJo → Log Apple Pay Transaction.")
-            setupStep(number: 4, text: "Map Shortcut Input: Amount → Amount, Name or Merchant → Merchant. Optionally map Card → Card.")
-            setupStep(number: 5, text: "Pick an Asset (and optional Category), then tap Done.")
+            setupStep(number: 1, text: "Tap Get Shortcut and add ByJo x Apple Pay.")
+            setupStep(number: 2, text: "Tap Create Automation and choose Transaction (or Wallet on newer iOS).")
+            setupStep(number: 3, text: "Select the cards to track, then choose Run Immediately.")
+            setupStep(number: 4, text: "Add Action → Run Shortcut → ByJo x Apple Pay (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings).")
+            setupStep(number: 5, text: "Optionally set Category Name. Leave empty to categorize later in ByJo.")
         }
     }
 

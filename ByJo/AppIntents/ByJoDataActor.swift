@@ -36,6 +36,46 @@ actor ByJoDataActor {
         return asset.name
     }
 
+    /// Finds an asset/category by name (case-insensitive) or creates them, then logs the expense.
+    func addApplePayOperation(
+        merchant: String,
+        amount: Decimal,
+        assetName: String,
+        categoryName: String?,
+        note: String
+    ) throws -> String {
+        let asset = try findOrCreateAsset(named: assetName)
+        var category: CategoryOperation?
+        if let categoryName {
+            category = try findOrCreateCategory(named: categoryName)
+        }
+        let operation = AssetOperation(name: merchant, amount: amount, asset: asset, category: category, note: note)
+        modelContext.insert(operation)
+        try modelContext.save()
+        WidgetCenter.shared.reloadAllTimelines()
+        return asset.name
+    }
+
+    private func findOrCreateAsset(named name: String) throws -> Asset {
+        let assets = try modelContext.fetch(FetchDescriptor<Asset>())
+        if let existing = assets.first(where: { $0.name.localizedCaseInsensitiveCompare(name) == .orderedSame }) {
+            return existing
+        }
+        let asset = Asset(name: name, type: .bankAccount, initialBalance: 0)
+        modelContext.insert(asset)
+        return asset
+    }
+
+    private func findOrCreateCategory(named name: String) throws -> CategoryOperation {
+        let categories = try modelContext.fetch(FetchDescriptor<CategoryOperation>())
+        if let existing = categories.first(where: { $0.name.localizedCaseInsensitiveCompare(name) == .orderedSame }) {
+            return existing
+        }
+        let category = CategoryOperation(name: name)
+        modelContext.insert(category)
+        return category
+    }
+
     func addSwap(fromAssetId: UUID, toAssetId: UUID, name: String, amount: Decimal) throws -> (String, String) {
         let fromPredicate = #Predicate<Asset> { $0.id == fromAssetId }
         let toPredicate = #Predicate<Asset> { $0.id == toAssetId }
@@ -59,10 +99,12 @@ actor ByJoDataActor {
 
 enum ByJoIntentError: LocalizedError {
     case assetNotFound
+    case invalidAssetName
 
     var errorDescription: String? {
         switch self {
         case .assetNotFound: return "Asset not found."
+        case .invalidAssetName: return "Asset name is required."
         }
     }
 }

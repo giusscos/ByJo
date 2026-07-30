@@ -52,6 +52,11 @@ struct AssetDetailView: View {
     
     @State private var activeSheet: ActiveSheet?
     @State private var filterCategory: CategoryOperation?
+    @State private var isEditMode: EditMode = .inactive
+    @State private var selectedOperations = Set<AssetOperation>()
+    @State private var showingBulkDeleteAlert = false
+    @State private var showingBulkCategorySheet = false
+    @State private var showingBulkAssetSheet = false
 
     
     var filteredAndSortedOperations: [OperationByDate] {
@@ -81,7 +86,7 @@ struct AssetDetailView: View {
     
     var body: some View {
         NavigationStack {
-            List {
+            List(selection: $selectedOperations) {
                 if !filteredAndSortedOperations.isEmpty {
                     ForEach(filteredAndSortedOperations) { item in
                         Section {
@@ -91,6 +96,7 @@ struct AssetDetailView: View {
                                 } label: {
                                     AssetOperationRow(operation: operation)
                                 }
+                                .tag(operation)
                                 .swipeActions (edge: .trailing) {
                                     Button (role: .destructive) {
                                         deleteOperation(operation)
@@ -138,77 +144,117 @@ struct AssetDetailView: View {
                 }
             }
             .navigationTitle(asset.name)
+            .environment(\.editMode, $isEditMode)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        activeSheet = .createOperation
-                    } label: {
-                        VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
+                if !(asset.operations ?? []).isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        EditButton()
                     }
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Section {
+
+                if isEditMode == .active {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
                             Button {
-                                activeSheet = .editAsset
+                                showingBulkCategorySheet = true
                             } label: {
-                                Label("Edit", systemImage: "pencil")
+                                Label("Change Category", systemImage: "tag")
                             }
-                            
+                            .disabled(categories.isEmpty)
+
                             Button {
-                                activeSheet = .swapAssetOperation
+                                showingBulkAssetSheet = true
                             } label: {
-                                Label("Swap", systemImage: "arrow.up.arrow.down")
+                                Label("Change Asset", systemImage: "building.columns")
                             }
                             .disabled(assets.count < 2)
+                        } label: {
+                            Label("Reassign", systemImage: "arrow.left.arrow.right")
                         }
-                        
-                        Section {
-                            Button {
-                                activeSheet = .createGoal
-                            } label: {
-                                Label("Add goal", systemImage: "plus")
+                        .disabled(selectedOperations.isEmpty)
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(role: .destructive) {
+                            showingBulkDeleteAlert = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                        .disabled(selectedOperations.isEmpty)
+                    }
+                } else {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            activeSheet = .createOperation
+                        } label: {
+                            VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
+                        }
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            Section {
+                                Button {
+                                    activeSheet = .editAsset
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                
+                                Button {
+                                    activeSheet = .swapAssetOperation
+                                } label: {
+                                    Label("Swap", systemImage: "arrow.up.arrow.down")
+                                }
+                                .disabled(assets.count < 2)
                             }
                             
-                            Button {
-                                activeSheet = .viewGoal
-                            } label: {
-                                Label("Goal list", systemImage: "list.bullet")
-                            }
-                        }
-                        
-                        Section {
-                            Button {
-                                activeSheet = .viewCategories
-                            } label: {
-                                Label("Categories", systemImage: "list.bullet")
-                            }
-                        }
-                        
-                        if !(asset.operations ?? []).isEmpty {
                             Section {
-                                Menu("By Category") {
-                                    ForEach(categories) { category in
-                                        Button(category.name) {
+                                Button {
+                                    activeSheet = .createGoal
+                                } label: {
+                                    Label("Add goal", systemImage: "plus")
+                                }
+                                
+                                Button {
+                                    activeSheet = .viewGoal
+                                } label: {
+                                    Label("Goal list", systemImage: "list.bullet")
+                                }
+                            }
+                            
+                            Section {
+                                Button {
+                                    activeSheet = .viewCategories
+                                } label: {
+                                    Label("Categories", systemImage: "list.bullet")
+                                }
+                            }
+                            
+                            if !(asset.operations ?? []).isEmpty {
+                                Section {
+                                    Menu("By Category") {
+                                        ForEach(categories) { category in
+                                            Button(category.name) {
+                                                withAnimation {
+                                                    filterCategory = category
+                                                }
+                                            }
+                                        }
+                                        
+                                        Button("Clear Filter") {
                                             withAnimation {
-                                                filterCategory = category
+                                                filterCategory = nil
                                             }
                                         }
                                     }
-                                    
-                                    Button("Clear Filter") {
-                                        withAnimation {
-                                            filterCategory = nil
-                                        }
-                                    }
+                                } header: {
+                                    Text("Filters")
                                 }
-                            } header: {
-                                Text("Filters")
                             }
+                        } label: {
+                            VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                         }
-                    } label: {
-                        VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                     }
                 }
             }
@@ -240,6 +286,52 @@ struct AssetDetailView: View {
                         }
                 }
             }
+            .sheet(isPresented: $showingBulkCategorySheet) {
+                NavigationStack {
+                    List(categories) { category in
+                        Button {
+                            reassignCategory(category)
+                        } label: {
+                            Label(category.name, systemImage: "tag")
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                    .navigationTitle("Change Category")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showingBulkCategorySheet = false }
+                        }
+                    }
+                }
+                .presentationDetents([.medium, .large])
+            }
+            .sheet(isPresented: $showingBulkAssetSheet) {
+                NavigationStack {
+                    List(assets.filter { $0 != asset }) { target in
+                        Button {
+                            reassignAsset(target)
+                        } label: {
+                            Label(target.name, systemImage: "building.columns")
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                    .navigationTitle("Change Asset")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showingBulkAssetSheet = false }
+                        }
+                    }
+                }
+                .presentationDetents([.medium, .large])
+            }
+            .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    deleteSelectedOperations()
+                }
+            }
         }
     }
     
@@ -249,6 +341,34 @@ struct AssetDetailView: View {
             modelContext.delete(linked)
         }
         modelContext.delete(operation)
+    }
+
+    private func reassignCategory(_ category: CategoryOperation) {
+        for operation in selectedOperations {
+            operation.category = category
+        }
+        selectedOperations.removeAll()
+        isEditMode = .inactive
+        showingBulkCategorySheet = false
+    }
+
+    private func reassignAsset(_ target: Asset) {
+        for operation in selectedOperations {
+            operation.asset = target
+        }
+        selectedOperations.removeAll()
+        isEditMode = .inactive
+        showingBulkAssetSheet = false
+    }
+
+    private func deleteSelectedOperations() {
+        for operation in selectedOperations {
+            withAnimation {
+                deleteOperation(operation)
+            }
+        }
+        selectedOperations.removeAll()
+        isEditMode = .inactive
     }
 }
 
