@@ -66,21 +66,30 @@ struct OperationListView: View {
     @State private var selectedAsset: Asset?
     @State private var isEditMode: EditMode = .inactive
     @State private var filterCategory: CategoryOperation?
+    @State private var filterMerchant: String?
     @State private var selectedOperations = Set<AssetOperation>()
-    
+
     @State private var sortOrder: OperationSortOrder = .date
     @State private var isAscending: Bool = false
     @State private var showRecurringOnly: Bool = false
-    
+
+    var uniqueMerchants: [String] {
+        Array(Set(operations.map { $0.name }.filter { !$0.isEmpty })).sorted()
+    }
+
     var filteredAndSortedOperations: [OperationByDate] {
         var filteredOperations = operations
-        
+
         if let asset = selectedAsset {
             filteredOperations = filteredOperations.filter { $0.asset == asset }
         }
-        
+
         if let category = filterCategory {
             filteredOperations = filteredOperations.filter { $0.category == category }
+        }
+
+        if let merchant = filterMerchant {
+            filteredOperations = filteredOperations.filter { $0.name == merchant }
         }
 
         if showRecurringOnly {
@@ -302,8 +311,26 @@ struct OperationListView: View {
                                                 } label: {
                                                     HStack {
                                                         Text(category.name)
-                                                        
+
                                                         if filterCategory == category {
+                                                            Image(systemName: "checkmark")
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        Menu("By Merchant") {
+                                            ForEach(uniqueMerchants, id: \.self) { merchant in
+                                                Button {
+                                                    withAnimation {
+                                                        filterMerchant = filterMerchant == merchant ? nil : merchant
+                                                    }
+                                                } label: {
+                                                    HStack {
+                                                        Text(merchant)
+
+                                                        if filterMerchant == merchant {
                                                             Image(systemName: "checkmark")
                                                         }
                                                     }
@@ -352,8 +379,8 @@ struct OperationListView: View {
                             EditAssetOperationView(asset: asset, category: category)
                         }
                     case .edit(let operation):
-                        if let asset = operation.asset, let category = operation.category {
-                            EditAssetOperationView(operation: operation, asset: asset, category: category)
+                        if let category = operation.category ?? categories.first {
+                            EditAssetOperationView(operation: operation, asset: operation.asset, category: category)
                         }
                     case .createAsset:
                         EditAssetView()

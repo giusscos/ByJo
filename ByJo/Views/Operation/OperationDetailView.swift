@@ -23,6 +23,7 @@ struct OperationDetailView: View {
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
 
     @Query var operations: [AssetOperation]
+    @Query var categories: [CategoryOperation]
 
     var operation: AssetOperation
     var linkedOperation: AssetOperation? = nil
@@ -175,15 +176,6 @@ struct OperationDetailView: View {
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .lineLimit(8)
-                            .mask {
-                                VStack(spacing: 0) {
-                                    LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom)
-                                        .frame(height: 10)
-                                    Color.black
-                                    LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
-                                        .frame(height: 10)
-                                }
-                            }
                     }
                     .padding(.vertical, 4)
                 } header: {
@@ -275,7 +267,7 @@ struct OperationDetailView: View {
             Text("No future occurrences will be generated. Past occurrences are kept.")
         }
         .sheet(isPresented: $showEditSheet, content: {
-            if let category = operation.category {
+            if let category = operation.category ?? categories.first {
                 EditAssetOperationView(operation: operation, category: category)
             }
         })

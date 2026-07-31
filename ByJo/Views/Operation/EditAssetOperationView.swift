@@ -81,6 +81,14 @@ struct EditAssetOperationView: View {
         return true
     }
 
+    private var nameSuggestions: [String] {
+        guard !name.isEmpty else { return [] }
+        let existing = Set(allOperations.compactMap { $0.name.isEmpty ? nil : $0.name })
+        return existing
+            .filter { $0.localizedCaseInsensitiveContains(name) && $0.caseInsensitiveCompare(name) != .orderedSame }
+            .sorted()
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -119,6 +127,20 @@ struct EditAssetOperationView: View {
                                         print(error.localizedDescription)
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+
+                if focusedField == .name && !nameSuggestions.isEmpty {
+                    Section("Suggestions") {
+                        ForEach(nameSuggestions.prefix(5), id: \.self) { suggestion in
+                            Button {
+                                name = suggestion
+                                focusedField = .amount
+                            } label: {
+                                Text(suggestion)
+                                    .foregroundStyle(.primary)
                             }
                         }
                     }
@@ -353,11 +375,15 @@ struct EditAssetOperationView: View {
                 note = operation.note
                 frequency = operation.frequency
 
-                if operation.asset == nil {
+                if let opAsset = operation.asset {
+                    asset = opAsset
+                } else {
                     operation.asset = asset
                 }
 
-                if operation.category == nil {
+                if let opCategory = operation.category {
+                    category = opCategory
+                } else {
                     operation.category = category
                 }
 
@@ -372,7 +398,7 @@ struct EditAssetOperationView: View {
                 }
             }
 
-            if let firstAsset = assets.first {
+            if asset == nil, let firstAsset = assets.first {
                 asset = firstAsset
             }
         }
