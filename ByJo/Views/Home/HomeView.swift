@@ -95,6 +95,8 @@ struct HomeView: View {
         case .netWorthHistory:  NetWorthHistoryWidgetView()
         case .spendingTrends:   SpendingTrendsWidgetView()
         case .savingsRateTrend: SavingsRateTrendWidgetView()
+        case .budgetProgress:   BudgetProgressWidgetView()
+        case .debtPayoff:       DebtPayoffWidgetView()
         }
     }
 

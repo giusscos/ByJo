@@ -20,6 +20,7 @@ struct NetWorthHistoryWidgetView: View {
     @Query var assets: [Asset]
 
     @State private var selectedRange: DateRangeOption = .month
+    @State private var showProjection: Bool = false
 
     private let rangeOptions: [DateRangeOption] = [.week, .month, .threeMonths, .sixMonths, .year, .all]
 
@@ -74,6 +75,35 @@ struct NetWorthHistoryWidgetView: View {
     private var delta: Double { (points.first?.value).map { currentNetWorth - $0 } ?? 0 }
     private var lineColor: Color { delta >= 0 ? .green : .red }
 
+    private var monthlyRecurringNet: Double {
+        assets.flatMap { $0.operations ?? [] }
+            .filter { $0.frequency != .single }
+            .reduce(0.0) { sum, op in
+                let monthly: Decimal
+                switch op.frequency {
+                case .single:  monthly = 0
+                case .daily:   monthly = op.amount * 30
+                case .weekly:  monthly = op.amount * 4
+                case .monthly: monthly = op.amount
+                case .yearly:  monthly = op.amount / 12
+                }
+                return sum + NSDecimalNumber(decimal: monthly).doubleValue
+            }
+    }
+
+    private var projectionPoints: [NetWorthPoint] {
+        guard showProjection else { return [] }
+        let net = monthlyRecurringNet
+        let now = Date()
+        let calendar = Calendar.current
+        var result = [NetWorthPoint(date: now, value: currentNetWorth)]
+        for month in 1...12 {
+            guard let date = calendar.date(byAdding: .month, value: month, to: now) else { continue }
+            result.append(NetWorthPoint(date: date, value: currentNetWorth + net * Double(month)))
+        }
+        return result
+    }
+
     var body: some View {
         if !assets.isEmpty {
             Section {
@@ -107,34 +137,62 @@ struct NetWorthHistoryWidgetView: View {
 
                         Spacer()
 
-                        Picker("", selection: $selectedRange) {
-                            ForEach(rangeOptions, id: \.self) { option in
-                                Text(option.label).tag(option)
+                        VStack(alignment: .trailing, spacing: 6) {
+                            Picker("", selection: $selectedRange) {
+                                ForEach(rangeOptions, id: \.self) { option in
+                                    Text(option.label).tag(option)
+                                }
                             }
+                            .labelsHidden()
+                            .pickerStyle(.menu)
+
+                            Button {
+                                withAnimation { showProjection.toggle() }
+                            } label: {
+                                Text("Forecast")
+                                    .font(.caption2)
+                                    .fontWeight(.semibold)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(showProjection ? Color.accentColor : Color.secondary.opacity(0.15))
+                                    .foregroundStyle(showProjection ? .white : .secondary)
+                                    .clipShape(Capsule())
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .labelsHidden()
-                        .pickerStyle(.menu)
                     }
 
                     if points.count > 1 {
-                        Chart(points) { point in
-                            AreaMark(
-                                x: .value("Date", point.date),
-                                y: .value("Net Worth", point.value)
-                            )
-                            .foregroundStyle(.linearGradient(
-                                colors: [lineColor.opacity(0.25), lineColor.opacity(0.0)],
-                                startPoint: .top, endPoint: .bottom
-                            ))
-                            .interpolationMethod(.monotone)
+                        Chart {
+                            ForEach(points) { point in
+                                AreaMark(
+                                    x: .value("Date", point.date),
+                                    y: .value("Net Worth", point.value)
+                                )
+                                .foregroundStyle(.linearGradient(
+                                    colors: [lineColor.opacity(0.25), lineColor.opacity(0.0)],
+                                    startPoint: .top, endPoint: .bottom
+                                ))
+                                .interpolationMethod(.monotone)
 
-                            LineMark(
-                                x: .value("Date", point.date),
-                                y: .value("Net Worth", point.value)
-                            )
-                            .foregroundStyle(lineColor)
-                            .lineStyle(StrokeStyle(lineWidth: 2))
-                            .interpolationMethod(.monotone)
+                                LineMark(
+                                    x: .value("Date", point.date),
+                                    y: .value("Net Worth", point.value)
+                                )
+                                .foregroundStyle(lineColor)
+                                .lineStyle(StrokeStyle(lineWidth: 2))
+                                .interpolationMethod(.monotone)
+                            }
+
+                            ForEach(projectionPoints) { point in
+                                LineMark(
+                                    x: .value("Date", point.date),
+                                    y: .value("Net Worth", point.value)
+                                )
+                                .foregroundStyle(lineColor.opacity(0.5))
+                                .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 3]))
+                                .interpolationMethod(.monotone)
+                            }
                         }
                         .chartYScale(domain: .automatic(includesZero: false))
                         .chartXAxis {

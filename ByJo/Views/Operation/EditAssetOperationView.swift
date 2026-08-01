@@ -93,7 +93,7 @@ struct EditAssetOperationView: View {
         NavigationStack {
             List {
                 Section {
-                    TextField("Name", text: $name)
+                    TextField("Name", text: $name.animation(.snappy(duration: 0.22)))
                         .autocorrectionDisabled()
                         .focused($focusedField, equals: .name)
                         .submitLabel(.next)
@@ -136,8 +136,10 @@ struct EditAssetOperationView: View {
                     Section("Suggestions") {
                         ForEach(nameSuggestions.prefix(5), id: \.self) { suggestion in
                             Button {
-                                name = suggestion
-                                focusedField = .amount
+                                withAnimation(.snappy(duration: 0.25)) {
+                                    name = suggestion
+                                    focusedField = .amount
+                                }
                             } label: {
                                 Text(suggestion)
                                     .foregroundStyle(.primary)
@@ -300,6 +302,8 @@ struct EditAssetOperationView: View {
                 }
                 .listRowInsets(.init(top: 16, leading: 14, bottom: 16, trailing: 16))
             }
+            .animation(.snappy(duration: 0.28), value: focusedField == .name && !nameSuggestions.isEmpty)
+            .animation(.snappy(duration: 0.22), value: nameSuggestions)
             .navigationTitle(operation != nil ? "Edit operation" : "Create operation")
             .toolbar {
                 if let operation = operation {

@@ -18,6 +18,8 @@ enum HomeSection: String, CaseIterable, Identifiable {
     case netWorthHistory
     case spendingTrends
     case savingsRateTrend
+    case budgetProgress
+    case debtPayoff
 
     var id: String { rawValue }
 
@@ -35,6 +37,8 @@ enum HomeSection: String, CaseIterable, Identifiable {
         case .netWorthHistory:  return NSLocalizedString("Net Worth History", comment: "")
         case .spendingTrends:   return NSLocalizedString("Spending Trends", comment: "")
         case .savingsRateTrend: return NSLocalizedString("Savings Rate Trend", comment: "")
+        case .budgetProgress:   return NSLocalizedString("Budget Progress", comment: "")
+        case .debtPayoff:       return NSLocalizedString("Debt Payoff", comment: "")
         }
     }
 
@@ -52,6 +56,8 @@ enum HomeSection: String, CaseIterable, Identifiable {
         case .netWorthHistory:  return "chart.line.uptrend.xyaxis"
         case .spendingTrends:   return "chart.bar.fill"
         case .savingsRateTrend: return "chart.xyaxis.line"
+        case .budgetProgress:   return "chart.bar"
+        case .debtPayoff:       return "creditcard.fill"
         }
     }
 
