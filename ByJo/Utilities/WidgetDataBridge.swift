@@ -152,7 +152,7 @@ struct WidgetDataBridge {
 
         let calendar = Calendar.current
         let now = Date()
-        let start = DateRangeOption.month.dateRange.startDate
+        let start = Calendar.current.startOfDay(for: DateRangeOption.month.rollingStartDate)
 
         func netWorthAt(_ date: Date) -> Double {
             assets.reduce(0.0) { sum, asset in

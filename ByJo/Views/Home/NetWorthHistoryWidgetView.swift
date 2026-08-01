@@ -37,7 +37,7 @@ struct NetWorthHistoryWidgetView: View {
             let earliest = assets.flatMap { $0.operations ?? [] }.map(\.date).min()
             start = earliest.map { calendar.startOfDay(for: $0) } ?? now
         } else {
-            start = selectedRange.dateRange.startDate
+            start = calendar.startOfDay(for: selectedRange.rollingStartDate)
         }
         guard start < now else { return [NetWorthPoint(date: now, value: currentNetWorth)] }
 

@@ -211,6 +211,20 @@ enum DateRangeOption: Identifiable, Hashable {
         }
     }
 
+    /// Rolling lookback from now (e.g. last 30 days for `.month`), for trend charts labeled 1W/1M/…
+    var rollingStartDate: Date {
+        let calendar = Calendar.current
+        let now = Date()
+        switch self {
+        case .week:        return calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        case .month:       return calendar.date(byAdding: .month, value: -1, to: now) ?? now
+        case .threeMonths: return calendar.date(byAdding: .month, value: -3, to: now) ?? now
+        case .sixMonths:   return calendar.date(byAdding: .month, value: -6, to: now) ?? now
+        case .year:        return calendar.date(byAdding: .year, value: -1, to: now) ?? now
+        case .all:         return Date.distantPast
+        }
+    }
+
     var previousRange: (startDate: Date, endDate: Date) {
         let calendar = Calendar.current
         let now = Date()
