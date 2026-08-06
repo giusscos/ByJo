@@ -54,7 +54,7 @@ struct SavingsRateTrendWidgetView: View {
         if !dataPoints.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Savings rate trend")
+                    Text("Savings Rate Trend")
                         .font(.headline)
                         .foregroundStyle(.secondary)
 

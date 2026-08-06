@@ -45,6 +45,6 @@ struct AddOperationIntent: AppIntent {
             categoryId: categoryId,
             note: note
         )
-        return .result(dialog: "Added \(name) to \(assetName).")
+        return .result(dialog: IntentDialog(stringLiteral: String(format: String(localized: "Added %@ to %@."), name, assetName)))
     }
 }

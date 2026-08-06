@@ -27,7 +27,7 @@ struct NetWorthWidgetView: View {
     var body: some View {
         Section {
             VStack (alignment: .leading) {
-                Text("Net worth")
+                Text("Net Worth")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 

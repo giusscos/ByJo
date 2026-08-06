@@ -29,7 +29,16 @@ struct OperationsGroupedByCategoryListView: View {
                                 .font(.headline)
                                 .lineLimit(1)
 
-                            Text("\(ops.count == 1 ? "Operation" : "Operations"): \(ops.count)")
+                            Text(
+                                String(
+                                    format: String(
+                                        localized: String.LocalizationValue(
+                                            ops.count == 1 ? "Operation: %lld" : "Operations: %lld"
+                                        )
+                                    ),
+                                    ops.count
+                                )
+                            )
                                 .foregroundStyle(.secondary)
                                 .font(.caption)
                         }

@@ -39,6 +39,6 @@ struct AddSwapIntent: AppIntent {
             amount: Decimal(amount)
         )
         let formatted = Decimal(amount).formatted(.number.precision(.fractionLength(0...2)))
-        return .result(dialog: "Transferred \(formatted) from \(fromName) to \(toName).")
+        return .result(dialog: IntentDialog(stringLiteral: String(format: String(localized: "Transferred %@ from %@ to %@."), formatted, fromName, toName)))
     }
 }

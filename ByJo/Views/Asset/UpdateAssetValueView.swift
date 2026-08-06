@@ -123,7 +123,8 @@ struct UpdateAssetValueView: View {
                     Text("New value")
                 } footer: {
                     if let delta, delta != 0 {
-                        Text("Adjustment: \(delta.formatted(.currency(code: currencyCode.rawValue)))")
+                        let amount = delta.formatted(.currency(code: currencyCode.rawValue))
+                        Text("Adjustment: \(amount)")
                             .foregroundStyle(delta >= 0 ? .green : .red)
                     }
                 }
@@ -187,9 +188,10 @@ struct UpdateAssetValueView: View {
             return
         }
 
-        let category = findOrCreateValueUpdateCategory()
+        let valueUpdateName = String(localized: "Value update")
+        let category = findOrCreateValueUpdateCategory(named: valueUpdateName)
         modelContext.insert(AssetOperation(
-            name: "Value update",
+            name: valueUpdateName,
             date: date,
             amount: delta,
             asset: asset,
@@ -199,14 +201,15 @@ struct UpdateAssetValueView: View {
         dismiss()
     }
 
-    private func findOrCreateValueUpdateCategory() -> CategoryOperation {
-        let descriptor = FetchDescriptor<CategoryOperation>(
-            predicate: #Predicate { $0.name == "Value update" }
-        )
-        if let existing = (try? modelContext.fetch(descriptor))?.first {
+    private func findOrCreateValueUpdateCategory(named localizedName: String) -> CategoryOperation {
+        let englishName = "Value update"
+        let descriptor = FetchDescriptor<CategoryOperation>()
+        if let existing = (try? modelContext.fetch(descriptor))?.first(where: {
+            $0.name == englishName || $0.name == localizedName
+        }) {
             return existing
         }
-        let category = CategoryOperation(name: "Value update")
+        let category = CategoryOperation(name: localizedName)
         modelContext.insert(category)
         return category
     }

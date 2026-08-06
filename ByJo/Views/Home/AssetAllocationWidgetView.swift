@@ -50,7 +50,7 @@ struct AssetAllocationWidgetView: View {
         if !slices.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Asset allocation")
+                    Text("Asset Allocation")
                         .font(.headline)
                         .foregroundStyle(.secondary)
 

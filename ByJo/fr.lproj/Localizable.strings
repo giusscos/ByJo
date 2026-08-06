@@ -170,3 +170,374 @@
 "Get notified when recurring payments are due." = "Recevez des notifications lorsque les paiements récurrents sont dus.";
 "Reminders enabled" = "Rappels activés";
 "Date" = "Date";
+
+/* MARK: - What's New */
+"What's New in ByJo" = "Nouveautés de ByJo";
+"Here's everything that's new and improved." = "Voici tout ce qui est nouveau et amélioré.";
+"Continue" = "Continuer";
+"Update Asset Value" = "Mettre à jour la valeur";
+"Set an asset to its real value — ByJo records the adjustment as an operation with an optional note." = "Fixez un actif à sa valeur réelle — ByJo enregistre l’ajustement comme une opération avec une note optionnelle.";
+"Balance History" = "Historique du solde";
+"See how an asset’s value changed over time with a chart on the asset detail screen." = "Voyez l’évolution de la valeur d’un actif dans le temps avec un graphique sur l’écran de détail.";
+
+/* MARK: - Update Asset Value */
+"Update value" = "Mettre à jour la valeur";
+"Current" = "Actuel";
+"New value" = "Nouvelle valeur";
+"Adjustment: %@" = "Ajustement : %@";
+"Note (optional)" = "Note (facultative)";
+"Value update" = "Mise à jour de valeur";
+
+/* MARK: - Asset Balance History */
+"Balance history" = "Historique du solde";
+"Hide chart" = "Masquer le graphique";
+"Show chart" = "Afficher le graphique";
+
+/* MARK: - Home Empty State */
+"Start tracking your money" = "Commencez à suivre votre argent";
+"Add your assets, then log income and expenses to see your net worth and monthly progress." = "Ajoutez vos actifs, puis enregistrez revenus et dépenses pour voir votre patrimoine net et votre progression mensuelle.";
+
+/* MARK: - Onboarding Welcome */
+"Your personal finance tracker.\nBuilt for clarity, not complexity." = "Votre gestionnaire de finances personnelles.\nConçu pour la clarté, pas la complexité.";
+"Get Started" = "Commencer";
+
+/* MARK: - Onboarding Why Save */
+"Know Your Net Worth" = "Connaissez votre Patrimoine Net";
+"Your net worth — assets minus liabilities — is the clearest snapshot of your financial health." = "Votre patrimoine net — actifs moins passifs — est le reflet le plus clair de votre santé financière.";
+"Next" = "Suivant";
+"People don't know\ntheir net worth" = "Les gens ne connaissent\npas leur patrimoine net";
+"More likely to hit\ngoals when tracking" = "Plus de chances d'atteindre\nles objectifs en suivant";
+"You can't improve what you don't measure — tracking is the first step." = "On ne peut pas améliorer ce qu'on ne mesure pas — le suivi est la première étape.";
+"Seeing your net worth grow month over month is the best motivation to keep going." = "Voir son patrimoine net croître mois après mois est la meilleure motivation pour continuer.";
+"Spotting a downward trend early lets you act before it becomes a bigger problem." = "Repérer une tendance baissière tôt vous permet d'agir avant qu'elle ne devienne un problème plus important.";
+
+/* MARK: - Onboarding Why Invest */
+"Take Control of Your Budget" = "Prenez le Contrôle de votre Budget";
+"Knowing where your money goes gives you the power to decide where it should go." = "Savoir où va votre argent vous donne le pouvoir de décider où il doit aller.";
+"Let's Set Up ByJo" = "Configurons ByJo";
+"Of income goes\nuntracked each month" = "Des revenus non\nsuivis chaque mois";
+"Less overspending\nwith regular tracking" = "Moins de dépenses excessives\navec un suivi régulier";
+"Most people underestimate their monthly expenses by 20–30%." = "La plupart des gens sous-estiment leurs dépenses mensuelles de 20 à 30 %.";
+"A simple spending log reveals patterns you'd never notice otherwise." = "Un simple journal de dépenses révèle des schémas que vous n'auriez jamais remarqués autrement.";
+"Budgeting isn't about restriction — it's about making intentional choices." = "Budgétiser ne consiste pas à se restreindre — il s'agit de faire des choix délibérés.";
+
+/* MARK: - Onboarding Currency */
+"Choose Your Currency" = "Choisissez votre Devise";
+"Select how amounts are displayed. You can change this anytime." = "Sélectionnez comment les montants sont affichés. Vous pouvez le modifier à tout moment.";
+
+/* MARK: - Onboarding Asset Setup */
+"Add Your First Asset" = "Ajoutez votre Premier Actif";
+"Track a bank account, savings, investments, or anything of value." = "Suivez un compte bancaire, une épargne, des investissements ou tout ce qui a de la valeur.";
+"Current Balance" = "Solde Actuel";
+"e.g. My Bank Account" = "ex. Mon Compte Bancaire";
+"Compact keyboard" = "Clavier compact";
+
+/* MARK: - Onboarding Transaction & Recurring */
+"Record an inflow or outflow for " = "Enregistrez un flux entrant ou sortant pour ";
+"Automate a salary, subscription, or bill for " = "Automatisez un salaire, un abonnement ou une facture pour ";
+"your asset" = "votre actif";
+"e.g. Monthly Salary" = "ex. Salaire Mensuel";
+"e.g. Grocery Shopping" = "ex. Courses";
+"e.g. Netflix" = "ex. Netflix";
+
+/* MARK: - Onboarding Success */
+"You're All Set!" = "Tout est Prêt !";
+"Your financial journey starts now. ByJo will help you track every step — from savings to investments." = "Votre voyage financier commence maintenant. ByJo vous aidera à suivre chaque étape — de l'épargne aux investissements.";
+
+/* MARK: - Home Tips */
+"Add your first asset" = "Ajoutez votre premier actif";
+"Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth." = "Appuyez ici pour ajouter un compte bancaire, un investissement ou tout élément ayant une valeur financière pour commencer à suivre votre patrimoine net.";
+"Log your first transaction" = "Enregistrez votre première transaction";
+"Tap + to record inflows or outflows and keep your balances up to date." = "Appuyez sur + pour enregistrer des entrées ou sorties et maintenir vos soldes à jour.";
+
+/* MARK: - Budget Progress Widget */
+"Budget Progress" = "Progression du Budget";
+"of %@" = "sur %@";
+
+/* MARK: - Debt Payoff Widget */
+"Debt Payoff" = "Remboursement de Dettes";
+"/ mo" = "/ mois";
+"Paid off %@" = "Remboursé %@";
+"No recurring payments" = "Aucun paiement récurrent";
+/* MARK: - Home Sections (additional) */
+"Expense Breakdown" = "Répartition des Dépenses";
+"Net Worth History" = "Historique du Patrimoine Net";
+"Spending Trends" = "Tendances de Dépenses";
+"Savings Rate Trend" = "Tendance du Taux d'Épargne";
+
+/* MARK: - Home Widgets */
+"Net Worth" = "Patrimoine Net";
+"This month" = "Ce mois";
+"VS last month" = "VS mois dernier";
+"Forecast" = "Prévision";
+"Budget" = "Budget";
+"≥20% great" = "≥20 % excellent";
+"10–20% ok" = "10–20 % correct";
+"<10% low" = "<10 % faible";
+"Add All" = "Tout ajouter";
+"Customize Home" = "Personnaliser l'Accueil";
+"Drag to reorder. Tap the eye icon to show or hide a section." = "Faites glisser pour réorganiser. Appuyez sur l'icône œil pour afficher ou masquer une section.";
+"Recurring Operations" = "Opérations Récurrentes";
+"Categories overview" = "Aperçu des catégories";
+"Home" = "Accueil";
+"Timeframe" = "Période";
+"%lld pending operation" = "%lld opération en attente";
+"%lld pending operations" = "%lld opérations en attente";
+"Operation: %lld" = "Opération : %lld";
+"Operations: %lld" = "Opérations : %lld";
+
+/* MARK: - Goals (additional) */
+"Started" = "Début";
+"Target" = "Objectif";
+"Remaining" = "Restant";
+"Saved so far" = "Épargné jusqu'ici";
+"Goal reached!" = "Objectif atteint !";
+"Due date" = "Échéance";
+"Expired" = "Expiré";
+"Progress" = "Progression";
+"Monthly pace" = "Rythme mensuel";
+"Estimated completion" = "Fin estimée";
+"On track" = "Dans les temps";
+"Behind schedule" = "En retard";
+"Need more savings" = "Épargne insuffisante";
+"Balance not growing — add an inflow to this asset" = "Le solde n'augmente pas — ajoutez une entrée sur cet actif";
+"Projections" = "Projections";
+"Based on your last 90 days of activity on %@." = "Basé sur vos 90 derniers jours d'activité sur %@.";
+"Per day" = "Par jour";
+"Per week" = "Par semaine";
+"Per month" = "Par mois";
+"Required savings" = "Épargne requise";
+"To reach your target in %lld days." = "Pour atteindre votre objectif en %lld jours.";
+"Manage" = "Gérer";
+"Pin to home" = "Épingler à l'accueil";
+"Unpin from home" = "Désépingler de l'accueil";
+"Resume" = "Reprendre";
+"Suspend" = "Suspendre";
+"Mark as completed" = "Marquer comme complété";
+"Create goal" = "Créer un objectif";
+"Edit goal" = "Modifier l'objectif";
+"Title" = "Titre";
+"Current: " = "Actuel : ";
+"Ongoing" = "En cours";
+"Complete" = "Terminé";
+"left to go" = "restant";
+"Due date: " = "Échéance : ";
+"Completed date: " = "Date de complétion : ";
+"Reached" = "Atteint";
+"Missed" = "Manqué";
+"%lld active" = "%lld actifs";
+"%lldd left" = "%lldj restants";
+
+/* MARK: - Export & Import */
+"Export & Import" = "Exporter et Importer";
+"Done" = "OK";
+"OK" = "OK";
+"Import Error" = "Erreur d'Importation";
+"Unknown error" = "Erreur inconnue";
+"Export Operations as CSV" = "Exporter les Opérations en CSV";
+"No operations to export" = "Aucune opération à exporter";
+"Export Full Backup (JSON)" = "Exporter la Sauvegarde Complète (JSON)";
+"No data to export" = "Aucune donnée à exporter";
+"Export" = "Exporter";
+"CSV contains all operations. JSON contains everything: assets, operations, categories, and goals." = "Le CSV contient toutes les opérations. Le JSON contient tout : actifs, opérations, catégories et objectifs.";
+"Import CSV…" = "Importer un CSV…";
+"Restore from JSON Backup…" = "Restaurer depuis une Sauvegarde JSON…";
+"Import" = "Importer";
+"Imported data is added to your existing data. CSV lets you map columns from any spreadsheet." = "Les données importées s'ajoutent à vos données existantes. Le CSV vous permet de faire correspondre les colonnes de n'importe quel tableur.";
+"Sample CSV File" = "Fichier CSV Exemple";
+"Sample JSON Backup" = "Sauvegarde JSON Exemple";
+"Sample Files" = "Fichiers Exemples";
+"Download these to understand the expected format before importing your own data." = "Téléchargez-les pour comprendre le format attendu avant d'importer vos propres données.";
+"Could not access the file." = "Impossible d'accéder au fichier.";
+"Could not read the file." = "Impossible de lire le fichier.";
+"The CSV file appears to be empty or has no header row." = "Le fichier CSV semble vide ou n'a pas de ligne d'en-tête.";
+"Map Columns" = "Correspondance des Colonnes";
+"Import Complete" = "Importation Terminée";
+"Import Failed" = "Échec de l'Importation";
+"File Info" = "Infos du Fichier";
+"File" = "Fichier";
+"Rows" = "Lignes";
+"Columns detected" = "Colonnes détectées";
+"Required Fields" = "Champs Requis";
+"Select which column in your file corresponds to each field." = "Sélectionnez la colonne de votre fichier correspondant à chaque champ.";
+"Optional Fields" = "Champs Facultatifs";
+"Frequency" = "Fréquence";
+"Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single." = "Valeurs de fréquence : Unique, Quotidien, Hebdomadaire, Mensuel, Annuel. Les valeurs non reconnues sont remplacées par Unique.";
+"Skip duplicates" = "Ignorer les doublons";
+"Duplicates found" = "Doublons trouvés";
+"Import Options" = "Options d'Importation";
+"A duplicate matches an existing operation by description, date, amount, and asset." = "Un doublon correspond à une opération existante par description, date, montant et actif.";
+"Issues — fix these to enable import" = "Problèmes — corrigez-les pour activer l'importation";
+"Select column…" = "Sélectionner une colonne…";
+"None" = "Aucun";
+"Restore Backup" = "Restaurer la Sauvegarde";
+"Export Date" = "Date d'Exportation";
+"Version" = "Version";
+"Backup Contents" = "Contenu de la Sauvegarde";
+"Duplicates Found" = "Doublons Trouvés";
+"Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset." = "Les actifs et catégories correspondent par nom. Les opérations correspondent par description, date, montant et actif. Les objectifs correspondent par titre, cible et actif.";
+"This adds to your existing data, not replaces it. To start fresh, delete your data first." = "Cela s'ajoute à vos données existantes, sans les remplacer. Pour repartir de zéro, supprimez d'abord vos données.";
+"Description is empty" = "La description est vide";
+"Asset name is empty" = "Le nom de l'actif est vide";
+"Column not found in file" = "Colonne introuvable dans le fichier";
+"Import %lld" = "Importer %lld";
+"%lld imported, %lld duplicates skipped." = "%lld importés, %lld doublons ignorés.";
+"%lld operations imported successfully." = "%lld opérations importées avec succès.";
+"Preview — first %lld rows" = "Aperçu — %lld premières lignes";
+"%lld already exist" = "%lld existent déjà";
+"Required field not mapped: %@" = "Champ requis non associé : %@";
+"Row %lld: %@" = "Ligne %lld : %@";
+"Invalid backup file: %@" = "Fichier de sauvegarde invalide : %@";
+"Unsupported backup version %lld. Please update ByJo." = "Version de sauvegarde %lld non prise en charge. Veuillez mettre à jour ByJo.";
+"Cannot parse date \"%@\"" = "Impossible d'analyser la date « %@ »";
+"Cannot parse amount \"%@\"" = "Impossible d'analyser le montant « %@ »";
+
+/* MARK: - Wallet Auto-Log */
+"Wallet Auto-Log" = "Enregistrement Auto Cartes";
+"Auto-log taps" = "Enregistrer les paiements auto";
+"Set up Shortcuts to log merchant and amount automatically." = "Configurez Raccourcis pour enregistrer automatiquement le commerçant et le montant.";
+"Auto-log card taps" = "Enregistrement auto des paiements par carte";
+"Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass." = "Ajoutez le raccourci partagé ByJo Enregistrement Auto Cartes, puis configurez une automatisation Transaction pour que chaque paiement NFC soit enregistré dans ByJo. Les actifs et catégories sont associés ou créés à partir des noms fournis.";
+"Get Shortcut" = "Obtenir le Raccourci";
+"Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts." = "Ouvre le raccourci partagé ByJo Enregistrement Auto Cartes pour l'ajouter à Raccourcis.";
+"Create Automation" = "Créer une Automatisation";
+"Opens Shortcuts to create a new Transaction / Wallet automation." = "Ouvre Raccourcis pour créer une automatisation Transaction / Cartes.";
+"Setup steps" = "Étapes de configuration";
+"Tap Get Shortcut and add ByJo Wallet Auto-Log." = "Appuyez sur Obtenir le Raccourci et ajoutez ByJo Enregistrement Auto Cartes.";
+"Tap Create Automation and choose Transaction (or Wallet on newer iOS)." = "Appuyez sur Créer une Automatisation et choisissez Transaction (ou Cartes sur les iOS plus récents).";
+"Select the cards to track, then choose Run Immediately." = "Sélectionnez les cartes à suivre, puis choisissez Exécuter Immédiatement.";
+"Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings)." = "Ajouter une Action → Exécuter le Raccourci → ByJo Enregistrement Auto Cartes (ou ouvrez le raccourci et confirmez les correspondances Commerçant, Montant et Nom de l'Actif).";
+"Optionally set Category Name. Leave empty to categorize later in ByJo." = "Définissez éventuellement le Nom de Catégorie. Laissez vide pour catégoriser plus tard dans ByJo.";
+"If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet." = "Si les paiements ne s'enregistrent jamais, activez Données Cellulaires pour Cartes dans Réglages → Apps → Cartes.";
+"I've set this up" = "J'ai configuré cela";
+"This hides the tip on Home. You can always show it again from Customize Home." = "Cela masque l'astuce sur l'Accueil. Vous pouvez la réafficher depuis Personnaliser l'Accueil.";
+"Shown at the top of Home when enabled." = "Affiché en haut de l'Accueil lorsqu'il est activé.";
+
+/* MARK: - Operations (additional) */
+"Operations" = "Opérations";
+"Add operation" = "Ajouter une opération";
+"on" = "le";
+"Details" = "Détails";
+"Asset from" = "Actif source";
+"Asset to" = "Actif destination";
+"Suggestions" = "Suggestions";
+"Add split" = "Ajouter une répartition";
+"Remove splits" = "Supprimer les répartitions";
+"Split transaction" = "Répartir la transaction";
+"Splits" = "Répartitions";
+"Do you want to update only this occurrence or all %lld occurrences in the series?" = "Voulez-vous mettre à jour uniquement cette occurrence ou les %lld occurrences de la série ?";
+"Change Category" = "Changer de Catégorie";
+"Change Asset" = "Changer d'Actif";
+"Reassign" = "Réassigner";
+"Recurring only" = "Récurrents uniquement";
+"Delete Operations" = "Supprimer les Opérations";
+"No operations found 😕" = "Aucune opération trouvée 😕";
+"Start adding operations" = "Commencez à ajouter des opérations";
+"Add operations" = "Ajouter des opérations";
+"No categories found 😕" = "Aucune catégorie trouvée 😕";
+"Start adding categories" = "Commencez à ajouter des catégories";
+"Add categories" = "Ajouter des catégories";
+"Add category" = "Ajouter une catégorie";
+"Operation" = "Opération";
+
+/* MARK: - Assets (additional) */
+"Create asset" = "Créer un actif";
+"Edit asset" = "Modifier l'actif";
+"Goal list" = "Liste des objectifs";
+"Clear Filter" = "Effacer le Filtre";
+"Delete Assets" = "Supprimer les Actifs";
+"All" = "Tous";
+
+/* MARK: - Paywall */
+"Your Finances," = "Vos Finances,";
+"Under Control." = "Sous Contrôle.";
+"Track every asset and account" = "Suivez chaque actif et compte";
+"Set goals and watch them grow" = "Fixez des objectifs et voyez-les croître";
+"Never miss a scheduled payment" = "Ne manquez jamais un paiement prévu";
+"Your full net worth, at a glance" = "Votre patrimoine net complet, d'un coup d'œil";
+"Pay once, use forever" = "Payez une fois, utilisez pour toujours";
+"Terms" = "Conditions";
+"Privacy" = "Confidentialité";
+"Lifetime Access" = "Accès à Vie";
+"Pay once. No renewals, no limits. Yours forever." = "Payez une fois. Sans renouvellement, sans limite. À vous pour toujours.";
+
+/* MARK: - Search */
+"Search" = "Rechercher";
+"Search for assets and operations by name, type, or category." = "Recherchez des actifs et opérations par nom, type ou catégorie.";
+"Assets, operations, categories…" = "Actifs, opérations, catégories…";
+
+/* MARK: - Currency Picker */
+"Hey, I'm ByJo 👋" = "Salut, je suis ByJo 👋";
+"Before you start, set your preferred currency" = "Avant de commencer, définissez votre devise préférée";
+"Currency" = "Devise";
+
+/* MARK: - Categories (additional) */
+"Budget / month" = "Budget / mois";
+"%@ / month" = "%@ / mois";
+"Add" = "Ajouter";
+"Delete Categories" = "Supprimer les Catégories";
+
+/* MARK: - App Intents */
+"Add Operation" = "Ajouter une Opération";
+"Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow." = "Enregistrez une opération financière sur un actif dans ByJo. Utilisez un montant positif pour une entrée et un montant négatif pour une sortie.";
+"Added %@ to %@." = "%@ ajouté à %@.";
+"Transfer Between Assets" = "Virement entre Actifs";
+"Move funds from one asset to another in ByJo." = "Transférez des fonds d'un actif à un autre dans ByJo.";
+"From Asset" = "Actif Source";
+"To Asset" = "Actif Destination";
+"Transferred %@ from %@ to %@." = "%@ transféré de %@ vers %@.";
+"Log Wallet Transaction" = "Enregistrer une Transaction Cartes";
+"Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass." = "Enregistrez un paiement par carte Cartes comme une dépense dans ByJo. Les actifs et catégories manquants sont créés automatiquement à partir des noms fournis.";
+"Merchant" = "Commerçant";
+"Asset Name" = "Nom de l'Actif";
+"Category Name" = "Nom de Catégorie";
+"Card" = "Carte";
+"Card tap" = "Paiement par carte";
+"Wallet" = "Cartes";
+"Wallet · %@" = "Cartes · %@";
+"Logged %@ (%@) to %@." = "%@ (%@) enregistré sur %@.";
+"Transfer Funds" = "Transférer des Fonds";
+"Log Wallet Tap" = "Enregistrer un Paiement Cartes";
+"Asset not found." = "Actif introuvable.";
+"Asset name is required." = "Le nom de l'actif est requis.";
+
+/* MARK: - Widget Extension */
+"Track your financial goals." = "Suivez vos objectifs financiers.";
+"How your wealth is distributed across assets." = "Comment votre patrimoine est réparti entre les actifs.";
+"Monthly spending over the last 6 months." = "Dépenses mensuelles sur les 6 derniers mois.";
+"Your net worth trend over the past month." = "Tendance de votre patrimoine net sur le mois dernier.";
+"Your savings rate over the last 6 months." = "Votre taux d'épargne sur les 6 derniers mois.";
+"Your monthly savings rate." = "Votre taux d'épargne mensuel.";
+"This month's expenses by category." = "Dépenses de ce mois par catégorie.";
+"Upcoming recurring inflows and outflows." = "Entrées et sorties récurrentes à venir.";
+"Your total net worth at a glance." = "Votre patrimoine net total d'un coup d'œil.";
+"This month's inflow vs. outflow ratio." = "Ratio entrées / sorties de ce mois.";
+"No history" = "Aucun historique";
+"No history yet" = "Pas encore d'historique";
+"Spending" = "Dépenses";
+"6 months" = "6 mois";
+"No data" = "Aucune donnée";
+"No spending data" = "Aucune donnée de dépenses";
+"Total" = "Total";
+"Avg / month" = "Moy. / mois";
+"Allocation" = "Répartition";
+"No assets yet" = "Aucun actif pour l'instant";
+"Great" = "Excellent";
+"Low" = "Faible";
+"Monthly Savings Rate" = "Taux d'Épargne Mensuel";
+"Saved" = "Épargné";
+"Savings Trend" = "Tendance d'Épargne";
+"No data yet" = "Pas encore de données";
+"Expenses" = "Dépenses";
+"No expenses this month" = "Aucune dépense ce mois";
+"Financial Goals" = "Objectifs Financiers";
+"No active goals" = "Aucun objectif actif";
+"No active\ngoals" = "Aucun objectif\nactif";
+"No active goals yet" = "Pas encore d'objectif actif";
+"Today" = "Aujourd'hui";
+"Tomorrow" = "Demain";
+"in %lldd" = "dans %lldj";
+"Next Recurring" = "Prochains Récurrents";
+"No recurring\noperations" = "Aucune opération\nrécurrente";
+"No recurring operations" = "Aucune opération récurrente";
+"No recurring operations yet" = "Pas encore d'opération récurrente";

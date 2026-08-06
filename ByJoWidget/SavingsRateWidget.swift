@@ -40,7 +40,9 @@ struct SavingsRateWidget: Widget {
 }
 
 private func srColor(_ r: Double) -> Color { r >= 0.20 ? .green : r >= 0.10 ? .yellow : .red }
-private func srLabel(_ r: Double) -> String { r >= 0.20 ? "Great" : r >= 0.10 ? "OK" : "Low" }
+private func srLabel(_ r: Double) -> String {
+    String(localized: String.LocalizationValue(r >= 0.20 ? "Great" : r >= 0.10 ? "OK" : "Low"))
+}
 private func srFmt(_ v: Double, currency: String) -> String {
     let f = NumberFormatter(); f.numberStyle = .currency; f.currencyCode = currency; f.maximumFractionDigits = 0
     return f.string(from: NSNumber(value: v)) ?? "\(v)"

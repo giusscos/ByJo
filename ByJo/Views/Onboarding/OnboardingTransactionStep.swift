@@ -49,9 +49,15 @@ struct OnboardingTransactionStep: View {
                                 .multilineTextAlignment(.center)
 
                             Group {
-                                Text("Record an inflow or outflow for ") +
-                                Text(assetName.isEmpty ? "your asset" : assetName).fontWeight(.semibold) +
-                                Text(".")
+                                if assetName.isEmpty {
+                                    Text("Record an inflow or outflow for ") +
+                                    Text("your asset").fontWeight(.semibold) +
+                                    Text(".")
+                                } else {
+                                    Text("Record an inflow or outflow for ") +
+                                    Text(verbatim: assetName).fontWeight(.semibold) +
+                                    Text(".")
+                                }
                             }
                             .font(.body)
                             .foregroundStyle(.secondary)

@@ -36,7 +36,7 @@ extension View {
 
 struct StatCard: View {
     let value: String
-    let label: String
+    let label: LocalizedStringKey
     let accent: Color
 
     var body: some View {
@@ -60,7 +60,7 @@ struct StatCard: View {
 struct FactRow: View {
     let icon: String
     let color: Color
-    let text: String
+    let text: LocalizedStringKey
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {

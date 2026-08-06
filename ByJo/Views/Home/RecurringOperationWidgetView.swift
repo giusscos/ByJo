@@ -223,7 +223,18 @@ private struct RecurringOperationsPreviewSheet: View {
                     .padding(.vertical, 4)
                 }
             }
-            .navigationTitle("\(operations.count) pending \(operations.count == 1 ? "operation" : "operations")")
+            .navigationTitle(
+                String(
+                    format: String(
+                        localized: String.LocalizationValue(
+                            operations.count == 1
+                                ? "%lld pending operation"
+                                : "%lld pending operations"
+                        )
+                    ),
+                    operations.count
+                )
+            )
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

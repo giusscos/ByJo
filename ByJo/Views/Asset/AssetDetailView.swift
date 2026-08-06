@@ -128,20 +128,18 @@ struct AssetDetailView: View {
                     }
                 } else {
                     VStack {
-                        let text = categories.isEmpty ? "categories" : "operations"
-                        
-                        Text("No \(text) found 😕")
+                        Text(categories.isEmpty ? "No categories found 😕" : "No operations found 😕")
                             .font(.title2)
                             .fontWeight(.semibold)
                         
-                        Text("Start adding \(text)")
+                        Text(categories.isEmpty ? "Start adding categories" : "Start adding operations")
                             .font(.headline)
                             .foregroundStyle(.secondary)
                         
                         Button {
                             activeSheet = categories.isEmpty ? .viewCategories : .createOperation
                         } label: {
-                            Text("Add \(text)")
+                            Text(categories.isEmpty ? "Add categories" : "Add operations")
                                 .font(.headline)
                         }
                         .tint(.accent)

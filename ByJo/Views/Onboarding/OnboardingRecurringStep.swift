@@ -47,9 +47,15 @@ struct OnboardingRecurringStep: View {
                                 .multilineTextAlignment(.center)
 
                             Group {
-                                Text("Automate a salary, subscription, or bill for ") +
-                                Text(assetName.isEmpty ? "your asset" : assetName).fontWeight(.semibold) +
-                                Text(".")
+                                if assetName.isEmpty {
+                                    Text("Automate a salary, subscription, or bill for ") +
+                                    Text("your asset").fontWeight(.semibold) +
+                                    Text(".")
+                                } else {
+                                    Text("Automate a salary, subscription, or bill for ") +
+                                    Text(verbatim: assetName).fontWeight(.semibold) +
+                                    Text(".")
+                                }
                             }
                             .font(.body)
                             .foregroundStyle(.secondary)

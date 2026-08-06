@@ -58,9 +58,9 @@ private func daysLabel(_ date: Date) -> String {
     let days = Calendar.current.dateComponents([.day],
         from: Calendar.current.startOfDay(for: Date()),
         to: Calendar.current.startOfDay(for: date)).day ?? 0
-    if days == 0 { return "Today" }
-    if days == 1 { return "Tomorrow" }
-    return "in \(days)d"
+    if days == 0 { return String(localized: "Today") }
+    if days == 1 { return String(localized: "Tomorrow") }
+    return String(format: String(localized: "in %lldd"), days)
 }
 
 private struct RRow: View {

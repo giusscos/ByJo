@@ -103,8 +103,8 @@ enum ByJoIntentError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .assetNotFound: return "Asset not found."
-        case .invalidAssetName: return "Asset name is required."
+        case .assetNotFound: return String(localized: "Asset not found.")
+        case .invalidAssetName: return String(localized: "Asset name is required.")
         }
     }
 }

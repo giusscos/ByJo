@@ -57,6 +57,6 @@ struct LogWalletTransactionIntent: AppIntent {
         )
 
         let formatted = abs(Decimal(amount)).formatted(.number.precision(.fractionLength(0...2)))
-        return .result(dialog: "Logged \(name) (\(formatted)) to \(resolvedAssetName).")
+        return .result(dialog: IntentDialog(stringLiteral: String(format: String(localized: "Logged %@ (%@) to %@."), name, formatted, resolvedAssetName)))
     }
 }

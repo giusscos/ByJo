@@ -34,7 +34,7 @@ struct TopExpensesWidgetView: View {
         if !assets.isEmpty && !topExpenses.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Top expenses")
+                    Text("Top Expenses")
                         .font(.headline)
                         .foregroundStyle(.secondary)
 

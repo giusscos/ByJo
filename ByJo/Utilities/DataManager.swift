@@ -97,13 +97,13 @@ enum DataImportError: LocalizedError, Identifiable {
     var errorDescription: String? {
         switch self {
         case .missingRequiredMapping(let field):
-            return "Required field not mapped: \(field)"
+            return String(format: String(localized: "Required field not mapped: %@"), field)
         case .rowError(let row, let message):
-            return "Row \(row): \(message)"
+            return String(format: String(localized: "Row %lld: %@"), row, message)
         case .invalidJSON(let message):
-            return "Invalid backup file: \(message)"
+            return String(format: String(localized: "Invalid backup file: %@"), message)
         case .unsupportedVersion(let v):
-            return "Unsupported backup version \(v). Please update ByJo."
+            return String(format: String(localized: "Unsupported backup version %lld. Please update ByJo."), v)
         }
     }
 }
@@ -262,7 +262,7 @@ enum DataManager {
             let amtCol  = mapping.amount, let amountIdx = headers.firstIndex(of: amtCol),
             let assetCol = mapping.asset, let assetIdx  = headers.firstIndex(of: assetCol)
         else {
-            return ([], [.missingRequiredMapping("Column not found in file")])
+            return ([], [.missingRequiredMapping(String(localized: "Column not found in file"))])
         }
 
         let categoryIdx = mapping.category.flatMap  { headers.firstIndex(of: $0) }
@@ -283,18 +283,18 @@ enum DataManager {
             let dateStr   = field(dateIdx)
             let amountStr = field(amountIdx)
 
-            if name.isEmpty      { errors.append(.rowError(rowNum, "Description is empty")); continue }
-            if assetName.isEmpty { errors.append(.rowError(rowNum, "Asset name is empty")); continue }
+            if name.isEmpty      { errors.append(.rowError(rowNum, String(localized: "Description is empty"))); continue }
+            if assetName.isEmpty { errors.append(.rowError(rowNum, String(localized: "Asset name is empty"))); continue }
 
             guard let date = parseDate(dateStr) else {
-                errors.append(.rowError(rowNum, "Cannot parse date \"\(dateStr)\"")); continue
+                errors.append(.rowError(rowNum, String(format: String(localized: "Cannot parse date \"%@\""), dateStr))); continue
             }
 
             let cleanAmount = amountStr
                 .replacingOccurrences(of: " ", with: "")
                 .replacingOccurrences(of: ",", with: ".")
             guard let amount = Decimal(string: cleanAmount) else {
-                errors.append(.rowError(rowNum, "Cannot parse amount \"\(amountStr)\"")); continue
+                errors.append(.rowError(rowNum, String(format: String(localized: "Cannot parse amount \"%@\""), amountStr))); continue
             }
 
             let freqStr = frequencyIdx.map { field($0) } ?? ""

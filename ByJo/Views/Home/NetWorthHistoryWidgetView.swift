@@ -110,7 +110,7 @@ struct NetWorthHistoryWidgetView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Net worth history")
+                            Text("Net Worth History")
                                 .font(.headline)
                                 .foregroundStyle(.secondary)
 

@@ -57,7 +57,7 @@ struct SpendingTrendsWidgetView: View {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
-                        Text("Spending trends")
+                        Text("Spending Trends")
                             .font(.headline)
                             .foregroundStyle(.secondary)
 

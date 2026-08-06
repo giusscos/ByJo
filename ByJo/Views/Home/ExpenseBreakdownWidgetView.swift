@@ -62,7 +62,7 @@ struct ExpenseBreakdownWidgetView: View {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
-                        Text("Expense breakdown")
+                        Text("Expense Breakdown")
                             .font(.headline)
                             .foregroundStyle(.secondary)
 

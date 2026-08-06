@@ -116,12 +116,13 @@ struct DebtPayoffWidgetView: View {
 
                             HStack {
                                 if debt.monthlyPayment > 0 {
-                                    Label(
-                                        debt.monthlyPayment.formatted(
-                                            .currency(code: currencyCode.rawValue)
-                                        ) + " / mo",
-                                        systemImage: "calendar"
-                                    )
+                                    Label {
+                                        Text(debt.monthlyPayment, format: .currency(code: currencyCode.rawValue)) +
+                                        Text(verbatim: " ") +
+                                        Text("/ mo")
+                                    } icon: {
+                                        Image(systemName: "calendar")
+                                    }
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                                 }

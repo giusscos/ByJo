@@ -50,7 +50,9 @@ struct SavingsRateTrendWidget: Widget {
 }
 
 private func srtColor(_ r: Double) -> Color { r >= 0.20 ? .green : r >= 0.10 ? .yellow : .red }
-private func srtLabel(_ r: Double) -> String { r >= 0.20 ? "Great" : r >= 0.10 ? "OK" : "Low" }
+private func srtLabel(_ r: Double) -> String {
+    String(localized: String.LocalizationValue(r >= 0.20 ? "Great" : r >= 0.10 ? "OK" : "Low"))
+}
 
 private struct SRTChart: View {
     let points: [WSavingsRateTrendData.Point]

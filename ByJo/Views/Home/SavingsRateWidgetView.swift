@@ -50,7 +50,7 @@ struct SavingsRateWidgetView: View {
         if !assets.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Savings rate")
+                    Text("Savings Rate")
                         .font(.headline)
                         .foregroundStyle(.secondary)
 

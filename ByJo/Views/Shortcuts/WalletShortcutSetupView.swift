@@ -108,7 +108,7 @@ struct WalletShortcutSetupView: View {
         }
     }
 
-    private func setupStep(number: Int, text: String) -> some View {
+    private func setupStep(number: Int, text: LocalizedStringKey) -> some View {
         Label {
             Text(text)
         } icon: {

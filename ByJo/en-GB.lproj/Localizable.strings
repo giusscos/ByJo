@@ -170,3 +170,375 @@
 "Get notified when recurring payments are due." = "Get notified when recurring payments are due.";
 "Reminders enabled" = "Reminders enabled";
 "Date" = "Date";
+
+/* MARK: - What's New */
+"What's New in ByJo" = "What's New in ByJo";
+"Here's everything that's new and improved." = "Here's everything that's new and improved.";
+"Continue" = "Continue";
+"Update Asset Value" = "Update Asset Value";
+"Set an asset to its real value — ByJo records the adjustment as an operation with an optional note." = "Set an asset to its real value — ByJo records the adjustment as an operation with an optional note.";
+"Balance History" = "Balance History";
+"See how an asset’s value changed over time with a chart on the asset detail screen." = "See how an asset’s value changed over time with a chart on the asset detail screen.";
+
+/* MARK: - Update Asset Value */
+"Update value" = "Update value";
+"Current" = "Current";
+"New value" = "New value";
+"Adjustment: %@" = "Adjustment: %@";
+"Note (optional)" = "Note (optional)";
+"Value update" = "Value update";
+
+/* MARK: - Asset Balance History */
+"Balance history" = "Balance history";
+"Hide chart" = "Hide chart";
+"Show chart" = "Show chart";
+
+/* MARK: - Home Empty State */
+"Start tracking your money" = "Start tracking your money";
+"Add your assets, then log income and expenses to see your net worth and monthly progress." = "Add your assets, then log income and expenses to see your net worth and monthly progress.";
+
+/* MARK: - Onboarding Welcome */
+"Your personal finance tracker.\nBuilt for clarity, not complexity." = "Your personal finance tracker.\nBuilt for clarity, not complexity.";
+"Get Started" = "Get Started";
+
+/* MARK: - Onboarding Why Save */
+"Know Your Net Worth" = "Know Your Net Worth";
+"Your net worth — assets minus liabilities — is the clearest snapshot of your financial health." = "Your net worth — assets minus liabilities — is the clearest snapshot of your financial health.";
+"Next" = "Next";
+"People don't know\ntheir net worth" = "People don't know\ntheir net worth";
+"More likely to hit\ngoals when tracking" = "More likely to hit\ngoals when tracking";
+"You can't improve what you don't measure — tracking is the first step." = "You can't improve what you don't measure — tracking is the first step.";
+"Seeing your net worth grow month over month is the best motivation to keep going." = "Seeing your net worth grow month over month is the best motivation to keep going.";
+"Spotting a downward trend early lets you act before it becomes a bigger problem." = "Spotting a downward trend early lets you act before it becomes a bigger problem.";
+
+/* MARK: - Onboarding Why Invest */
+"Take Control of Your Budget" = "Take Control of Your Budget";
+"Knowing where your money goes gives you the power to decide where it should go." = "Knowing where your money goes gives you the power to decide where it should go.";
+"Let's Set Up ByJo" = "Let's Set Up ByJo";
+"Of income goes\nuntracked each month" = "Of income goes\nuntracked each month";
+"Less overspending\nwith regular tracking" = "Less overspending\nwith regular tracking";
+"Most people underestimate their monthly expenses by 20–30%." = "Most people underestimate their monthly expenses by 20–30%.";
+"A simple spending log reveals patterns you'd never notice otherwise." = "A simple spending log reveals patterns you'd never notice otherwise.";
+"Budgeting isn't about restriction — it's about making intentional choices." = "Budgeting isn't about restriction — it's about making intentional choices.";
+
+/* MARK: - Onboarding Currency */
+"Choose Your Currency" = "Choose Your Currency";
+"Select how amounts are displayed. You can change this anytime." = "Select how amounts are displayed. You can change this anytime.";
+
+/* MARK: - Onboarding Asset Setup */
+"Add Your First Asset" = "Add Your First Asset";
+"Track a bank account, savings, investments, or anything of value." = "Track a bank account, savings, investments, or anything of value.";
+"Current Balance" = "Current Balance";
+"e.g. My Bank Account" = "e.g. My Bank Account";
+"Compact keyboard" = "Compact keyboard";
+
+/* MARK: - Onboarding Transaction & Recurring */
+"Record an inflow or outflow for " = "Record an inflow or outflow for ";
+"Automate a salary, subscription, or bill for " = "Automate a salary, subscription, or bill for ";
+"your asset" = "your asset";
+"e.g. Monthly Salary" = "e.g. Monthly Salary";
+"e.g. Grocery Shopping" = "e.g. Grocery Shopping";
+"e.g. Netflix" = "e.g. Netflix";
+
+/* MARK: - Onboarding Success */
+"You're All Set!" = "You're All Set!";
+"Your financial journey starts now. ByJo will help you track every step — from savings to investments." = "Your financial journey starts now. ByJo will help you track every step — from savings to investments.";
+
+/* MARK: - Home Tips */
+"Add your first asset" = "Add your first asset";
+"Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth." = "Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth.";
+"Log your first transaction" = "Log your first transaction";
+"Tap + to record inflows or outflows and keep your balances up to date." = "Tap + to record inflows or outflows and keep your balances up to date.";
+
+/* MARK: - Budget Progress Widget */
+"Budget Progress" = "Budget Progress";
+"of %@" = "of %@";
+
+/* MARK: - Debt Payoff Widget */
+"Debt Payoff" = "Debt Payoff";
+"/ mo" = "/ mo";
+"Paid off %@" = "Paid off %@";
+"No recurring payments" = "No recurring payments";
+
+/* MARK: - Home Sections (additional) */
+"Expense Breakdown" = "Expense Breakdown";
+"Net Worth History" = "Net Worth History";
+"Spending Trends" = "Spending Trends";
+"Savings Rate Trend" = "Savings Rate Trend";
+
+/* MARK: - Home Widgets */
+"Net Worth" = "Net Worth";
+"This month" = "This month";
+"VS last month" = "VS last month";
+"Forecast" = "Forecast";
+"Budget" = "Budget";
+"≥20% great" = "≥20% great";
+"10–20% ok" = "10–20% ok";
+"<10% low" = "<10% low";
+"Add All" = "Add All";
+"Customize Home" = "Customize Home";
+"Drag to reorder. Tap the eye icon to show or hide a section." = "Drag to reorder. Tap the eye icon to show or hide a section.";
+"Recurring Operations" = "Recurring Operations";
+"Categories overview" = "Categories overview";
+"Home" = "Home";
+"Timeframe" = "Timeframe";
+"%lld pending operation" = "%lld pending operation";
+"%lld pending operations" = "%lld pending operations";
+"Operation: %lld" = "Operation: %lld";
+"Operations: %lld" = "Operations: %lld";
+
+/* MARK: - Goals (additional) */
+"Started" = "Started";
+"Target" = "Target";
+"Remaining" = "Remaining";
+"Saved so far" = "Saved so far";
+"Goal reached!" = "Goal reached!";
+"Due date" = "Due date";
+"Expired" = "Expired";
+"Progress" = "Progress";
+"Monthly pace" = "Monthly pace";
+"Estimated completion" = "Estimated completion";
+"On track" = "On track";
+"Behind schedule" = "Behind schedule";
+"Need more savings" = "Need more savings";
+"Balance not growing — add an inflow to this asset" = "Balance not growing — add an inflow to this asset";
+"Projections" = "Projections";
+"Based on your last 90 days of activity on %@." = "Based on your last 90 days of activity on %@.";
+"Per day" = "Per day";
+"Per week" = "Per week";
+"Per month" = "Per month";
+"Required savings" = "Required savings";
+"To reach your target in %lld days." = "To reach your target in %lld days.";
+"Manage" = "Manage";
+"Pin to home" = "Pin to home";
+"Unpin from home" = "Unpin from home";
+"Resume" = "Resume";
+"Suspend" = "Suspend";
+"Mark as completed" = "Mark as completed";
+"Create goal" = "Create goal";
+"Edit goal" = "Edit goal";
+"Title" = "Title";
+"Current: " = "Current: ";
+"Ongoing" = "Ongoing";
+"Complete" = "Complete";
+"left to go" = "left to go";
+"Due date: " = "Due date: ";
+"Completed date: " = "Completed date: ";
+"Reached" = "Reached";
+"Missed" = "Missed";
+"%lld active" = "%lld active";
+"%lldd left" = "%lldd left";
+
+/* MARK: - Export & Import */
+"Export & Import" = "Export & Import";
+"Done" = "Done";
+"OK" = "OK";
+"Import Error" = "Import Error";
+"Unknown error" = "Unknown error";
+"Export Operations as CSV" = "Export Operations as CSV";
+"No operations to export" = "No operations to export";
+"Export Full Backup (JSON)" = "Export Full Backup (JSON)";
+"No data to export" = "No data to export";
+"Export" = "Export";
+"CSV contains all operations. JSON contains everything: assets, operations, categories, and goals." = "CSV contains all operations. JSON contains everything: assets, operations, categories, and goals.";
+"Import CSV…" = "Import CSV…";
+"Restore from JSON Backup…" = "Restore from JSON Backup…";
+"Import" = "Import";
+"Imported data is added to your existing data. CSV lets you map columns from any spreadsheet." = "Imported data is added to your existing data. CSV lets you map columns from any spreadsheet.";
+"Sample CSV File" = "Sample CSV File";
+"Sample JSON Backup" = "Sample JSON Backup";
+"Sample Files" = "Sample Files";
+"Download these to understand the expected format before importing your own data." = "Download these to understand the expected format before importing your own data.";
+"Could not access the file." = "Could not access the file.";
+"Could not read the file." = "Could not read the file.";
+"The CSV file appears to be empty or has no header row." = "The CSV file appears to be empty or has no header row.";
+"Map Columns" = "Map Columns";
+"Import Complete" = "Import Complete";
+"Import Failed" = "Import Failed";
+"File Info" = "File Info";
+"File" = "File";
+"Rows" = "Rows";
+"Columns detected" = "Columns detected";
+"Required Fields" = "Required Fields";
+"Select which column in your file corresponds to each field." = "Select which column in your file corresponds to each field.";
+"Optional Fields" = "Optional Fields";
+"Frequency" = "Frequency";
+"Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single." = "Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single.";
+"Skip duplicates" = "Skip duplicates";
+"Duplicates found" = "Duplicates found";
+"Import Options" = "Import Options";
+"A duplicate matches an existing operation by description, date, amount, and asset." = "A duplicate matches an existing operation by description, date, amount, and asset.";
+"Issues — fix these to enable import" = "Issues — fix these to enable import";
+"Select column…" = "Select column…";
+"None" = "None";
+"Restore Backup" = "Restore Backup";
+"Export Date" = "Export Date";
+"Version" = "Version";
+"Backup Contents" = "Backup Contents";
+"Duplicates Found" = "Duplicates Found";
+"Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset." = "Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset.";
+"This adds to your existing data, not replaces it. To start fresh, delete your data first." = "This adds to your existing data, not replaces it. To start fresh, delete your data first.";
+"Description is empty" = "Description is empty";
+"Asset name is empty" = "Asset name is empty";
+"Column not found in file" = "Column not found in file";
+"Import %lld" = "Import %lld";
+"%lld imported, %lld duplicates skipped." = "%lld imported, %lld duplicates skipped.";
+"%lld operations imported successfully." = "%lld operations imported successfully.";
+"Preview — first %lld rows" = "Preview — first %lld rows";
+"%lld already exist" = "%lld already exist";
+"Required field not mapped: %@" = "Required field not mapped: %@";
+"Row %lld: %@" = "Row %lld: %@";
+"Invalid backup file: %@" = "Invalid backup file: %@";
+"Unsupported backup version %lld. Please update ByJo." = "Unsupported backup version %lld. Please update ByJo.";
+"Cannot parse date \"%@\"" = "Cannot parse date \"%@\"";
+"Cannot parse amount \"%@\"" = "Cannot parse amount \"%@\"";
+
+/* MARK: - Wallet Auto-Log */
+"Wallet Auto-Log" = "Wallet Auto-Log";
+"Auto-log taps" = "Auto-log taps";
+"Set up Shortcuts to log merchant and amount automatically." = "Set up Shortcuts to log merchant and amount automatically.";
+"Auto-log card taps" = "Auto-log card taps";
+"Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass." = "Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass.";
+"Get Shortcut" = "Get Shortcut";
+"Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts." = "Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts.";
+"Create Automation" = "Create Automation";
+"Opens Shortcuts to create a new Transaction / Wallet automation." = "Opens Shortcuts to create a new Transaction / Wallet automation.";
+"Setup steps" = "Setup steps";
+"Tap Get Shortcut and add ByJo Wallet Auto-Log." = "Tap Get Shortcut and add ByJo Wallet Auto-Log.";
+"Tap Create Automation and choose Transaction (or Wallet on newer iOS)." = "Tap Create Automation and choose Transaction (or Wallet on newer iOS).";
+"Select the cards to track, then choose Run Immediately." = "Select the cards to track, then choose Run Immediately.";
+"Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings)." = "Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings).";
+"Optionally set Category Name. Leave empty to categorize later in ByJo." = "Optionally set Category Name. Leave empty to categorize later in ByJo.";
+"If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet." = "If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet.";
+"I've set this up" = "I've set this up";
+"This hides the tip on Home. You can always show it again from Customize Home." = "This hides the tip on Home. You can always show it again from Customize Home.";
+"Shown at the top of Home when enabled." = "Shown at the top of Home when enabled.";
+
+/* MARK: - Operations (additional) */
+"Operations" = "Operations";
+"Add operation" = "Add operation";
+"on" = "on";
+"Details" = "Details";
+"Asset from" = "Asset from";
+"Asset to" = "Asset to";
+"Suggestions" = "Suggestions";
+"Add split" = "Add split";
+"Remove splits" = "Remove splits";
+"Split transaction" = "Split transaction";
+"Splits" = "Splits";
+"Do you want to update only this occurrence or all %lld occurrences in the series?" = "Do you want to update only this occurrence or all %lld occurrences in the series?";
+"Change Category" = "Change Category";
+"Change Asset" = "Change Asset";
+"Reassign" = "Reassign";
+"Recurring only" = "Recurring only";
+"Delete Operations" = "Delete Operations";
+"No operations found 😕" = "No operations found 😕";
+"Start adding operations" = "Start adding operations";
+"Add operations" = "Add operations";
+"No categories found 😕" = "No categories found 😕";
+"Start adding categories" = "Start adding categories";
+"Add categories" = "Add categories";
+"Add category" = "Add category";
+"Operation" = "Operation";
+
+/* MARK: - Assets (additional) */
+"Create asset" = "Create asset";
+"Edit asset" = "Edit asset";
+"Goal list" = "Goal list";
+"Clear Filter" = "Clear Filter";
+"Delete Assets" = "Delete Assets";
+"All" = "All";
+
+/* MARK: - Paywall */
+"Your Finances," = "Your Finances,";
+"Under Control." = "Under Control.";
+"Track every asset and account" = "Track every asset and account";
+"Set goals and watch them grow" = "Set goals and watch them grow";
+"Never miss a scheduled payment" = "Never miss a scheduled payment";
+"Your full net worth, at a glance" = "Your full net worth, at a glance";
+"Pay once, use forever" = "Pay once, use forever";
+"Terms" = "Terms";
+"Privacy" = "Privacy";
+"Lifetime Access" = "Lifetime Access";
+"Pay once. No renewals, no limits. Yours forever." = "Pay once. No renewals, no limits. Yours forever.";
+
+/* MARK: - Search */
+"Search" = "Search";
+"Search for assets and operations by name, type, or category." = "Search for assets and operations by name, type, or category.";
+"Assets, operations, categories…" = "Assets, operations, categories…";
+
+/* MARK: - Currency Picker */
+"Hey, I'm ByJo 👋" = "Hey, I'm ByJo 👋";
+"Before you start, set your preferred currency" = "Before you start, set your preferred currency";
+"Currency" = "Currency";
+
+/* MARK: - Categories (additional) */
+"Budget / month" = "Budget / month";
+"%@ / month" = "%@ / month";
+"Add" = "Add";
+"Delete Categories" = "Delete Categories";
+
+/* MARK: - App Intents */
+"Add Operation" = "Add Operation";
+"Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow." = "Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow.";
+"Added %@ to %@." = "Added %@ to %@.";
+"Transfer Between Assets" = "Transfer Between Assets";
+"Move funds from one asset to another in ByJo." = "Move funds from one asset to another in ByJo.";
+"From Asset" = "From Asset";
+"To Asset" = "To Asset";
+"Transferred %@ from %@ to %@." = "Transferred %@ from %@ to %@.";
+"Log Wallet Transaction" = "Log Wallet Transaction";
+"Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass." = "Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass.";
+"Merchant" = "Merchant";
+"Asset Name" = "Asset Name";
+"Category Name" = "Category Name";
+"Card" = "Card";
+"Card tap" = "Card tap";
+"Wallet" = "Wallet";
+"Wallet · %@" = "Wallet · %@";
+"Logged %@ (%@) to %@." = "Logged %@ (%@) to %@.";
+"Transfer Funds" = "Transfer Funds";
+"Log Wallet Tap" = "Log Wallet Tap";
+"Asset not found." = "Asset not found.";
+"Asset name is required." = "Asset name is required.";
+
+/* MARK: - Widget Extension */
+"Track your financial goals." = "Track your financial goals.";
+"How your wealth is distributed across assets." = "How your wealth is distributed across assets.";
+"Monthly spending over the last 6 months." = "Monthly spending over the last 6 months.";
+"Your net worth trend over the past month." = "Your net worth trend over the past month.";
+"Your savings rate over the last 6 months." = "Your savings rate over the last 6 months.";
+"Your monthly savings rate." = "Your monthly savings rate.";
+"This month's expenses by category." = "This month's expenses by category.";
+"Upcoming recurring inflows and outflows." = "Upcoming recurring inflows and outflows.";
+"Your total net worth at a glance." = "Your total net worth at a glance.";
+"This month's inflow vs. outflow ratio." = "This month's inflow vs. outflow ratio.";
+"No history" = "No history";
+"No history yet" = "No history yet";
+"Spending" = "Spending";
+"6 months" = "6 months";
+"No data" = "No data";
+"No spending data" = "No spending data";
+"Total" = "Total";
+"Avg / month" = "Avg / month";
+"Allocation" = "Allocation";
+"No assets yet" = "No assets yet";
+"Great" = "Great";
+"Low" = "Low";
+"Monthly Savings Rate" = "Monthly Savings Rate";
+"Saved" = "Saved";
+"Savings Trend" = "Savings Trend";
+"No data yet" = "No data yet";
+"Expenses" = "Expenses";
+"No expenses this month" = "No expenses this month";
+"Financial Goals" = "Financial Goals";
+"No active goals" = "No active goals";
+"No active\ngoals" = "No active\ngoals";
+"No active goals yet" = "No active goals yet";
+"Today" = "Today";
+"Tomorrow" = "Tomorrow";
+"in %lldd" = "in %lldd";
+"Next Recurring" = "Next Recurring";
+"No recurring\noperations" = "No recurring\noperations";
+"No recurring operations" = "No recurring operations";
+"No recurring operations yet" = "No recurring operations yet";

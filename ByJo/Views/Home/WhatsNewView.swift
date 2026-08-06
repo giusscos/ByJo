@@ -113,10 +113,10 @@ private struct FeatureRow: View {
                 )
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(feature.title)
+                Text(LocalizedStringKey(feature.title))
                     .font(.headline)
 
-                Text(feature.description)
+                Text(LocalizedStringKey(feature.description))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
