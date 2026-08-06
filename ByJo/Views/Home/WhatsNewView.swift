@@ -16,34 +16,16 @@ private struct WhatsNewFeature {
 
 private let features: [WhatsNewFeature] = [
     WhatsNewFeature(
-        icon: "house.fill",
-        color: .blue,
-        title: "Home Redesign",
-        description: "A completely refreshed home experience with a cleaner layout and better information hierarchy."
-    ),
-    WhatsNewFeature(
-        icon: "square.grid.2x2.fill",
-        color: .teal,
-        title: "Home Widgets",
-        description: "Customisable in-app widgets — net worth, asset allocation, top expenses, savings rate, and more."
-    ),
-    WhatsNewFeature(
-        icon: "book.pages.fill",
-        color: .orange,
-        title: "Operations Redesigned",
-        description: "Recurring operations are now more powerful and solid. Enjoy a better details view and richer swap information."
-    ),
-    WhatsNewFeature(
-        icon: "mic.fill",
+        icon: "arrow.triangle.2.circlepath",
         color: .purple,
-        title: "App Intents",
-        description: "Add operations and swaps directly via Siri and the Shortcuts app — no need to open ByJo."
+        title: "Update Asset Value",
+        description: "Set an asset to its real value — ByJo records the adjustment as an operation with an optional note."
     ),
     WhatsNewFeature(
-        icon: "rectangle.stack.fill",
+        icon: "chart.xyaxis.line",
         color: .green,
-        title: "Widgets",
-        description: "New home screen and lock screen widgets let you track net worth, savings rate, and more at a glance."
+        title: "Balance History",
+        description: "See how an asset’s value changed over time with a chart on the asset detail screen."
     )
 ]
 

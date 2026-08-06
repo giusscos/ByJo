@@ -109,19 +109,50 @@ struct HomeView: View {
                     }
                 }
 
+                if assets.isEmpty {
+                    Section {
+                        VStack(spacing: 12) {
+                            Text("Start tracking your money")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .multilineTextAlignment(.center)
+
+                            Text("Add your assets, then log income and expenses to see your net worth and monthly progress.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+
+                            Button {
+                                activeSheet = .createAsset
+                            } label: {
+                                Text("Add asset")
+                                    .font(.headline)
+                            }
+                            .tint(.accent)
+                            .buttonBorderShape(.capsule)
+                            .buttonStyle(.bordered)
+                            .padding(.top, 4)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                    }
+                }
+
                 ForEach(visibleSections) { section in
                     sectionView(for: section)
                 }
             }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(netWorth.formatted(compactNumber
+                ? .currency(code: currencyCode.rawValue).notation(.compactName)
+                : .currency(code: currencyCode.rawValue)))
+            .navigationBarTitleDisplayMode(.large)
             .onAppear {
                 AddAssetTip.hasAssets = !assets.isEmpty
                 AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && operations.isEmpty
                 WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
-                if whatsNewVersion != "2.0" {
+                if whatsNewVersion != "1.1.7" {
                     showWhatsNew = true
-                    whatsNewVersion = "2.0"
+                    whatsNewVersion = "1.1.7"
                 }
             }
             .onChange(of: assets) { _, new in
@@ -137,14 +168,6 @@ struct HomeView: View {
                 WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
             }
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(netWorth, format: compactNumber
-                         ? .currency(code: currencyCode.rawValue).notation(.compactName)
-                         : .currency(code: currencyCode.rawValue))
-                        .font(.headline)
-                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
-                }
-
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         activeSheet = .createOperation

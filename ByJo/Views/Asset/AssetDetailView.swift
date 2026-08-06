@@ -12,6 +12,7 @@ import SwiftUI
 struct AssetDetailView: View {
     enum ActiveSheet: Identifiable {
         case editAsset
+        case updateValue
         case createOperation
         case editOperation(AssetOperation)
         case createGoal
@@ -24,6 +25,8 @@ struct AssetDetailView: View {
             switch self {
                 case .editAsset:
                     return "editAsset"
+                case .updateValue:
+                    return "updateValue"
                 case .createOperation:
                     return "createOperation"
                 case .editOperation(let operation):
@@ -43,6 +46,8 @@ struct AssetDetailView: View {
     }
     
     @Environment(\.modelContext) var modelContext
+
+    @AppStorage("showAssetBalanceChart") private var showAssetBalanceChart: Bool = true
     
     var asset: Asset
 
@@ -87,6 +92,10 @@ struct AssetDetailView: View {
     var body: some View {
         NavigationStack {
             List(selection: $selectedOperations) {
+                if showAssetBalanceChart {
+                    AssetBalanceHistorySection(asset: asset)
+                }
+
                 if !filteredAndSortedOperations.isEmpty {
                     ForEach(filteredAndSortedOperations) { item in
                         Section {
@@ -186,7 +195,7 @@ struct AssetDetailView: View {
                 } else {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            activeSheet = .createOperation
+                            activeSheet = categories.isEmpty ? .viewCategories : .createOperation
                         } label: {
                             VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
                         }
@@ -199,6 +208,12 @@ struct AssetDetailView: View {
                                     activeSheet = .editAsset
                                 } label: {
                                     Label("Edit", systemImage: "pencil")
+                                }
+
+                                Button {
+                                    activeSheet = .updateValue
+                                } label: {
+                                    Label("Update value", systemImage: "arrow.triangle.2.circlepath")
                                 }
                                 
                                 Button {
@@ -228,6 +243,19 @@ struct AssetDetailView: View {
                                     activeSheet = .viewCategories
                                 } label: {
                                     Label("Categories", systemImage: "list.bullet")
+                                }
+                            }
+
+                            Section {
+                                Button {
+                                    withAnimation {
+                                        showAssetBalanceChart.toggle()
+                                    }
+                                } label: {
+                                    Label(
+                                        showAssetBalanceChart ? "Hide chart" : "Show chart",
+                                        systemImage: showAssetBalanceChart ? "chart.xyaxis.line" : "chart.line.uptrend.xyaxis"
+                                    )
                                 }
                             }
                             
@@ -262,6 +290,8 @@ struct AssetDetailView: View {
                 switch sheet {
                     case .editAsset:
                         EditAssetView(asset: asset)
+                    case .updateValue:
+                        UpdateAssetValueView(asset: asset)
                     case .createGoal:
                         EditGoalView(asset: asset)
                     case .editGoal(let goal):

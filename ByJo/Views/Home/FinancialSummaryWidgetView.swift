@@ -24,28 +24,30 @@ struct FinancialSummaryWidgetView: View {
     }
 
     var body: some View {
-        Section {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("This month")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
+        if !assets.isEmpty {
+            Section {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("This month")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
 
-                HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    if netChangeThisMonth > 0 {
-                        Text("+")
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        if netChangeThisMonth > 0 {
+                            Text("+")
+                                .font(.system(size: 40, weight: .black, design: .rounded))
+                                .foregroundStyle(.green)
+                        }
+
+                        Text(netChangeThisMonth, format: compactNumber
+                             ? .currency(code: currencyCode.rawValue).notation(.compactName)
+                             : .currency(code: currencyCode.rawValue))
                             .font(.system(size: 40, weight: .black, design: .rounded))
-                            .foregroundStyle(.green)
+                            .foregroundStyle(netChangeThisMonth >= 0 ? Color.green : Color.red)
+                            .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
-
-                    Text(netChangeThisMonth, format: compactNumber
-                         ? .currency(code: currencyCode.rawValue).notation(.compactName)
-                         : .currency(code: currencyCode.rawValue))
-                        .font(.system(size: 40, weight: .black, design: .rounded))
-                        .foregroundStyle(netChangeThisMonth >= 0 ? Color.green : Color.red)
-                        .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                 }
+                .padding(.vertical, 8)
             }
-            .padding(.vertical, 8)
         }
     }
 }

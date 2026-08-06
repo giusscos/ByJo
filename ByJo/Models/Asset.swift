@@ -30,6 +30,12 @@ final class Asset {
         (operations ?? []).reduce(initialBalance) { $0 + $1.amount }
     }
 
+    func calculateBalance(at date: Date) -> Decimal {
+        initialBalance + (operations ?? [])
+            .filter { $0.date <= date }
+            .reduce(0) { $0 + $1.amount }
+    }
+
     func calculateBalanceForDateRange(_ dateRange: DateRangeOption) -> Decimal {
         let (start, end) = dateRange.dateRange
         return initialBalance + operationsTotal(from: start, to: end)
