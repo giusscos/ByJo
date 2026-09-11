@@ -5,6 +5,7 @@
 //  Created by Giuseppe Cosenza on 04/11/24.
 //
 
+import StoreKit
 import SwiftData
 import SwiftUI
 import TipKit
@@ -46,6 +47,7 @@ struct HomeView: View {
     }
     
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.requestReview) private var requestReview
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
@@ -53,6 +55,7 @@ struct HomeView: View {
     @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
     @AppStorage("whatsNewVersion") var whatsNewVersion: String = ""
     @AppStorage("showApplePayShortcutBanner") var showWalletShortcutBanner: Bool = true
+    @AppStorage("lastReviewRequestedVersion") private var lastReviewRequestedVersion: String = ""
 
     @State private var showWhatsNew: Bool = false
 
@@ -98,6 +101,14 @@ struct HomeView: View {
         case .budgetProgress:   BudgetProgressWidgetView()
         case .debtPayoff:       DebtPayoffWidgetView()
         }
+    }
+
+    private func requestReviewIfAppropriate() {
+        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        guard lastReviewRequestedVersion != currentVersion,
+              operations.count >= 3 else { return }
+        requestReview()
+        lastReviewRequestedVersion = currentVersion
     }
 
     var body: some View {
@@ -154,6 +165,7 @@ struct HomeView: View {
                     showWhatsNew = true
                     whatsNewVersion = "1.1.7"
                 }
+                requestReviewIfAppropriate()
             }
             .onChange(of: assets) { _, new in
                 AddAssetTip.hasAssets = !new.isEmpty
@@ -166,6 +178,7 @@ struct HomeView: View {
             .onChange(of: operations) { _, new in
                 AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && new.isEmpty
                 WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
+                requestReviewIfAppropriate()
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
