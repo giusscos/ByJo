@@ -15,25 +15,50 @@
   ],
   "products" : [
     {
-      "displayPrice" : "119.99",
-      "familyShareable" : true,
-      "internalID" : "6749497387",
-      "localizations" : [
-        {
-          "description" : "Lifetime unlimited access for your family",
-          "displayName" : "ByJo Family Lifetime",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "com.giusscos.byjoFamilyLifetime",
-      "referenceName" : "ByJo Family Lifetime",
-      "type" : "NonConsumable"
-    },
-    {
       "displayPrice" : "69.99",
       "familyShareable" : false,
       "internalID" : "6749497343",
       "localizations" : [
+        {
+          "description" : "Lifetime unlimited access",
+          "displayName" : "ByJo Lifetime",
+          "locale" : "en_GB"
+        },
+        {
+          "description" : "Accesso illimitato a vita",
+          "displayName" : "ByJo a vita",
+          "locale" : "it"
+        },
+        {
+          "description" : "Accès illimité à vie",
+          "displayName" : "ByJo à vie",
+          "locale" : "fr_CA"
+        },
+        {
+          "description" : "Acceso ilimitado de por vida",
+          "displayName" : "ByJo de por vida",
+          "locale" : "es_ES"
+        },
+        {
+          "description" : "Acesso ilimitado vitalício",
+          "displayName" : "ByJo Vitalício",
+          "locale" : "pt_BR"
+        },
+        {
+          "description" : "Accès illimité à vie",
+          "displayName" : "ByJo à vie",
+          "locale" : "fr"
+        },
+        {
+          "description" : "Acesso ilimitado vitalício",
+          "displayName" : "ByJo Vitalício",
+          "locale" : "pt_PT"
+        },
+        {
+          "description" : "Lebenslanger, unbegrenzter Zugriff",
+          "displayName" : "ByJo Lebenslang",
+          "locale" : "de"
+        },
         {
           "description" : "Lifetime unlimited access",
           "displayName" : "ByJo Lifetime",
@@ -53,7 +78,7 @@
     "_developerTeamID" : "MA7MBQ947C",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 805277672.35446298,
+    "_lastSynchronizedDate" : 812740768.10957694,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
@@ -97,10 +122,58 @@
     ],
     "_timeRate" : 0
   },
+  "subscriptionBundleGroups" : [
+
+  ],
   "subscriptionGroups" : [
     {
       "id" : "21584181",
       "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "Desbloquea el acceso Pro",
+          "locale" : "es_ES"
+        },
+        {
+          "description" : "",
+          "displayName" : "Desbloqueia o acesso Pro",
+          "locale" : "pt_PT"
+        },
+        {
+          "description" : "",
+          "displayName" : "Desbloqueie o acesso Pro",
+          "locale" : "pt_BR"
+        },
+        {
+          "description" : "",
+          "displayName" : "Débloquez l'accès Pro",
+          "locale" : "fr"
+        },
+        {
+          "description" : "",
+          "displayName" : "Débloquez l'accès Pro",
+          "locale" : "fr_CA"
+        },
+        {
+          "description" : "",
+          "displayName" : "Pro-Zugang freischalten",
+          "locale" : "de"
+        },
+        {
+          "description" : "",
+          "displayName" : "Sblocca l'accesso Pro",
+          "locale" : "it"
+        },
+        {
+          "description" : "",
+          "displayName" : "Unlock Pro Access",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "",
+          "displayName" : "Unlock Pro Access",
+          "locale" : "en_GB"
+        },
         {
           "description" : "",
           "displayName" : "Unlock Pro Access",
@@ -109,45 +182,6 @@
       ],
       "name" : "ByJo Pro access",
       "subscriptions" : [
-        {
-          "adHocOffers" : [
-
-          ],
-          "billingPlans" : [
-            {
-              "billingPlanType" : "BILLED_UPFRONT",
-              "commitmentDisplayPrice" : "99.99",
-              "displayPrice" : "99.99",
-              "internalID" : "6749497859_BILLED_UPFRONT",
-              "isEnabled" : true
-            }
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "99.99",
-          "familyShareable" : true,
-          "groupNumber" : 2,
-          "internalID" : "6749497859",
-          "introductoryOffers" : [
-
-          ],
-          "localizations" : [
-            {
-              "description" : "Get unlimited family access for this year",
-              "displayName" : "ByJo Family Pro",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "bjpro_9999_1y_fa",
-          "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "ByJo Family Pro, 99.99, 1 year",
-          "subscriptionGroupID" : "21584181",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
-        },
         {
           "adHocOffers" : [
 
@@ -166,12 +200,57 @@
           ],
           "displayPrice" : "3.99",
           "familyShareable" : false,
-          "groupNumber" : 1,
+          "groupNumber" : 2,
           "internalID" : "6789044163",
           "introductoryOffers" : [
 
           ],
           "localizations" : [
+            {
+              "description" : "Get unlimited access for this week",
+              "displayName" : "ByJo Pro",
+              "locale" : "en_GB"
+            },
+            {
+              "description" : "Accès illimité pendant une semaine",
+              "displayName" : "ByJo Pro",
+              "locale" : "fr"
+            },
+            {
+              "description" : "Acesso ilimitado por uma semana",
+              "displayName" : "ByJo Pro",
+              "locale" : "pt_BR"
+            },
+            {
+              "description" : "Get unlimited access for this week",
+              "displayName" : "ByJo Pro",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Acesso ilimitado durante uma semana",
+              "displayName" : "ByJo Pro",
+              "locale" : "pt_PT"
+            },
+            {
+              "description" : "Accès illimité pendant une semaine",
+              "displayName" : "ByJo Pro",
+              "locale" : "fr_CA"
+            },
+            {
+              "description" : "Accesso illimitato per una settimana",
+              "displayName" : "ByJo Pro",
+              "locale" : "it"
+            },
+            {
+              "description" : "Unbegrenzter Zugriff für eine Woche",
+              "displayName" : "ByJo Pro",
+              "locale" : "de"
+            },
+            {
+              "description" : "Acceso ilimitado durante una semana",
+              "displayName" : "ByJo Pro",
+              "locale" : "es_ES"
+            },
             {
               "description" : "Get unlimited access for this week",
               "displayName" : "ByJo Pro",
@@ -201,16 +280,85 @@
             }
           ],
           "codeOffers" : [
-
+            {
+              "billingPlanType" : "BILLED_UPFRONT",
+              "eligibility" : [
+                "new"
+              ],
+              "internalID" : "e05ffd38-88bd-416b-a4e5-d2ba127e505b",
+              "isStackable" : true,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "offer test",
+              "subscriptionPeriod" : "P1M"
+            }
           ],
           "displayPrice" : "39.99",
           "familyShareable" : false,
-          "groupNumber" : 2,
+          "groupNumber" : 1,
           "internalID" : "6749497774",
+          "introductoryOffer" : {
+            "billingPlanType" : "BILLED_UPFRONT",
+            "internalID" : "eyJzIjoiNjc0OTQ5Nzc3NCIsImQiOjE3OTEwMTA4MDAsImkiOiJVUyIsInQiOiIiLCJwIjoiMCJ9",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
           "introductoryOffers" : [
-
+            {
+              "billingPlanType" : "BILLED_UPFRONT",
+              "internalID" : "eyJzIjoiNjc0OTQ5Nzc3NCIsImQiOjE3OTEwMTA4MDAsImkiOiJVUyIsInQiOiIiLCJwIjoiMCJ9",
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "subscriptionPeriod" : "P1W"
+            }
           ],
           "localizations" : [
+            {
+              "description" : "Accesso illimitato per un anno",
+              "displayName" : "ByJo Pro",
+              "locale" : "it"
+            },
+            {
+              "description" : "Accès illimité pendant un an",
+              "displayName" : "ByJo Pro",
+              "locale" : "fr"
+            },
+            {
+              "description" : "Acceso ilimitado durante todo un año",
+              "displayName" : "ByJo Pro",
+              "locale" : "es_ES"
+            },
+            {
+              "description" : "Get unlimited access for this year",
+              "displayName" : "ByJo Pro",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Get unlimited access for this year",
+              "displayName" : "ByJo Pro",
+              "locale" : "en_GB"
+            },
+            {
+              "description" : "Acesso ilimitado por um ano",
+              "displayName" : "ByJo Pro",
+              "locale" : "pt_BR"
+            },
+            {
+              "description" : "Unbegrenzter Zugriff für ein ganzes Jahr",
+              "displayName" : "ByJo Pro",
+              "locale" : "de"
+            },
+            {
+              "description" : "Accès illimité pendant un an",
+              "displayName" : "ByJo Pro",
+              "locale" : "fr_CA"
+            },
+            {
+              "description" : "Acesso ilimitado durante um ano",
+              "displayName" : "ByJo Pro",
+              "locale" : "pt_PT"
+            },
             {
               "description" : "Get unlimited access for this year",
               "displayName" : "ByJo Pro",
@@ -223,14 +371,27 @@
           "subscriptionGroupID" : "21584181",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
-
+            {
+              "billingPlanType" : "BILLED_UPFRONT",
+              "displayPrice" : "19.99",
+              "internalID" : "6818829200",
+              "isEligible" : true,
+              "numberOfPeriods" : 1,
+              "offerID" : "winback_1y_50",
+              "paymentMode" : "payUpFront",
+              "referenceName" : "Win-back yearly 50% first year",
+              "subscriptionPeriod" : "P1Y"
+            }
           ]
         }
       ]
     }
   ],
+  "subscriptionSuiteGroups" : [
+
+  ],
   "version" : {
-    "major" : 5,
-    "minor" : 0
+    "major" : 6,
+    "minor" : 3
   }
 }

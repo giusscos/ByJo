@@ -7,6 +7,7 @@
 
 import Foundation
 import StoreKit
+import UserNotifications
 
 typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo
 typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
@@ -20,7 +21,13 @@ final class Store {
 
     let productIds: [String] = ["bjpro_999_1m_fa", "bjpro_9999_1y_fa", "bjpro_399_1m", "bjpro_3999_1y", "byjo_399_1w"]
     let groupId: String = "21584181"
+    /// Plans offered on the paywall. `productIds` stays broader so subscribers on
+    /// retired plans (monthly, family) keep their entitlement.
+    let paywallProductIds: [String] = ["bjpro_3999_1y", "byjo_399_1w"]
     let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"]
+    /// Lifetime purchases offered on the paywall. Family lifetime is retired but stays in
+    /// `productLifetimeIds` so existing owners keep their entitlement.
+    let paywallLifetimeIds: [String] = ["com.giusscos.byjoLifetime"]
 
     private var storeProducts: [Product] = []
     var purchasedProducts: [Product] = []
@@ -93,6 +100,7 @@ final class Store {
             if case .verified(let tx) = status.transaction,
                let sub = subscriptions.first(where: { $0.id == tx.productID }) {
                 matched.append(sub)
+                scheduleTrialEndingReminder(for: tx)
                 print("[Store] updateSubscriptionStatus — matched: \(tx.productID)")
             }
         }
@@ -111,6 +119,73 @@ final class Store {
             subscriptions = try await Product.products(for: productIds)
         } catch {
             print("[Store] product request failed: \(error)")
+        }
+    }
+
+    /// Length in days of the free trial the user can still redeem, or nil when
+    /// no product in the group offers one or the user already used it.
+    func eligibleTrialDays() async -> Int? {
+        if subscriptions.isEmpty { await requestProducts() }
+        guard let offer = subscriptions.compactMap({ $0.subscription?.introductoryOffer })
+            .first(where: { $0.paymentMode == .freeTrial }) else { return nil }
+        guard await Product.SubscriptionInfo.isEligibleForIntroOffer(for: groupId) else { return nil }
+
+        let unitDays: Int
+        switch offer.period.unit {
+        case .day: unitDays = 1
+        case .week: unitDays = 7
+        case .month: unitDays = 30
+        case .year: unitDays = 365
+        @unknown default: unitDays = 1
+        }
+        return offer.period.value * unitDays
+    }
+
+    /// Yearly plan's localized price, e.g. "$39.99".
+    func yearlyDisplayPrice() async -> String? {
+        if subscriptions.isEmpty { await requestProducts() }
+        return subscriptions.first(where: { $0.id == "bjpro_3999_1y" })?.displayPrice
+    }
+
+    /// How much cheaper the yearly plan is than a year of weekly payments, rounded
+    /// down so the paywall never overstates it.
+    func yearlySavingsPercent() async -> Int? {
+        if subscriptions.isEmpty { await requestProducts() }
+        guard let yearly = subscriptions.first(where: { $0.id == "bjpro_3999_1y" }),
+              let weekly = subscriptions.first(where: { $0.id == "byjo_399_1w" }) else { return nil }
+        let weeklyPerYear = weekly.price * 52
+        guard weeklyPerYear > 0, yearly.price < weeklyPerYear else { return nil }
+        let savings = (1 - yearly.price / weeklyPerYear) * 100
+        return Int(NSDecimalNumber(decimal: savings).doubleValue.rounded(.down))
+    }
+
+    /// Notifies the user one day before a free trial converts to a paid plan.
+    /// Uses a fixed identifier so repeated status updates replace the same request.
+    private func scheduleTrialEndingReminder(for transaction: Transaction) {
+        let identifier = "trial-ending-reminder"
+        let center = UNUserNotificationCenter.current()
+
+        guard transaction.offer?.type == .introductory,
+              let expiration = transaction.expirationDate,
+              let fireDate = Calendar.current.date(byAdding: .day, value: -1, to: expiration),
+              fireDate > .now else {
+            center.removePendingNotificationRequests(withIdentifiers: [identifier])
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "Your ByJo trial ends tomorrow")
+        content.body = String(localized: "Keep your net worth in view, or cancel anytime in Settings before it renews.")
+        content.sound = .default
+
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+        // Provisional authorization delivers quietly without an upfront prompt
+        // when the user never answered the notification permission alert.
+        center.requestAuthorization(options: [.alert, .sound, .provisional]) { _, _ in
+            center.add(request)
         }
     }
 

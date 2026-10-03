@@ -542,3 +542,16 @@
 "No recurring\noperations" = "No recurring\noperations";
 "No recurring operations" = "No recurring operations";
 "No recurring operations yet" = "No recurring operations yet";
+
+/* MARK: - Paywall trial */
+"Your net worth is ready" = "Your net worth is ready";
+"Tracked assets: %lld" = "Tracked assets: %lld";
+"Try ByJo Pro free" = "Try ByJo Pro free";
+"Your ByJo trial ends tomorrow" = "Your ByJo trial ends tomorrow";
+"Keep your net worth in view, or cancel anytime in Settings before it renews." = "Keep your net worth in view, or cancel anytime in Settings before it renews.";
+"Full access to every feature" = "Full access to every feature";
+"Day %lld" = "Day %lld";
+"We'll remind you before your trial ends" = "We'll remind you before your trial ends";
+"%@ per year starts. Cancel anytime before." = "%@ per year starts. Cancel anytime before.";
+"Your yearly plan starts. Cancel anytime before." = "Your yearly plan starts. Cancel anytime before.";
+"Yearly saves %lld%% vs weekly" = "Yearly saves %lld%% vs weekly";

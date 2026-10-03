@@ -12,8 +12,6 @@ import UserNotifications
 // MARK: - Navigation Step
 
 private enum OnboardingStep: Hashable {
-    case whySave
-    case whyInvest
     case currency
     case createAsset
     case addTransaction
@@ -43,7 +41,7 @@ struct OnboardingView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            OnboardingWelcomeStep { path.append(.whySave) }
+            OnboardingWelcomeStep { path.append(.currency) }
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: OnboardingStep.self) { step in
                     destinationView(for: step)
@@ -54,10 +52,6 @@ struct OnboardingView: View {
     @ViewBuilder
     private func destinationView(for step: OnboardingStep) -> some View {
         switch step {
-        case .whySave:
-            OnboardingWhySaveStep { path.append(.whyInvest) }
-        case .whyInvest:
-            OnboardingWhyInvestStep { path.append(.currency) }
         case .currency:
             OnboardingCurrencyStep(currencyCode: $currencyCode) { path.append(.createAsset) }
         case .createAsset:

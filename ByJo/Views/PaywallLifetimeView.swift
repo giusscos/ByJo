@@ -32,7 +32,7 @@ struct PaywallLifetimeView: View {
             .padding(.top, 28)
             .padding(.bottom, 8)
 
-            StoreView(ids: store.productLifetimeIds) { _ in
+            StoreView(ids: store.paywallLifetimeIds) { _ in
                 Image("paywall-lifetime")
                     .resizable()
                     .scaledToFit()

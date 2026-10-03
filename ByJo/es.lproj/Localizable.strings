@@ -541,3 +541,16 @@
 "No recurring\noperations" = "Sin operaciones\nrecurrentes";
 "No recurring operations" = "Sin operaciones recurrentes";
 "No recurring operations yet" = "Aún sin operaciones recurrentes";
+
+/* MARK: - Paywall trial */
+"Your net worth is ready" = "Tu patrimonio neto está listo";
+"Tracked assets: %lld" = "Activos registrados: %lld";
+"Try ByJo Pro free" = "Prueba ByJo Pro gratis";
+"Your ByJo trial ends tomorrow" = "Tu prueba de ByJo termina mañana";
+"Keep your net worth in view, or cancel anytime in Settings before it renews." = "Sigue de cerca tu patrimonio neto o cancela cuando quieras en Ajustes antes de la renovación.";
+"Full access to every feature" = "Acceso completo a todas las funciones";
+"Day %lld" = "Día %lld";
+"We'll remind you before your trial ends" = "Te avisamos antes de que termine la prueba";
+"%@ per year starts. Cancel anytime before." = "Empieza tu plan de %@ al año. Cancela antes cuando quieras.";
+"Your yearly plan starts. Cancel anytime before." = "Empieza tu plan anual. Cancela antes cuando quieras.";
+"Yearly saves %lld%% vs weekly" = "El plan anual ahorra un %lld%% frente al semanal";
