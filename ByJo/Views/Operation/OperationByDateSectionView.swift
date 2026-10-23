@@ -14,7 +14,10 @@ struct OperationByDateSectionView: View {
     var filteredAndSortedOperations: [OperationByDate]
     
     @Binding var activeSheet: OperationListViewSheet?
-    
+
+    /// False when a split view shows the selected row's detail instead of pushing it.
+    var linksToDetail: Bool = true
+
     @Query var allOperations: [AssetOperation]
     
     func linkedOperation(for operation: AssetOperation) -> AssetOperation? {
@@ -27,10 +30,16 @@ struct OperationByDateSectionView: View {
             Section {
                 ForEach(item.operations) { operation in
                     let linked = linkedOperation(for: operation)
-                    NavigationLink {
-                        OperationDetailView(operation: operation, linkedOperation: linked)
-                    } label: {
-                        OperationRow(operation: operation)
+                    Group {
+                        if linksToDetail {
+                            NavigationLink {
+                                OperationDetailView(operation: operation, linkedOperation: linked)
+                            } label: {
+                                OperationRow(operation: operation)
+                            }
+                        } else {
+                            OperationRow(operation: operation)
+                        }
                     }
                     .tag(operation)
                     .swipeActions(edge: .trailing) {

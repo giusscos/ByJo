@@ -27,6 +27,13 @@ struct ByJoApp: App {
         do {
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
             container.mainContext.undoManager = UndoManager()
+            #if DEBUG
+            // Seeds demo data for screenshot runs when the store is empty.
+            if ProcessInfo.processInfo.arguments.contains("-seedMockData"),
+               (try? container.mainContext.fetchCount(FetchDescriptor<Asset>())) == 0 {
+                MockDataGenerator.generate(in: container.mainContext)
+            }
+            #endif
             return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")

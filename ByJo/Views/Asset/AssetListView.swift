@@ -51,6 +51,7 @@ struct AssetListView: View {
     }
     
     @Environment(\.modelContext) var modelContext
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
@@ -87,216 +88,256 @@ struct AssetListView: View {
         return sortedAssets
     }
     
-    var body: some View {
-        NavigationStack {
-            List(selection: $selectedAssets) {
-                if filteredAndSortedAssets.isEmpty {
-                    VStack {
-                        Text("No assets found 😕")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        
-                        Text("Start adding assets")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                        
-                        Button {
-                            activeSheet = .createAsset
-                        } label: {
-                            Text("Add asset")
-                                .font(.headline)
-                        }
-                        .tint(.accent)
-                        .buttonBorderShape(.capsule)
-                        .buttonStyle(.bordered)
-                    }
-                    .frame(maxWidth: .infinity)
-                } else {
-                    Section {
-                        ForEach(filteredAndSortedAssets) { asset in
-                            NavigationLink {
-                                AssetDetailView(asset: asset)
-                            } label: {
-                                AssetRowView(asset: asset)
-                            }
-                            .tag(asset)
-                            .swipeActions (edge: .trailing) {
-                                Button (role: .destructive) {
-                                    modelContext.delete(asset)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                
-                                Button {
-                                    activeSheet = .editAsset(asset)
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
-                                .tint(.blue)
-                            }
-                        }
-                    } 
-                }
-            }
-            .navigationTitle("Assets")
-            .toolbar {
-                if !assets.isEmpty {
-                    ToolbarItem(placement: .topBarLeading) {
-                        withAnimation {
-                            EditButton()
-                        }
-                    }
-                }
-                
-                if isEditMode == .inactive {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            activeSheet = .createAsset
-                        } label: {
-                            VersionedLabel(title: "Add asset", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
-                        }
-                    }
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    if isEditMode == .active {
-                        Button(role: .destructive) {
-                            showingBulkDeleteAlert = true
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                        .tint(.red)
-                        .disabled(selectedAssets.isEmpty)
-                    } else {
-                        Menu {
-                            Section {
-                                Button {
-                                    withAnimation {
-                                        compactNumber.toggle()
-                                    }
-                                } label: {
-                                    Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
-                                }
-                            }
-                            
-                            Section {
-                                Button {
-                                    activeSheet = .swapAssetOperation
-                                } label: {
-                                    Label("Swap", systemImage: "arrow.up.arrow.down")
-                                }
-                                .disabled(assets.count < 2)
-                            }
-                            
-                            Section {
-                                Button {
-                                    activeSheet = .createGoal
-                                } label: {
-                                    Label("Add goal", systemImage: "plus")
-                                }
-                                .disabled(assets.isEmpty)
-                                
-                                NavigationLink {
-                                    GoalListView()
-                                } label: {
-                                    Label("Goals", systemImage: "list.bullet")
-                                }
-                                .disabled(goals.isEmpty)
-                            }
-                        
-                            Section {
-                                Button {
-                                    activeSheet = .viewCategories
-                                } label: {
-                                    Label("Categories", systemImage: "list.bullet")
-                                }
-                            }
-                            
-                            if !assets.isEmpty {
-                                Section("Filters") {
-                                    Menu("By Type") {
-                                        ForEach(AssetType.allCases, id: \.self) { type in
-                                            Button {
-                                                withAnimation {
-                                                    if type != selectedType {
-                                                        selectedType = type
-                                                    } else {
-                                                        selectedType = nil
-                                                    }
-                                                }
-                                            } label: {
-                                                HStack {
-                                                    Text(type.displayName)
+    /// Single asset shown in the detail column on regular width.
+    private var detailAsset: Asset? {
+        guard isEditMode == .inactive, selectedAssets.count == 1 else { return nil }
+        return selectedAssets.first
+    }
 
-                                                    if type == selectedType {
-                                                        Image(systemName: "checkmark")
-                                                    }
+    var body: some View {
+        // Regular width (iPhone Duo inner display, iPad) shows list + detail side by side,
+        // driven by list selection; compact width keeps push navigation.
+        if horizontalSizeClass == .regular {
+            NavigationSplitView {
+                assetList
+                    .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 440)
+            } detail: {
+                if let asset = detailAsset {
+                    AssetDetailView(asset: asset)
+                        .id(asset.id)
+                } else {
+                    ContentUnavailableView("Select an asset", systemImage: "building.columns", description: Text("Pick an asset to see its balance and operations."))
+                }
+            }
+        } else {
+            NavigationStack {
+                assetList
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func assetRow(_ asset: Asset) -> some View {
+        if horizontalSizeClass == .regular {
+            AssetRowView(asset: asset)
+        } else {
+            NavigationLink {
+                AssetDetailView(asset: asset)
+            } label: {
+                AssetRowView(asset: asset)
+            }
+        }
+    }
+
+    private var assetList: some View {
+        List(selection: $selectedAssets) {
+            if filteredAndSortedAssets.isEmpty {
+                VStack {
+                    Text("No assets found 😕")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    Text("Start adding assets")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                    
+                    Button {
+                        activeSheet = .createAsset
+                    } label: {
+                        Text("Add asset")
+                            .font(.headline)
+                    }
+                    .tint(.accent)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+                }
+                .frame(maxWidth: .infinity)
+            } else {
+                Section {
+                    ForEach(filteredAndSortedAssets) { asset in
+                        assetRow(asset)
+                        .tag(asset)
+                        .swipeActions (edge: .trailing) {
+                            Button (role: .destructive) {
+                                selectedAssets.remove(asset)
+                                modelContext.delete(asset)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                            
+                            Button {
+                                activeSheet = .editAsset(asset)
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.blue)
+                        }
+                    }
+                } 
+            }
+        }
+        .navigationTitle("Assets")
+        .toolbar {
+            if !assets.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    withAnimation {
+                        EditButton()
+                    }
+                }
+            }
+            
+            if isEditMode == .inactive {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        activeSheet = .createAsset
+                    } label: {
+                        VersionedLabel(title: "Add asset", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
+                    }
+                }
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                if isEditMode == .active {
+                    Button(role: .destructive) {
+                        showingBulkDeleteAlert = true
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                    .tint(.red)
+                    .disabled(selectedAssets.isEmpty)
+                } else {
+                    Menu {
+                        Section {
+                            Button {
+                                withAnimation {
+                                    compactNumber.toggle()
+                                }
+                            } label: {
+                                Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                            }
+                        }
+                        
+                        Section {
+                            Button {
+                                activeSheet = .swapAssetOperation
+                            } label: {
+                                Label("Swap", systemImage: "arrow.up.arrow.down")
+                            }
+                            .disabled(assets.count < 2)
+                        }
+                        
+                        Section {
+                            Button {
+                                activeSheet = .createGoal
+                            } label: {
+                                Label("Add goal", systemImage: "plus")
+                            }
+                            .disabled(assets.isEmpty)
+                            
+                            NavigationLink {
+                                GoalListView()
+                            } label: {
+                                Label("Goals", systemImage: "list.bullet")
+                            }
+                            .disabled(goals.isEmpty)
+                        }
+                    
+                        Section {
+                            Button {
+                                activeSheet = .viewCategories
+                            } label: {
+                                Label("Categories", systemImage: "list.bullet")
+                            }
+                        }
+                        
+                        if !assets.isEmpty {
+                            Section("Filters") {
+                                Menu("By Type") {
+                                    ForEach(AssetType.allCases, id: \.self) { type in
+                                        Button {
+                                            withAnimation {
+                                                if type != selectedType {
+                                                    selectedType = type
+                                                } else {
+                                                    selectedType = nil
                                                 }
                                             }
-                                        }
-                                    }
-                                }
-                                
-                                Section("Sorters") {
-                                    Menu("Sort By") {
-                                        ForEach(AssetSortOrder.allCases, id: \.self) { sort in
-                                            Button {
-                                                withAnimation {
-                                                    if sortOrder == sort {
-                                                        isAscending.toggle()
-                                                    } else {
-                                                        sortOrder = sort
-                                                        isAscending = true
-                                                    }
-                                                }
-                                            } label: {
-                                                HStack {
-                                                    Text(sort.displayName)
-                                                    
-                                                    if sortOrder == sort {
-                                                        Image(systemName: isAscending ? "arrow.up" : "arrow.down")
-                                                    }
+                                        } label: {
+                                            HStack {
+                                                Text(type.displayName)
+
+                                                if type == selectedType {
+                                                    Image(systemName: "checkmark")
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        } label: {
-                            VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
+                            
+                            Section("Sorters") {
+                                Menu("Sort By") {
+                                    ForEach(AssetSortOrder.allCases, id: \.self) { sort in
+                                        Button {
+                                            withAnimation {
+                                                if sortOrder == sort {
+                                                    isAscending.toggle()
+                                                } else {
+                                                    sortOrder = sort
+                                                    isAscending = true
+                                                }
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Text(sort.displayName)
+                                                
+                                                if sortOrder == sort {
+                                                    Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+                    } label: {
+                        VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                     }
                 }
             }
-            .environment(\.editMode, $isEditMode)
-            .sheet(item: $activeSheet) { sheet in
-                switch sheet {
-                    case .createAsset:
-                        EditAssetView()
-                    case .editAsset(let asset):
-                        EditAssetView(asset: asset)
-                    case .createGoal:
-                        if let asset = assets.first {
-                            EditGoalView(asset: asset)
-                        }
-                    case .editGoal(let goal):
-                        if let asset = goal.asset {
-                            EditGoalView(goal: goal, asset: asset)
-                        }
-                    case .viewCategories:
-                        CategoryOperationView()
-                    case .swapAssetOperation:
-                        if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
-                            AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
-                        }
-                }
+        }
+        .environment(\.editMode, $isEditMode)
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+                case .createAsset:
+                    EditAssetView()
+                case .editAsset(let asset):
+                    EditAssetView(asset: asset)
+                case .createGoal:
+                    if let asset = assets.first {
+                        EditGoalView(asset: asset)
+                    }
+                case .editGoal(let goal):
+                    if let asset = goal.asset {
+                        EditGoalView(goal: goal, asset: asset)
+                    }
+                case .viewCategories:
+                    CategoryOperationView()
+                case .swapAssetOperation:
+                    if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
+                        AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
+                    }
             }
-            .confirmationDialog("Delete Assets", isPresented: $showingBulkDeleteAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
-                    deleteSelectedAssets()
-                }
+        }
+        .confirmationDialog("Delete Assets", isPresented: $showingBulkDeleteAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                deleteSelectedAssets()
             }
+        }
+        // Drop deleted assets so the detail column never shows a removed record.
+        .onChange(of: assets) { _, new in
+            selectedAssets.formIntersection(new)
         }
     }
     

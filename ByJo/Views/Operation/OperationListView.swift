@@ -48,7 +48,8 @@ struct OperationListView: View {
     }
     
     @Environment(\.modelContext) var modelContext
-    
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
@@ -125,318 +126,355 @@ struct OperationListView: View {
         }.sorted { $0.date > $1.date }
     }
     
+    /// Single operation shown in the detail column on regular width.
+    private var detailOperation: AssetOperation? {
+        guard isEditMode == .inactive, selectedOperations.count == 1 else { return nil }
+        return selectedOperations.first
+    }
+
     var body: some View {
-        NavigationStack {
-            List(selection: $selectedOperations) {
-                if assets.isEmpty {
-                    VStack {
-                        Text("No assets found 😕")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        
-                        Text("Start adding assets")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                        
-                        Button {
-                            activeSheet = .createAsset
-                        } label: {
-                            Text("Add asset")
-                                .font(.headline)
-                        }
-                        .tint(.accent)
-                        .buttonBorderShape(.capsule)
-                        .buttonStyle(.bordered)
+        // Regular width (iPhone Duo inner display, iPad) shows list + detail side by side,
+        // driven by list selection; compact width keeps push navigation.
+        if horizontalSizeClass == .regular {
+            NavigationSplitView {
+                operationList
+                    .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 440)
+            } detail: {
+                if let operation = detailOperation {
+                    NavigationStack {
+                        OperationDetailView(operation: operation, linkedOperation: linkedOperation(for: operation))
                     }
-                    .frame(maxWidth: .infinity)
-                } else if filteredAndSortedOperations.isEmpty {
-                    VStack {
-                        Text(categories.isEmpty ? "No categories found 😕" : "No operations found 😕")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        
-                        Text(categories.isEmpty ? "Start adding categories" : "Start adding operations")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                        
-                        Button {
-                            activeSheet = categories.isEmpty ? .viewCategories : .create
-                        } label: {
-                            Text(categories.isEmpty ? "Add categories" : "Add operations")
-                                .font(.headline)
-                        }
-                        .tint(.accent)
-                        .buttonBorderShape(.capsule)
-                        .buttonStyle(.bordered)
-                    }
-                    .frame(maxWidth: .infinity)
+                    .id(operation.id)
                 } else {
-                    OperationByDateSectionView(filteredAndSortedOperations: filteredAndSortedOperations, activeSheet: $activeSheet)
+                    ContentUnavailableView("Select an operation", systemImage: "book.pages", description: Text("Pick an operation to see its details."))
                 }
             }
-            .navigationTitle("Operations")
-            .toolbar {
-                if !operations.isEmpty {
-                    ToolbarItem(placement: .topBarLeading) {
-                        EditButton()
+        } else {
+            NavigationStack {
+                operationList
+            }
+        }
+    }
+
+    private func linkedOperation(for operation: AssetOperation) -> AssetOperation? {
+        guard let swapId = operation.swapId else { return nil }
+        return operations.first(where: { $0.id != operation.id && $0.swapId == swapId })
+    }
+
+    private var operationList: some View {
+        List(selection: $selectedOperations) {
+            if assets.isEmpty {
+                VStack {
+                    Text("No assets found 😕")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    Text("Start adding assets")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                    
+                    Button {
+                        activeSheet = .createAsset
+                    } label: {
+                        Text("Add asset")
+                            .font(.headline)
+                    }
+                    .tint(.accent)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+                }
+                .frame(maxWidth: .infinity)
+            } else if filteredAndSortedOperations.isEmpty {
+                VStack {
+                    Text(categories.isEmpty ? "No categories found 😕" : "No operations found 😕")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    
+                    Text(categories.isEmpty ? "Start adding categories" : "Start adding operations")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                    
+                    Button {
+                        activeSheet = categories.isEmpty ? .viewCategories : .create
+                    } label: {
+                        Text(categories.isEmpty ? "Add categories" : "Add operations")
+                            .font(.headline)
+                    }
+                    .tint(.accent)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+                }
+                .frame(maxWidth: .infinity)
+            } else {
+                OperationByDateSectionView(filteredAndSortedOperations: filteredAndSortedOperations, activeSheet: $activeSheet, linksToDetail: horizontalSizeClass != .regular)
+            }
+        }
+        .navigationTitle("Operations")
+        .toolbar {
+            if !operations.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                }
+            }
+            
+            if let _ = assets.first {
+                if isEditMode == .inactive, !categories.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            activeSheet = .create
+                        } label: {
+                            VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
+                        }
                     }
                 }
                 
-                if let _ = assets.first {
-                    if isEditMode == .inactive, !categories.isEmpty {
-                        ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if isEditMode == .active {
+                        Menu {
                             Button {
-                                activeSheet = .create
+                                showingBulkCategorySheet = true
                             } label: {
-                                VersionedLabel(title: "Add operation", newSystemImage: "plus", oldSystemImage: "plus.circle.fill")
+                                Label("Change Category", systemImage: "tag")
                             }
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if isEditMode == .active {
-                            Menu {
-                                Button {
-                                    showingBulkCategorySheet = true
-                                } label: {
-                                    Label("Change Category", systemImage: "tag")
-                                }
-                                .disabled(categories.isEmpty)
+                            .disabled(categories.isEmpty)
 
-                                Button {
-                                    showingBulkAssetSheet = true
-                                } label: {
-                                    Label("Change Asset", systemImage: "wallet.pass")
-                                }
-                                .disabled(assets.isEmpty)
+                            Button {
+                                showingBulkAssetSheet = true
                             } label: {
-                                Label("Reassign", systemImage: "arrow.left.arrow.right")
+                                Label("Change Asset", systemImage: "wallet.pass")
                             }
-                            .disabled(selectedOperations.isEmpty)
+                            .disabled(assets.isEmpty)
+                        } label: {
+                            Label("Reassign", systemImage: "arrow.left.arrow.right")
                         }
+                        .disabled(selectedOperations.isEmpty)
                     }
+                }
 
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if isEditMode == .active {
-                            Button(role: .destructive) {
-                                showingBulkDeleteAlert = true
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                ToolbarItem(placement: .topBarTrailing) {
+                    if isEditMode == .active {
+                        Button(role: .destructive) {
+                            showingBulkDeleteAlert = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                        .disabled(selectedOperations.isEmpty)
+                    } else {
+                        Menu {
+                            Section {
+                                Button {
+                                    withAnimation {
+                                        compactNumber.toggle()
+                                    }
+                                } label: {
+                                    Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                                }
                             }
-                            .tint(.red)
-                            .disabled(selectedOperations.isEmpty)
-                        } else {
-                            Menu {
+                            
+                            Section {
+                                Button {
+                                    activeSheet = .swapAssetOperation
+                                } label: {
+                                    Label("Swap", systemImage: "arrow.up.arrow.down")
+                                }
+                                .disabled(assets.count < 2)
+                            }
+                            
+                            Section {
+                                Button {
+                                    activeSheet = .viewCategories
+                                } label: {
+                                    Label("Categories", systemImage: "list.bullet")
+                                }
+                            }
+                            
+                            if !operations.isEmpty {
                                 Section {
                                     Button {
                                         withAnimation {
-                                            compactNumber.toggle()
+                                            showRecurringOnly.toggle()
                                         }
                                     } label: {
-                                        Label(compactNumber ? "Long amount" : "Short amount", systemImage: compactNumber ? "arrow.up.left.and.arrow.down.right" : "arrow.down.right.and.arrow.up.left")
+                                        HStack {
+                                            Label("Recurring only", systemImage: "repeat")
+                                            if showRecurringOnly {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
                                     }
                                 }
-                                
+
                                 Section {
-                                    Button {
-                                        activeSheet = .swapAssetOperation
-                                    } label: {
-                                        Label("Swap", systemImage: "arrow.up.arrow.down")
-                                    }
-                                    .disabled(assets.count < 2)
-                                }
-                                
-                                Section {
-                                    Button {
-                                        activeSheet = .viewCategories
-                                    } label: {
-                                        Label("Categories", systemImage: "list.bullet")
-                                    }
-                                }
-                                
-                                if !operations.isEmpty {
-                                    Section {
-                                        Button {
-                                            withAnimation {
-                                                showRecurringOnly.toggle()
-                                            }
-                                        } label: {
-                                            HStack {
-                                                Label("Recurring only", systemImage: "repeat")
-                                                if showRecurringOnly {
-                                                    Image(systemName: "checkmark")
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    Section {
-                                        Menu("By Asset") {
-                                            ForEach(assets, id: \.id) { asset in
-                                                Button {
-                                                    if selectedAsset == asset {
-                                                        withAnimation {
-                                                            selectedAsset = nil
-                                                        }
-                                                    } else {
-                                                        withAnimation {
-                                                            selectedAsset = asset
-                                                        }
-                                                    }
-                                                } label: {
-                                                    HStack {
-                                                        Text(asset.name)
-                                                        
-                                                        if selectedAsset == asset {
-                                                            Image(systemName: "checkmark")
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        Menu("By Category") {
-                                            ForEach(categories) { category in
-                                                Button {
-                                                    if filterCategory == category {
-                                                        withAnimation {
-                                                            filterCategory = nil
-                                                        }
-                                                    } else {
-                                                        withAnimation {
-                                                            filterCategory = category
-                                                        }
-                                                    }
-                                                } label: {
-                                                    HStack {
-                                                        Text(category.name)
-
-                                                        if filterCategory == category {
-                                                            Image(systemName: "checkmark")
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        Menu("By Merchant") {
-                                            ForEach(uniqueMerchants, id: \.self) { merchant in
-                                                Button {
-                                                    withAnimation {
-                                                        filterMerchant = filterMerchant == merchant ? nil : merchant
-                                                    }
-                                                } label: {
-                                                    HStack {
-                                                        Text(merchant)
-
-                                                        if filterMerchant == merchant {
-                                                            Image(systemName: "checkmark")
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } header: {
-                                        Text("Filters")
-                                    }
-                                }
-                                
-                                Section("Sorters") {
-                                    Menu("Sort By") {
-                                        ForEach(OperationSortOrder.allCases, id: \.self) { sort in
+                                    Menu("By Asset") {
+                                        ForEach(assets, id: \.id) { asset in
                                             Button {
-                                                if sortOrder == sort {
-                                                    isAscending.toggle()
+                                                if selectedAsset == asset {
+                                                    withAnimation {
+                                                        selectedAsset = nil
+                                                    }
                                                 } else {
-                                                    sortOrder = sort
-                                                    isAscending = false
+                                                    withAnimation {
+                                                        selectedAsset = asset
+                                                    }
                                                 }
                                             } label: {
                                                 HStack {
-                                                    Text(sort.displayName)
+                                                    Text(asset.name)
                                                     
-                                                    if sortOrder == sort {
-                                                        Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                    if selectedAsset == asset {
+                                                        Image(systemName: "checkmark")
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    
+                                    Menu("By Category") {
+                                        ForEach(categories) { category in
+                                            Button {
+                                                if filterCategory == category {
+                                                    withAnimation {
+                                                        filterCategory = nil
+                                                    }
+                                                } else {
+                                                    withAnimation {
+                                                        filterCategory = category
+                                                    }
+                                                }
+                                            } label: {
+                                                HStack {
+                                                    Text(category.name)
+
+                                                    if filterCategory == category {
+                                                        Image(systemName: "checkmark")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Menu("By Merchant") {
+                                        ForEach(uniqueMerchants, id: \.self) { merchant in
+                                            Button {
+                                                withAnimation {
+                                                    filterMerchant = filterMerchant == merchant ? nil : merchant
+                                                }
+                                            } label: {
+                                                HStack {
+                                                    Text(merchant)
+
+                                                    if filterMerchant == merchant {
+                                                        Image(systemName: "checkmark")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } header: {
+                                    Text("Filters")
                                 }
-                            } label: {
-                                VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                             }
-                        }
-                    }
-                }
-            }
-            .environment(\.editMode, $isEditMode)
-            .sheet(item: $activeSheet) { sheet in
-                switch sheet {
-                    case .create:
-                        if let asset = assets.first, let category = categories.first {
-                            EditAssetOperationView(asset: asset, category: category)
-                        }
-                    case .edit(let operation):
-                        if let category = operation.category ?? categories.first {
-                            EditAssetOperationView(operation: operation, asset: operation.asset, category: category)
-                        }
-                    case .createAsset:
-                        EditAssetView()
-                    case .viewCategories:
-                        CategoryOperationView()
-                    case .swapAssetOperation:
-                        if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
-                            AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
-                        }
-                }
-            }
-            .sheet(isPresented: $showingBulkCategorySheet) {
-                NavigationStack {
-                    List(categories) { category in
-                        Button {
-                            reassignCategory(category)
+                            
+                            Section("Sorters") {
+                                Menu("Sort By") {
+                                    ForEach(OperationSortOrder.allCases, id: \.self) { sort in
+                                        Button {
+                                            if sortOrder == sort {
+                                                isAscending.toggle()
+                                            } else {
+                                                sortOrder = sort
+                                                isAscending = false
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Text(sort.displayName)
+                                                
+                                                if sortOrder == sort {
+                                                    Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         } label: {
-                            Label(category.name, systemImage: "tag")
-                                .foregroundStyle(.primary)
-                        }
-                    }
-                    .navigationTitle("Change Category")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") { showingBulkCategorySheet = false }
+                            VersionedLabel(title: "Menu", newSystemImage: "ellipsis", oldSystemImage: "ellipsis.circle")
                         }
                     }
                 }
-                .presentationDetents([.medium, .large])
             }
-            .sheet(isPresented: $showingBulkAssetSheet) {
-                NavigationStack {
-                    List(assets) { asset in
-                        Button {
-                            reassignAsset(asset)
-                        } label: {
-                            Label(asset.name, systemImage: "building.columns")
-                                .foregroundStyle(.primary)
-                        }
+        }
+        .environment(\.editMode, $isEditMode)
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+                case .create:
+                    if let asset = assets.first, let category = categories.first {
+                        EditAssetOperationView(asset: asset, category: category)
                     }
-                    .navigationTitle("Change Asset")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") { showingBulkAssetSheet = false }
-                        }
+                case .edit(let operation):
+                    if let category = operation.category ?? categories.first {
+                        EditAssetOperationView(operation: operation, asset: operation.asset, category: category)
+                    }
+                case .createAsset:
+                    EditAssetView()
+                case .viewCategories:
+                    CategoryOperationView()
+                case .swapAssetOperation:
+                    if assets.count > 1, let assetFrom = assets.first, let assetTo = assets.last {
+                        AssetAmountSwapView(assetFrom: assetFrom, assetTo: assetTo)
+                    }
+            }
+        }
+        .sheet(isPresented: $showingBulkCategorySheet) {
+            NavigationStack {
+                List(categories) { category in
+                    Button {
+                        reassignCategory(category)
+                    } label: {
+                        Label(category.name, systemImage: "tag")
+                            .foregroundStyle(.primary)
                     }
                 }
-                .presentationDetents([.medium, .large])
-            }
-            .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
-                    deleteSelectedOperations()
+                .navigationTitle("Change Category")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { showingBulkCategorySheet = false }
+                    }
                 }
             }
+            .presentationDetents([.medium, .large])
+        }
+        .sheet(isPresented: $showingBulkAssetSheet) {
+            NavigationStack {
+                List(assets) { asset in
+                    Button {
+                        reassignAsset(asset)
+                    } label: {
+                        Label(asset.name, systemImage: "building.columns")
+                            .foregroundStyle(.primary)
+                    }
+                }
+                .navigationTitle("Change Asset")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { showingBulkAssetSheet = false }
+                    }
+                }
+            }
+            .presentationDetents([.medium, .large])
+        }
+        .confirmationDialog("Delete Operations", isPresented: $showingBulkDeleteAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                deleteSelectedOperations()
+            }
+        }
+        // Drop deleted operations so the detail column never shows a removed record.
+        .onChange(of: operations) { _, new in
+            selectedOperations.formIntersection(new)
         }
     }
 

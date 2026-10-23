@@ -13,13 +13,22 @@ struct ContentView: View {
 
     @State var store = Store()
 
+    /// Lets screenshot runs launched outside Xcode (no StoreKit config) reach the main UI.
+    private var bypassPaywall: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-bypassPaywall")
+        #else
+        return false
+        #endif
+    }
+
     private var hasPaid: Bool {
-        !store.purchasedSubscriptions.isEmpty || !store.purchasedProducts.isEmpty
+        bypassPaywall || !store.purchasedSubscriptions.isEmpty || !store.purchasedProducts.isEmpty
     }
 
     var body: some View {
         Group {
-            if store.isLoading {
+            if store.isLoading && !bypassPaywall {
                 ProgressView()
             } else if !hasPaid {
                 if !hasCompletedOnboarding {
@@ -63,6 +72,9 @@ struct ContentView: View {
                 SearchView()
             }
         }
+        // Tab bar on compact width; on regular width (iPhone Duo inner display, iPad)
+        // it can expand into a sidebar.
+        .tabViewStyle(.sidebarAdaptable)
     }
 }
 
