@@ -7,175 +7,111 @@
 
 import SwiftUI
 import SwiftData
-import UserNotifications
 
 // MARK: - Navigation Step
 
 private enum OnboardingStep: Hashable {
-    case currency
-    case createAsset
-    case addTransaction
-    case addRecurring
-    case success
+    case firstAsset
+    case plans
 }
 
 // MARK: - Root Container
 
+/// First-run flow: Welcome → first asset (skippable) → ByJo Pro plans, where the user
+/// can start the trial or continue on the free plan.
 struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    @AppStorage("whatsNewVersion") private var whatsNewVersion: String = ""
+    var store: Store
     var onComplete: () -> Void
 
     @State private var path: [OnboardingStep] = []
+    @State private var didDetectCurrency = false
     @State private var assetName = ""
     @State private var assetType: AssetType = .bankAccount
     @State private var assetBalance: Decimal? = nil
     @State private var assetStatusBalance: StatusBalance = .positive
-    @State private var operationName = ""
-    @State private var operationAmount: Decimal? = nil
-    @State private var operationType: OperationType = .inflow
-    @State private var recurringName = ""
-    @State private var recurringAmount: Decimal? = nil
-    @State private var recurringOperationType: OperationType = .inflow
-    @State private var recurringFrequency: RecurrenceFrequency = .monthly
 
     var body: some View {
         NavigationStack(path: $path) {
-            OnboardingWelcomeStep { path.append(.currency) }
+            OnboardingWelcomeStep(currencyCode: currencyCode) { path.append(.firstAsset) }
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: OnboardingStep.self) { step in
-                    destinationView(for: step)
+                    switch step {
+                    case .firstAsset:
+                        OnboardingAssetStep(
+                            name: $assetName,
+                            type: $assetType,
+                            balance: $assetBalance,
+                            statusBalance: $assetStatusBalance,
+                            currencyCode: $currencyCode,
+                            onContinue: {
+                                saveFirstAsset()
+                                path.append(.plans)
+                            },
+                            onSkip: { path.append(.plans) }
+                        )
+                    case .plans:
+                        OnboardingPlansStep(store: store, onContinueFree: finish)
+                    }
                 }
         }
-    }
-
-    @ViewBuilder
-    private func destinationView(for step: OnboardingStep) -> some View {
-        switch step {
-        case .currency:
-            OnboardingCurrencyStep(currencyCode: $currencyCode) { path.append(.createAsset) }
-        case .createAsset:
-            OnboardingAssetStep(
-                name: $assetName,
-                type: $assetType,
-                balance: $assetBalance,
-                statusBalance: $assetStatusBalance,
-                currencyCode: currencyCode
-            ) {
-                path.append(.addTransaction)
-            }
-        case .addTransaction:
-            OnboardingTransactionStep(
-                name: $operationName,
-                amount: $operationAmount,
-                operationType: $operationType,
-                assetName: assetName,
-                currencyCode: currencyCode,
-                onContinue: { path.append(.addRecurring) },
-                onSkip: { path.append(.addRecurring) }
-            )
-        case .addRecurring:
-            OnboardingRecurringStep(
-                name: $recurringName,
-                amount: $recurringAmount,
-                operationType: $recurringOperationType,
-                frequency: $recurringFrequency,
-                assetName: assetName,
-                currencyCode: currencyCode,
-                onContinue: { commitToSwiftData() },
-                onSkip: { commitToSwiftData() }
-            )
-        case .success:
-            OnboardingSuccessStep(onComplete: onComplete)
+        .onAppear(perform: detectCurrency)
+        // Purchased here, or a returning subscriber whose entitlement just loaded.
+        .onChange(of: store.isPro) { _, isPro in
+            if isPro { finish() }
         }
     }
 
-    // MARK: - SwiftData Commit
+    private func finish() {
+        ensureDefaultCategory()
+        // A new install has nothing to catch up on.
+        whatsNewVersion = WhatsNewView.release
+        onComplete()
+    }
 
-    private func commitToSwiftData() {
+    /// Starts from the currency of the user's region; they can change it on the asset step.
+    private func detectCurrency() {
+        guard !didDetectCurrency else { return }
+        didDetectCurrency = true
+        if let identifier = Locale.current.currency?.identifier,
+           let detected = CurrencyCode(rawValue: identifier) {
+            currencyCode = detected
+        }
+    }
+
+    // MARK: - SwiftData
+
+    private func saveFirstAsset() {
+        let trimmed = assetName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = trimmed.isEmpty ? assetType.displayName : trimmed
         let finalBalance: Decimal = {
             guard let b = assetBalance else { return 0 }
-            return assetStatusBalance == .negative ? (b > 0 ? b * -1 : b) : abs(b)
+            return assetStatusBalance == .negative ? -abs(b) : abs(b)
         }()
 
-        // Reuse existing asset with same name to prevent duplicates on re-entry
-        let assetDescriptor = FetchDescriptor<Asset>(
-            predicate: #Predicate { $0.name == assetName }
-        )
-        let asset: Asset
-        if let existing = (try? modelContext.fetch(assetDescriptor))?.first {
-            asset = existing
+        // Going back and saving again updates the same asset instead of adding a second one.
+        let descriptor = FetchDescriptor<Asset>(predicate: #Predicate { $0.name == name })
+        if let existing = (try? modelContext.fetch(descriptor))?.first {
+            existing.type = assetType
+            existing.initialBalance = finalBalance
         } else {
-            let newAsset = Asset(name: assetName, type: assetType, initialBalance: finalBalance)
-            modelContext.insert(newAsset)
-            asset = newAsset
+            modelContext.insert(Asset(name: name, type: assetType, initialBalance: finalBalance))
         }
-
-        // Reuse existing "General" category or create it once
-        let categoryDescriptor = FetchDescriptor<CategoryOperation>(
-            predicate: #Predicate { $0.name == "General" }
-        )
-        let category: CategoryOperation
-        if let existing = (try? modelContext.fetch(categoryDescriptor))?.first {
-            category = existing
-        } else {
-            let newCategory = CategoryOperation(name: "General")
-            modelContext.insert(newCategory)
-            category = newCategory
-        }
-
-        // Only add the transaction if it doesn't already exist on this asset
-        if !operationName.isEmpty, let rawAmount = operationAmount {
-            let opAmount: Decimal = operationType == .outflow
-                ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
-                : abs(rawAmount)
-            let alreadyExists = (asset.operations ?? []).contains {
-                $0.name == operationName && $0.frequency == .single
-            }
-            if !alreadyExists {
-                modelContext.insert(AssetOperation(
-                    name: operationName, date: .now, amount: opAmount,
-                    asset: asset, category: category
-                ))
-            }
-        }
-
-        // Only add the recurring operation if it doesn't already exist on this asset
-        if !recurringName.isEmpty, let rawAmount = recurringAmount {
-            let recAmount: Decimal = recurringOperationType == .outflow
-                ? (rawAmount > 0 ? rawAmount * -1 : rawAmount)
-                : abs(rawAmount)
-            let alreadyExists = (asset.operations ?? []).contains {
-                $0.name == recurringName && $0.frequency != .single
-            }
-            if !alreadyExists {
-                let uuid = UUID()
-                modelContext.insert(AssetOperation(
-                    id: uuid, name: recurringName, date: .now, amount: recAmount,
-                    asset: asset, category: category, frequency: recurringFrequency
-                ))
-                scheduleRecurringNotification(id: uuid, name: recurringName, amount: recAmount)
-            }
-        }
-
-        path.append(.success)
+        ensureDefaultCategory()
     }
 
-    private func scheduleRecurringNotification(id: UUID, name: String, amount: Decimal) {
-        guard recurringFrequency != .single,
-              let nextDate = recurringFrequency.nextPaymentDate(from: .now) else { return }
-        let content = UNMutableNotificationContent()
-        content.title = "Recurring operation"
-        content.subtitle = "\(name) \(amount.formatted(.currency(code: currencyCode.rawValue)))"
-        content.badge = 1
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDate)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        UNUserNotificationCenter.current().add(
-            UNNotificationRequest(identifier: id.uuidString, content: content, trigger: trigger)
-        )
+    /// Operations need a category, so a "General" one is there from the start.
+    private func ensureDefaultCategory() {
+        let descriptor = FetchDescriptor<CategoryOperation>(predicate: #Predicate { $0.name == "General" })
+        if (try? modelContext.fetch(descriptor))?.first == nil {
+            modelContext.insert(CategoryOperation(name: "General"))
+        }
     }
 }
 
 #Preview {
-    OnboardingView(onComplete: {})
+    OnboardingView(store: Store(), onComplete: {})
+        .modelContainer(for: Asset.self, inMemory: true)
 }

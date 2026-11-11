@@ -450,17 +450,8 @@
 "All" = "All";
 
 /* MARK: - Paywall */
-"Your Finances," = "Your Finances,";
-"Under Control." = "Under Control.";
-"Track every asset and account" = "Track every asset and account";
-"Set goals and watch them grow" = "Set goals and watch them grow";
-"Never miss a scheduled payment" = "Never miss a scheduled payment";
-"Your full net worth, at a glance" = "Your full net worth, at a glance";
-"Pay once, use forever" = "Pay once, use forever";
 "Terms" = "Terms";
 "Privacy" = "Privacy";
-"Lifetime Access" = "Lifetime Access";
-"Pay once. No renewals, no limits. Yours forever." = "Pay once. No renewals, no limits. Yours forever.";
 
 /* MARK: - Search */
 "Search" = "Search";
@@ -546,12 +537,58 @@
 /* MARK: - Paywall trial */
 "Your net worth is ready" = "Your net worth is ready";
 "Tracked assets: %lld" = "Tracked assets: %lld";
-"Try ByJo Pro free" = "Try ByJo Pro free";
 "Your ByJo trial ends tomorrow" = "Your ByJo trial ends tomorrow";
 "Keep your net worth in view, or cancel anytime in Settings before it renews." = "Keep your net worth in view, or cancel anytime in Settings before it renews.";
-"Full access to every feature" = "Full access to every feature";
-"Day %lld" = "Day %lld";
-"We'll remind you before your trial ends" = "We'll remind you before your trial ends";
-"%@ per year starts. Cancel anytime before." = "%@ per year starts. Cancel anytime before.";
-"Your yearly plan starts. Cancel anytime before." = "Your yearly plan starts. Cancel anytime before.";
-"Yearly saves %lld%% vs weekly" = "Yearly saves %lld%% vs weekly";
+
+/* MARK: - Free plan & ByJo Pro */
+"Unlimited Assets" = "Unlimited Assets";
+"Track every account, card, loan and investment. The free plan covers %lld." = "Track every account, card, loan and investment. The free plan covers %lld.";
+"Give any asset a target and a date, and watch your progress." = "Give any asset a target and a date, and watch your progress.";
+"Schedule bills and income, with a reminder before each one." = "Schedule bills and income, with a reminder before each one.";
+"Home Screen Widgets" = "Home Screen Widgets";
+"Net worth, spending and goals at a glance, without opening the app." = "Net worth, spending and goals at a glance, without opening the app.";
+"Bring in a CSV or JSON file, and take your data with you anytime." = "Bring in a CSV or JSON file, and take your data with you anytime.";
+"All Future Pro Features" = "All Future Pro Features";
+"New Pro features are included in every plan." = "New Pro features are included in every plan.";
+"Lifetime" = "Lifetime";
+"Flexible, cancel anytime" = "Flexible, cancel anytime";
+"Pay once, keep it forever" = "Pay once, keep it forever";
+"%lld Days Free" = "%lld Days Free";
+"Best Value" = "Best Value";
+"Just %@ per week" = "Just %@ per week";
+"Start %lld-Day Free Trial" = "Start %lld-Day Free Trial";
+"Purchase Error" = "Purchase Error";
+"%lld days free, then %@/year. Cancel anytime." = "%lld days free, then %@/year. Cancel anytime.";
+"%@ per year. Renews automatically, cancel anytime." = "%@ per year. Renews automatically, cancel anytime.";
+"%@ per week. Renews automatically, cancel anytime." = "%@ per week. Renews automatically, cancel anytime.";
+"One payment of %@. No subscription." = "One payment of %@. No subscription.";
+"Restore Purchases" = "Restore Purchases";
+"Plans are unavailable right now. Check your connection and try again." = "Plans are unavailable right now. Check your connection and try again.";
+"Close" = "Close";
+"Unlock ByJo Pro" = "Unlock ByJo Pro";
+"Track Every Account" = "Track Every Account";
+"Set Goals with Pro" = "Set Goals with Pro";
+"Recurring Operations with Pro" = "Recurring Operations with Pro";
+"Export & Import with Pro" = "Export & Import with Pro";
+"Your whole financial picture, private and in one place." = "Your whole financial picture, private and in one place.";
+"The free plan covers %lld assets. Pro adds as many as you need." = "The free plan covers %lld assets. Pro adds as many as you need.";
+"Schedule bills and income, and get a reminder before each one." = "Schedule bills and income, and get a reminder before each one.";
+"Bring your data in from a spreadsheet, or take it with you anytime." = "Bring your data in from a spreadsheet, or take it with you anytime.";
+"The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro." = "The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro.";
+"Savings" = "Savings";
+"Investments" = "Investments";
+"Car loan" = "Car loan";
+"Your whole net worth.\nPrivate." = "Your whole net worth.\nPrivate.";
+"No sign-up, no bank login. Your data stays on your devices and in your own iCloud." = "No sign-up, no bank login. Your data stays on your devices and in your own iCloud.";
+"Example of a net worth made of savings, investments and a car loan" = "Example of a net worth made of savings, investments and a car loan";
+"Name (optional)" = "Name (optional)";
+"Every account, goal and widget, with no limits." = "Every account, goal and widget, with no limits.";
+"Continue for free" = "Continue for free";
+"Upgrade to ByJo Pro" = "Upgrade to ByJo Pro";
+"Charts & Insights" = "Charts & Insights";
+"Net worth history, spending trends, allocation and more, with Home arranged your way." = "Net worth history, spending trends, allocation and more, with Home arranged your way.";
+"See the Whole Picture" = "See the Whole Picture";
+"Make Home Yours" = "Make Home Yours";
+"Net worth history, spending trends, asset allocation and more, right on Home." = "Net worth history, spending trends, asset allocation and more, right on Home.";
+"Reorder and hide Home sections to match how you think about money." = "Reorder and hide Home sections to match how you think about money.";
+"Reorder and hide Home sections" = "Reorder and hide Home sections";

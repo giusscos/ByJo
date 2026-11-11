@@ -37,7 +37,7 @@ struct AssetAllocationWidget: Widget {
     let kind = "AssetAllocationWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: AssetAllocProvider()) { entry in
-            AssetAllocWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            AssetAllocWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Asset Allocation")
         .description("How your wealth is distributed across assets.")

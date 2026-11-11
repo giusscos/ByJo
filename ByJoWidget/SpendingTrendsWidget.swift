@@ -42,7 +42,7 @@ struct SpendingTrendsWidget: Widget {
     let kind = "SpendingTrendsWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: SpendingTrendsProvider()) { entry in
-            SpendingTrendsWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            SpendingTrendsWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Spending Trends")
         .description("Monthly spending over the last 6 months.")

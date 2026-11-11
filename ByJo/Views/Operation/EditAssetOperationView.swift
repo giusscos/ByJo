@@ -39,10 +39,16 @@ struct EditAssetOperationView: View {
 
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(Store.self) private var store
 
     @Query var assets: [Asset]
     @Query var categoriesOperation: [CategoryOperation]
     @Query var allOperations: [AssetOperation]
+
+    /// Recurring operations are Pro: a free user's pick waits here while the paywall
+    /// is open, and is applied if they unlock Pro.
+    @State private var pendingFrequency: RecurrenceFrequency?
+    @State private var showRecurringPaywall = false
 
     var operation: AssetOperation?
 
@@ -89,6 +95,22 @@ struct EditAssetOperationView: View {
             .sorted()
     }
 
+    /// Free users picking a repeat schedule get the paywall instead. An operation's
+    /// existing schedule stays selectable so it remains editable after a plan lapses.
+    private var frequencySelection: Binding<RecurrenceFrequency> {
+        Binding(
+            get: { frequency },
+            set: { newValue in
+                if newValue != .single, newValue != operation?.frequency, !store.unlocksPro {
+                    pendingFrequency = newValue
+                    showRecurringPaywall = true
+                } else {
+                    frequency = newValue
+                }
+            }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -104,7 +126,7 @@ struct EditAssetOperationView: View {
                     DatePicker("Date", selection: $date)
 
                     VStack(alignment: .leading) {
-                        Picker("Recurring", selection: $frequency) {
+                        Picker("Recurring", selection: frequencySelection) {
                             ForEach(RecurrenceFrequency.allCases, id: \.self) { frequencyType in
                                 Text(frequencyType.displayName)
                             }
@@ -304,6 +326,15 @@ struct EditAssetOperationView: View {
             }
             .animation(.snappy(duration: 0.28), value: focusedField == .name && !nameSuggestions.isEmpty)
             .animation(.snappy(duration: 0.22), value: nameSuggestions)
+            .onChange(of: store.isPro) { _, isPro in
+                if isPro, let pendingFrequency {
+                    frequency = pendingFrequency
+                    self.pendingFrequency = nil
+                }
+            }
+            .sheet(isPresented: $showRecurringPaywall) {
+                PaywallView(store: store, context: .recurring)
+            }
             .navigationTitle(operation != nil ? "Edit operation" : "Create operation")
             .toolbar {
                 if let operation = operation {
@@ -545,4 +576,5 @@ struct EditAssetOperationView: View {
         asset: Asset(name: "Cash", initialBalance: 10000),
         category: CategoryOperation(name: "Bank account")
     )
+    .environment(Store())
 }

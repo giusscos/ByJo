@@ -40,7 +40,7 @@ struct NetWorthHistoryWidget: Widget {
     let kind = "NetWorthHistoryWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: NetWorthHistoryProvider()) { entry in
-            NetWorthHistoryWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            NetWorthHistoryWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Net Worth History")
         .description("Your net worth trend over the past month.")

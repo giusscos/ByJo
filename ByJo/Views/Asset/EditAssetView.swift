@@ -20,8 +20,14 @@ struct EditAssetView: View {
     @Environment(\.dismiss) var dismiss
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    @Environment(Store.self) private var store
+    @Query private var allAssets: [Asset]
 
     var asset: Asset?
+
+    /// Whether the free plan's asset cap applied when the sheet opened. Frozen on appear
+    /// so saving the 3rd asset doesn't flip the closing sheet to the paywall.
+    @State private var wasAtFreeLimit: Bool?
 
     @State private var name: String = ""
     @State private var initialBalanceString: String = ""
@@ -34,7 +40,24 @@ struct EditAssetView: View {
         return Decimal(string: normalized)
     }
 
+    private var isAtFreeLimit: Bool {
+        asset == nil && allAssets.count >= Store.freeAssetLimit
+    }
+
     var body: some View {
+        Group {
+            if (wasAtFreeLimit ?? isAtFreeLimit) && !store.unlocksPro {
+                PaywallView(store: store, context: .assetLimit, dismissOnUnlock: false)
+            } else {
+                editor
+            }
+        }
+        .onAppear {
+            if wasAtFreeLimit == nil { wasAtFreeLimit = isAtFreeLimit }
+        }
+    }
+
+    private var editor: some View {
         NavigationStack {
             Form {
                 Section {
@@ -206,4 +229,5 @@ struct EditAssetView: View {
 #Preview {
     EditAssetView(asset: Asset(name: "Bank", type: .bankAccount, initialBalance: 100))
         .modelContainer(for: Asset.self, inMemory: true)
+        .environment(Store())
 }

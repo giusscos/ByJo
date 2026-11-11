@@ -9,6 +9,7 @@ import UniformTypeIdentifiers
 struct ExportImportView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(Store.self) private var store
 
     @Query var assets: [Asset]
     @Query(sort: \AssetOperation.date, order: .reverse) var operations: [AssetOperation]
@@ -26,6 +27,14 @@ struct ExportImportView: View {
     @State private var showError = false
 
     var body: some View {
+        if store.unlocksPro {
+            content
+        } else {
+            PaywallView(store: store, context: .importExport, dismissOnUnlock: false)
+        }
+    }
+
+    private var content: some View {
         NavigationStack {
             List {
                 exportSection

@@ -449,17 +449,8 @@
 "All" = "Alle";
 
 /* MARK: - Paywall */
-"Your Finances," = "Deine Finanzen,";
-"Under Control." = "Unter Kontrolle.";
-"Track every asset and account" = "Jedes Vermögen und Konto tracken";
-"Set goals and watch them grow" = "Ziele setzen und wachsen sehen";
-"Never miss a scheduled payment" = "Keine geplante Zahlung verpassen";
-"Your full net worth, at a glance" = "Dein gesamtes Nettovermögen auf einen Blick";
-"Pay once, use forever" = "Einmal zahlen, für immer nutzen";
 "Terms" = "AGB";
 "Privacy" = "Datenschutz";
-"Lifetime Access" = "Lebenslanger Zugang";
-"Pay once. No renewals, no limits. Yours forever." = "Einmal zahlen. Keine Verlängerungen, keine Limits. Für immer deins.";
 
 /* MARK: - Search */
 "Search" = "Suchen";
@@ -545,12 +536,58 @@
 /* MARK: - Paywall trial */
 "Your net worth is ready" = "Dein Nettovermögen ist bereit";
 "Tracked assets: %lld" = "Erfasste Vermögenswerte: %lld";
-"Try ByJo Pro free" = "ByJo Pro kostenlos testen";
 "Your ByJo trial ends tomorrow" = "Dein ByJo-Testzeitraum endet morgen";
 "Keep your net worth in view, or cancel anytime in Settings before it renews." = "Behalte dein Nettovermögen im Blick oder kündige jederzeit vor der Verlängerung in den Einstellungen.";
-"Full access to every feature" = "Voller Zugriff auf alle Funktionen";
-"Day %lld" = "Tag %lld";
-"We'll remind you before your trial ends" = "Wir erinnern dich vor Ende des Tests";
-"%@ per year starts. Cancel anytime before." = "Dein Abo für %@ pro Jahr beginnt. Vorher jederzeit kündbar.";
-"Your yearly plan starts. Cancel anytime before." = "Dein Jahresabo beginnt. Vorher jederzeit kündbar.";
-"Yearly saves %lld%% vs weekly" = "Jährlich sparst du %lld%% gegenüber wöchentlich";
+
+/* MARK: - Free plan & ByJo Pro */
+"Unlimited Assets" = "Unbegrenzt viele Vermögenswerte";
+"Track every account, card, loan and investment. The free plan covers %lld." = "Erfasse jedes Konto, jede Karte, jeden Kredit und jede Anlage. Der Gratis-Plan umfasst %lld.";
+"Give any asset a target and a date, and watch your progress." = "Gib jedem Vermögenswert ein Ziel und ein Datum und verfolge deinen Fortschritt.";
+"Schedule bills and income, with a reminder before each one." = "Plane Rechnungen und Einnahmen, mit einer Erinnerung vor jeder Zahlung.";
+"Home Screen Widgets" = "Widgets für den Home-Bildschirm";
+"Net worth, spending and goals at a glance, without opening the app." = "Nettovermögen, Ausgaben und Ziele auf einen Blick, ohne die App zu öffnen.";
+"Bring in a CSV or JSON file, and take your data with you anytime." = "Importiere eine CSV- oder JSON-Datei und nimm deine Daten jederzeit mit.";
+"All Future Pro Features" = "Alle künftigen Pro-Funktionen";
+"New Pro features are included in every plan." = "Neue Pro-Funktionen sind in jedem Plan enthalten.";
+"Lifetime" = "Lebenslang";
+"Flexible, cancel anytime" = "Flexibel, jederzeit kündbar";
+"Pay once, keep it forever" = "Einmal zahlen, für immer behalten";
+"%lld Days Free" = "%lld Tage gratis";
+"Best Value" = "Bester Preis";
+"Just %@ per week" = "Nur %@ pro Woche";
+"Start %lld-Day Free Trial" = "%lld Tage gratis testen";
+"Purchase Error" = "Kauf fehlgeschlagen";
+"%lld days free, then %@/year. Cancel anytime." = "%lld Tage gratis, danach %@/Jahr. Jederzeit kündbar.";
+"%@ per year. Renews automatically, cancel anytime." = "%@ pro Jahr. Verlängert sich automatisch, jederzeit kündbar.";
+"%@ per week. Renews automatically, cancel anytime." = "%@ pro Woche. Verlängert sich automatisch, jederzeit kündbar.";
+"One payment of %@. No subscription." = "Einmalig %@. Kein Abo.";
+"Restore Purchases" = "Käufe wiederherstellen";
+"Plans are unavailable right now. Check your connection and try again." = "Die Pläne sind gerade nicht verfügbar. Prüfe deine Verbindung und versuche es erneut.";
+"Close" = "Schließen";
+"Unlock ByJo Pro" = "ByJo Pro freischalten";
+"Track Every Account" = "Erfasse jedes Konto";
+"Set Goals with Pro" = "Ziele mit Pro";
+"Recurring Operations with Pro" = "Wiederkehrende Buchungen mit Pro";
+"Export & Import with Pro" = "Export & Import mit Pro";
+"Your whole financial picture, private and in one place." = "Deine ganze finanzielle Lage, privat und an einem Ort.";
+"The free plan covers %lld assets. Pro adds as many as you need." = "Der Gratis-Plan umfasst %lld Vermögenswerte. Mit Pro so viele, wie du brauchst.";
+"Schedule bills and income, and get a reminder before each one." = "Plane Rechnungen und Einnahmen und erhalte vor jeder Zahlung eine Erinnerung.";
+"Bring your data in from a spreadsheet, or take it with you anytime." = "Hol deine Daten aus einer Tabelle oder nimm sie jederzeit mit.";
+"The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro." = "Der Gratis-Plan umfasst %lld Vermögenswerte. Wähle einen bestehenden aus oder öffne ByJo, um auf Pro zu upgraden.";
+"Savings" = "Ersparnisse";
+"Investments" = "Geldanlagen";
+"Car loan" = "Autokredit";
+"Your whole net worth.\nPrivate." = "Dein ganzes Nettovermögen.\nPrivat.";
+"No sign-up, no bank login. Your data stays on your devices and in your own iCloud." = "Keine Anmeldung, kein Bank-Login. Deine Daten bleiben auf deinen Geräten und in deinem eigenen iCloud.";
+"Example of a net worth made of savings, investments and a car loan" = "Beispiel für ein Nettovermögen aus Ersparnissen, Geldanlagen und einem Autokredit";
+"Name (optional)" = "Name (optional)";
+"Every account, goal and widget, with no limits." = "Jedes Konto, jedes Ziel und jedes Widget, ohne Grenzen.";
+"Continue for free" = "Kostenlos weiter";
+"Upgrade to ByJo Pro" = "Auf ByJo Pro upgraden";
+"Charts & Insights" = "Diagramme & Einblicke";
+"Net worth history, spending trends, allocation and more, with Home arranged your way." = "Nettovermögen-Verlauf, Ausgabentrends, Vermögensaufteilung und mehr, mit einer Startseite nach deinem Geschmack.";
+"See the Whole Picture" = "Das ganze Bild im Blick";
+"Make Home Yours" = "Gestalte deine Startseite";
+"Net worth history, spending trends, asset allocation and more, right on Home." = "Nettovermögen-Verlauf, Ausgabentrends, Vermögensaufteilung und mehr, direkt auf der Startseite.";
+"Reorder and hide Home sections to match how you think about money." = "Sortiere Bereiche der Startseite und blende sie aus, so wie du über Geld denkst.";
+"Reorder and hide Home sections" = "Bereiche der Startseite sortieren und ausblenden";

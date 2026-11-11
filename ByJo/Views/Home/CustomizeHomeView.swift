@@ -9,9 +9,11 @@ struct CustomizeHomeView: View {
     @AppStorage("homeSectionOrder") var sectionOrderString: String = HomeSection.defaultOrderString
     @AppStorage("homeSectionHidden") var sectionHiddenString: String = ""
     @AppStorage("showApplePayShortcutBanner") var showWalletShortcutBanner: Bool = true
+    @Environment(Store.self) private var store
 
     @State private var sections: [HomeSection] = []
     @State private var hiddenSections: Set<HomeSection> = []
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -38,41 +40,73 @@ struct CustomizeHomeView: View {
                     Text("Shown at the top of Home when enabled.")
                 }
 
-                Section {
-                    ForEach(sections) { section in
-                        HStack(spacing: 12) {
-                            Button {
-                                toggleVisibility(section)
-                            } label: {
-                                Image(systemName: hiddenSections.contains(section) ? "eye.slash" : "eye")
-                                    .foregroundStyle(hiddenSections.contains(section) ? Color.secondary : Color.primary)
+                // Reordering and hiding sections is Pro. The Wallet banner switch above
+                // stays free: it's the only way to hide that banner.
+                if store.unlocksPro {
+                    sectionList
+                } else {
+                    Section {
+                        Button {
+                            showPaywall = true
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "lock.fill")
+                                    .foregroundStyle(Color.accentColor)
                                     .frame(width: 28)
+                                Text("Reorder and hide Home sections")
+                                    .foregroundStyle(Color.primary)
+                                Spacer()
+                                Text(verbatim: "Pro")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(Color.accentColor, in: Capsule())
                             }
-                            .buttonStyle(.plain)
-
-                            Image(systemName: section.icon)
-                                .foregroundStyle(Color.secondary)
-                                .frame(width: 20)
-
-                            Text(section.title)
-                                .foregroundStyle(hiddenSections.contains(section) ? Color.secondary : Color.primary)
                         }
-                        .deleteDisabled(true)
                     }
-                    .onMove { from, to in
-                        sections.move(fromOffsets: from, toOffset: to)
-                        saveSectionOrder()
-                    }
-                } footer: {
-                    Text("Drag to reorder. Tap the eye icon to show or hide a section.")
                 }
             }
-            .environment(\.editMode, .constant(.active))
+            .environment(\.editMode, .constant(store.unlocksPro ? .active : .inactive))
             .navigationTitle("Customize Home")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(store: store, context: .customizeHome)
+            }
         }
         .onAppear {
             loadState()
+        }
+    }
+
+    private var sectionList: some View {
+        Section {
+            ForEach(sections) { section in
+                HStack(spacing: 12) {
+                    Button {
+                        toggleVisibility(section)
+                    } label: {
+                        Image(systemName: hiddenSections.contains(section) ? "eye.slash" : "eye")
+                            .foregroundStyle(hiddenSections.contains(section) ? Color.secondary : Color.primary)
+                            .frame(width: 28)
+                    }
+                    .buttonStyle(.plain)
+
+                    Image(systemName: section.icon)
+                        .foregroundStyle(Color.secondary)
+                        .frame(width: 20)
+
+                    Text(section.title)
+                        .foregroundStyle(hiddenSections.contains(section) ? Color.secondary : Color.primary)
+                }
+                .deleteDisabled(true)
+            }
+            .onMove { from, to in
+                sections.move(fromOffsets: from, toOffset: to)
+                saveSectionOrder()
+            }
+        } footer: {
+            Text("Drag to reorder. Tap the eye icon to show or hide a section.")
         }
     }
 
@@ -101,4 +135,5 @@ struct CustomizeHomeView: View {
 
 #Preview {
     CustomizeHomeView()
+        .environment(Store())
 }

@@ -30,6 +30,10 @@ private let features: [WhatsNewFeature] = [
 ]
 
 struct WhatsNewView: View {
+    /// The release these features belong to. Users who have seen it, and new installs
+    /// (which have nothing to catch up on), skip the sheet.
+    static let release = "1.1.7"
+
     var onDismiss: () -> Void
 
     var body: some View {

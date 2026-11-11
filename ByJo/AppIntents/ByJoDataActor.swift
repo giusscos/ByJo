@@ -61,6 +61,9 @@ actor ByJoDataActor {
         if let existing = assets.first(where: { $0.name.localizedCaseInsensitiveCompare(name) == .orderedSame }) {
             return existing
         }
+        guard ProAccess.isUnlocked || assets.count < Store.freeAssetLimit else {
+            throw ByJoIntentError.freeAssetLimitReached
+        }
         let asset = Asset(name: name, type: .bankAccount, initialBalance: 0)
         modelContext.insert(asset)
         return asset
@@ -100,11 +103,14 @@ actor ByJoDataActor {
 enum ByJoIntentError: LocalizedError {
     case assetNotFound
     case invalidAssetName
+    case freeAssetLimitReached
 
     var errorDescription: String? {
         switch self {
         case .assetNotFound: return String(localized: "Asset not found.")
         case .invalidAssetName: return String(localized: "Asset name is required.")
+        case .freeAssetLimitReached:
+            return String(localized: "The free plan covers \(Store.freeAssetLimit) assets. Pick one of your assets, or open ByJo to upgrade to Pro.")
         }
     }
 }

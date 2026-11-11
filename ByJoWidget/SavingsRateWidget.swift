@@ -31,7 +31,7 @@ struct SavingsRateWidget: Widget {
     let kind = "SavingsRateWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: SavingsRateProvider()) { entry in
-            SavingsRateWidgetViewKit(entry: entry).containerBackground(.background, for: .widget)
+            SavingsRateWidgetViewKit(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Savings Rate")
         .description("Your monthly savings rate.")

@@ -61,5 +61,17 @@ enum HomeSection: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Advanced charts are part of ByJo Pro. On the free plan they stay on Home, blurred
+    /// behind a lock, as a preview of what Pro adds.
+    var isPro: Bool {
+        switch self {
+        case .netWorthHistory, .spendingTrends, .savingsRateTrend,
+             .expenseBreakdown, .assetAllocation, .debtPayoff:
+            return true
+        default:
+            return false
+        }
+    }
+
     static let defaultOrderString: String = allCases.map(\.rawValue).joined(separator: ",")
 }

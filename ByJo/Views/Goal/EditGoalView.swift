@@ -20,6 +20,7 @@ struct EditGoalView: View {
     @Environment(\.dismiss) var dismiss
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
+    @Environment(Store.self) private var store
 
     @Query var assets: [Asset]
 
@@ -40,7 +41,16 @@ struct EditGoalView: View {
         return Decimal(string: normalized)
     }
 
+    /// Goals are Pro. Existing goals stay editable so nothing is lost after a plan lapses.
     var body: some View {
+        if goal == nil && !store.unlocksPro {
+            PaywallView(store: store, context: .goals, dismissOnUnlock: false)
+        } else {
+            editor
+        }
+    }
+
+    private var editor: some View {
         NavigationStack {
             Form {
                 if let goal, goal.isCompleted {
@@ -258,4 +268,5 @@ struct EditGoalView: View {
         goal: Goal(title: "", startingAmount: 100.0, targetAmount: 0.0),
         asset: Asset(name: "BuddyBank", initialBalance: 1000.0)
     )
+    .environment(Store())
 }

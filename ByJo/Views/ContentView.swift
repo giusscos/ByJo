@@ -13,38 +13,19 @@ struct ContentView: View {
 
     @State var store = Store()
 
-    /// Lets screenshot runs launched outside Xcode (no StoreKit config) reach the main UI.
-    private var bypassPaywall: Bool {
-        #if DEBUG
-        return ProcessInfo.processInfo.arguments.contains("-bypassPaywall")
-        #else
-        return false
-        #endif
-    }
-
-    private var hasPaid: Bool {
-        bypassPaywall || !store.purchasedSubscriptions.isEmpty || !store.purchasedProducts.isEmpty
-    }
-
     var body: some View {
         Group {
-            if store.isLoading && !bypassPaywall {
-                ProgressView()
-            } else if !hasPaid {
-                if !hasCompletedOnboarding {
-                    OnboardingView {
-                        hasCompletedOnboarding = true
-                    }
-                } else {
-                    PaywallView(store: store)
+            if !hasCompletedOnboarding {
+                OnboardingView(store: store) {
+                    hasCompletedOnboarding = true
                 }
             } else {
+                // The free plan opens the app; Pro features show the paywall when reached.
                 mainTabView
             }
         }
+        .environment(store)
         // Placed here so the task is always alive regardless of which view is shown.
-        // Previously it was inside PaywallView, which caused a race: the task was
-        // cancelled mid-flight when hasPaid flipped and the view was torn down.
         .subscriptionStatusTask(for: store.groupId) { taskState in
             guard let statuses = taskState.value else { return }
             await store.updateSubscriptionStatus(statuses: statuses)

@@ -37,7 +37,7 @@ struct ExpenseBreakdownWidget: Widget {
     let kind = "ExpenseBreakdownWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ExpenseBreakdownProvider()) { entry in
-            ExpenseBreakdownWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            ExpenseBreakdownWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Expense Breakdown")
         .description("This month's expenses by category.")

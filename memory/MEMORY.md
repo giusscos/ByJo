@@ -1,3 +1,3 @@
 # ByJo Memory Index
 
-- [Onboarding flow (June 2026)](project_onboarding.md) — 5-step interactive pre-paywall funnel; creates real SwiftData records during setup
+- [Onboarding and free plan (Nov 2026)](project_onboarding.md) — 3-screen onboarding ending on plans with "Continue for free"; free plan up to 3 assets

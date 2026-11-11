@@ -120,3 +120,25 @@ extension UserDefaults {
         if let data = try? encoder.encode(value) { self.set(data, forKey: key.rawValue) }
     }
 }
+
+// MARK: - Pro access
+/// Whether ByJo Pro is unlocked, written by the app once StoreKit has checked entitlements,
+/// and read by the widgets and Siri intents, which can't ask StoreKit themselves cheaply.
+enum ProAccess {
+    private static let key = "pro.isUnlocked"
+
+    /// Unlocked until the app has checked once, so subscribers updating from the
+    /// hard-paywall versions never see a locked widget before opening the app.
+    static var isUnlocked: Bool {
+        UserDefaults.appGroup?.object(forKey: key) as? Bool ?? true
+    }
+
+    /// Saves the state and reports whether it changed.
+    @discardableResult
+    static func save(_ unlocked: Bool) -> Bool {
+        guard let defaults = UserDefaults.appGroup else { return false }
+        let changed = defaults.object(forKey: key) as? Bool != unlocked
+        defaults.set(unlocked, forKey: key)
+        return changed
+    }
+}

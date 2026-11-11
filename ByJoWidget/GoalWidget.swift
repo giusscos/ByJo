@@ -37,7 +37,7 @@ struct GoalWidget: Widget {
     let kind = "GoalWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: GoalProvider()) { entry in
-            GoalWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            GoalWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Goals")
         .description("Track your financial goals.")

@@ -41,7 +41,7 @@ struct SavingsRateTrendWidget: Widget {
     let kind = "SavingsRateTrendWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: SavingsRateTrendProvider()) { entry in
-            SavingsRateTrendWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            SavingsRateTrendWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Savings Rate Trend")
         .description("Your savings rate over the last 6 months.")

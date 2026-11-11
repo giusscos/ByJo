@@ -21,9 +21,15 @@ struct HomeView: View {
         case customize
         case exportImport
         case walletShortcut
+        case pro
+        case proCharts
 
         var id: String {
             switch self {
+                case .pro:
+                    return "pro"
+                case .proCharts:
+                    return "proCharts"
                 case .createOperation:
                     return "createOperation"
                 case .createAsset:
@@ -48,6 +54,7 @@ struct HomeView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.requestReview) private var requestReview
+    @Environment(Store.self) private var store
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
@@ -150,7 +157,12 @@ struct HomeView: View {
                 }
 
                 ForEach(visibleSections) { section in
-                    sectionView(for: section)
+                    if section.isPro && !store.unlocksPro {
+                        sectionView(for: section)
+                            .proLockedCard(title: section.title) { activeSheet = .proCharts }
+                    } else {
+                        sectionView(for: section)
+                    }
                 }
             }
             .navigationTitle(netWorth.formatted(compactNumber
@@ -161,9 +173,9 @@ struct HomeView: View {
                 AddAssetTip.hasAssets = !assets.isEmpty
                 AddOperationTip.isReady = !assets.isEmpty && !categories.isEmpty && operations.isEmpty
                 WidgetDataBridge.update(assets: assets, currencyCode: currencyCode, compactNumber: compactNumber)
-                if whatsNewVersion != "1.1.7" {
+                if whatsNewVersion != WhatsNewView.release {
                     showWhatsNew = true
-                    whatsNewVersion = "1.1.7"
+                    whatsNewVersion = WhatsNewView.release
                 }
                 requestReviewIfAppropriate()
             }
@@ -193,6 +205,16 @@ struct HomeView: View {
 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        if !store.isPro && !store.isLoading {
+                            Section {
+                                Button {
+                                    activeSheet = .pro
+                                } label: {
+                                    Label("Upgrade to ByJo Pro", systemImage: "star.fill")
+                                }
+                            }
+                        }
+
                         Section {
                             Button {
                                 activeSheet = .customize
@@ -319,6 +341,10 @@ struct HomeView: View {
                         ExportImportView()
                     case .walletShortcut:
                         WalletShortcutSetupView()
+                    case .pro:
+                        PaywallView(store: store)
+                    case .proCharts:
+                        PaywallView(store: store, context: .charts)
                 }
             }
         }
@@ -327,4 +353,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(Store())
 }

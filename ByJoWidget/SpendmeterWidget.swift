@@ -32,7 +32,7 @@ struct SpendmeterWidget: Widget {
     let kind = "SpendmeterWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: SpendmeterProvider()) { entry in
-            SpendmeterWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            SpendmeterWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Spendmeter")
         .description("This month's inflow vs. outflow ratio.")

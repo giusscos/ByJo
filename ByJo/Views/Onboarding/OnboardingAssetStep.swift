@@ -12,8 +12,9 @@ struct OnboardingAssetStep: View {
     @Binding var type: AssetType
     @Binding var balance: Decimal?
     @Binding var statusBalance: StatusBalance
-    let currencyCode: CurrencyCode
+    @Binding var currencyCode: CurrencyCode
     let onContinue: () -> Void
+    let onSkip: () -> Void
 
     @FocusState private var focusedField: FocusField?
     @State private var appeared = false
@@ -25,7 +26,8 @@ struct OnboardingAssetStep: View {
         return Decimal(string: normalized)
     }
 
-    private var isDisabled: Bool { name.isEmpty || balanceString.isEmpty }
+    /// The name is optional: an empty one becomes the type's name, e.g. "Bank Account".
+    private var isDisabled: Bool { balanceString.isEmpty }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -60,11 +62,11 @@ struct OnboardingAssetStep: View {
 
                     VStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Name")
+                            Text("Name (optional)")
                                 .font(.subheadline).fontWeight(.medium)
                                 .foregroundStyle(.secondary)
 
-                            TextField("e.g. My Bank Account", text: $name)
+                            TextField(type.displayName, text: $name)
                                 .padding(14)
                                 .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                                 .focused($focusedField, equals: .name)
@@ -97,9 +99,29 @@ struct OnboardingAssetStep: View {
                         .onboardingAppear(appeared, delay: 0.32)
 
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Current Balance")
-                                .font(.subheadline).fontWeight(.medium)
-                                .foregroundStyle(.secondary)
+                            HStack {
+                                Text("Current Balance")
+                                    .font(.subheadline).fontWeight(.medium)
+                                    .foregroundStyle(.secondary)
+
+                                Spacer()
+
+                                Menu {
+                                    Picker("Currency", selection: $currencyCode) {
+                                        ForEach(CurrencyCode.allCases, id: \.self) { code in
+                                            Text(verbatim: code.rawValue).tag(code)
+                                        }
+                                    }
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Text(verbatim: currencyCode.rawValue)
+                                        Image(systemName: "chevron.up.chevron.down")
+                                            .font(.caption2)
+                                    }
+                                    .font(.subheadline.weight(.semibold))
+                                }
+                                .accessibilityLabel(Text("Currency"))
+                            }
 
                             VStack(spacing: 6) {
                                 ZStack {
@@ -180,7 +202,8 @@ struct OnboardingAssetStep: View {
         }
         .background(KeyboardDismissOnAppear())
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button("Skip", action: onSkip)
                 Button("Save", action: onContinue)
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.capsule)
@@ -196,7 +219,8 @@ struct OnboardingAssetStep: View {
         .onAppear {
             UITextField.appearance().clearButtonMode = .never
             appeared = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { focusedField = .name }
+            // The balance is the only required field, so start there.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { focusedField = .balance }
         }
         .onDisappear { focusedField = nil }
     }

@@ -8,38 +8,75 @@
 import Foundation
 import StoreKit
 import UserNotifications
+import WidgetKit
 
 typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo
 typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
 
 @Observable
 final class Store {
+    /// The free plan covers this many assets. Pro removes the cap, and adds goals,
+    /// recurring operations, Home Screen widgets and import/export.
+    static let freeAssetLimit = 3
+
     private var subscriptions: [Product] = []
     var purchasedSubscriptions: [Product] = []
-    private var subscriptionGroupStatus: RenewalState?
     var isLoading: Bool = true
+    /// Days of the yearly plan's free trial the user can still redeem, or nil.
+    private(set) var yearlyTrialDays: Int?
 
     let productIds: [String] = ["bjpro_999_1m_fa", "bjpro_9999_1y_fa", "bjpro_399_1m", "bjpro_3999_1y", "byjo_399_1w"]
     let groupId: String = "21584181"
     /// Plans offered on the paywall. `productIds` stays broader so subscribers on
     /// retired plans (monthly, family) keep their entitlement.
-    let paywallProductIds: [String] = ["bjpro_3999_1y", "byjo_399_1w"]
+    /// The yearly plan carries the free trial and is pre-selected.
+    let yearlyProductId: String = "bjpro_3999_1y"
+    let weeklyProductId: String = "byjo_399_1w"
     let productLifetimeIds: [String] = ["com.giusscos.byjoFamilyLifetime", "com.giusscos.byjoLifetime"]
-    /// Lifetime purchases offered on the paywall. Family lifetime is retired but stays in
+    /// Lifetime purchase offered on the paywall. Family lifetime is retired but stays in
     /// `productLifetimeIds` so existing owners keep their entitlement.
-    let paywallLifetimeIds: [String] = ["com.giusscos.byjoLifetime"]
+    let lifetimeProductId: String = "com.giusscos.byjoLifetime"
 
     private var storeProducts: [Product] = []
     var purchasedProducts: [Product] = []
 
     var updateListenerTask: Task<Void, Error>? = nil
 
+    /// Lets screenshot runs launched outside Xcode (no StoreKit config) show Pro screens.
+    private let bypassPaywall: Bool = {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-bypassPaywall")
+        #else
+        return false
+        #endif
+    }()
+
+    var isPro: Bool {
+        bypassPaywall || !purchasedSubscriptions.isEmpty || !purchasedProducts.isEmpty
+    }
+
+    /// Whether Pro features open. True while StoreKit is still loading, so subscribers
+    /// never hit a lock in the first moments after launch.
+    var unlocksPro: Bool { isPro || isLoading }
+
+    var yearlyProduct: Product? { subscriptions.first { $0.id == yearlyProductId } }
+    var weeklyProduct: Product? { subscriptions.first { $0.id == weeklyProductId } }
+    var lifetimeProduct: Product? { storeProducts.first { $0.id == lifetimeProductId } }
+
     init() {
         updateListenerTask = listenForTransactions()
 
-        Task {
+        Task { @MainActor in
             await requestProducts()
             await updateCustomerProductStatus()
+            await refreshTrialEligibility()
+            isLoading = false
+        }
+        // If StoreKit never answers (no network, or a Simulator run without a StoreKit
+        // configuration), stop treating the app as loading so the free plan's limits apply.
+        // Entitlements that arrive later still unlock Pro.
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(6))
             isLoading = false
         }
     }
@@ -66,6 +103,7 @@ final class Store {
 
     @MainActor
     func handleVerifiedTransaction(_ transaction: Transaction) {
+        guard transaction.revocationDate == nil else { return }
         switch transaction.productType {
         case .autoRenewable:
             if let sub = subscriptions.first(where: { $0.id == transaction.productID }),
@@ -82,6 +120,7 @@ final class Store {
         default:
             break
         }
+        saveProAccess()
     }
 
     // Called from subscriptionStatusTask — uses status objects StoreKit already has,
@@ -107,6 +146,7 @@ final class Store {
 
         if !matched.isEmpty {
             purchasedSubscriptions = matched
+            saveProAccess()
         } else {
             await updateCustomerProductStatus()
         }
@@ -122,12 +162,13 @@ final class Store {
         }
     }
 
-    /// Length in days of the free trial the user can still redeem, or nil when
-    /// no product in the group offers one or the user already used it.
+    /// Length in days of the yearly plan's free trial when the user can still redeem it,
+    /// or nil when the plan has no trial or the user already used one in the group.
     func eligibleTrialDays() async -> Int? {
         if subscriptions.isEmpty { await requestProducts() }
-        guard let offer = subscriptions.compactMap({ $0.subscription?.introductoryOffer })
-            .first(where: { $0.paymentMode == .freeTrial }) else { return nil }
+        guard let offer = subscriptions.first(where: { $0.id == yearlyProductId })?
+            .subscription?.introductoryOffer,
+              offer.paymentMode == .freeTrial else { return nil }
         guard await Product.SubscriptionInfo.isEligibleForIntroOffer(for: groupId) else { return nil }
 
         let unitDays: Int
@@ -141,22 +182,9 @@ final class Store {
         return offer.period.value * unitDays
     }
 
-    /// Yearly plan's localized price, e.g. "$39.99".
-    func yearlyDisplayPrice() async -> String? {
-        if subscriptions.isEmpty { await requestProducts() }
-        return subscriptions.first(where: { $0.id == "bjpro_3999_1y" })?.displayPrice
-    }
-
-    /// How much cheaper the yearly plan is than a year of weekly payments, rounded
-    /// down so the paywall never overstates it.
-    func yearlySavingsPercent() async -> Int? {
-        if subscriptions.isEmpty { await requestProducts() }
-        guard let yearly = subscriptions.first(where: { $0.id == "bjpro_3999_1y" }),
-              let weekly = subscriptions.first(where: { $0.id == "byjo_399_1w" }) else { return nil }
-        let weeklyPerYear = weekly.price * 52
-        guard weeklyPerYear > 0, yearly.price < weeklyPerYear else { return nil }
-        let savings = (1 - yearly.price / weeklyPerYear) * 100
-        return Int(NSDecimalNumber(decimal: savings).doubleValue.rounded(.down))
+    @MainActor
+    func refreshTrialEligibility() async {
+        yearlyTrialDays = await eligibleTrialDays()
     }
 
     /// Notifies the user one day before a free trial converts to a paid plan.
@@ -182,31 +210,41 @@ final class Store {
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
-        // Provisional authorization delivers quietly without an upfront prompt
-        // when the user never answered the notification permission alert.
-        center.requestAuthorization(options: [.alert, .sound, .provisional]) { _, _ in
+        // Ask for full permission, not provisional: the paywall promised this reminder,
+        // and a provisional grant would only deliver it quietly to Notification Center.
+        // The system shows the prompt once, right after the trial starts; users who
+        // already answered (e.g. when scheduling a recurring operation) aren't asked again.
+        center.requestAuthorization(options: [.alert, .sound]) { _, _ in
             center.add(request)
         }
     }
 
-    func purchase(_ product: Product) async throws -> Transaction? {
-        let result = try await product.purchase()
-
+    /// Buys a product. Pass `@Environment(\.purchase)` as `perform` so StoreKit can
+    /// present its sheet in the right scene.
+    @MainActor
+    func purchase(
+        _ product: Product,
+        perform: (Product) async throws -> Product.PurchaseResult
+    ) async throws {
+        let result = try await perform(product)
         switch result {
         case .success(let verification):
             let transaction = try checkVerified(verification)
-            await updateCustomerProductStatus()
+            handleVerifiedTransaction(transaction)
             await transaction.finish()
-            return transaction
-        case .userCancelled, .pending:
-            return nil
-        default:
-            return nil
+            await refreshTrialEligibility()
+        case .pending, .userCancelled:
+            // Ask to Buy and similar: the entitlement arrives later through Transaction.updates.
+            break
+        @unknown default:
+            break
         }
     }
 
-    func isPurchased(_ product: Product) async throws -> Bool {
-        return purchasedProducts.contains(product)
+    @MainActor
+    func restorePurchases() async {
+        try? await AppStore.sync()
+        await updateCustomerProductStatus()
     }
 
     func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
@@ -248,6 +286,16 @@ final class Store {
 
         purchasedSubscriptions = newSubscriptions
         purchasedProducts = newProducts
+        saveProAccess()
+    }
+
+    /// Shares the Pro state with the widgets and Siri intents, and redraws the widgets
+    /// when it changes so they lock or unlock right away.
+    @MainActor
+    private func saveProAccess() {
+        if ProAccess.save(isPro) {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 }
 

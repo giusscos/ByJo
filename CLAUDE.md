@@ -2,7 +2,7 @@
 
 ## What the app is
 
-ByJo is a personal finance tracker designed as a better alternative to spreadsheets. Users track net worth, manage budgets across multiple asset types, log recurring operations, set financial goals, and compare performance across time periods. All data stays on-device (privacy-first). Monetised via a subscription/lifetime paywall (StoreKit 2).
+ByJo is a personal finance tracker designed as a better alternative to spreadsheets. Users track net worth, manage budgets across multiple asset types, log recurring operations, set financial goals, and compare performance across time periods. All data stays on-device (privacy-first). Free plan up to 3 assets; ByJo Pro (subscription or lifetime, StoreKit 2) unlocks the rest.
 
 ## Core models (SwiftData)
 
@@ -26,36 +26,39 @@ ByJo is a personal finance tracker designed as a better alternative to spreadshe
 ## App flow
 
 ```
-ByJoApp → ContentView
-  ├─ store.isLoading → ProgressView
-  └─ TabView (Home / Assets / Operations)
-       └─ fullScreenCover
-            ├─ first launch, !hasCompletedOnboarding → OnboardingView → PaywallView
-            ├─ hasCompletedOnboarding, !hasPaid    → PaywallView
-            ├─ hasPaid, showCurrencyPicker          → CurrencyPickerView
-            └─ hasPaid                              → (nothing, TabView visible)
+ByJoApp → ContentView (.environment(store))
+  ├─ !hasCompletedOnboarding → OnboardingView: Welcome → first asset (skippable) → plans
+  │                              ("Start free trial", or "Continue for free")
+  └─ TabView (Home / Assets / Operations / Search), free or Pro
 ```
 
-`hasPaid = !purchasedSubscriptions.isEmpty || !purchasedProducts.isEmpty` (Store.swift)
+There is no hard paywall. `Store.isPro = !purchasedSubscriptions.isEmpty || !purchasedProducts.isEmpty`.
+
+## Free plan vs ByJo Pro (since 2026-11)
+
+- **Free:** up to `Store.freeAssetLimit` (3) assets, unlimited operations and categories (with budgets), the basic Home cards, swaps, search, Siri/Shortcuts logging, the Wallet banner switch.
+- **Pro:** unlimited assets, goals, recurring operations, Home Screen widgets, export & import, the advanced Home charts (`HomeSection.isPro`: Net Worth History, Spending Trends, Savings Rate Trend, Expense Breakdown, Asset Allocation, Debt Payoff), and reordering/hiding Home sections in `CustomizeHomeView`.
+- Locked Home charts stay visible, blurred, through `.proLockedCard(title:onUnlock:)`; tapping opens `PaywallView(context: .charts)`.
+- Gate with `store.unlocksPro` (true while StoreKit loads, so subscribers never see a lock). Gates live where the feature opens: `EditAssetView` (new asset past the cap), `EditGoalView` (new goal), `ExportImportView`, and the frequency picker in `EditAssetOperationView`. The editors show `PaywallView(dismissOnUnlock: false)` in place of the form and switch to the form once Pro unlocks.
+- Never remove or hide existing data on the free plan: existing goals, recurring operations and extra assets stay viewable and editable after a plan lapses.
+- Widgets and App Intents can't ask StoreKit, so `Store` writes `ProAccess` (app group, `WidgetShared.swift`). Widgets wrap their view in `.proLocked()`; the Wallet intent won't create a 4th asset.
 
 ## Subscription / paywall
 
-- `Store` is `@Observable`, instantiated in `ContentView` as `@State var store = Store()`
-- Product IDs: `bjpro_999_1m_fa`, `bjpro_9999_1y_fa`, `bjpro_399_1m`, `bjpro_3999_1y`
-- Lifetime IDs: `com.giusscos.byjoFamilyLifetime`, `com.giusscos.byjoLifetime`
-- `PaywallView` uses `SubscriptionStoreView(groupID:)` — cannot be dismissed interactively
-- `PaywallLifetimeView` is presented as a medium detent sheet from inside `PaywallView`
+- `Store` is `@Observable`, created in `ContentView` as `@State var store = Store()` and injected with `.environment(store)`; views read it with `@Environment(Store.self)`.
+- Paywall plans: `bjpro_3999_1y` (yearly, 7-day free trial, pre-selected), `byjo_399_1w` (weekly, no trial), `com.giusscos.byjoLifetime`. Older IDs in `productIds` / `productLifetimeIds` stay so their owners keep Pro.
+- `PlanPickerView.swift` holds `PlanPicker`, `PlanPurchaseButton` (trial wording only for the yearly plan), `ProFeatureList` and `PaywallLegalFooter`, shared by `PaywallView` and `OnboardingPlansStep`. Adapted from yPrompt.
+- `PaywallView(context:)` is always closable; `context` sets the headline (upgrade, asset limit, goals, recurring, export & import).
+- Purchases go through `store.purchase(product) { try await purchase($0) }` with `@Environment(\.purchase)`.
 
-## Onboarding (added 2026-06)
+## Onboarding (redone 2026-11)
 
-`OnboardingView` is shown on first launch via `@AppStorage("hasCompletedOnboarding")`. It:
-1. Welcomes the user with the value proposition
-2. Lets them pick their currency
-3. Walks them through creating their first `Asset` (saved to SwiftData on step completion)
-4. Walks them through logging their first `AssetOperation` (skippable)
-5. Shows a feature summary then calls `onComplete()` → paywall
+`OnboardingView` is shown on first launch via `@AppStorage("hasCompletedOnboarding")`:
+1. **Welcome**: sample net worth card, "Your whole net worth. Private."
+2. **First asset**: type and balance (name optional, defaults to the type's name), currency picked from the region and changeable inline. Skippable.
+3. **Plans** (`OnboardingPlansStep`): the user's net worth, plan cards, Pro features, "Continue for free".
 
-The onboarding creates real SwiftData records so the user's data is already waiting after they subscribe. A default `CategoryOperation("General")` is created alongside the asset.
+A default `CategoryOperation("General")` is created when onboarding finishes. If Pro unlocks during onboarding (purchase, or a returning subscriber's entitlement loading), onboarding closes on its own. New installs skip the What's New sheet.
 
 ## Key AppStorage keys
 
@@ -63,7 +66,8 @@ The onboarding creates real SwiftData records so the user's data is already wait
 |---|---|---|---|
 | `currencyCode` | `CurrencyCode` | `.usd` | Display currency throughout the app |
 | `compactNumber` | `Bool` | `true` | Compact vs. full number formatting |
-| `showCurrencyPicker` | `Bool` | `true` | Show currency picker after first subscription |
+| `showCurrencyPicker` | `Bool` | `true` | Legacy `CurrencyPickerView` flag; not part of the current flow (onboarding sets the currency) |
+| `whatsNewVersion` | `String` | `""` | Last What's New release seen (`WhatsNewView.release`); onboarding sets it so new installs skip the sheet |
 | `hasCompletedOnboarding` | `Bool` | `false` | Gate for onboarding vs. paywall on launch |
 
 ## Architecture notes

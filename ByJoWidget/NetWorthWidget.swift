@@ -43,7 +43,7 @@ struct NetWorthWidget: Widget {
     let kind = "NetWorthWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: NetWorthProvider()) { entry in
-            NetWorthWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            NetWorthWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Net Worth")
         .description("Your total net worth at a glance.")

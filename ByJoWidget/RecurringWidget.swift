@@ -41,7 +41,7 @@ struct RecurringWidget: Widget {
     let kind = "RecurringWidget"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: RecurringProvider()) { entry in
-            RecurringWidgetView(entry: entry).containerBackground(.background, for: .widget)
+            RecurringWidgetView(entry: entry).proLocked().containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Recurring Operations")
         .description("Upcoming recurring inflows and outflows.")
