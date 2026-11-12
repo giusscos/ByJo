@@ -153,7 +153,7 @@ private struct GoalHomeSummary: View {
                 .tint(goal.isExpired ? .red : (remaining == 0 ? .green : .accentColor))
 
             // Footer stats
-            HStack(spacing: 3) {
+            AdaptiveStack(spacing: 3) {
                 Text(goal.startingAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)
                      : .currency(code: currency.rawValue))
@@ -162,12 +162,14 @@ private struct GoalHomeSummary: View {
 
                 Text("·")
                     .foregroundStyle(Color.secondary.opacity(0.4))
+                    .accessibilityHidden(true)
 
                 Text("\(progressPercent)%")
                     .fontWeight(.semibold)
 
                 Text("·")
                     .foregroundStyle(Color.secondary.opacity(0.4))
+                    .accessibilityHidden(true)
 
                 Text(goal.targetAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)
@@ -175,11 +177,12 @@ private struct GoalHomeSummary: View {
                     .foregroundStyle(.secondary)
                     .contentTransition(.numericText(value: compactNumber ? 0 : 1))
 
-                Spacer()
+                Spacer(minLength: 0)
 
                 if let dueDate = goal.dueDate {
                     HStack(spacing: 3) {
                         Image(systemName: "calendar")
+                            .accessibilityHidden(true)
                         Text(dueDate, format: .dateTime.month(.abbreviated).year())
                     }
                     .foregroundStyle(.secondary)
