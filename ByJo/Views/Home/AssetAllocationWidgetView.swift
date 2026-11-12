@@ -87,9 +87,10 @@ struct AssetAllocationWidgetView: View {
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.secondary)
                                 }
-                                .accessibilityElement(children: .combine)
                             }
                         }
+                        // The chart's marks already read each slice; the legend would repeat them.
+                        .accessibilityHidden(true)
                     }
                 }
                 .padding(.vertical, 8)

@@ -81,16 +81,19 @@ struct OnboardingWelcomeStep: View {
                     .lineLimit(1)
             }
 
-            VStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 12) {
                 ForEach(rows) { row in
                     AdaptiveStack(spacing: 12) {
-                        Image(systemName: row.icon)
-                            .font(.subheadline)
-                            .foregroundStyle(.white)
-                            .frame(width: 32, height: 32)
-                            .background(row.color.gradient, in: RoundedRectangle(cornerRadius: 8))
-                        Text(row.name)
-                            .font(.subheadline.weight(.medium))
+                        HStack(spacing: 12) {
+                            Image(systemName: row.icon)
+                                .font(.subheadline)
+                                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                                .foregroundStyle(.white)
+                                .frame(width: 32, height: 32)
+                                .background(row.color.gradient, in: RoundedRectangle(cornerRadius: 8))
+                            Text(row.name)
+                                .font(.subheadline.weight(.medium))
+                        }
                         Spacer(minLength: 0)
                         Text(row.amount, format: .currency(code: currencyCode.rawValue).precision(.fractionLength(0)))
                             .font(.subheadline.weight(.semibold))

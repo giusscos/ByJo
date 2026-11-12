@@ -8,6 +8,7 @@ import SwiftUI
 
 struct SavingsRateWidgetView: View {
     @Query var assets: [Asset]
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     private var allOperations: [AssetOperation] {
         assets.flatMap { $0.operations ?? [] }
@@ -42,6 +43,12 @@ struct SavingsRateWidgetView: View {
         return .red
     }
 
+    /// Yellow text is hard to read on a light card; with Increase Contrast the number uses the
+    /// primary color and the bar and legend keep the rating color.
+    private var numberColor: Color {
+        colorSchemeContrast == .increased && rateColor == .yellow ? .primary : rateColor
+    }
+
     private var hasData: Bool {
         inflow > 0
     }
@@ -57,13 +64,13 @@ struct SavingsRateWidgetView: View {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(hasData ? "\(savingsRatePercent)" : "—")
                             .scaledFont(size: 52, weight: .black, design: .rounded, maxSize: 96)
-                            .foregroundStyle(hasData ? rateColor : Color.secondary)
+                            .foregroundStyle(hasData ? numberColor : Color.secondary)
                             .contentTransition(.numericText(value: Double(savingsRatePercent)))
 
                         if hasData {
                             Text("%")
                                 .scaledFont(size: 28, weight: .bold, design: .rounded, maxSize: 52)
-                                .foregroundStyle(rateColor)
+                                .foregroundStyle(numberColor)
                                 .padding(.bottom, 6)
                         }
                     }
@@ -85,14 +92,11 @@ struct SavingsRateWidgetView: View {
                     .accessibilityHidden(true)
 
                     AdaptiveStack {
-                        Label("≥20% great", systemImage: "circle.fill")
-                            .foregroundStyle(.green)
+                        Label { Text("≥20% great") } icon: { Image(systemName: "circle.fill").foregroundStyle(.green) }
                         Spacer(minLength: 0)
-                        Label("10–20% ok", systemImage: "circle.fill")
-                            .foregroundStyle(.yellow)
+                        Label { Text("10–20% ok") } icon: { Image(systemName: "circle.fill").foregroundStyle(.yellow) }
                         Spacer(minLength: 0)
-                        Label("<10% low", systemImage: "circle.fill")
-                            .foregroundStyle(.red)
+                        Label { Text("<10% low") } icon: { Image(systemName: "circle.fill").foregroundStyle(.red) }
                     }
                     .font(.caption2)
                     .foregroundStyle(.secondary)

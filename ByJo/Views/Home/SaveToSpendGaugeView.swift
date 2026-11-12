@@ -371,6 +371,8 @@ struct SpendmeterView: View {
                         .font(.callout)
                         .fontWeight(.semibold)
                         .monospacedDigit()
+                        // The capsule rides a fixed-height arc; the value is also read by VoiceOver.
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility1)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 7)
                         .background(.ultraThinMaterial, in: Capsule())

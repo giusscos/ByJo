@@ -113,11 +113,10 @@ struct ExpenseBreakdownWidgetView: View {
                                         .foregroundStyle(.secondary)
                                         .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                 }
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityLabel(Text(slice.label))
-                                .accessibilityValue(Text(slice.amount.accessibilityCurrency(currencyCode)))
                             }
                         }
+                        // The chart's marks already read each slice; the legend would repeat them.
+                        .accessibilityHidden(true)
                     }
                 }
                 .padding(.vertical, 8)

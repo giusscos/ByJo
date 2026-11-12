@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GoalRowView: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage("compactNumber") var compactNumber: Bool = true
     @AppStorage("pinnedGoalId") private var pinnedGoalId: String = ""
 
@@ -135,16 +136,20 @@ struct GoalRowView: View {
                      : .currency(code: currency.rawValue))
                     .foregroundStyle(.secondary)
 
-                Text("·")
-                    .foregroundStyle(Color.secondary.opacity(0.4))
-                    .accessibilityHidden(true)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("·")
+                        .foregroundStyle(Color.secondary.opacity(0.4))
+                        .accessibilityHidden(true)
+                }
 
                 Text("\(progressPercent)%")
                     .fontWeight(.semibold)
 
-                Text("·")
-                    .foregroundStyle(Color.secondary.opacity(0.4))
-                    .accessibilityHidden(true)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("·")
+                        .foregroundStyle(Color.secondary.opacity(0.4))
+                        .accessibilityHidden(true)
+                }
 
                 Text(goal.targetAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)

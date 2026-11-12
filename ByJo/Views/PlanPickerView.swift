@@ -244,18 +244,26 @@ struct BottomBarFade: View {
 /// terms line, so no separate notice is needed here.
 struct PaywallLegalFooter: View {
     var store: Store
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         AdaptiveStack(horizontalAlignment: .center, spacing: 6) {
             Link("Terms", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-            Text(verbatim: "·").foregroundStyle(.tertiary).accessibilityHidden(true)
+            separator
             Link("Privacy", destination: URL(string: "https://by-jo.com/privacy")!)
-            Text(verbatim: "·").foregroundStyle(.tertiary).accessibilityHidden(true)
+            separator
             Button("Restore Purchases") {
                 Task { await store.restorePurchases() }
             }
         }
         .font(.caption)
         .buttonStyle(.borderless)
+    }
+
+    /// A dot between the links; dropped when they stack at accessibility sizes.
+    @ViewBuilder private var separator: some View {
+        if !dynamicTypeSize.isAccessibilitySize {
+            Text(verbatim: "·").foregroundStyle(.tertiary).accessibilityHidden(true)
+        }
     }
 }

@@ -10,6 +10,7 @@ struct TopExpensesWidgetView: View {
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query var assets: [Asset]
 
     private var topExpenses: [AssetOperation] {
@@ -40,13 +41,13 @@ struct TopExpensesWidgetView: View {
 
                     ForEach(Array(topExpenses.enumerated()), id: \.offset) { index, op in
                         VStack(alignment: .leading, spacing: 6) {
-                            HStack {
+                            AdaptiveStack {
                                 Text(op.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                    .lineLimit(1)
+                                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
 
-                                Spacer()
+                                Spacer(minLength: 0)
 
                                 Text(abs(op.amount), format: compactNumber
                                      ? .currency(code: currencyCode.rawValue).notation(.compactName)

@@ -64,6 +64,7 @@ struct GoalListStackView: View {
 
 private struct GoalHomeSummary: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage("compactNumber") var compactNumber: Bool = true
 
     var goal: Goal
@@ -160,16 +161,20 @@ private struct GoalHomeSummary: View {
                     .foregroundStyle(.secondary)
                     .contentTransition(.numericText(value: compactNumber ? 0 : 1))
 
-                Text("·")
-                    .foregroundStyle(Color.secondary.opacity(0.4))
-                    .accessibilityHidden(true)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("·")
+                        .foregroundStyle(Color.secondary.opacity(0.4))
+                        .accessibilityHidden(true)
+                }
 
                 Text("\(progressPercent)%")
                     .fontWeight(.semibold)
 
-                Text("·")
-                    .foregroundStyle(Color.secondary.opacity(0.4))
-                    .accessibilityHidden(true)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("·")
+                        .foregroundStyle(Color.secondary.opacity(0.4))
+                        .accessibilityHidden(true)
+                }
 
                 Text(goal.targetAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)

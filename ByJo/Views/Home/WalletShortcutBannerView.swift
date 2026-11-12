@@ -7,15 +7,20 @@ import SwiftUI
 
 struct WalletShortcutBannerView: View {
     var onTap: () -> Void
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         Section {
             Button(action: onTap) {
                 HStack(alignment: .center, spacing: 14) {
-                    Image(systemName: "wallet.pass.fill")
-                        .font(.title2)
-                        .foregroundStyle(.tint)
-                        .frame(width: 36, height: 36)
+                    // At accessibility sizes the icon would leave the text a narrow column.
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Image(systemName: "wallet.pass.fill")
+                            .font(.title2)
+                            .foregroundStyle(.tint)
+                            .frame(width: 36, height: 36)
+                            .accessibilityHidden(true)
+                    }
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Auto-log taps")

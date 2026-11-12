@@ -99,11 +99,11 @@ struct SavingsRateTrendWidgetView: View {
                     .accessibilityLabel(Text("Savings Rate Trend"))
 
                     AdaptiveStack {
-                        Label("≥20% great", systemImage: "circle.fill").foregroundStyle(.green)
+                        Label { Text("≥20% great") } icon: { Image(systemName: "circle.fill").foregroundStyle(.green) }
                         Spacer(minLength: 0)
-                        Label("10–20% ok", systemImage: "circle.fill").foregroundStyle(.yellow)
+                        Label { Text("10–20% ok") } icon: { Image(systemName: "circle.fill").foregroundStyle(.yellow) }
                         Spacer(minLength: 0)
-                        Label("<10% low", systemImage: "circle.fill").foregroundStyle(.red)
+                        Label { Text("<10% low") } icon: { Image(systemName: "circle.fill").foregroundStyle(.red) }
                     }
                     .font(.caption2)
                     .foregroundStyle(.secondary)
