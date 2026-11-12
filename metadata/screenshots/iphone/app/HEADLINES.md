@@ -35,3 +35,16 @@ Machine-assisted: a native speaker should check them. Line 1 is the big green li
 | 6 | Check in / from your Home Screen | Bekijk alles / vanaf je beginscherm | ホーム画面で / いつでもチェック | 在主屏幕上 / 随时查看 | 在主畫面上 / 隨時查看 | تابع كل شيء / من الشاشة الرئيسية |
 
 Arabic frames should be mirrored: headline right-aligned, and the phone mockup can stay centered.
+
+## iPad and iPhone Duo (decided 2026-11-12)
+
+No new captures: reuse the English app images from the live iPad set (6 frames) and from
+`metadata/screenshots/iphone-duo/app-store/en-US`, and only translate the text in the Figma frames.
+Translated app screens are kept for iPhone only, where most people see them.
+
+- iPad frames use the same six headlines as iPhone (table above).
+- iPhone Duo frames: `01-all-your-money` = headline 1, `03-plan` = headline 5, and `02-unfold` needs this one:
+
+| en (live) | nl-NL | ja | zh-Hans | zh-Hant | ar-SA |
+|---|---|---|---|---|---|
+| Unfold the / full picture | Klap open voor / het hele plaatje | 開けば / 全体が見える | 展开屏幕 / 看清全貌 | 展開螢幕 / 看清全貌 | افتح الشاشة / لترى الصورة كاملة |
