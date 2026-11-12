@@ -79,3 +79,5 @@ A default `CategoryOperation("General")` is created when onboarding finishes. If
 - Swap operations: two `AssetOperation` records sharing the same `swapId` UUID represent a fund transfer between assets
 - Recurring operations schedule local `UNUserNotificationCenter` notifications
 - `filterData(for:data:)` is a free function in `AssetOperation.swift` used across multiple views
+- Parse typed amounts with `Decimal(string: text.normalizedAmountInput)` (`Utilities/AmountInput.swift`): the decimal pad types Eastern Arabic digits and `٫` in Arabic regions, which `Decimal(string:)` alone reads as nil
+- App languages: `en`, `en-GB`, `de`, `es`, `fr`, `fr-CA`, `it`, `pt`, `pt-BR`, `ar`, `ja`, `nl`. A new language needs `ByJo/<lang>.lproj` and `ByJoWidget/<lang>.lproj`, an entry in `CFBundleLocalizations` (`ByJo/Info.plist`) and in the project's `knownRegions`. `ar` is right-to-left; prefix labels that start with `≥` or `<` with U+200E so they aren't mirrored

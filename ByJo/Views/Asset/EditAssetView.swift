@@ -36,7 +36,7 @@ struct EditAssetView: View {
 
     private var parsedBalance: Decimal? {
         guard !initialBalanceString.isEmpty else { return nil }
-        let normalized = initialBalanceString.replacingOccurrences(of: ",", with: ".")
+        let normalized = initialBalanceString.normalizedAmountInput
         return Decimal(string: normalized)
     }
 

@@ -37,7 +37,7 @@ struct EditGoalView: View {
 
     private var parsedTargetAmount: Decimal? {
         guard !targetAmountString.isEmpty else { return nil }
-        let normalized = targetAmountString.replacingOccurrences(of: ",", with: ".")
+        let normalized = targetAmountString.normalizedAmountInput
         return Decimal(string: normalized)
     }
 

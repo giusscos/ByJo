@@ -13,6 +13,9 @@
 		<string>fr-CA</string>
 		<string>pt</string>
 		<string>pt-BR</string>
+		<string>ar</string>
+		<string>ja</string>
+		<string>nl</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

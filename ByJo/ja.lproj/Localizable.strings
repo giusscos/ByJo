@@ -1,0 +1,598 @@
+/* Japanese. Machine-assisted translation, 2026-11-12: a native speaker should review it before release.
+   Terms: net worth = 純資産, assets = 資産, operations = 取引, goals = 目標,
+   recurring operations = 定期取引, inflow = 収入, outflow = 支出. */
+
+/* MARK: - Asset Types */
+"Cash" = "現金";
+"Bank Account" = "銀行口座";
+"Savings Account" = "普通預金";
+"Checking Account" = "当座預金";
+"Credit Card" = "クレジットカード";
+"Investment Account" = "投資口座";
+"Brokerage Account" = "証券口座";
+"Retirement Account" = "退職金口座";
+"Pension" = "年金";
+"Cryptocurrency" = "暗号資産";
+"Stocks" = "株式";
+"Bonds" = "債券";
+"Mutual Funds" = "投資信託";
+"ETFs" = "ETF";
+"Real Estate" = "不動産";
+"Property" = "所有物";
+"Vehicle" = "車両";
+"Car" = "自動車";
+"Motorcycle" = "バイク";
+"Boat" = "ボート";
+"Jewelry" = "宝飾品";
+"Art" = "美術品";
+"Collectibles" = "コレクション";
+"Business" = "事業";
+"Partnership" = "共同事業";
+"Loan" = "ローン";
+"Mortgage" = "住宅ローン";
+"Student Loan" = "奨学金";
+"Personal Loan" = "個人ローン";
+"Insurance" = "保険";
+"Life Insurance" = "生命保険";
+"Health Insurance" = "医療保険";
+"Annuity" = "個人年金";
+"Commodity" = "コモディティ";
+"Precious Metals" = "貴金属";
+"Foreign Currency" = "外貨";
+"Options" = "オプション";
+"Futures" = "先物";
+"Private Equity" = "プライベートエクイティ";
+"Crowdfunding Investment" = "クラウドファンディング投資";
+"Other" = "その他";
+
+/* MARK: - Operation Types */
+"Inflow" = "収入";
+"Outflow" = "支出";
+
+/* MARK: - Recurrence Frequency */
+"Single" = "1回のみ";
+"Daily" = "毎日";
+"Weekly" = "毎週";
+"Monthly" = "毎月";
+"Yearly" = "毎年";
+
+/* MARK: - Goal Status */
+"Completed" = "達成済み";
+"Suspended" = "一時停止中";
+
+/* MARK: - Balance Status */
+"Positive" = "プラス";
+"Negative" = "マイナス";
+
+/* MARK: - Spendmeter Timeframe */
+"Day" = "日";
+"Week" = "週";
+"Month" = "月";
+"Year" = "年";
+
+/* MARK: - Asset Sort Order */
+"Name" = "名前";
+"Balance" = "残高";
+"Type" = "種類";
+
+/* MARK: - Home Sections */
+"Goals" = "目標";
+"Monthly Summary" = "月次サマリー";
+"Spendmeter" = "支出メーター";
+"Recurring" = "定期";
+"Top Category" = "トップカテゴリ";
+"Savings Rate" = "貯蓄率";
+"Top Expenses" = "主な支出";
+"Asset Allocation" = "資産配分";
+
+/* MARK: - Spendmeter Period Labels */
+"yesterday" = "昨日";
+"last week" = "先週";
+"last month" = "先月";
+"last year" = "昨年";
+
+/* MARK: - Spendmeter Insight Messages */
+"Same as %@" = "%@と同じ";
+"%d%% more saved than %@" = "%2$@より%1$d%%多く貯蓄";
+"%d%% less saved than %@" = "%2$@より%1$d%%少ない貯蓄";
+"More saved than %@" = "%@より多く貯蓄";
+"Less saved than %@" = "%@より貯蓄が少ない";
+
+/* MARK: - Notifications */
+"Recurring operation" = "定期取引";
+
+/* MARK: - Assets */
+"Assets" = "資産";
+"Add asset" = "資産を追加";
+"No assets found 😕" = "資産が見つかりません 😕";
+"Start adding assets" = "資産を追加しましょう";
+"Asset type" = "資産の種類";
+"Long amount" = "全桁で表示";
+"Short amount" = "短縮表示";
+"By Type" = "種類別";
+"Sort By" = "並べ替え";
+"Filters" = "フィルタ";
+"Sorters" = "並べ替え";
+"Menu" = "メニュー";
+
+/* MARK: - Operations */
+"Edit operation" = "取引を編集";
+"Create operation" = "取引を作成";
+"Update recurring operation" = "定期取引を更新";
+"Update this occurrence only" = "この回のみ更新";
+"Update all occurrences" = "すべての回を更新";
+"Insert note" = "メモを入力";
+"Next occurrence: " = "次回: ";
+
+/* MARK: - Goals */
+"Add goal" = "目標を追加";
+"Is Goal completed?" = "目標は達成しましたか？";
+
+/* MARK: - Categories */
+"Categories" = "カテゴリ";
+
+/* MARK: - Common Actions */
+"Save" = "保存";
+"Edit" = "編集";
+"Delete" = "削除";
+"Cancel" = "キャンセル";
+"Skip" = "スキップ";
+"Allow" = "許可";
+
+/* MARK: - Operation Detail */
+"Asset" = "資産";
+"Category" = "カテゴリ";
+"Next payment" = "次回の支払い";
+"From" = "振替元";
+"To" = "振替先";
+"Received" = "受取";
+"Transfer" = "振替";
+"Note" = "メモ";
+"History" = "履歴";
+"Stop recurring" = "繰り返しを停止";
+"Delete current" = "この取引を削除";
+"Delete linked" = "対の取引を削除";
+"Delete both" = "両方を削除";
+"Are you sure you want to delete?" = "本当に削除しますか？";
+"Stop recurring?" = "繰り返しを停止しますか？";
+"No future occurrences will be generated. Past occurrences are kept." = "今後の取引は作成されません。過去の取引は残ります。";
+
+/* MARK: - Swap */
+"Swap" = "振替";
+
+/* MARK: - Keyboard */
+"Hide keyboard" = "キーボードを隠す";
+"Dismiss keyboard" = "キーボードを閉じる";
+
+/* MARK: - Onboarding */
+"Set Up a Recurring Payment" = "定期的な支払いを設定";
+"Log a Transaction" = "取引を記録";
+"Description" = "内容";
+"Amount" = "金額";
+"Repeats" = "繰り返し";
+"Enable Reminders" = "リマインダーを有効にする";
+"Get notified when recurring payments are due." = "定期的な支払いの期日に通知を受け取れます。";
+"Reminders enabled" = "リマインダーは有効です";
+"Date" = "日付";
+
+/* MARK: - What's New */
+"What's New in ByJo" = "ByJoの新機能";
+"Here's everything that's new and improved." = "新機能と改善点をご紹介します。";
+"Continue" = "続ける";
+"Update Asset Value" = "資産の評価額を更新";
+"Set an asset to its real value — ByJo records the adjustment as an operation with an optional note." = "資産を実際の評価額に合わせると、ByJoが差額を取引として記録します（メモは任意）。";
+"Balance History" = "残高の推移";
+"See how an asset’s value changed over time with a chart on the asset detail screen." = "資産の詳細画面のグラフで、評価額の推移を確認できます。";
+
+/* MARK: - Update Asset Value */
+"Update value" = "評価額を更新";
+"Current" = "現在";
+"New value" = "新しい評価額";
+"Adjustment: %@" = "調整額: %@";
+"Note (optional)" = "メモ（任意）";
+"Value update" = "評価額の更新";
+
+/* MARK: - Asset Balance History */
+"Balance history" = "残高の推移";
+"Hide chart" = "グラフを隠す";
+"Show chart" = "グラフを表示";
+
+/* MARK: - Home Empty State */
+"Start tracking your money" = "お金の記録を始めましょう";
+"Add your assets, then log income and expenses to see your net worth and monthly progress." = "資産を追加して収入と支出を記録すると、純資産と毎月の推移が見えるようになります。";
+
+/* MARK: - Onboarding Welcome */
+"Your personal finance tracker.\nBuilt for clarity, not complexity." = "あなたのための資産管理アプリ。\n複雑さより、わかりやすさを。";
+"Get Started" = "はじめる";
+
+/* MARK: - Onboarding Why Save */
+"Know Your Net Worth" = "純資産を把握しよう";
+"Your net worth — assets minus liabilities — is the clearest snapshot of your financial health." = "純資産（資産から負債を引いた額）は、家計の健全さをもっとも端的に示します。";
+"Next" = "次へ";
+"People don't know\ntheir net worth" = "自分の純資産を\n知らない人の割合";
+"More likely to hit\ngoals when tracking" = "記録すると目標を\n達成しやすくなる";
+"You can't improve what you don't measure — tracking is the first step." = "測らないものは改善できません。記録が最初の一歩です。";
+"Seeing your net worth grow month over month is the best motivation to keep going." = "純資産が毎月増えていくのを見ることが、続けるいちばんの励みになります。";
+"Spotting a downward trend early lets you act before it becomes a bigger problem." = "減少傾向に早く気づけば、大きな問題になる前に手を打てます。";
+
+/* MARK: - Onboarding Why Invest */
+"Take Control of Your Budget" = "予算をコントロールしよう";
+"Knowing where your money goes gives you the power to decide where it should go." = "お金の行き先がわかれば、使い道を自分で決められます。";
+"Let's Set Up ByJo" = "ByJoを設定しましょう";
+"Of income goes\nuntracked each month" = "毎月、記録されずに\n消えていく収入の割合";
+"Less overspending\nwith regular tracking" = "こまめな記録で\n使いすぎが減る";
+"Most people underestimate their monthly expenses by 20–30%." = "多くの人は毎月の支出を20〜30%少なく見積もっています。";
+"A simple spending log reveals patterns you'd never notice otherwise." = "シンプルな支出記録で、普段は気づかない傾向が見えてきます。";
+"Budgeting isn't about restriction — it's about making intentional choices." = "予算は我慢するためではなく、納得して選ぶためのものです。";
+
+/* MARK: - Onboarding Currency */
+"Choose Your Currency" = "通貨を選択";
+"Select how amounts are displayed. You can change this anytime." = "金額の表示通貨を選んでください。あとからいつでも変更できます。";
+
+/* MARK: - Onboarding Asset Setup */
+"Add Your First Asset" = "最初の資産を追加";
+"Track a bank account, savings, investments, or anything of value." = "銀行口座、貯金、投資など、価値のあるものなら何でも記録できます。";
+"Current Balance" = "現在の残高";
+"e.g. My Bank Account" = "例: メインバンク";
+"Compact keyboard" = "コンパクトキーボード";
+
+/* MARK: - Onboarding Transaction & Recurring */
+"Record an inflow or outflow for " = "収入または支出を記録: ";
+"Automate a salary, subscription, or bill for " = "給与、サブスク、請求を自動化: ";
+"your asset" = "あなたの資産";
+"e.g. Monthly Salary" = "例: 毎月の給与";
+"e.g. Grocery Shopping" = "例: 食料品の買い物";
+"e.g. Netflix" = "例: Netflix";
+
+/* MARK: - Onboarding Success */
+"You're All Set!" = "準備完了です！";
+"Your financial journey starts now. ByJo will help you track every step — from savings to investments." = "あなたのお金の旅が今始まります。貯金から投資まで、ByJoがすべてを記録するお手伝いをします。";
+
+/* MARK: - Home Tips */
+"Add your first asset" = "最初の資産を追加";
+"Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth." = "ここをタップして銀行口座、投資など価値のあるものを追加し、純資産の記録を始めましょう。";
+"Log your first transaction" = "最初の取引を記録";
+"Tap + to record inflows or outflows and keep your balances up to date." = "+ をタップして収入や支出を記録し、残高を最新に保ちましょう。";
+
+/* MARK: - Budget Progress Widget */
+"Budget Progress" = "予算の進捗";
+"of %@" = "/ %@";
+
+/* MARK: - Debt Payoff Widget */
+"Debt Payoff" = "返済状況";
+"/ mo" = "/ 月";
+"Paid off %@" = "%@に完済";
+"No recurring payments" = "定期的な支払いはありません";
+
+/* MARK: - Home Sections (additional) */
+"Expense Breakdown" = "支出の内訳";
+"Net Worth History" = "純資産の推移";
+"Spending Trends" = "支出の推移";
+"Savings Rate Trend" = "貯蓄率の推移";
+
+/* MARK: - Home Widgets */
+"Net Worth" = "純資産";
+"This month" = "今月";
+"VS last month" = "先月比";
+"Forecast" = "見通し";
+"Budget" = "予算";
+"≥20% great" = "20%以上 優秀";
+"10–20% ok" = "10〜20% 良好";
+"<10% low" = "10%未満 低い";
+"Add All" = "すべて追加";
+"Customize Home" = "ホームをカスタマイズ";
+"Drag to reorder. Tap the eye icon to show or hide a section." = "ドラッグで並べ替え。目のアイコンをタップするとセクションを表示・非表示にできます。";
+"Recurring Operations" = "定期取引";
+"Categories overview" = "カテゴリの概要";
+"Home" = "ホーム";
+"Timeframe" = "期間";
+"%lld pending operation" = "保留中の取引 %lld件";
+"%lld pending operations" = "保留中の取引 %lld件";
+"Operation: %lld" = "取引: %lld件";
+"Operations: %lld" = "取引: %lld件";
+
+/* MARK: - Goals (additional) */
+"Started" = "開始";
+"Target" = "目標額";
+"Remaining" = "残り";
+"Saved so far" = "これまでの貯蓄";
+"Goal reached!" = "目標達成！";
+"Due date" = "期日";
+"Expired" = "期限切れ";
+"Progress" = "進捗";
+"Monthly pace" = "月間ペース";
+"Estimated completion" = "達成予定";
+"On track" = "順調";
+"Behind schedule" = "予定より遅れています";
+"Need more savings" = "もう少し貯蓄が必要です";
+"Balance not growing — add an inflow to this asset" = "残高が増えていません。この資産に収入を追加しましょう";
+"Projections" = "予測";
+"Based on your last 90 days of activity on %@." = "%@の過去90日間の動きにもとづいています。";
+"Per day" = "1日あたり";
+"Per week" = "1週間あたり";
+"Per month" = "1か月あたり";
+"Required savings" = "必要な貯蓄額";
+"To reach your target in %lld days." = "%lld日で目標に届くために。";
+"Manage" = "管理";
+"Pin to home" = "ホームにピン留め";
+"Unpin from home" = "ホームのピン留めを外す";
+"Resume" = "再開";
+"Suspend" = "一時停止";
+"Mark as completed" = "達成済みにする";
+"Create goal" = "目標を作成";
+"Edit goal" = "目標を編集";
+"Title" = "タイトル";
+"Current: " = "現在: ";
+"Ongoing" = "進行中";
+"Complete" = "完了";
+"left to go" = "残り";
+"Due date: " = "期日: ";
+"Completed date: " = "達成日: ";
+"Reached" = "達成";
+"Missed" = "未達成";
+"%lld active" = "%lld件 進行中";
+"%lldd left" = "残り%lld日";
+
+/* MARK: - Export & Import */
+"Export & Import" = "書き出しと読み込み";
+"Done" = "完了";
+"OK" = "OK";
+"Import Error" = "読み込みエラー";
+"Unknown error" = "不明なエラー";
+"Export Operations as CSV" = "取引をCSVで書き出す";
+"No operations to export" = "書き出す取引がありません";
+"Export Full Backup (JSON)" = "完全バックアップを書き出す（JSON）";
+"No data to export" = "書き出すデータがありません";
+"Export" = "書き出し";
+"CSV contains all operations. JSON contains everything: assets, operations, categories, and goals." = "CSVにはすべての取引が含まれます。JSONには資産、取引、カテゴリ、目標のすべてが含まれます。";
+"Import CSV…" = "CSVを読み込む…";
+"Restore from JSON Backup…" = "JSONバックアップから復元…";
+"Import" = "読み込み";
+"Imported data is added to your existing data. CSV lets you map columns from any spreadsheet." = "読み込んだデータは既存のデータに追加されます。CSVなら、どんな表計算ファイルの列も対応づけられます。";
+"Sample CSV File" = "CSVのサンプル";
+"Sample JSON Backup" = "JSONバックアップのサンプル";
+"Sample Files" = "サンプルファイル";
+"Download these to understand the expected format before importing your own data." = "ご自身のデータを読み込む前に、これらをダウンロードして形式を確認してください。";
+"Could not access the file." = "ファイルにアクセスできませんでした。";
+"Could not read the file." = "ファイルを読み込めませんでした。";
+"The CSV file appears to be empty or has no header row." = "CSVファイルが空か、見出し行がありません。";
+"Map Columns" = "列の対応づけ";
+"Import Complete" = "読み込み完了";
+"Import Failed" = "読み込み失敗";
+"File Info" = "ファイル情報";
+"File" = "ファイル";
+"Rows" = "行数";
+"Columns detected" = "検出された列";
+"Required Fields" = "必須項目";
+"Select which column in your file corresponds to each field." = "各項目に対応するファイルの列を選んでください。";
+"Optional Fields" = "任意項目";
+"Frequency" = "頻度";
+"Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single." = "頻度の値: Single、Daily、Weekly、Monthly、Yearly。認識できない値はSingleとして扱われます。";
+"Skip duplicates" = "重複をスキップ";
+"Duplicates found" = "重複が見つかりました";
+"Import Options" = "読み込みオプション";
+"A duplicate matches an existing operation by description, date, amount, and asset." = "内容、日付、金額、資産が既存の取引と一致するものを重複とみなします。";
+"Issues — fix these to enable import" = "問題があります。修正すると読み込めます";
+"Select column…" = "列を選択…";
+"None" = "なし";
+"Restore Backup" = "バックアップを復元";
+"Export Date" = "書き出し日";
+"Version" = "バージョン";
+"Backup Contents" = "バックアップの内容";
+"Duplicates Found" = "重複が見つかりました";
+"Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset." = "資産とカテゴリは名前で照合します。取引は内容、日付、金額、資産で、目標はタイトル、目標額、資産で照合します。";
+"This adds to your existing data, not replaces it. To start fresh, delete your data first." = "既存のデータは置き換えられず、追加されます。最初からやり直す場合は、先にデータを削除してください。";
+"Description is empty" = "内容が空です";
+"Asset name is empty" = "資産名が空です";
+"Column not found in file" = "ファイルに列が見つかりません";
+"Import %lld" = "%lld件を読み込む";
+"%lld imported, %lld duplicates skipped." = "%lld件を読み込み、重複%lld件をスキップしました。";
+"%lld operations imported successfully." = "%lld件の取引を読み込みました。";
+"Preview — first %lld rows" = "プレビュー（最初の%lld行）";
+"%lld already exist" = "%lld件は登録済み";
+"Required field not mapped: %@" = "必須項目が未設定です: %@";
+"Row %lld: %@" = "%lld行目: %@";
+"Invalid backup file: %@" = "無効なバックアップファイル: %@";
+"Unsupported backup version %lld. Please update ByJo." = "バックアップのバージョン%lldには対応していません。ByJoをアップデートしてください。";
+"Cannot parse date \"%@\"" = "日付「%@」を読み取れません";
+"Cannot parse amount \"%@\"" = "金額「%@」を読み取れません";
+
+/* MARK: - Wallet Auto-Log */
+"Wallet Auto-Log" = "Wallet自動記録";
+"Auto-log taps" = "タッチ決済を自動記録";
+"Set up Shortcuts to log merchant and amount automatically." = "ショートカットを設定して、店舗名と金額を自動で記録します。";
+"Auto-log card taps" = "カードのタッチ決済を自動記録";
+"Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass." = "共有のByJo Wallet Auto-Logショートカットを追加し、「取引」オートメーションを設定すると、NFCでタッチするたびにByJoに記録されます。資産とカテゴリは、渡した名前で照合または作成されます。";
+"Get Shortcut" = "ショートカットを入手";
+"Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts." = "共有のByJo Wallet Auto-Logショートカットを開き、ショートカットに追加できます。";
+"Create Automation" = "オートメーションを作成";
+"Opens Shortcuts to create a new Transaction / Wallet automation." = "ショートカットを開いて、新しい「取引」／「Wallet」オートメーションを作成します。";
+"Setup steps" = "設定手順";
+"Tap Get Shortcut and add ByJo Wallet Auto-Log." = "「ショートカットを入手」をタップし、ByJo Wallet Auto-Logを追加します。";
+"Tap Create Automation and choose Transaction (or Wallet on newer iOS)." = "「オートメーションを作成」をタップし、「取引」（新しいiOSでは「Wallet」）を選びます。";
+"Select the cards to track, then choose Run Immediately." = "記録するカードを選び、「すぐに実行」を選択します。";
+"Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings)." = "アクションを追加 → ショートカットを実行 → ByJo Wallet Auto-Log（またはショートカットを開き、店舗名・金額・資産名の対応を確認）。";
+"Optionally set Category Name. Leave empty to categorize later in ByJo." = "必要に応じてカテゴリ名を設定します。空欄にすると、あとからByJoで分類できます。";
+"If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet." = "記録されない場合は、設定 → アプリ → Walletでモバイルデータ通信をオンにしてください。";
+"I've set this up" = "設定しました";
+"This hides the tip on Home. You can always show it again from Customize Home." = "ホームのヒントを非表示にします。「ホームをカスタマイズ」からいつでも再表示できます。";
+"Shown at the top of Home when enabled." = "オンにするとホームの上部に表示されます。";
+
+/* MARK: - Operations (additional) */
+"Operations" = "取引";
+"Add operation" = "取引を追加";
+"on" = "・";
+"Details" = "詳細";
+"Asset from" = "振替元の資産";
+"Asset to" = "振替先の資産";
+"Suggestions" = "候補";
+"Add split" = "分割を追加";
+"Remove splits" = "分割を解除";
+"Split transaction" = "取引を分割";
+"Splits" = "分割";
+"Do you want to update only this occurrence or all %lld occurrences in the series?" = "この回だけを更新しますか？それとも全%lld回を更新しますか？";
+"Change Category" = "カテゴリを変更";
+"Change Asset" = "資産を変更";
+"Reassign" = "付け替え";
+"Recurring only" = "定期取引のみ";
+"Delete Operations" = "取引を削除";
+"No operations found 😕" = "取引が見つかりません 😕";
+"Start adding operations" = "取引を追加しましょう";
+"Add operations" = "取引を追加";
+"No categories found 😕" = "カテゴリが見つかりません 😕";
+"Start adding categories" = "カテゴリを追加しましょう";
+"Add categories" = "カテゴリを追加";
+"Add category" = "カテゴリを追加";
+"Operation" = "取引";
+
+/* MARK: - Assets (additional) */
+"Create asset" = "資産を作成";
+"Edit asset" = "資産を編集";
+"Goal list" = "目標一覧";
+"Clear Filter" = "フィルタを解除";
+"Delete Assets" = "資産を削除";
+"All" = "すべて";
+
+/* MARK: - Paywall */
+"Terms" = "利用規約";
+"Privacy" = "プライバシー";
+
+/* MARK: - Search */
+"Search" = "検索";
+"Search for assets and operations by name, type, or category." = "資産や取引を、名前、種類、カテゴリで検索できます。";
+"Assets, operations, categories…" = "資産、取引、カテゴリ…";
+
+/* MARK: - Currency Picker */
+"Hey, I'm ByJo 👋" = "こんにちは、ByJoです 👋";
+"Before you start, set your preferred currency" = "はじめる前に、使う通貨を設定してください";
+"Currency" = "通貨";
+
+/* MARK: - Categories (additional) */
+"Budget / month" = "予算 / 月";
+"%@ / month" = "%@ / 月";
+"Add" = "追加";
+"Delete Categories" = "カテゴリを削除";
+
+/* MARK: - App Intents */
+"Add Operation" = "取引を追加";
+"Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow." = "ByJoの資産に取引を記録します。収入はプラス、支出はマイナスの金額で入力してください。";
+"Added %@ to %@." = "%1$@を%2$@に追加しました。";
+"Transfer Between Assets" = "資産間の振替";
+"Move funds from one asset to another in ByJo." = "ByJoで資産から別の資産へ資金を移動します。";
+"From Asset" = "振替元の資産";
+"To Asset" = "振替先の資産";
+"Transferred %@ from %@ to %@." = "%2$@から%3$@へ%1$@を振り替えました。";
+"Log Wallet Transaction" = "Walletの取引を記録";
+"Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass." = "Walletのタッチ決済をByJoに支出として記録します。存在しない資産やカテゴリは、渡した名前で自動作成されます。";
+"Merchant" = "店舗";
+"Asset Name" = "資産名";
+"Category Name" = "カテゴリ名";
+"Card" = "カード";
+"Card tap" = "タッチ決済";
+"Wallet" = "Wallet";
+"Wallet · %@" = "Wallet · %@";
+"Logged %@ (%@) to %@." = "%1$@（%2$@）を%3$@に記録しました。";
+"Transfer Funds" = "資金を振替";
+"Log Wallet Tap" = "タッチ決済を記録";
+"Asset not found." = "資産が見つかりません。";
+"Asset name is required." = "資産名を入力してください。";
+
+/* MARK: - Widget Extension */
+"Track your financial goals." = "お金の目標を確認できます。";
+"How your wealth is distributed across assets." = "資産ごとの配分を確認できます。";
+"Monthly spending over the last 6 months." = "過去6か月の毎月の支出。";
+"Your net worth trend over the past month." = "過去1か月の純資産の推移。";
+"Your savings rate over the last 6 months." = "過去6か月の貯蓄率。";
+"Your monthly savings rate." = "今月の貯蓄率。";
+"This month's expenses by category." = "今月のカテゴリ別支出。";
+"Upcoming recurring inflows and outflows." = "今後の定期的な収入と支出。";
+"Your total net worth at a glance." = "純資産の合計がひと目でわかります。";
+"This month's inflow vs. outflow ratio." = "今月の収入と支出の比率。";
+"No history" = "履歴なし";
+"No history yet" = "まだ履歴がありません";
+"Spending" = "支出";
+"6 months" = "6か月";
+"No data" = "データなし";
+"No spending data" = "支出データがありません";
+"Total" = "合計";
+"Avg / month" = "平均 / 月";
+"Allocation" = "配分";
+"No assets yet" = "まだ資産がありません";
+"Great" = "優秀";
+"Low" = "低い";
+"Monthly Savings Rate" = "今月の貯蓄率";
+"Saved" = "貯蓄額";
+"Savings Trend" = "貯蓄の推移";
+"No data yet" = "まだデータがありません";
+"Expenses" = "支出";
+"No expenses this month" = "今月の支出はありません";
+"Financial Goals" = "お金の目標";
+"No active goals" = "進行中の目標はありません";
+"No active\ngoals" = "進行中の\n目標なし";
+"No active goals yet" = "進行中の目標はまだありません";
+"Today" = "今日";
+"Tomorrow" = "明日";
+"in %lldd" = "%lld日後";
+"Next Recurring" = "次の定期取引";
+"No recurring\noperations" = "定期取引\nなし";
+"No recurring operations" = "定期取引はありません";
+"No recurring operations yet" = "定期取引はまだありません";
+
+/* MARK: - Paywall trial */
+"Your net worth is ready" = "純資産の準備ができました";
+"Tracked assets: %lld" = "記録中の資産: %lld件";
+"Your ByJo trial ends tomorrow" = "ByJoの無料トライアルは明日終了します";
+"Keep your net worth in view, or cancel anytime in Settings before it renews." = "このまま純資産を見守るか、更新前に設定からいつでもキャンセルできます。";
+
+/* MARK: - Free plan & ByJo Pro */
+"Unlimited Assets" = "資産を無制限に";
+"Track every account, card, loan and investment. The free plan covers %lld." = "口座、カード、ローン、投資をすべて記録。無料プランは%lld件までです。";
+"Give any asset a target and a date, and watch your progress." = "資産に目標額と期日を設定して、進捗を確認できます。";
+"Schedule bills and income, with a reminder before each one." = "請求や収入を予定に入れ、それぞれの前にリマインドします。";
+"Home Screen Widgets" = "ホーム画面ウィジェット";
+"Net worth, spending and goals at a glance, without opening the app." = "アプリを開かずに、純資産、支出、目標をひと目で確認。";
+"Bring in a CSV or JSON file, and take your data with you anytime." = "CSVやJSONファイルを読み込み、データをいつでも持ち出せます。";
+"All Future Pro Features" = "今後のPro機能もすべて";
+"New Pro features are included in every plan." = "新しいPro機能はすべてのプランに含まれます。";
+"Lifetime" = "買い切り";
+"Flexible, cancel anytime" = "いつでもキャンセル可能";
+"Pay once, keep it forever" = "一度の支払いでずっと使える";
+"%lld Days Free" = "%lld日間無料";
+"Best Value" = "いちばんお得";
+"Just %@ per week" = "1週間あたりわずか%@";
+"Start %lld-Day Free Trial" = "%lld日間の無料トライアルを開始";
+"Purchase Error" = "購入エラー";
+"%lld days free, then %@/year. Cancel anytime." = "%lld日間無料、その後%@/年。いつでもキャンセルできます。";
+"%@ per year. Renews automatically, cancel anytime." = "%@/年。自動更新、いつでもキャンセルできます。";
+"%@ per week. Renews automatically, cancel anytime." = "%@/週。自動更新、いつでもキャンセルできます。";
+"One payment of %@. No subscription." = "%@の一回払い。サブスクリプションではありません。";
+"Restore Purchases" = "購入を復元";
+"Plans are unavailable right now. Check your connection and try again." = "現在プランを表示できません。接続を確認して、もう一度お試しください。";
+"Close" = "閉じる";
+"Unlock ByJo Pro" = "ByJo Proを解放";
+"Track Every Account" = "すべての口座を記録";
+"Set Goals with Pro" = "Proで目標を設定";
+"Recurring Operations with Pro" = "Proで定期取引";
+"Export & Import with Pro" = "Proで書き出しと読み込み";
+"Your whole financial picture, private and in one place." = "お金の全体像を、プライベートにひとつの場所で。";
+"The free plan covers %lld assets. Pro adds as many as you need." = "無料プランは資産%lld件まで。Proなら必要なだけ追加できます。";
+"Schedule bills and income, and get a reminder before each one." = "請求や収入を予定に入れて、それぞれの前にリマインダーを受け取れます。";
+"Bring your data in from a spreadsheet, or take it with you anytime." = "表計算ファイルからデータを読み込んだり、いつでも持ち出したりできます。";
+"The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro." = "無料プランは資産%lld件までです。既存の資産を選ぶか、ByJoを開いてProにアップグレードしてください。";
+"Savings" = "貯金";
+"Investments" = "投資";
+"Car loan" = "自動車ローン";
+"Your whole net worth.\nPrivate." = "純資産のすべてを。\nプライベートに。";
+"No sign-up, no bank login. Your data stays on your devices and in your own iCloud." = "登録不要、銀行ログイン不要。データはあなたのデバイスとご自身のiCloudにだけ保存されます。";
+"Example of a net worth made of savings, investments and a car loan" = "貯金、投資、自動車ローンからなる純資産の例";
+"Name (optional)" = "名前（任意）";
+"Every account, goal and widget, with no limits." = "口座、目標、ウィジェットをすべて無制限に。";
+"Continue for free" = "無料で続ける";
+"Upgrade to ByJo Pro" = "ByJo Proにアップグレード";
+"Charts & Insights" = "グラフと分析";
+"Net worth history, spending trends, allocation and more, with Home arranged your way." = "純資産の推移、支出の傾向、資産配分などを、好きな並びのホームで。";
+"See the Whole Picture" = "全体像を見る";
+"Make Home Yours" = "ホームを自分好みに";
+"Net worth history, spending trends, asset allocation and more, right on Home." = "純資産の推移、支出の傾向、資産配分などをホームで直接確認。";
+"Reorder and hide Home sections to match how you think about money." = "ホームのセクションを並べ替えたり隠したりして、自分のお金の見方に合わせられます。";
+"Reorder and hide Home sections" = "ホームのセクションを並べ替え・非表示";

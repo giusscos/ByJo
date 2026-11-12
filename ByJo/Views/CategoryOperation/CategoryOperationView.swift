@@ -231,7 +231,7 @@ struct CategoryOperationView: View {
     func saveEditedCategory(category: CategoryOperation) {
         withAnimation {
             category.name = newCategoryName
-            let normalized = newCategoryBudget.replacingOccurrences(of: ",", with: ".")
+            let normalized = newCategoryBudget.normalizedAmountInput
             category.monthlyBudget = Decimal(string: normalized) ?? 0
 
             newCategoryName = ""

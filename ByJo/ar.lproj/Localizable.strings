@@ -1,0 +1,598 @@
+/* Arabic. Machine-assisted translation, 2026-11-12: a native speaker should review it before release.
+   Terms: net worth = صافي الثروة, assets = الأصول, operations = العمليات, goals = الأهداف,
+   recurring operations = العمليات المتكررة, inflow = دخل, outflow = مصروف. */
+
+/* MARK: - Asset Types */
+"Cash" = "نقد";
+"Bank Account" = "حساب بنكي";
+"Savings Account" = "حساب توفير";
+"Checking Account" = "حساب جارٍ";
+"Credit Card" = "بطاقة ائتمان";
+"Investment Account" = "حساب استثمار";
+"Brokerage Account" = "حساب وساطة";
+"Retirement Account" = "حساب تقاعد";
+"Pension" = "معاش تقاعدي";
+"Cryptocurrency" = "عملات رقمية";
+"Stocks" = "أسهم";
+"Bonds" = "سندات";
+"Mutual Funds" = "صناديق استثمار مشتركة";
+"ETFs" = "صناديق مؤشرات متداولة";
+"Real Estate" = "عقارات";
+"Property" = "ممتلكات";
+"Vehicle" = "مركبة";
+"Car" = "سيارة";
+"Motorcycle" = "دراجة نارية";
+"Boat" = "قارب";
+"Jewelry" = "مجوهرات";
+"Art" = "أعمال فنية";
+"Collectibles" = "مقتنيات";
+"Business" = "نشاط تجاري";
+"Partnership" = "شراكة";
+"Loan" = "قرض";
+"Mortgage" = "رهن عقاري";
+"Student Loan" = "قرض دراسي";
+"Personal Loan" = "قرض شخصي";
+"Insurance" = "تأمين";
+"Life Insurance" = "تأمين على الحياة";
+"Health Insurance" = "تأمين صحي";
+"Annuity" = "دفعات سنوية";
+"Commodity" = "سلع";
+"Precious Metals" = "معادن ثمينة";
+"Foreign Currency" = "عملة أجنبية";
+"Options" = "عقود خيارات";
+"Futures" = "عقود آجلة";
+"Private Equity" = "أسهم خاصة";
+"Crowdfunding Investment" = "استثمار جماعي";
+"Other" = "أخرى";
+
+/* MARK: - Operation Types */
+"Inflow" = "دخل";
+"Outflow" = "مصروف";
+
+/* MARK: - Recurrence Frequency */
+"Single" = "مرة واحدة";
+"Daily" = "يومي";
+"Weekly" = "أسبوعي";
+"Monthly" = "شهري";
+"Yearly" = "سنوي";
+
+/* MARK: - Goal Status */
+"Completed" = "مكتمل";
+"Suspended" = "معلّق";
+
+/* MARK: - Balance Status */
+"Positive" = "موجب";
+"Negative" = "سالب";
+
+/* MARK: - Spendmeter Timeframe */
+"Day" = "يوم";
+"Week" = "أسبوع";
+"Month" = "شهر";
+"Year" = "سنة";
+
+/* MARK: - Asset Sort Order */
+"Name" = "الاسم";
+"Balance" = "الرصيد";
+"Type" = "النوع";
+
+/* MARK: - Home Sections */
+"Goals" = "الأهداف";
+"Monthly Summary" = "الملخص الشهري";
+"Spendmeter" = "مقياس الإنفاق";
+"Recurring" = "المتكررة";
+"Top Category" = "الفئة الأعلى";
+"Savings Rate" = "معدل الادخار";
+"Top Expenses" = "أعلى المصاريف";
+"Asset Allocation" = "توزيع الأصول";
+
+/* MARK: - Spendmeter Period Labels */
+"yesterday" = "أمس";
+"last week" = "الأسبوع الماضي";
+"last month" = "الشهر الماضي";
+"last year" = "العام الماضي";
+
+/* MARK: - Spendmeter Insight Messages */
+"Same as %@" = "مثل %@";
+"%d%% more saved than %@" = "ادخار أكثر بنسبة %d%% من %@";
+"%d%% less saved than %@" = "ادخار أقل بنسبة %d%% من %@";
+"More saved than %@" = "ادخار أكثر من %@";
+"Less saved than %@" = "ادخار أقل من %@";
+
+/* MARK: - Notifications */
+"Recurring operation" = "عملية متكررة";
+
+/* MARK: - Assets */
+"Assets" = "الأصول";
+"Add asset" = "إضافة أصل";
+"No assets found 😕" = "لا توجد أصول 😕";
+"Start adding assets" = "ابدأ بإضافة الأصول";
+"Asset type" = "نوع الأصل";
+"Long amount" = "المبلغ كاملًا";
+"Short amount" = "المبلغ مختصرًا";
+"By Type" = "حسب النوع";
+"Sort By" = "ترتيب حسب";
+"Filters" = "عوامل التصفية";
+"Sorters" = "الترتيب";
+"Menu" = "القائمة";
+
+/* MARK: - Operations */
+"Edit operation" = "تعديل العملية";
+"Create operation" = "إنشاء عملية";
+"Update recurring operation" = "تحديث العملية المتكررة";
+"Update this occurrence only" = "تحديث هذا التكرار فقط";
+"Update all occurrences" = "تحديث كل التكرارات";
+"Insert note" = "إضافة ملاحظة";
+"Next occurrence: " = "التكرار التالي: ";
+
+/* MARK: - Goals */
+"Add goal" = "إضافة هدف";
+"Is Goal completed?" = "هل اكتمل الهدف؟";
+
+/* MARK: - Categories */
+"Categories" = "الفئات";
+
+/* MARK: - Common Actions */
+"Save" = "حفظ";
+"Edit" = "تعديل";
+"Delete" = "حذف";
+"Cancel" = "إلغاء";
+"Skip" = "تخطٍّ";
+"Allow" = "سماح";
+
+/* MARK: - Operation Detail */
+"Asset" = "الأصل";
+"Category" = "الفئة";
+"Next payment" = "الدفعة التالية";
+"From" = "من";
+"To" = "إلى";
+"Received" = "مستلَم";
+"Transfer" = "تحويل";
+"Note" = "ملاحظة";
+"History" = "السجل";
+"Stop recurring" = "إيقاف التكرار";
+"Delete current" = "حذف الحالية";
+"Delete linked" = "حذف المرتبطة";
+"Delete both" = "حذف الاثنتين";
+"Are you sure you want to delete?" = "هل تريد الحذف بالتأكيد؟";
+"Stop recurring?" = "إيقاف التكرار؟";
+"No future occurrences will be generated. Past occurrences are kept." = "لن تُنشأ تكرارات مستقبلية. ستبقى التكرارات السابقة محفوظة.";
+
+/* MARK: - Swap */
+"Swap" = "تحويل";
+
+/* MARK: - Keyboard */
+"Hide keyboard" = "إخفاء لوحة المفاتيح";
+"Dismiss keyboard" = "إغلاق لوحة المفاتيح";
+
+/* MARK: - Onboarding */
+"Set Up a Recurring Payment" = "إعداد دفعة متكررة";
+"Log a Transaction" = "تسجيل معاملة";
+"Description" = "الوصف";
+"Amount" = "المبلغ";
+"Repeats" = "التكرار";
+"Enable Reminders" = "تفعيل التذكيرات";
+"Get notified when recurring payments are due." = "احصل على إشعار عند حلول موعد الدفعات المتكررة.";
+"Reminders enabled" = "التذكيرات مفعّلة";
+"Date" = "التاريخ";
+
+/* MARK: - What's New */
+"What's New in ByJo" = "الجديد في ByJo";
+"Here's everything that's new and improved." = "إليك كل ما هو جديد ومحسّن.";
+"Continue" = "متابعة";
+"Update Asset Value" = "تحديث قيمة الأصل";
+"Set an asset to its real value — ByJo records the adjustment as an operation with an optional note." = "اضبط الأصل على قيمته الحقيقية، وسيسجّل ByJo الفرق كعملية مع ملاحظة اختيارية.";
+"Balance History" = "سجل الرصيد";
+"See how an asset’s value changed over time with a chart on the asset detail screen." = "شاهد كيف تغيّرت قيمة الأصل بمرور الوقت عبر رسم بياني في شاشة تفاصيل الأصل.";
+
+/* MARK: - Update Asset Value */
+"Update value" = "تحديث القيمة";
+"Current" = "الحالية";
+"New value" = "القيمة الجديدة";
+"Adjustment: %@" = "التعديل: %@";
+"Note (optional)" = "ملاحظة (اختياري)";
+"Value update" = "تحديث القيمة";
+
+/* MARK: - Asset Balance History */
+"Balance history" = "سجل الرصيد";
+"Hide chart" = "إخفاء الرسم البياني";
+"Show chart" = "عرض الرسم البياني";
+
+/* MARK: - Home Empty State */
+"Start tracking your money" = "ابدأ بتتبّع أموالك";
+"Add your assets, then log income and expenses to see your net worth and monthly progress." = "أضف أصولك، ثم سجّل الدخل والمصاريف لترى صافي ثروتك وتقدّمك الشهري.";
+
+/* MARK: - Onboarding Welcome */
+"Your personal finance tracker.\nBuilt for clarity, not complexity." = "متتبّع أموالك الشخصية.\nمصمَّم للوضوح لا للتعقيد.";
+"Get Started" = "ابدأ الآن";
+
+/* MARK: - Onboarding Why Save */
+"Know Your Net Worth" = "اعرف صافي ثروتك";
+"Your net worth — assets minus liabilities — is the clearest snapshot of your financial health." = "صافي ثروتك، أي الأصول ناقص الالتزامات، هو أوضح صورة عن صحتك المالية.";
+"Next" = "التالي";
+"People don't know\ntheir net worth" = "من الناس لا يعرفون\nصافي ثروتهم";
+"More likely to hit\ngoals when tracking" = "فرصة أكبر لتحقيق\nالأهداف مع التتبّع";
+"You can't improve what you don't measure — tracking is the first step." = "لا يمكنك تحسين ما لا تقيسه، والتتبّع هو الخطوة الأولى.";
+"Seeing your net worth grow month over month is the best motivation to keep going." = "رؤية صافي ثروتك ينمو شهرًا بعد شهر هي أفضل دافع للاستمرار.";
+"Spotting a downward trend early lets you act before it becomes a bigger problem." = "اكتشاف التراجع مبكرًا يتيح لك التصرّف قبل أن يصبح مشكلة أكبر.";
+
+/* MARK: - Onboarding Why Invest */
+"Take Control of Your Budget" = "تحكّم في ميزانيتك";
+"Knowing where your money goes gives you the power to decide where it should go." = "معرفة أين تذهب أموالك تمنحك القدرة على تحديد أين يجب أن تذهب.";
+"Let's Set Up ByJo" = "لنُعدّ ByJo";
+"Of income goes\nuntracked each month" = "من الدخل لا يُتتبَّع\nكل شهر";
+"Less overspending\nwith regular tracking" = "إنفاق زائد أقل\nمع التتبّع المنتظم";
+"Most people underestimate their monthly expenses by 20–30%." = "معظم الناس يقدّرون مصاريفهم الشهرية بأقل من حقيقتها بنسبة 20–30%.";
+"A simple spending log reveals patterns you'd never notice otherwise." = "سجل إنفاق بسيط يكشف أنماطًا لم تكن لتلاحظها أبدًا.";
+"Budgeting isn't about restriction — it's about making intentional choices." = "الميزانية لا تعني التقييد، بل اتخاذ قرارات مدروسة.";
+
+/* MARK: - Onboarding Currency */
+"Choose Your Currency" = "اختر عملتك";
+"Select how amounts are displayed. You can change this anytime." = "اختر طريقة عرض المبالغ. يمكنك تغييرها في أي وقت.";
+
+/* MARK: - Onboarding Asset Setup */
+"Add Your First Asset" = "أضف أصلك الأول";
+"Track a bank account, savings, investments, or anything of value." = "تتبّع حسابًا بنكيًا أو مدخرات أو استثمارات أو أي شيء ذي قيمة.";
+"Current Balance" = "الرصيد الحالي";
+"e.g. My Bank Account" = "مثال: حسابي البنكي";
+"Compact keyboard" = "لوحة مفاتيح مصغّرة";
+
+/* MARK: - Onboarding Transaction & Recurring */
+"Record an inflow or outflow for " = "سجّل دخلًا أو مصروفًا لـ ";
+"Automate a salary, subscription, or bill for " = "أتمِت راتبًا أو اشتراكًا أو فاتورة لـ ";
+"your asset" = "أصلك";
+"e.g. Monthly Salary" = "مثال: الراتب الشهري";
+"e.g. Grocery Shopping" = "مثال: مشتريات البقالة";
+"e.g. Netflix" = "مثال: Netflix";
+
+/* MARK: - Onboarding Success */
+"You're All Set!" = "كل شيء جاهز!";
+"Your financial journey starts now. ByJo will help you track every step — from savings to investments." = "رحلتك المالية تبدأ الآن. سيساعدك ByJo على تتبّع كل خطوة، من المدخرات إلى الاستثمارات.";
+
+/* MARK: - Home Tips */
+"Add your first asset" = "أضف أصلك الأول";
+"Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth." = "اضغط هنا لإضافة حساب بنكي أو استثمار أو أي شيء له قيمة مالية لتبدأ بتتبّع صافي ثروتك.";
+"Log your first transaction" = "سجّل أول معاملة";
+"Tap + to record inflows or outflows and keep your balances up to date." = "اضغط + لتسجيل الدخل أو المصاريف وإبقاء أرصدتك محدّثة.";
+
+/* MARK: - Budget Progress Widget */
+"Budget Progress" = "تقدّم الميزانية";
+"of %@" = "من %@";
+
+/* MARK: - Debt Payoff Widget */
+"Debt Payoff" = "سداد الديون";
+"/ mo" = "/ شهر";
+"Paid off %@" = "سُدِّد في %@";
+"No recurring payments" = "لا توجد دفعات متكررة";
+
+/* MARK: - Home Sections (additional) */
+"Expense Breakdown" = "تفصيل المصاريف";
+"Net Worth History" = "سجل صافي الثروة";
+"Spending Trends" = "اتجاهات الإنفاق";
+"Savings Rate Trend" = "اتجاه معدل الادخار";
+
+/* MARK: - Home Widgets */
+"Net Worth" = "صافي الثروة";
+"This month" = "هذا الشهر";
+"VS last month" = "مقابل الشهر الماضي";
+"Forecast" = "التوقّع";
+"Budget" = "الميزانية";
+"≥20% great" = "‎≥20% ممتاز";
+"10–20% ok" = "‎10–20% جيد";
+"<10% low" = "‎<10% منخفض";
+"Add All" = "إضافة الكل";
+"Customize Home" = "تخصيص الرئيسية";
+"Drag to reorder. Tap the eye icon to show or hide a section." = "اسحب لإعادة الترتيب. اضغط أيقونة العين لإظهار قسم أو إخفائه.";
+"Recurring Operations" = "العمليات المتكررة";
+"Categories overview" = "نظرة عامة على الفئات";
+"Home" = "الرئيسية";
+"Timeframe" = "الفترة";
+"%lld pending operation" = "%lld عملية معلّقة";
+"%lld pending operations" = "%lld عمليات معلّقة";
+"Operation: %lld" = "عملية: %lld";
+"Operations: %lld" = "العمليات: %lld";
+
+/* MARK: - Goals (additional) */
+"Started" = "البداية";
+"Target" = "الهدف";
+"Remaining" = "المتبقي";
+"Saved so far" = "المدَّخر حتى الآن";
+"Goal reached!" = "تحقّق الهدف!";
+"Due date" = "تاريخ الاستحقاق";
+"Expired" = "منتهٍ";
+"Progress" = "التقدّم";
+"Monthly pace" = "الوتيرة الشهرية";
+"Estimated completion" = "الإنجاز المتوقّع";
+"On track" = "على المسار";
+"Behind schedule" = "متأخر عن الموعد";
+"Need more savings" = "تحتاج إلى ادخار أكثر";
+"Balance not growing — add an inflow to this asset" = "الرصيد لا ينمو. أضف دخلًا إلى هذا الأصل";
+"Projections" = "التوقّعات";
+"Based on your last 90 days of activity on %@." = "بناءً على نشاطك في آخر 90 يومًا على %@.";
+"Per day" = "يوميًا";
+"Per week" = "أسبوعيًا";
+"Per month" = "شهريًا";
+"Required savings" = "الادخار المطلوب";
+"To reach your target in %lld days." = "لبلوغ هدفك خلال %lld يومًا.";
+"Manage" = "إدارة";
+"Pin to home" = "تثبيت في الرئيسية";
+"Unpin from home" = "إلغاء التثبيت من الرئيسية";
+"Resume" = "استئناف";
+"Suspend" = "تعليق";
+"Mark as completed" = "تمييز كمكتمل";
+"Create goal" = "إنشاء هدف";
+"Edit goal" = "تعديل الهدف";
+"Title" = "العنوان";
+"Current: " = "الحالي: ";
+"Ongoing" = "جارٍ";
+"Complete" = "مكتمل";
+"left to go" = "متبقٍ";
+"Due date: " = "تاريخ الاستحقاق: ";
+"Completed date: " = "تاريخ الإنجاز: ";
+"Reached" = "تحقّق";
+"Missed" = "فائت";
+"%lld active" = "%lld نشط";
+"%lldd left" = "باقي %lld يوم";
+
+/* MARK: - Export & Import */
+"Export & Import" = "التصدير والاستيراد";
+"Done" = "تم";
+"OK" = "حسنًا";
+"Import Error" = "خطأ في الاستيراد";
+"Unknown error" = "خطأ غير معروف";
+"Export Operations as CSV" = "تصدير العمليات بصيغة CSV";
+"No operations to export" = "لا توجد عمليات للتصدير";
+"Export Full Backup (JSON)" = "تصدير نسخة احتياطية كاملة (JSON)";
+"No data to export" = "لا توجد بيانات للتصدير";
+"Export" = "تصدير";
+"CSV contains all operations. JSON contains everything: assets, operations, categories, and goals." = "يحتوي ملف CSV على كل العمليات. ويحتوي JSON على كل شيء: الأصول والعمليات والفئات والأهداف.";
+"Import CSV…" = "استيراد CSV…";
+"Restore from JSON Backup…" = "الاستعادة من نسخة JSON احتياطية…";
+"Import" = "استيراد";
+"Imported data is added to your existing data. CSV lets you map columns from any spreadsheet." = "تُضاف البيانات المستوردة إلى بياناتك الحالية. يتيح لك CSV ربط الأعمدة من أي جدول بيانات.";
+"Sample CSV File" = "ملف CSV نموذجي";
+"Sample JSON Backup" = "نسخة JSON احتياطية نموذجية";
+"Sample Files" = "ملفات نموذجية";
+"Download these to understand the expected format before importing your own data." = "نزّل هذه الملفات لفهم الصيغة المطلوبة قبل استيراد بياناتك.";
+"Could not access the file." = "تعذّر الوصول إلى الملف.";
+"Could not read the file." = "تعذّرت قراءة الملف.";
+"The CSV file appears to be empty or has no header row." = "يبدو أن ملف CSV فارغ أو لا يحتوي على صف عناوين.";
+"Map Columns" = "ربط الأعمدة";
+"Import Complete" = "اكتمل الاستيراد";
+"Import Failed" = "فشل الاستيراد";
+"File Info" = "معلومات الملف";
+"File" = "الملف";
+"Rows" = "الصفوف";
+"Columns detected" = "الأعمدة المكتشفة";
+"Required Fields" = "الحقول المطلوبة";
+"Select which column in your file corresponds to each field." = "اختر العمود في ملفك الذي يقابل كل حقل.";
+"Optional Fields" = "الحقول الاختيارية";
+"Frequency" = "التكرار";
+"Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single." = "قيم التكرار: Single وDaily وWeekly وMonthly وYearly. القيم غير المعروفة تُعامل كـ Single.";
+"Skip duplicates" = "تخطّي المكررات";
+"Duplicates found" = "تم العثور على مكررات";
+"Import Options" = "خيارات الاستيراد";
+"A duplicate matches an existing operation by description, date, amount, and asset." = "المكرر هو ما يطابق عملية موجودة في الوصف والتاريخ والمبلغ والأصل.";
+"Issues — fix these to enable import" = "مشكلات: أصلحها لتفعيل الاستيراد";
+"Select column…" = "اختر عمودًا…";
+"None" = "لا شيء";
+"Restore Backup" = "استعادة النسخة الاحتياطية";
+"Export Date" = "تاريخ التصدير";
+"Version" = "الإصدار";
+"Backup Contents" = "محتوى النسخة الاحتياطية";
+"Duplicates Found" = "تم العثور على مكررات";
+"Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset." = "تُطابَق الأصول والفئات بالاسم، والعمليات بالوصف والتاريخ والمبلغ والأصل، والأهداف بالعنوان والمبلغ المستهدف والأصل.";
+"This adds to your existing data, not replaces it. To start fresh, delete your data first." = "يُضاف هذا إلى بياناتك الحالية ولا يستبدلها. لتبدأ من جديد، احذف بياناتك أولًا.";
+"Description is empty" = "الوصف فارغ";
+"Asset name is empty" = "اسم الأصل فارغ";
+"Column not found in file" = "العمود غير موجود في الملف";
+"Import %lld" = "استيراد %lld";
+"%lld imported, %lld duplicates skipped." = "تم استيراد %lld، وتخطّي %lld مكررًا.";
+"%lld operations imported successfully." = "تم استيراد %lld عملية بنجاح.";
+"Preview — first %lld rows" = "معاينة: أول %lld صفوف";
+"%lld already exist" = "%lld موجودة مسبقًا";
+"Required field not mapped: %@" = "حقل مطلوب غير مربوط: %@";
+"Row %lld: %@" = "الصف %lld: %@";
+"Invalid backup file: %@" = "ملف نسخة احتياطية غير صالح: %@";
+"Unsupported backup version %lld. Please update ByJo." = "إصدار النسخة الاحتياطية %lld غير مدعوم. يُرجى تحديث ByJo.";
+"Cannot parse date \"%@\"" = "تعذّرت قراءة التاريخ \"%@\"";
+"Cannot parse amount \"%@\"" = "تعذّرت قراءة المبلغ \"%@\"";
+
+/* MARK: - Wallet Auto-Log */
+"Wallet Auto-Log" = "التسجيل التلقائي من Wallet";
+"Auto-log taps" = "تسجيل الدفعات تلقائيًا";
+"Set up Shortcuts to log merchant and amount automatically." = "اضبط الاختصارات لتسجيل التاجر والمبلغ تلقائيًا.";
+"Auto-log card taps" = "تسجيل دفعات البطاقة تلقائيًا";
+"Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass." = "أضف اختصار ByJo Wallet Auto-Log المشترك، ثم أنشئ أتمتة «معاملة» لتُسجَّل كل دفعة NFC في ByJo. تُطابَق الأصول والفئات أو تُنشأ من الأسماء التي تمرّرها.";
+"Get Shortcut" = "الحصول على الاختصار";
+"Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts." = "يفتح اختصار ByJo Wallet Auto-Log المشترك لتضيفه إلى الاختصارات.";
+"Create Automation" = "إنشاء أتمتة";
+"Opens Shortcuts to create a new Transaction / Wallet automation." = "يفتح الاختصارات لإنشاء أتمتة «معاملة» أو «Wallet» جديدة.";
+"Setup steps" = "خطوات الإعداد";
+"Tap Get Shortcut and add ByJo Wallet Auto-Log." = "اضغط «الحصول على الاختصار» وأضف ByJo Wallet Auto-Log.";
+"Tap Create Automation and choose Transaction (or Wallet on newer iOS)." = "اضغط «إنشاء أتمتة» واختر «معاملة» (أو «Wallet» في إصدارات iOS الأحدث).";
+"Select the cards to track, then choose Run Immediately." = "اختر البطاقات التي تريد تتبّعها، ثم اختر «تشغيل فورًا».";
+"Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings)." = "إضافة إجراء ← تشغيل اختصار ← ByJo Wallet Auto-Log (أو افتح الاختصار وتأكّد من ربط التاجر والمبلغ واسم الأصل).";
+"Optionally set Category Name. Leave empty to categorize later in ByJo." = "يمكنك تحديد اسم الفئة، أو تركه فارغًا للتصنيف لاحقًا في ByJo.";
+"If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet." = "إذا لم تُسجَّل الدفعات أبدًا، فعّل البيانات الخلوية لتطبيق Wallet من الإعدادات ← التطبيقات ← Wallet.";
+"I've set this up" = "انتهيت من الإعداد";
+"This hides the tip on Home. You can always show it again from Customize Home." = "سيؤدي هذا إلى إخفاء النصيحة من الرئيسية. يمكنك إظهارها مجددًا من «تخصيص الرئيسية».";
+"Shown at the top of Home when enabled." = "تظهر أعلى الرئيسية عند التفعيل.";
+
+/* MARK: - Operations (additional) */
+"Operations" = "العمليات";
+"Add operation" = "إضافة عملية";
+"on" = "في";
+"Details" = "التفاصيل";
+"Asset from" = "من الأصل";
+"Asset to" = "إلى الأصل";
+"Suggestions" = "اقتراحات";
+"Add split" = "إضافة تقسيم";
+"Remove splits" = "إزالة التقسيمات";
+"Split transaction" = "تقسيم المعاملة";
+"Splits" = "التقسيمات";
+"Do you want to update only this occurrence or all %lld occurrences in the series?" = "هل تريد تحديث هذا التكرار فقط أم كل التكرارات (%lld) في السلسلة؟";
+"Change Category" = "تغيير الفئة";
+"Change Asset" = "تغيير الأصل";
+"Reassign" = "إعادة تعيين";
+"Recurring only" = "المتكررة فقط";
+"Delete Operations" = "حذف العمليات";
+"No operations found 😕" = "لا توجد عمليات 😕";
+"Start adding operations" = "ابدأ بإضافة العمليات";
+"Add operations" = "إضافة عمليات";
+"No categories found 😕" = "لا توجد فئات 😕";
+"Start adding categories" = "ابدأ بإضافة الفئات";
+"Add categories" = "إضافة فئات";
+"Add category" = "إضافة فئة";
+"Operation" = "العملية";
+
+/* MARK: - Assets (additional) */
+"Create asset" = "إنشاء أصل";
+"Edit asset" = "تعديل الأصل";
+"Goal list" = "قائمة الأهداف";
+"Clear Filter" = "مسح التصفية";
+"Delete Assets" = "حذف الأصول";
+"All" = "الكل";
+
+/* MARK: - Paywall */
+"Terms" = "الشروط";
+"Privacy" = "الخصوصية";
+
+/* MARK: - Search */
+"Search" = "بحث";
+"Search for assets and operations by name, type, or category." = "ابحث عن الأصول والعمليات بالاسم أو النوع أو الفئة.";
+"Assets, operations, categories…" = "الأصول، العمليات، الفئات…";
+
+/* MARK: - Currency Picker */
+"Hey, I'm ByJo 👋" = "مرحبًا، أنا ByJo 👋";
+"Before you start, set your preferred currency" = "قبل أن تبدأ، اختر عملتك المفضّلة";
+"Currency" = "العملة";
+
+/* MARK: - Categories (additional) */
+"Budget / month" = "الميزانية / شهر";
+"%@ / month" = "%@ / شهر";
+"Add" = "إضافة";
+"Delete Categories" = "حذف الفئات";
+
+/* MARK: - App Intents */
+"Add Operation" = "إضافة عملية";
+"Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow." = "سجّل عملية مالية على أصل في ByJo. استخدم مبلغًا موجبًا للدخل ومبلغًا سالبًا للمصروف.";
+"Added %@ to %@." = "تمت إضافة %@ إلى %@.";
+"Transfer Between Assets" = "التحويل بين الأصول";
+"Move funds from one asset to another in ByJo." = "انقل الأموال من أصل إلى آخر في ByJo.";
+"From Asset" = "من الأصل";
+"To Asset" = "إلى الأصل";
+"Transferred %@ from %@ to %@." = "تم تحويل %@ من %@ إلى %@.";
+"Log Wallet Transaction" = "تسجيل معاملة Wallet";
+"Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass." = "سجّل دفعة بطاقة Wallet كمصروف في ByJo. تُنشأ الأصول والفئات غير الموجودة تلقائيًا من الأسماء التي تمرّرها.";
+"Merchant" = "التاجر";
+"Asset Name" = "اسم الأصل";
+"Category Name" = "اسم الفئة";
+"Card" = "البطاقة";
+"Card tap" = "دفعة بطاقة";
+"Wallet" = "Wallet";
+"Wallet · %@" = "Wallet · %@";
+"Logged %@ (%@) to %@." = "تم تسجيل %@ (%@) في %@.";
+"Transfer Funds" = "تحويل الأموال";
+"Log Wallet Tap" = "تسجيل دفعة Wallet";
+"Asset not found." = "لم يُعثر على الأصل.";
+"Asset name is required." = "اسم الأصل مطلوب.";
+
+/* MARK: - Widget Extension */
+"Track your financial goals." = "تابع أهدافك المالية.";
+"How your wealth is distributed across assets." = "كيف تتوزّع ثروتك على الأصول.";
+"Monthly spending over the last 6 months." = "الإنفاق الشهري خلال آخر 6 أشهر.";
+"Your net worth trend over the past month." = "اتجاه صافي ثروتك خلال الشهر الماضي.";
+"Your savings rate over the last 6 months." = "معدل ادخارك خلال آخر 6 أشهر.";
+"Your monthly savings rate." = "معدل ادخارك الشهري.";
+"This month's expenses by category." = "مصاريف هذا الشهر حسب الفئة.";
+"Upcoming recurring inflows and outflows." = "الدخل والمصاريف المتكررة القادمة.";
+"Your total net worth at a glance." = "صافي ثروتك الإجمالي بنظرة واحدة.";
+"This month's inflow vs. outflow ratio." = "نسبة الدخل إلى المصاريف هذا الشهر.";
+"No history" = "لا يوجد سجل";
+"No history yet" = "لا يوجد سجل بعد";
+"Spending" = "الإنفاق";
+"6 months" = "6 أشهر";
+"No data" = "لا توجد بيانات";
+"No spending data" = "لا توجد بيانات إنفاق";
+"Total" = "الإجمالي";
+"Avg / month" = "المتوسط / شهر";
+"Allocation" = "التوزيع";
+"No assets yet" = "لا توجد أصول بعد";
+"Great" = "ممتاز";
+"Low" = "منخفض";
+"Monthly Savings Rate" = "معدل الادخار الشهري";
+"Saved" = "المدَّخر";
+"Savings Trend" = "اتجاه الادخار";
+"No data yet" = "لا توجد بيانات بعد";
+"Expenses" = "المصاريف";
+"No expenses this month" = "لا مصاريف هذا الشهر";
+"Financial Goals" = "الأهداف المالية";
+"No active goals" = "لا أهداف نشطة";
+"No active\ngoals" = "لا أهداف\nنشطة";
+"No active goals yet" = "لا أهداف نشطة بعد";
+"Today" = "اليوم";
+"Tomorrow" = "غدًا";
+"in %lldd" = "بعد %lld يوم";
+"Next Recurring" = "التكرار القادم";
+"No recurring\noperations" = "لا عمليات\nمتكررة";
+"No recurring operations" = "لا عمليات متكررة";
+"No recurring operations yet" = "لا عمليات متكررة بعد";
+
+/* MARK: - Paywall trial */
+"Your net worth is ready" = "صافي ثروتك جاهز";
+"Tracked assets: %lld" = "الأصول المتتبَّعة: %lld";
+"Your ByJo trial ends tomorrow" = "تنتهي فترة تجربة ByJo غدًا";
+"Keep your net worth in view, or cancel anytime in Settings before it renews." = "أبقِ صافي ثروتك أمام عينيك، أو ألغِ الاشتراك في أي وقت من الإعدادات قبل التجديد.";
+
+/* MARK: - Free plan & ByJo Pro */
+"Unlimited Assets" = "أصول بلا حدود";
+"Track every account, card, loan and investment. The free plan covers %lld." = "تتبّع كل حساب وبطاقة وقرض واستثمار. تشمل الخطة المجانية %lld.";
+"Give any asset a target and a date, and watch your progress." = "حدّد لأي أصل هدفًا وموعدًا، وتابع تقدّمك.";
+"Schedule bills and income, with a reminder before each one." = "جدوِل الفواتير والدخل، مع تذكير قبل كل موعد.";
+"Home Screen Widgets" = "أدوات الشاشة الرئيسية";
+"Net worth, spending and goals at a glance, without opening the app." = "صافي الثروة والإنفاق والأهداف بنظرة واحدة، دون فتح التطبيق.";
+"Bring in a CSV or JSON file, and take your data with you anytime." = "استورد ملف CSV أو JSON، وخذ بياناتك معك في أي وقت.";
+"All Future Pro Features" = "كل ميزات Pro المستقبلية";
+"New Pro features are included in every plan." = "ميزات Pro الجديدة مشمولة في كل الخطط.";
+"Lifetime" = "مدى الحياة";
+"Flexible, cancel anytime" = "مرن، ألغِ في أي وقت";
+"Pay once, keep it forever" = "ادفع مرة واحدة واحتفظ به للأبد";
+"%lld Days Free" = "%lld أيام مجانًا";
+"Best Value" = "أفضل قيمة";
+"Just %@ per week" = "%@ فقط أسبوعيًا";
+"Start %lld-Day Free Trial" = "ابدأ تجربة مجانية لمدة %lld أيام";
+"Purchase Error" = "خطأ في الشراء";
+"%lld days free, then %@/year. Cancel anytime." = "%lld أيام مجانًا، ثم %@/سنة. ألغِ في أي وقت.";
+"%@ per year. Renews automatically, cancel anytime." = "%@ سنويًا. يتجدّد تلقائيًا، ويمكنك الإلغاء في أي وقت.";
+"%@ per week. Renews automatically, cancel anytime." = "%@ أسبوعيًا. يتجدّد تلقائيًا، ويمكنك الإلغاء في أي وقت.";
+"One payment of %@. No subscription." = "دفعة واحدة بقيمة %@. بلا اشتراك.";
+"Restore Purchases" = "استعادة المشتريات";
+"Plans are unavailable right now. Check your connection and try again." = "الخطط غير متاحة الآن. تحقّق من اتصالك وحاول مجددًا.";
+"Close" = "إغلاق";
+"Unlock ByJo Pro" = "افتح ByJo Pro";
+"Track Every Account" = "تتبّع كل حساب";
+"Set Goals with Pro" = "حدّد أهدافك مع Pro";
+"Recurring Operations with Pro" = "العمليات المتكررة مع Pro";
+"Export & Import with Pro" = "التصدير والاستيراد مع Pro";
+"Your whole financial picture, private and in one place." = "صورتك المالية كاملة، بخصوصية وفي مكان واحد.";
+"The free plan covers %lld assets. Pro adds as many as you need." = "تشمل الخطة المجانية %lld أصول. ويضيف Pro ما تحتاجه منها بلا حدود.";
+"Schedule bills and income, and get a reminder before each one." = "جدوِل الفواتير والدخل، واحصل على تذكير قبل كل موعد.";
+"Bring your data in from a spreadsheet, or take it with you anytime." = "استورد بياناتك من جدول بيانات، أو خذها معك في أي وقت.";
+"The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro." = "تشمل الخطة المجانية %lld أصول. اختر أحد أصولك، أو افتح ByJo للترقية إلى Pro.";
+"Savings" = "المدخرات";
+"Investments" = "الاستثمارات";
+"Car loan" = "قرض السيارة";
+"Your whole net worth.\nPrivate." = "صافي ثروتك كاملًا.\nبخصوصية تامة.";
+"No sign-up, no bank login. Your data stays on your devices and in your own iCloud." = "بلا تسجيل وبلا ربط بالبنك. تبقى بياناتك على أجهزتك وفي iCloud الخاص بك.";
+"Example of a net worth made of savings, investments and a car loan" = "مثال على صافي ثروة يتكوّن من مدخرات واستثمارات وقرض سيارة";
+"Name (optional)" = "الاسم (اختياري)";
+"Every account, goal and widget, with no limits." = "كل الحسابات والأهداف والأدوات، بلا حدود.";
+"Continue for free" = "المتابعة مجانًا";
+"Upgrade to ByJo Pro" = "الترقية إلى ByJo Pro";
+"Charts & Insights" = "رسوم بيانية وتحليلات";
+"Net worth history, spending trends, allocation and more, with Home arranged your way." = "سجل صافي الثروة واتجاهات الإنفاق والتوزيع وغيرها، مع رئيسية مرتّبة على طريقتك.";
+"See the Whole Picture" = "شاهد الصورة كاملة";
+"Make Home Yours" = "اجعل الرئيسية على ذوقك";
+"Net worth history, spending trends, asset allocation and more, right on Home." = "سجل صافي الثروة واتجاهات الإنفاق وتوزيع الأصول وغيرها، مباشرة في الرئيسية.";
+"Reorder and hide Home sections to match how you think about money." = "أعد ترتيب أقسام الرئيسية وأخفِ ما تريد لتناسب طريقة تفكيرك في المال.";
+"Reorder and hide Home sections" = "إعادة ترتيب أقسام الرئيسية وإخفاؤها";

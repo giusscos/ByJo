@@ -22,7 +22,7 @@ struct OnboardingAssetStep: View {
 
     private var parsedBalance: Decimal? {
         guard !balanceString.isEmpty else { return nil }
-        let normalized = balanceString.replacingOccurrences(of: ",", with: ".")
+        let normalized = balanceString.normalizedAmountInput
         return Decimal(string: normalized)
     }
 

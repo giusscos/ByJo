@@ -20,7 +20,7 @@ private struct SplitRow: Identifiable {
     }
 
     var amount: Decimal? {
-        let normalized = amountString.replacingOccurrences(of: ",", with: ".")
+        let normalized = amountString.normalizedAmountInput
         guard !normalized.isEmpty else { return nil }
         return Decimal(string: normalized)
     }
@@ -68,7 +68,7 @@ struct EditAssetOperationView: View {
 
     private var parsedAmount: Decimal? {
         guard !amountString.isEmpty else { return nil }
-        let normalized = amountString.replacingOccurrences(of: ",", with: ".")
+        let normalized = amountString.normalizedAmountInput
         return Decimal(string: normalized)
     }
 

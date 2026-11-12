@@ -32,7 +32,7 @@ struct UpdateAssetValueView: View {
 
     private var parsedValue: Decimal? {
         guard !valueString.isEmpty else { return nil }
-        let normalized = valueString.replacingOccurrences(of: ",", with: ".")
+        let normalized = valueString.normalizedAmountInput
         return Decimal(string: normalized)
     }
 

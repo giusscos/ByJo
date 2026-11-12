@@ -1,0 +1,598 @@
+/* Dutch. Machine-assisted translation, 2026-11-12: a native speaker should review it before release.
+   Terms: net worth = nettovermogen, assets = bezittingen, operations = transacties, goals = doelen,
+   recurring operations = terugkerende transacties, inflow = inkomsten, outflow = uitgave. */
+
+/* MARK: - Asset Types */
+"Cash" = "Contant geld";
+"Bank Account" = "Bankrekening";
+"Savings Account" = "Spaarrekening";
+"Checking Account" = "Betaalrekening";
+"Credit Card" = "Creditcard";
+"Investment Account" = "Beleggingsrekening";
+"Brokerage Account" = "Effectenrekening";
+"Retirement Account" = "Pensioenrekening";
+"Pension" = "Pensioen";
+"Cryptocurrency" = "Crypto";
+"Stocks" = "Aandelen";
+"Bonds" = "Obligaties";
+"Mutual Funds" = "Beleggingsfondsen";
+"ETFs" = "ETF's";
+"Real Estate" = "Vastgoed";
+"Property" = "Eigendom";
+"Vehicle" = "Voertuig";
+"Car" = "Auto";
+"Motorcycle" = "Motor";
+"Boat" = "Boot";
+"Jewelry" = "Sieraden";
+"Art" = "Kunst";
+"Collectibles" = "Verzamelobjecten";
+"Business" = "Bedrijf";
+"Partnership" = "Vennootschap";
+"Loan" = "Lening";
+"Mortgage" = "Hypotheek";
+"Student Loan" = "Studieschuld";
+"Personal Loan" = "Persoonlijke lening";
+"Insurance" = "Verzekering";
+"Life Insurance" = "Levensverzekering";
+"Health Insurance" = "Zorgverzekering";
+"Annuity" = "Lijfrente";
+"Commodity" = "Grondstof";
+"Precious Metals" = "Edelmetalen";
+"Foreign Currency" = "Vreemde valuta";
+"Options" = "Opties";
+"Futures" = "Futures";
+"Private Equity" = "Private equity";
+"Crowdfunding Investment" = "Crowdfundingbelegging";
+"Other" = "Overig";
+
+/* MARK: - Operation Types */
+"Inflow" = "Inkomsten";
+"Outflow" = "Uitgave";
+
+/* MARK: - Recurrence Frequency */
+"Single" = "Eenmalig";
+"Daily" = "Dagelijks";
+"Weekly" = "Wekelijks";
+"Monthly" = "Maandelijks";
+"Yearly" = "Jaarlijks";
+
+/* MARK: - Goal Status */
+"Completed" = "Voltooid";
+"Suspended" = "Gepauzeerd";
+
+/* MARK: - Balance Status */
+"Positive" = "Positief";
+"Negative" = "Negatief";
+
+/* MARK: - Spendmeter Timeframe */
+"Day" = "Dag";
+"Week" = "Week";
+"Month" = "Maand";
+"Year" = "Jaar";
+
+/* MARK: - Asset Sort Order */
+"Name" = "Naam";
+"Balance" = "Saldo";
+"Type" = "Type";
+
+/* MARK: - Home Sections */
+"Goals" = "Doelen";
+"Monthly Summary" = "Maandoverzicht";
+"Spendmeter" = "Uitgavenmeter";
+"Recurring" = "Terugkerend";
+"Top Category" = "Topcategorie";
+"Savings Rate" = "Spaarquote";
+"Top Expenses" = "Grootste uitgaven";
+"Asset Allocation" = "Vermogensverdeling";
+
+/* MARK: - Spendmeter Period Labels */
+"yesterday" = "gisteren";
+"last week" = "vorige week";
+"last month" = "vorige maand";
+"last year" = "vorig jaar";
+
+/* MARK: - Spendmeter Insight Messages */
+"Same as %@" = "Gelijk aan %@";
+"%d%% more saved than %@" = "%d%% meer gespaard dan %@";
+"%d%% less saved than %@" = "%d%% minder gespaard dan %@";
+"More saved than %@" = "Meer gespaard dan %@";
+"Less saved than %@" = "Minder gespaard dan %@";
+
+/* MARK: - Notifications */
+"Recurring operation" = "Terugkerende transactie";
+
+/* MARK: - Assets */
+"Assets" = "Bezittingen";
+"Add asset" = "Bezitting toevoegen";
+"No assets found 😕" = "Geen bezittingen gevonden 😕";
+"Start adding assets" = "Voeg je eerste bezittingen toe";
+"Asset type" = "Soort bezitting";
+"Long amount" = "Volledig bedrag";
+"Short amount" = "Verkort bedrag";
+"By Type" = "Op soort";
+"Sort By" = "Sorteren op";
+"Filters" = "Filters";
+"Sorters" = "Sortering";
+"Menu" = "Menu";
+
+/* MARK: - Operations */
+"Edit operation" = "Transactie bewerken";
+"Create operation" = "Transactie aanmaken";
+"Update recurring operation" = "Terugkerende transactie bijwerken";
+"Update this occurrence only" = "Alleen deze keer bijwerken";
+"Update all occurrences" = "Alle keren bijwerken";
+"Insert note" = "Notitie toevoegen";
+"Next occurrence: " = "Volgende keer: ";
+
+/* MARK: - Goals */
+"Add goal" = "Doel toevoegen";
+"Is Goal completed?" = "Is het doel bereikt?";
+
+/* MARK: - Categories */
+"Categories" = "Categorieën";
+
+/* MARK: - Common Actions */
+"Save" = "Bewaar";
+"Edit" = "Wijzig";
+"Delete" = "Verwijder";
+"Cancel" = "Annuleer";
+"Skip" = "Sla over";
+"Allow" = "Sta toe";
+
+/* MARK: - Operation Detail */
+"Asset" = "Bezitting";
+"Category" = "Categorie";
+"Next payment" = "Volgende betaling";
+"From" = "Van";
+"To" = "Naar";
+"Received" = "Ontvangen";
+"Transfer" = "Overboeking";
+"Note" = "Notitie";
+"History" = "Geschiedenis";
+"Stop recurring" = "Herhaling stoppen";
+"Delete current" = "Deze verwijderen";
+"Delete linked" = "Gekoppelde verwijderen";
+"Delete both" = "Beide verwijderen";
+"Are you sure you want to delete?" = "Weet je zeker dat je dit wilt verwijderen?";
+"Stop recurring?" = "Herhaling stoppen?";
+"No future occurrences will be generated. Past occurrences are kept." = "Er worden geen nieuwe herhalingen meer aangemaakt. Eerdere blijven bewaard.";
+
+/* MARK: - Swap */
+"Swap" = "Overboeken";
+
+/* MARK: - Keyboard */
+"Hide keyboard" = "Toetsenbord verbergen";
+"Dismiss keyboard" = "Toetsenbord sluiten";
+
+/* MARK: - Onboarding */
+"Set Up a Recurring Payment" = "Stel een terugkerende betaling in";
+"Log a Transaction" = "Leg een transactie vast";
+"Description" = "Omschrijving";
+"Amount" = "Bedrag";
+"Repeats" = "Herhaling";
+"Enable Reminders" = "Herinneringen aanzetten";
+"Get notified when recurring payments are due." = "Krijg een melding wanneer een terugkerende betaling eraan komt.";
+"Reminders enabled" = "Herinneringen staan aan";
+"Date" = "Datum";
+
+/* MARK: - What's New */
+"What's New in ByJo" = "Nieuw in ByJo";
+"Here's everything that's new and improved." = "Dit is er nieuw en verbeterd.";
+"Continue" = "Ga verder";
+"Update Asset Value" = "Waarde van bezitting bijwerken";
+"Set an asset to its real value — ByJo records the adjustment as an operation with an optional note." = "Zet een bezitting op de echte waarde. ByJo legt het verschil vast als transactie, met een optionele notitie.";
+"Balance History" = "Saldoverloop";
+"See how an asset’s value changed over time with a chart on the asset detail screen." = "Bekijk in een grafiek op het detailscherm hoe de waarde van een bezitting is veranderd.";
+
+/* MARK: - Update Asset Value */
+"Update value" = "Waarde bijwerken";
+"Current" = "Huidig";
+"New value" = "Nieuwe waarde";
+"Adjustment: %@" = "Aanpassing: %@";
+"Note (optional)" = "Notitie (optioneel)";
+"Value update" = "Waardewijziging";
+
+/* MARK: - Asset Balance History */
+"Balance history" = "Saldoverloop";
+"Hide chart" = "Grafiek verbergen";
+"Show chart" = "Grafiek tonen";
+
+/* MARK: - Home Empty State */
+"Start tracking your money" = "Begin met je geld bijhouden";
+"Add your assets, then log income and expenses to see your net worth and monthly progress." = "Voeg je bezittingen toe en leg inkomsten en uitgaven vast om je nettovermogen en maandelijkse voortgang te zien.";
+
+/* MARK: - Onboarding Welcome */
+"Your personal finance tracker.\nBuilt for clarity, not complexity." = "Jouw persoonlijke financiën-tracker.\nGemaakt voor overzicht, niet voor gedoe.";
+"Get Started" = "Aan de slag";
+
+/* MARK: - Onboarding Why Save */
+"Know Your Net Worth" = "Ken je nettovermogen";
+"Your net worth — assets minus liabilities — is the clearest snapshot of your financial health." = "Je nettovermogen (bezittingen min schulden) is de duidelijkste momentopname van je financiële gezondheid.";
+"Next" = "Volgende";
+"People don't know\ntheir net worth" = "van de mensen kent\nzijn nettovermogen niet";
+"More likely to hit\ngoals when tracking" = "meer kans om doelen\nte halen met bijhouden";
+"You can't improve what you don't measure — tracking is the first step." = "Wat je niet meet, kun je niet verbeteren. Bijhouden is de eerste stap.";
+"Seeing your net worth grow month over month is the best motivation to keep going." = "Je nettovermogen maand na maand zien groeien is de beste motivatie om door te gaan.";
+"Spotting a downward trend early lets you act before it becomes a bigger problem." = "Zie je een daling op tijd, dan kun je ingrijpen voordat het een groter probleem wordt.";
+
+/* MARK: - Onboarding Why Invest */
+"Take Control of Your Budget" = "Neem je budget in eigen hand";
+"Knowing where your money goes gives you the power to decide where it should go." = "Weten waar je geld heen gaat, geeft je de vrijheid om te kiezen waar het heen moet.";
+"Let's Set Up ByJo" = "ByJo instellen";
+"Of income goes\nuntracked each month" = "van het inkomen wordt\nelke maand niet bijgehouden";
+"Less overspending\nwith regular tracking" = "minder te veel uitgeven\ndoor vaak bij te houden";
+"Most people underestimate their monthly expenses by 20–30%." = "De meeste mensen schatten hun maandelijkse uitgaven 20–30% te laag in.";
+"A simple spending log reveals patterns you'd never notice otherwise." = "Een eenvoudig uitgavenlogboek laat patronen zien die je anders nooit zou opmerken.";
+"Budgeting isn't about restriction — it's about making intentional choices." = "Budgetteren gaat niet over beperken, maar over bewuste keuzes maken.";
+
+/* MARK: - Onboarding Currency */
+"Choose Your Currency" = "Kies je valuta";
+"Select how amounts are displayed. You can change this anytime." = "Kies hoe bedragen worden weergegeven. Je kunt dit altijd wijzigen.";
+
+/* MARK: - Onboarding Asset Setup */
+"Add Your First Asset" = "Voeg je eerste bezitting toe";
+"Track a bank account, savings, investments, or anything of value." = "Houd een bankrekening, spaargeld, beleggingen of iets anders van waarde bij.";
+"Current Balance" = "Huidig saldo";
+"e.g. My Bank Account" = "bijv. Mijn bankrekening";
+"Compact keyboard" = "Compact toetsenbord";
+
+/* MARK: - Onboarding Transaction & Recurring */
+"Record an inflow or outflow for " = "Leg inkomsten of een uitgave vast voor ";
+"Automate a salary, subscription, or bill for " = "Automatiseer een salaris, abonnement of rekening voor ";
+"your asset" = "je bezitting";
+"e.g. Monthly Salary" = "bijv. Maandsalaris";
+"e.g. Grocery Shopping" = "bijv. Boodschappen";
+"e.g. Netflix" = "bijv. Netflix";
+
+/* MARK: - Onboarding Success */
+"You're All Set!" = "Je bent klaar!";
+"Your financial journey starts now. ByJo will help you track every step — from savings to investments." = "Je financiële reis begint nu. ByJo helpt je elke stap bij te houden, van sparen tot beleggen.";
+
+/* MARK: - Home Tips */
+"Add your first asset" = "Voeg je eerste bezitting toe";
+"Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth." = "Tik hier om een bankrekening, belegging of iets anders van waarde toe te voegen en je nettovermogen bij te houden.";
+"Log your first transaction" = "Leg je eerste transactie vast";
+"Tap + to record inflows or outflows and keep your balances up to date." = "Tik op + om inkomsten of uitgaven vast te leggen en je saldi actueel te houden.";
+
+/* MARK: - Budget Progress Widget */
+"Budget Progress" = "Budgetvoortgang";
+"of %@" = "van %@";
+
+/* MARK: - Debt Payoff Widget */
+"Debt Payoff" = "Schulden aflossen";
+"/ mo" = "/ mnd";
+"Paid off %@" = "Afgelost op %@";
+"No recurring payments" = "Geen terugkerende betalingen";
+
+/* MARK: - Home Sections (additional) */
+"Expense Breakdown" = "Uitgaven per categorie";
+"Net Worth History" = "Verloop nettovermogen";
+"Spending Trends" = "Uitgaventrends";
+"Savings Rate Trend" = "Verloop spaarquote";
+
+/* MARK: - Home Widgets */
+"Net Worth" = "Nettovermogen";
+"This month" = "Deze maand";
+"VS last month" = "T.o.v. vorige maand";
+"Forecast" = "Prognose";
+"Budget" = "Budget";
+"≥20% great" = "≥20% top";
+"10–20% ok" = "10–20% oké";
+"<10% low" = "<10% laag";
+"Add All" = "Alles toevoegen";
+"Customize Home" = "Home aanpassen";
+"Drag to reorder. Tap the eye icon to show or hide a section." = "Sleep om de volgorde te wijzigen. Tik op het oog om een onderdeel te tonen of te verbergen.";
+"Recurring Operations" = "Terugkerende transacties";
+"Categories overview" = "Overzicht categorieën";
+"Home" = "Home";
+"Timeframe" = "Periode";
+"%lld pending operation" = "%lld openstaande transactie";
+"%lld pending operations" = "%lld openstaande transacties";
+"Operation: %lld" = "Transactie: %lld";
+"Operations: %lld" = "Transacties: %lld";
+
+/* MARK: - Goals (additional) */
+"Started" = "Start";
+"Target" = "Doelbedrag";
+"Remaining" = "Resterend";
+"Saved so far" = "Tot nu toe gespaard";
+"Goal reached!" = "Doel bereikt!";
+"Due date" = "Einddatum";
+"Expired" = "Verlopen";
+"Progress" = "Voortgang";
+"Monthly pace" = "Maandelijks tempo";
+"Estimated completion" = "Verwacht bereikt";
+"On track" = "Op schema";
+"Behind schedule" = "Achter op schema";
+"Need more savings" = "Meer sparen nodig";
+"Balance not growing — add an inflow to this asset" = "Saldo groeit niet. Voeg inkomsten toe aan deze bezitting";
+"Projections" = "Prognoses";
+"Based on your last 90 days of activity on %@." = "Op basis van je activiteit op %@ in de afgelopen 90 dagen.";
+"Per day" = "Per dag";
+"Per week" = "Per week";
+"Per month" = "Per maand";
+"Required savings" = "Benodigd spaarbedrag";
+"To reach your target in %lld days." = "Om je doel in %lld dagen te halen.";
+"Manage" = "Beheer";
+"Pin to home" = "Vastzetten op Home";
+"Unpin from home" = "Losmaken van Home";
+"Resume" = "Hervat";
+"Suspend" = "Pauzeer";
+"Mark as completed" = "Markeer als voltooid";
+"Create goal" = "Doel aanmaken";
+"Edit goal" = "Doel bewerken";
+"Title" = "Titel";
+"Current: " = "Huidig: ";
+"Ongoing" = "Lopend";
+"Complete" = "Voltooid";
+"left to go" = "te gaan";
+"Due date: " = "Einddatum: ";
+"Completed date: " = "Voltooid op: ";
+"Reached" = "Bereikt";
+"Missed" = "Gemist";
+"%lld active" = "%lld actief";
+"%lldd left" = "nog %lld d";
+
+/* MARK: - Export & Import */
+"Export & Import" = "Exporteren en importeren";
+"Done" = "Klaar";
+"OK" = "OK";
+"Import Error" = "Importfout";
+"Unknown error" = "Onbekende fout";
+"Export Operations as CSV" = "Transacties exporteren als CSV";
+"No operations to export" = "Geen transacties om te exporteren";
+"Export Full Backup (JSON)" = "Volledige back-up exporteren (JSON)";
+"No data to export" = "Geen gegevens om te exporteren";
+"Export" = "Exporteren";
+"CSV contains all operations. JSON contains everything: assets, operations, categories, and goals." = "CSV bevat alle transacties. JSON bevat alles: bezittingen, transacties, categorieën en doelen.";
+"Import CSV…" = "CSV importeren…";
+"Restore from JSON Backup…" = "Herstellen uit JSON-back-up…";
+"Import" = "Importeren";
+"Imported data is added to your existing data. CSV lets you map columns from any spreadsheet." = "Geïmporteerde gegevens worden aan je bestaande gegevens toegevoegd. Met CSV koppel je kolommen uit elke spreadsheet.";
+"Sample CSV File" = "Voorbeeld-CSV";
+"Sample JSON Backup" = "Voorbeeld-JSON-back-up";
+"Sample Files" = "Voorbeeldbestanden";
+"Download these to understand the expected format before importing your own data." = "Download deze om het verwachte formaat te zien voordat je je eigen gegevens importeert.";
+"Could not access the file." = "Geen toegang tot het bestand.";
+"Could not read the file." = "Het bestand kan niet worden gelezen.";
+"The CSV file appears to be empty or has no header row." = "Het CSV-bestand lijkt leeg te zijn of heeft geen kopregel.";
+"Map Columns" = "Kolommen koppelen";
+"Import Complete" = "Import voltooid";
+"Import Failed" = "Import mislukt";
+"File Info" = "Bestandsinfo";
+"File" = "Bestand";
+"Rows" = "Rijen";
+"Columns detected" = "Gevonden kolommen";
+"Required Fields" = "Verplichte velden";
+"Select which column in your file corresponds to each field." = "Kies welke kolom in je bestand bij elk veld hoort.";
+"Optional Fields" = "Optionele velden";
+"Frequency" = "Frequentie";
+"Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single." = "Frequentiewaarden: Single, Daily, Weekly, Monthly, Yearly. Onbekende waarden worden Single.";
+"Skip duplicates" = "Dubbele overslaan";
+"Duplicates found" = "Dubbele gevonden";
+"Import Options" = "Importopties";
+"A duplicate matches an existing operation by description, date, amount, and asset." = "Een dubbele komt overeen met een bestaande transactie op omschrijving, datum, bedrag en bezitting.";
+"Issues — fix these to enable import" = "Problemen: los deze op om te kunnen importeren";
+"Select column…" = "Kies kolom…";
+"None" = "Geen";
+"Restore Backup" = "Back-up herstellen";
+"Export Date" = "Exportdatum";
+"Version" = "Versie";
+"Backup Contents" = "Inhoud back-up";
+"Duplicates Found" = "Dubbele gevonden";
+"Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset." = "Bezittingen en categorieën worden op naam vergeleken. Transacties op omschrijving, datum, bedrag en bezitting. Doelen op titel, doelbedrag en bezitting.";
+"This adds to your existing data, not replaces it. To start fresh, delete your data first." = "Dit wordt aan je bestaande gegevens toegevoegd en vervangt niets. Wil je opnieuw beginnen, verwijder dan eerst je gegevens.";
+"Description is empty" = "Omschrijving is leeg";
+"Asset name is empty" = "Naam bezitting is leeg";
+"Column not found in file" = "Kolom niet gevonden in bestand";
+"Import %lld" = "%lld importeren";
+"%lld imported, %lld duplicates skipped." = "%lld geïmporteerd, %lld dubbele overgeslagen.";
+"%lld operations imported successfully." = "%lld transacties geïmporteerd.";
+"Preview — first %lld rows" = "Voorbeeld: eerste %lld rijen";
+"%lld already exist" = "%lld bestaan al";
+"Required field not mapped: %@" = "Verplicht veld niet gekoppeld: %@";
+"Row %lld: %@" = "Rij %lld: %@";
+"Invalid backup file: %@" = "Ongeldig back-upbestand: %@";
+"Unsupported backup version %lld. Please update ByJo." = "Back-upversie %lld wordt niet ondersteund. Werk ByJo bij.";
+"Cannot parse date \"%@\"" = "Datum \"%@\" kan niet worden gelezen";
+"Cannot parse amount \"%@\"" = "Bedrag \"%@\" kan niet worden gelezen";
+
+/* MARK: - Wallet Auto-Log */
+"Wallet Auto-Log" = "Wallet automatisch vastleggen";
+"Auto-log taps" = "Betalingen automatisch vastleggen";
+"Set up Shortcuts to log merchant and amount automatically." = "Stel Opdrachten in om winkel en bedrag automatisch vast te leggen.";
+"Auto-log card taps" = "Kaartbetalingen automatisch vastleggen";
+"Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass." = "Voeg de gedeelde opdracht ByJo Wallet Auto-Log toe en maak een Transactie-automatisering, zodat elke NFC-betaling in ByJo wordt vastgelegd. Bezittingen en categorieën worden gekoppeld of aangemaakt op basis van de namen die je doorgeeft.";
+"Get Shortcut" = "Opdracht ophalen";
+"Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts." = "Opent de gedeelde opdracht ByJo Wallet Auto-Log zodat je die aan Opdrachten kunt toevoegen.";
+"Create Automation" = "Automatisering maken";
+"Opens Shortcuts to create a new Transaction / Wallet automation." = "Opent Opdrachten om een nieuwe Transactie- of Wallet-automatisering te maken.";
+"Setup steps" = "Stappen";
+"Tap Get Shortcut and add ByJo Wallet Auto-Log." = "Tik op 'Opdracht ophalen' en voeg ByJo Wallet Auto-Log toe.";
+"Tap Create Automation and choose Transaction (or Wallet on newer iOS)." = "Tik op 'Automatisering maken' en kies Transactie (of Wallet op nieuwere iOS-versies).";
+"Select the cards to track, then choose Run Immediately." = "Kies de kaarten die je wilt bijhouden en kies daarna 'Voer direct uit'.";
+"Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings)." = "Voeg taak toe → Voer opdracht uit → ByJo Wallet Auto-Log (of open de opdracht en controleer de koppeling van winkel, bedrag en naam bezitting).";
+"Optionally set Category Name. Leave empty to categorize later in ByJo." = "Vul eventueel een categorienaam in. Laat leeg om later in ByJo te categoriseren.";
+"If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet." = "Worden betalingen nooit vastgelegd? Zet mobiele data aan voor Wallet via Instellingen → Apps → Wallet.";
+"I've set this up" = "Ik heb dit ingesteld";
+"This hides the tip on Home. You can always show it again from Customize Home." = "Hiermee verberg je de tip op Home. Je kunt hem altijd weer tonen via Home aanpassen.";
+"Shown at the top of Home when enabled." = "Staat bovenaan Home als dit aan staat.";
+
+/* MARK: - Operations (additional) */
+"Operations" = "Transacties";
+"Add operation" = "Transactie toevoegen";
+"on" = "op";
+"Details" = "Details";
+"Asset from" = "Van bezitting";
+"Asset to" = "Naar bezitting";
+"Suggestions" = "Suggesties";
+"Add split" = "Splitsing toevoegen";
+"Remove splits" = "Splitsingen verwijderen";
+"Split transaction" = "Transactie splitsen";
+"Splits" = "Splitsingen";
+"Do you want to update only this occurrence or all %lld occurrences in the series?" = "Wil je alleen deze keer bijwerken of alle %lld keren in de reeks?";
+"Change Category" = "Categorie wijzigen";
+"Change Asset" = "Bezitting wijzigen";
+"Reassign" = "Opnieuw toewijzen";
+"Recurring only" = "Alleen terugkerend";
+"Delete Operations" = "Transacties verwijderen";
+"No operations found 😕" = "Geen transacties gevonden 😕";
+"Start adding operations" = "Voeg je eerste transacties toe";
+"Add operations" = "Transacties toevoegen";
+"No categories found 😕" = "Geen categorieën gevonden 😕";
+"Start adding categories" = "Voeg je eerste categorieën toe";
+"Add categories" = "Categorieën toevoegen";
+"Add category" = "Categorie toevoegen";
+"Operation" = "Transactie";
+
+/* MARK: - Assets (additional) */
+"Create asset" = "Bezitting aanmaken";
+"Edit asset" = "Bezitting bewerken";
+"Goal list" = "Doelenlijst";
+"Clear Filter" = "Filter wissen";
+"Delete Assets" = "Bezittingen verwijderen";
+"All" = "Alles";
+
+/* MARK: - Paywall */
+"Terms" = "Voorwaarden";
+"Privacy" = "Privacy";
+
+/* MARK: - Search */
+"Search" = "Zoek";
+"Search for assets and operations by name, type, or category." = "Zoek bezittingen en transacties op naam, soort of categorie.";
+"Assets, operations, categories…" = "Bezittingen, transacties, categorieën…";
+
+/* MARK: - Currency Picker */
+"Hey, I'm ByJo 👋" = "Hoi, ik ben ByJo 👋";
+"Before you start, set your preferred currency" = "Kies eerst je valuta";
+"Currency" = "Valuta";
+
+/* MARK: - Categories (additional) */
+"Budget / month" = "Budget / maand";
+"%@ / month" = "%@ / maand";
+"Add" = "Voeg toe";
+"Delete Categories" = "Categorieën verwijderen";
+
+/* MARK: - App Intents */
+"Add Operation" = "Transactie toevoegen";
+"Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow." = "Leg een transactie vast bij een bezitting in ByJo. Gebruik een positief bedrag voor inkomsten en een negatief bedrag voor een uitgave.";
+"Added %@ to %@." = "%@ toegevoegd aan %@.";
+"Transfer Between Assets" = "Overboeken tussen bezittingen";
+"Move funds from one asset to another in ByJo." = "Verplaats geld van de ene bezitting naar de andere in ByJo.";
+"From Asset" = "Van bezitting";
+"To Asset" = "Naar bezitting";
+"Transferred %@ from %@ to %@." = "%@ overgeboekt van %@ naar %@.";
+"Log Wallet Transaction" = "Wallet-transactie vastleggen";
+"Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass." = "Leg een Wallet-kaartbetaling vast als uitgave in ByJo. Ontbrekende bezittingen en categorieën worden automatisch aangemaakt op basis van de namen die je doorgeeft.";
+"Merchant" = "Winkel";
+"Asset Name" = "Naam bezitting";
+"Category Name" = "Categorienaam";
+"Card" = "Kaart";
+"Card tap" = "Kaartbetaling";
+"Wallet" = "Wallet";
+"Wallet · %@" = "Wallet · %@";
+"Logged %@ (%@) to %@." = "%@ (%@) vastgelegd bij %@.";
+"Transfer Funds" = "Geld overboeken";
+"Log Wallet Tap" = "Wallet-betaling vastleggen";
+"Asset not found." = "Bezitting niet gevonden.";
+"Asset name is required." = "Naam bezitting is verplicht.";
+
+/* MARK: - Widget Extension */
+"Track your financial goals." = "Volg je financiële doelen.";
+"How your wealth is distributed across assets." = "Hoe je vermogen over je bezittingen is verdeeld.";
+"Monthly spending over the last 6 months." = "Maandelijkse uitgaven over de afgelopen 6 maanden.";
+"Your net worth trend over the past month." = "Het verloop van je nettovermogen in de afgelopen maand.";
+"Your savings rate over the last 6 months." = "Je spaarquote over de afgelopen 6 maanden.";
+"Your monthly savings rate." = "Je maandelijkse spaarquote.";
+"This month's expenses by category." = "Uitgaven van deze maand per categorie.";
+"Upcoming recurring inflows and outflows." = "Komende terugkerende inkomsten en uitgaven.";
+"Your total net worth at a glance." = "Je totale nettovermogen in één oogopslag.";
+"This month's inflow vs. outflow ratio." = "Verhouding inkomsten en uitgaven deze maand.";
+"No history" = "Geen geschiedenis";
+"No history yet" = "Nog geen geschiedenis";
+"Spending" = "Uitgaven";
+"6 months" = "6 maanden";
+"No data" = "Geen gegevens";
+"No spending data" = "Geen uitgavengegevens";
+"Total" = "Totaal";
+"Avg / month" = "Gem. / maand";
+"Allocation" = "Verdeling";
+"No assets yet" = "Nog geen bezittingen";
+"Great" = "Top";
+"Low" = "Laag";
+"Monthly Savings Rate" = "Maandelijkse spaarquote";
+"Saved" = "Gespaard";
+"Savings Trend" = "Spaartrend";
+"No data yet" = "Nog geen gegevens";
+"Expenses" = "Uitgaven";
+"No expenses this month" = "Geen uitgaven deze maand";
+"Financial Goals" = "Financiële doelen";
+"No active goals" = "Geen actieve doelen";
+"No active\ngoals" = "Geen actieve\ndoelen";
+"No active goals yet" = "Nog geen actieve doelen";
+"Today" = "Vandaag";
+"Tomorrow" = "Morgen";
+"in %lldd" = "over %lld d";
+"Next Recurring" = "Volgende terugkerende";
+"No recurring\noperations" = "Geen terugkerende\ntransacties";
+"No recurring operations" = "Geen terugkerende transacties";
+"No recurring operations yet" = "Nog geen terugkerende transacties";
+
+/* MARK: - Paywall trial */
+"Your net worth is ready" = "Je nettovermogen staat klaar";
+"Tracked assets: %lld" = "Bijgehouden bezittingen: %lld";
+"Your ByJo trial ends tomorrow" = "Je ByJo-proefperiode eindigt morgen";
+"Keep your net worth in view, or cancel anytime in Settings before it renews." = "Houd je nettovermogen in beeld, of zeg op elk moment op via Instellingen voordat het wordt verlengd.";
+
+/* MARK: - Free plan & ByJo Pro */
+"Unlimited Assets" = "Onbeperkt bezittingen";
+"Track every account, card, loan and investment. The free plan covers %lld." = "Houd elke rekening, kaart, lening en belegging bij. Het gratis abonnement omvat er %lld.";
+"Give any asset a target and a date, and watch your progress." = "Geef elke bezitting een doel en een datum, en volg je voortgang.";
+"Schedule bills and income, with a reminder before each one." = "Plan rekeningen en inkomsten in, met een herinnering vooraf.";
+"Home Screen Widgets" = "Widgets op het beginscherm";
+"Net worth, spending and goals at a glance, without opening the app." = "Nettovermogen, uitgaven en doelen in één oogopslag, zonder de app te openen.";
+"Bring in a CSV or JSON file, and take your data with you anytime." = "Importeer een CSV- of JSON-bestand en neem je gegevens altijd mee.";
+"All Future Pro Features" = "Alle toekomstige Pro-functies";
+"New Pro features are included in every plan." = "Nieuwe Pro-functies zitten in elk abonnement.";
+"Lifetime" = "Levenslang";
+"Flexible, cancel anytime" = "Flexibel, altijd opzegbaar";
+"Pay once, keep it forever" = "Eén keer betalen, voor altijd van jou";
+"%lld Days Free" = "%lld dagen gratis";
+"Best Value" = "Voordeligst";
+"Just %@ per week" = "Slechts %@ per week";
+"Start %lld-Day Free Trial" = "Probeer %lld dagen gratis";
+"Purchase Error" = "Aankoopfout";
+"%lld days free, then %@/year. Cancel anytime." = "%lld dagen gratis, daarna %@/jaar. Altijd opzegbaar.";
+"%@ per year. Renews automatically, cancel anytime." = "%@ per jaar. Wordt automatisch verlengd, altijd opzegbaar.";
+"%@ per week. Renews automatically, cancel anytime." = "%@ per week. Wordt automatisch verlengd, altijd opzegbaar.";
+"One payment of %@. No subscription." = "Eenmalig %@. Geen abonnement.";
+"Restore Purchases" = "Aankopen herstellen";
+"Plans are unavailable right now. Check your connection and try again." = "Abonnementen zijn nu niet beschikbaar. Controleer je verbinding en probeer het opnieuw.";
+"Close" = "Sluit";
+"Unlock ByJo Pro" = "Ontgrendel ByJo Pro";
+"Track Every Account" = "Houd elke rekening bij";
+"Set Goals with Pro" = "Stel doelen met Pro";
+"Recurring Operations with Pro" = "Terugkerende transacties met Pro";
+"Export & Import with Pro" = "Exporteren en importeren met Pro";
+"Your whole financial picture, private and in one place." = "Je hele financiële plaatje, privé en op één plek.";
+"The free plan covers %lld assets. Pro adds as many as you need." = "Het gratis abonnement omvat %lld bezittingen. Met Pro voeg je er zoveel toe als je wilt.";
+"Schedule bills and income, and get a reminder before each one." = "Plan rekeningen en inkomsten in en krijg vooraf een herinnering.";
+"Bring your data in from a spreadsheet, or take it with you anytime." = "Haal je gegevens uit een spreadsheet, of neem ze altijd mee.";
+"The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro." = "Het gratis abonnement omvat %lld bezittingen. Kies een van je bezittingen, of open ByJo om naar Pro te gaan.";
+"Savings" = "Spaargeld";
+"Investments" = "Beleggingen";
+"Car loan" = "Autolening";
+"Your whole net worth.\nPrivate." = "Je hele nettovermogen.\nPrivé.";
+"No sign-up, no bank login. Your data stays on your devices and in your own iCloud." = "Geen account, geen bankkoppeling. Je gegevens blijven op je apparaten en in je eigen iCloud.";
+"Example of a net worth made of savings, investments and a car loan" = "Voorbeeld van een nettovermogen met spaargeld, beleggingen en een autolening";
+"Name (optional)" = "Naam (optioneel)";
+"Every account, goal and widget, with no limits." = "Elke rekening, elk doel en elke widget, zonder limiet.";
+"Continue for free" = "Gratis verder";
+"Upgrade to ByJo Pro" = "Upgrade naar ByJo Pro";
+"Charts & Insights" = "Grafieken en inzichten";
+"Net worth history, spending trends, allocation and more, with Home arranged your way." = "Verloop van je nettovermogen, uitgaventrends, verdeling en meer, met Home zoals jij het wilt.";
+"See the Whole Picture" = "Zie het hele plaatje";
+"Make Home Yours" = "Maak Home van jou";
+"Net worth history, spending trends, asset allocation and more, right on Home." = "Verloop van je nettovermogen, uitgaventrends, vermogensverdeling en meer, direct op Home.";
+"Reorder and hide Home sections to match how you think about money." = "Zet onderdelen van Home in een andere volgorde of verberg ze, zodat het past bij hoe jij over geld denkt.";
+"Reorder and hide Home sections" = "Onderdelen van Home ordenen en verbergen";
