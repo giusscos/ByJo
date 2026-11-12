@@ -5,8 +5,8 @@ Stor metadata import template
 3. Import this file from the Listing tab → Import Markdown.
 Character limits: Name 30 · Subtitle 30 · Description 4000 · Keywords 100 · Promotional Text 170 · What's New 4000
 -->
-<!-- PROPOSAL, prepared 2026-11-12. NOT shipped: eight NEW App Store localizations for the version after 1.2.0.
-     1.2.0 ships only the rename; add these in the next version, after Giuseppe's yes.
+<!-- APPLIED in App Store Connect on 2026-11-12 to version 1.1.10 (not yet submitted): eight NEW App Store localizations.
+     1.1.10 also carries the rename (next-name-subtitle.md) and new screenshots; release notes in 1.1.10.md.
 
      NATIVE-SPEAKER REVIEW NEEDED: the es-MX, ar-SA, ja, nl-NL, zh-Hans and zh-Hant text is a machine-assisted translation.
      Have a native speaker read name, subtitle, keywords, promotional text and description before import.

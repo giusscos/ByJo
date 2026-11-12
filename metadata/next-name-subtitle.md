@@ -5,7 +5,7 @@ Store metadata import template
 3. Import this file from the Listing tab → Import Markdown.
 Character limits: Name 30 · Subtitle 30 · Description 4000 · Keywords 100 · Promotional Text 170 · What's New 4000
 -->
-<!-- PROPOSAL (option B, name + subtitle only), prepared 2026-11-11. NOT shipped: waiting for Giuseppe's yes.
+<!-- APPLIED in App Store Connect on 2026-11-12 to version 1.1.10 (not yet submitted), together with next-languages.md.
      Keywords stay as they are live. Ship this OR next-keywords.md, not both.
      After it goes live, write the go-live date in the version's metadata file. -->
 
