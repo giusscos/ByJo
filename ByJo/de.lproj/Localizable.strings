@@ -591,3 +591,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "Nettovermögen-Verlauf, Ausgabentrends, Vermögensaufteilung und mehr, direkt auf der Startseite.";
 "Reorder and hide Home sections to match how you think about money." = "Sortiere Bereiche der Startseite und blende sie aus, so wie du über Geld denkst.";
 "Reorder and hide Home sections" = "Bereiche der Startseite sortieren und ausblenden";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "Plus %@";
+"Down %@" = "Minus %@";
+"Forecast, %@" = "Prognose, %@";
+"Shows the next 12 months based on your recurring operations" = "Zeigt die nächsten 12 Monate auf Basis deiner wiederkehrenden Buchungen";
+"%@ of %@" = "%@ von %@";
+"%@ of income spent" = "%@ der Einnahmen ausgegeben";
+"Clear" = "Löschen";
+"Switches the From and To assets" = "Tauscht die Konten Von und Nach";
+"%1$@, becomes %2$@" = "%1$@, wird %2$@";
+"Pinned" = "Angeheftet";
+"Ascending" = "Aufsteigend";
+"Descending" = "Absteigend";
+"Shown" = "Eingeblendet";
+"Hidden" = "Ausgeblendet";
+"Required" = "Erforderlich";

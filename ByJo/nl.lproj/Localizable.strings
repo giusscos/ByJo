@@ -596,3 +596,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "Verloop van je nettovermogen, uitgaventrends, vermogensverdeling en meer, direct op Home.";
 "Reorder and hide Home sections to match how you think about money." = "Zet onderdelen van Home in een andere volgorde of verberg ze, zodat het past bij hoe jij over geld denkt.";
 "Reorder and hide Home sections" = "Onderdelen van Home ordenen en verbergen";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "%@ omhoog";
+"Down %@" = "%@ omlaag";
+"Forecast, %@" = "Prognose, %@";
+"Shows the next 12 months based on your recurring operations" = "Toont de komende 12 maanden op basis van je terugkerende transacties";
+"%@ of %@" = "%@ van %@";
+"%@ of income spent" = "%@ van inkomsten uitgegeven";
+"Clear" = "Wis";
+"Switches the From and To assets" = "Wisselt de bezittingen Van en Naar om";
+"%1$@, becomes %2$@" = "%1$@, wordt %2$@";
+"Pinned" = "Vastgezet";
+"Ascending" = "Oplopend";
+"Descending" = "Aflopend";
+"Shown" = "Zichtbaar";
+"Hidden" = "Verborgen";
+"Required" = "Verplicht";

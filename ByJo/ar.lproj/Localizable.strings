@@ -596,3 +596,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "سجل صافي الثروة واتجاهات الإنفاق وتوزيع الأصول وغيرها، مباشرة في الرئيسية.";
 "Reorder and hide Home sections to match how you think about money." = "أعد ترتيب أقسام الرئيسية وأخفِ ما تريد لتناسب طريقة تفكيرك في المال.";
 "Reorder and hide Home sections" = "إعادة ترتيب أقسام الرئيسية وإخفاؤها";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "ارتفاع %@";
+"Down %@" = "انخفاض %@";
+"Forecast, %@" = "توقع، %@";
+"Shows the next 12 months based on your recurring operations" = "يعرض الأشهر الـ 12 القادمة بناءً على عملياتك المتكررة";
+"%@ of %@" = "%@ من %@";
+"%@ of income spent" = "تم إنفاق %@ من الدخل";
+"Clear" = "مسح";
+"Switches the From and To assets" = "يبدّل الأصلين «من» و«إلى»";
+"%1$@, becomes %2$@" = "%1$@، يصبح %2$@";
+"Pinned" = "مثبّت";
+"Ascending" = "تصاعدي";
+"Descending" = "تنازلي";
+"Shown" = "ظاهر";
+"Hidden" = "مخفي";
+"Required" = "مطلوب";

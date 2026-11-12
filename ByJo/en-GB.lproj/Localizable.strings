@@ -592,3 +592,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "Net worth history, spending trends, asset allocation and more, right on Home.";
 "Reorder and hide Home sections to match how you think about money." = "Reorder and hide Home sections to match how you think about money.";
 "Reorder and hide Home sections" = "Reorder and hide Home sections";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "Up %@";
+"Down %@" = "Down %@";
+"Forecast, %@" = "Forecast, %@";
+"Shows the next 12 months based on your recurring operations" = "Shows the next 12 months based on your recurring operations";
+"%@ of %@" = "%@ of %@";
+"%@ of income spent" = "%@ of income spent";
+"Clear" = "Clear";
+"Switches the From and To assets" = "Switches the From and To assets";
+"%1$@, becomes %2$@" = "%1$@, becomes %2$@";
+"Pinned" = "Pinned";
+"Ascending" = "Ascending";
+"Descending" = "Descending";
+"Shown" = "Shown";
+"Hidden" = "Hidden";
+"Required" = "Required";

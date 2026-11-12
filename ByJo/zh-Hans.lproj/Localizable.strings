@@ -596,3 +596,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "净资产走势、支出趋势、资产配置等，直接显示在首页。";
 "Reorder and hide Home sections to match how you think about money." = "调整首页板块的顺序或隐藏板块，按你的理财思路来安排。";
 "Reorder and hide Home sections" = "调整和隐藏首页板块";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "上涨 %@";
+"Down %@" = "下跌 %@";
+"Forecast, %@" = "预测，%@";
+"Shows the next 12 months based on your recurring operations" = "根据你的定期交易显示未来 12 个月";
+"%@ of %@" = "%@，共 %@";
+"%@ of income spent" = "已花费收入的 %@";
+"Clear" = "清除";
+"Switches the From and To assets" = "交换转出和转入资产";
+"%1$@, becomes %2$@" = "%1$@，变为 %2$@";
+"Pinned" = "已置顶";
+"Ascending" = "升序";
+"Descending" = "降序";
+"Shown" = "显示";
+"Hidden" = "隐藏";
+"Required" = "必填";
