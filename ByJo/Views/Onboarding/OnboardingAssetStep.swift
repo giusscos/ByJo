@@ -43,6 +43,7 @@ struct OnboardingAssetStep: View {
                                 .font(.system(size: 44))
                                 .foregroundStyle(Color.accentColor)
                         }
+                        .accessibilityHidden(true)
                         .onboardingAppear(appeared, delay: 0.05)
 
                         VStack(spacing: 8) {
@@ -99,7 +100,7 @@ struct OnboardingAssetStep: View {
                         .onboardingAppear(appeared, delay: 0.32)
 
                         VStack(alignment: .leading, spacing: 12) {
-                            HStack {
+                            AdaptiveStack {
                                 Text("Current Balance")
                                     .font(.subheadline).fontWeight(.medium)
                                     .foregroundStyle(.secondary)
@@ -121,12 +122,15 @@ struct OnboardingAssetStep: View {
                                     .font(.subheadline.weight(.semibold))
                                 }
                                 .accessibilityLabel(Text("Currency"))
+                                .accessibilityValue(Text(verbatim: Locale.current.localizedString(forCurrencyCode: currencyCode.rawValue) ?? currencyCode.rawValue))
                             }
 
                             VStack(spacing: 6) {
                                 ZStack {
                                     TextField("0", text: $balanceString)
-                                        .font(.system(size: 52, weight: .bold, design: .rounded))
+                                        .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                                        .minimumScaleFactor(0.5)
+                                        .accessibilityLabel(Text("Current Balance"))
                                         .multilineTextAlignment(.center)
                                         .keyboardType(.decimalPad)
                                         .focused($focusedField, equals: .balance)
@@ -138,6 +142,7 @@ struct OnboardingAssetStep: View {
                                                 balanceString = ""
                                             } label: {
                                                 Image(systemName: "xmark.circle.fill")
+                                                    .accessibilityLabel(Text("Clear"))
                                                     .font(.callout)
                                                     .foregroundStyle(.tertiary)
                                             }
@@ -162,25 +167,27 @@ struct OnboardingAssetStep: View {
                                     statusBalance = .positive
                                 } label: {
                                     HStack(spacing: 6) {
-                                        Image(systemName: "plus.circle.fill")
+                                        Image(systemName: statusBalance == .positive ? "plus.circle.fill" : "plus.circle")
                                         Text("Positive")
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.bordered)
                                 .tint(statusBalance == .positive ? .green : .secondary)
+                                .accessibilityAddTraits(statusBalance == .positive ? .isSelected : [])
 
                                 Button {
                                     statusBalance = .negative
                                 } label: {
                                     HStack(spacing: 6) {
-                                        Image(systemName: "minus.circle.fill")
+                                        Image(systemName: statusBalance == .negative ? "minus.circle.fill" : "minus.circle")
                                         Text("Negative")
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.bordered)
                                 .tint(statusBalance == .negative ? .red : .secondary)
+                                .accessibilityAddTraits(statusBalance == .negative ? .isSelected : [])
                             }
                         }
                         .id("balanceField")

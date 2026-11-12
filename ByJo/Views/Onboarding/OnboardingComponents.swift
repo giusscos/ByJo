@@ -24,11 +24,27 @@ struct KeyboardDismissOnAppear: UIViewControllerRepresentable {
 
 extension View {
     func onboardingAppear(_ appeared: Bool, delay: Double = 0) -> some View {
-        self
+        modifier(OnboardingAppear(appeared: appeared, delay: delay))
+    }
+}
+
+/// Fades, unblurs and slides content up as a step appears. With Reduce Motion it only fades.
+private struct OnboardingAppear: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let appeared: Bool
+    let delay: Double
+
+    func body(content: Content) -> some View {
+        content
             .opacity(appeared ? 1 : 0)
-            .blur(radius: appeared ? 0 : 8)
-            .offset(y: appeared ? 0 : 20)
-            .animation(.spring(response: 0.55, dampingFraction: 0.82).delay(delay), value: appeared)
+            .blur(radius: appeared || reduceMotion ? 0 : 8)
+            .offset(y: appeared || reduceMotion ? 0 : 20)
+            .animation(
+                reduceMotion
+                    ? .easeInOut(duration: 0.25).delay(delay)
+                    : .spring(response: 0.55, dampingFraction: 0.82).delay(delay),
+                value: appeared
+            )
     }
 }
 

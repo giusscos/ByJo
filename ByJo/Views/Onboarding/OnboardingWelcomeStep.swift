@@ -76,14 +76,14 @@ struct OnboardingWelcomeStep: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Text(netWorth, format: .currency(code: currencyCode.rawValue).precision(.fractionLength(0)))
-                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .scaledFont(size: 40, weight: .bold, design: .rounded, maxSize: 72)
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
             }
 
             VStack(spacing: 12) {
                 ForEach(rows) { row in
-                    HStack(spacing: 12) {
+                    AdaptiveStack(spacing: 12) {
                         Image(systemName: row.icon)
                             .font(.subheadline)
                             .foregroundStyle(.white)
@@ -91,7 +91,7 @@ struct OnboardingWelcomeStep: View {
                             .background(row.color.gradient, in: RoundedRectangle(cornerRadius: 8))
                         Text(row.name)
                             .font(.subheadline.weight(.medium))
-                        Spacer()
+                        Spacer(minLength: 0)
                         Text(row.amount, format: .currency(code: currencyCode.rawValue).precision(.fractionLength(0)))
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(row.amount < 0 ? .red : .primary)
