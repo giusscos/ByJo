@@ -149,11 +149,20 @@ struct OperationListView: View {
                     ContentUnavailableView("Select an operation", systemImage: "book.pages", description: Text("Pick an operation to see its details."))
                 }
             }
+            // Open with the most recent operation shown, so the detail column is never an empty half-screen.
+            .onAppear(perform: selectFirstOperationIfNeeded)
+            .onChange(of: operations) { _, _ in selectFirstOperationIfNeeded() }
         } else {
             NavigationStack {
                 operationList
             }
         }
+    }
+
+    private func selectFirstOperationIfNeeded() {
+        guard horizontalSizeClass == .regular, isEditMode == .inactive, selectedOperations.isEmpty,
+              let first = filteredAndSortedOperations.first?.operations.first else { return }
+        selectedOperations = [first]
     }
 
     private func linkedOperation(for operation: AssetOperation) -> AssetOperation? {

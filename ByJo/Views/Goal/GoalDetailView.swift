@@ -337,6 +337,7 @@ struct GoalDetailView: View {
                 }
             }
         }
+        .readableContentWidth()
         .navigationTitle(goal.title)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {

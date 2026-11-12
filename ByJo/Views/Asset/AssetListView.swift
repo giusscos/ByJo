@@ -109,11 +109,20 @@ struct AssetListView: View {
                     ContentUnavailableView("Select an asset", systemImage: "building.columns", description: Text("Pick an asset to see its balance and operations."))
                 }
             }
+            // Open with the first asset shown, so the detail column is never an empty half-screen.
+            .onAppear(perform: selectFirstAssetIfNeeded)
+            .onChange(of: filteredAndSortedAssets) { _, _ in selectFirstAssetIfNeeded() }
         } else {
             NavigationStack {
                 assetList
             }
         }
+    }
+
+    private func selectFirstAssetIfNeeded() {
+        guard horizontalSizeClass == .regular, isEditMode == .inactive, selectedAssets.isEmpty,
+              let first = filteredAndSortedAssets.first else { return }
+        selectedAssets = [first]
     }
 
     @ViewBuilder

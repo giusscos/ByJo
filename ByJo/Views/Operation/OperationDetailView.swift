@@ -223,6 +223,7 @@ struct OperationDetailView: View {
                 }
             }
         }
+        .readableContentWidth()
         .navigationTitle(operation.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

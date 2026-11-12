@@ -55,6 +55,8 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.requestReview) private var requestReview
     @Environment(Store.self) private var store
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var homeWidth: CGFloat = 0
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
@@ -118,51 +120,126 @@ struct HomeView: View {
         lastReviewRequestedVersion = currentVersion
     }
 
-    var body: some View {
-        NavigationStack {
-            List {
+    // MARK: - Layouts
+
+    /// iPhone and the folded iPhone Duo: one list of cards.
+    private var compactHome: some View {
+        List {
+            if showWalletShortcutBanner {
+                WalletShortcutBannerView {
+                    activeSheet = .walletShortcut
+                }
+            }
+
+            if assets.isEmpty {
+                Section {
+                    emptyState
+                }
+            }
+
+            ForEach(visibleSections) { section in
+                if section.isPro && !store.unlocksPro {
+                    sectionView(for: section)
+                        .proLockedCard(title: section.title) { activeSheet = .proCharts }
+                } else {
+                    sectionView(for: section)
+                }
+            }
+        }
+    }
+
+    /// iPad and the unfolded iPhone Duo: the same cards in columns (two, or three when there is room),
+    /// in the user's section order, instead of one list stretched across the screen.
+    private var wideHome: some View {
+        let columns = homeWidth >= 1100 ? 3 : 2
+        let sections = Array(visibleSections.enumerated())
+        return ScrollView {
+            VStack(spacing: 16) {
                 if showWalletShortcutBanner {
                     WalletShortcutBannerView {
                         activeSheet = .walletShortcut
                     }
+                    .homeCard()
                 }
 
                 if assets.isEmpty {
-                    Section {
-                        VStack(spacing: 12) {
-                            Text("Start tracking your money")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .multilineTextAlignment(.center)
-
-                            Text("Add your assets, then log income and expenses to see your net worth and monthly progress.")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-
-                            Button {
-                                activeSheet = .createAsset
-                            } label: {
-                                Text("Add asset")
-                                    .font(.headline)
-                            }
-                            .tint(.accent)
-                            .buttonBorderShape(.capsule)
-                            .buttonStyle(.bordered)
-                            .padding(.top, 4)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 24)
-                    }
+                    emptyState
+                        .homeCard()
                 }
 
-                ForEach(visibleSections) { section in
-                    if section.isPro && !store.unlocksPro {
-                        sectionView(for: section)
-                            .proLockedCard(title: section.title) { activeSheet = .proCharts }
-                    } else {
-                        sectionView(for: section)
+                HStack(alignment: .top, spacing: 16) {
+                    ForEach(0..<columns, id: \.self) { column in
+                        LazyVStack(spacing: 16) {
+                            ForEach(sections.filter { $0.offset % columns == column }, id: \.element.id) { _, section in
+                                homeCard(for: section)
+                            }
+                        }
                     }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
+        }
+        .background(Color(.systemGroupedBackground))
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { homeWidth = $0 }
+    }
+
+    @ViewBuilder
+    private func homeCard(for section: HomeSection) -> some View {
+        if section.isPro && !store.unlocksPro {
+            cardContent(for: section)
+                .homeCardPadding()
+                .proLockedCard(title: section.title) { activeSheet = .proCharts }
+                .homeCardBackground()
+        } else {
+            cardContent(for: section)
+                .homeCard()
+        }
+    }
+
+    /// One container per section, so a section with several list rows (like Goals) stays one card,
+    /// and plain buttons so tappable titles keep their colors outside a List.
+    private func cardContent(for section: HomeSection) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            sectionView(for: section)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            Text("Start tracking your money")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.center)
+
+            Text("Add your assets, then log income and expenses to see your net worth and monthly progress.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
+            Button {
+                activeSheet = .createAsset
+            } label: {
+                Text("Add asset")
+                    .font(.headline)
+            }
+            .tint(.accent)
+            .buttonBorderShape(.capsule)
+            .buttonStyle(.bordered)
+            .padding(.top, 4)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 24)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if horizontalSizeClass == .regular {
+                    wideHome
+                } else {
+                    compactHome
                 }
             }
             .navigationTitle(netWorth.formatted(compactNumber
@@ -354,4 +431,20 @@ struct HomeView: View {
 #Preview {
     HomeView()
         .environment(Store())
+}
+
+private extension View {
+    /// A Home section drawn as a standalone card (wide layout), matching the list's inset-grouped cells.
+    func homeCard() -> some View {
+        homeCardPadding().homeCardBackground()
+    }
+
+    func homeCardPadding() -> some View {
+        padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    func homeCardBackground() -> some View {
+        background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+    }
 }
