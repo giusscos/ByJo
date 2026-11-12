@@ -56,7 +56,9 @@ struct OperationDetailView: View {
             Section {
                 VStack(spacing: 10) {
                     Text(operation.amount, format: .currency(code: currencyCode.rawValue))
-                        .font(.system(size: 52, weight: .bold, design: .rounded))
+                        .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                         .foregroundStyle(accentColor)
                         .contentTransition(.numericText())
 
@@ -127,7 +129,7 @@ struct OperationDetailView: View {
 
             if let linkedOperation = linkedOperation, let linkedAsset = linkedOperation.asset {
                 Section {
-                    HStack(spacing: 12) {
+                    AdaptiveStack(spacing: 12) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("From")
                                 .font(.caption)
@@ -136,14 +138,15 @@ struct OperationDetailView: View {
                                 .font(.subheadline.weight(.medium))
                         }
 
-                        Spacer()
+                        Spacer(minLength: 0)
 
                         Image(systemName: "arrow.right.circle.fill")
                             .foregroundStyle(.secondary)
+                            .accessibilityHidden(true)
 
-                        Spacer()
+                        Spacer(minLength: 0)
 
-                        VStack(alignment: .trailing, spacing: 2) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text("To")
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
@@ -152,6 +155,7 @@ struct OperationDetailView: View {
                         }
                     }
                     .padding(.vertical, 4)
+                    .accessibilityElement(children: .combine)
 
                     LabeledContent {
                         Text(linkedOperation.amount, format: .currency(code: currencyCode.rawValue))
@@ -170,12 +174,12 @@ struct OperationDetailView: View {
                         Image(systemName: "quote.opening")
                             .font(.title2)
                             .foregroundStyle(.tertiary)
+                            .accessibilityHidden(true)
 
                         Text(operation.note)
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .lineLimit(8)
                     }
                     .padding(.vertical, 4)
                 } header: {
@@ -185,7 +189,7 @@ struct OperationDetailView: View {
             if let splits = operation.splits, !splits.isEmpty {
                 Section {
                     ForEach(splits) { split in
-                        HStack {
+                        AdaptiveStack {
                             Label(split.category?.name ?? "—", systemImage: "tag")
                                 .foregroundStyle(.secondary)
                             Spacer()

@@ -97,7 +97,7 @@ struct UpdateAssetValueView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
 
-                    HStack(spacing: 8) {
+                    AdaptiveStack(spacing: 8) {
                         Button {
                             statusValue = .positive
                         } label: {
