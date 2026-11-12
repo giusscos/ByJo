@@ -1,0 +1,115 @@
+{
+  "fill": {
+    "automatic-gradient": "extended-srgb:0.07000,0.62000,0.52000,1.00000",
+    "orientation": {
+      "start": {
+        "x": 0.5,
+        "y": 0
+      },
+      "stop": {
+        "x": 0.5,
+        "y": 0.7
+      }
+    }
+  },
+  "groups": [
+    {
+      "name": "Pupil",
+      "layers": [
+        {
+          "name": "pupil",
+          "image-name": "pupil.svg",
+          "glass": true,
+          "fill-specializations": [
+            {
+              "value": "none"
+            },
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "extended-gray:1.00000,1.00000"
+              }
+            }
+          ]
+        }
+      ],
+      "position": {
+        "scale": 1.0,
+        "translation-in-points": [
+          0,
+          0
+        ]
+      },
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": true,
+        "value": 0.25
+      },
+      "lighting": "combined"
+    },
+    {
+      "name": "Eye",
+      "layers": [
+        {
+          "name": "eye",
+          "image-name": "eye.svg",
+          "glass": true
+        }
+      ],
+      "position": {
+        "scale": 1.0,
+        "translation-in-points": [
+          0,
+          0
+        ]
+      },
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": true,
+        "value": 0.25
+      },
+      "lighting": "combined"
+    },
+    {
+      "name": "Line",
+      "layers": [
+        {
+          "name": "line",
+          "image-name": "line.svg",
+          "glass": true
+        }
+      ],
+      "position": {
+        "scale": 1.0,
+        "translation-in-points": [
+          0,
+          0
+        ]
+      },
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": true,
+        "value": 0.35
+      },
+      "lighting": "combined"
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}
