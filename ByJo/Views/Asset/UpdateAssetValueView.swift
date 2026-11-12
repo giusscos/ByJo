@@ -65,7 +65,9 @@ struct UpdateAssetValueView: View {
                     VStack(spacing: 6) {
                         ZStack {
                             TextField("0", text: $valueString)
-                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel(Text("New value"))
                                 .multilineTextAlignment(.center)
                                 .keyboardType(.decimalPad)
                                 .focused($focusedField, equals: .value)
@@ -77,6 +79,7 @@ struct UpdateAssetValueView: View {
                                         valueString = ""
                                     } label: {
                                         Image(systemName: "xmark.circle.fill")
+                                            .accessibilityLabel(Text("Clear"))
                                             .font(.callout)
                                             .foregroundStyle(.tertiary)
                                     }
@@ -99,25 +102,27 @@ struct UpdateAssetValueView: View {
                             statusValue = .positive
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "plus.circle.fill")
+                                Image(systemName: statusValue == .positive ? "plus.circle.fill" : "plus.circle")
                                 Text("Positive")
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(statusValue == .positive ? .green : .secondary)
+                        .accessibilityAddTraits(statusValue == .positive ? .isSelected : [])
 
                         Button {
                             statusValue = .negative
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "minus.circle.fill")
+                                Image(systemName: statusValue == .negative ? "minus.circle.fill" : "minus.circle")
                                 Text("Negative")
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(statusValue == .negative ? .red : .secondary)
+                        .accessibilityAddTraits(statusValue == .negative ? .isSelected : [])
                     }
                 } header: {
                     Text("New value")

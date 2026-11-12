@@ -45,7 +45,9 @@ struct AssetAmountSwapView: View {
                     VStack(spacing: 4) {
                         ZStack {
                             TextField("0", value: $amountToSwap, format: .number.precision(.fractionLength(2)))
-                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel(Text("Amount"))
                                 .multilineTextAlignment(.center)
                                 .keyboardType(.decimalPad)
                                 .focused($focusedField, equals: .amount)
@@ -61,6 +63,7 @@ struct AssetAmountSwapView: View {
                                         amountToSwap = nil
                                     } label: {
                                         Image(systemName: "xmark.circle.fill")
+                                            .accessibilityLabel(Text("Clear"))
                                             .font(.callout)
                                             .foregroundStyle(.tertiary)
                                     }
@@ -100,7 +103,7 @@ struct AssetAmountSwapView: View {
                 
                 Section {
                     Button {
-                        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                        withMotionAnimation(.spring(response: 0.4, dampingFraction: 0.6), reduced: nil) {
                             swapRotation += 180
                         }
                         let temp = assetFrom
@@ -112,7 +115,9 @@ struct AssetAmountSwapView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                             .rotationEffect(.degrees(swapRotation))
+                            .accessibilityLabel(Text("Swap"))
                     }
+                    .accessibilityHint(Text("Switches the From and To assets"))
                     .frame(maxWidth: .infinity)
                 }
                 .listRowInsets(.init(top: 4, leading: 0, bottom: 4, trailing: 0))
@@ -158,6 +163,7 @@ struct AssetAmountSwapView: View {
                             }
                         }
                         .focused($focusedField, equals: .note)
+                        .accessibilityLabel(Text("Insert note"))
                         .frame(minHeight: 60, maxHeight: 180)
                 }
             }
@@ -202,7 +208,7 @@ struct AssetAmountSwapView: View {
     
     @ViewBuilder
     private func balancePreview(current: Decimal, delta: Decimal?) -> some View {
-        HStack(spacing: 8) {
+        AdaptiveStack(spacing: 8) {
             Text(current.formatted(.currency(code: currencyCode.rawValue)))
                 .font(.title2)
                 .fontWeight(.semibold)
@@ -212,6 +218,7 @@ struct AssetAmountSwapView: View {
                 Image(systemName: "arrow.right")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
                 
                 Text((current + d).formatted(.currency(code: currencyCode.rawValue)))
                     .font(.title2)
@@ -219,6 +226,15 @@ struct AssetAmountSwapView: View {
                     .foregroundStyle(Color.trend(up: d >= 0))
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Balance"))
+        .accessibilityValue(Text(verbatim: balancePreviewValue(current: current, delta: delta)))
+    }
+
+    private func balancePreviewValue(current: Decimal, delta: Decimal?) -> String {
+        let now = current.accessibilityCurrency(currencyCode)
+        guard let d = delta, d != 0 else { return now }
+        return String(format: NSLocalizedString("%1$@, becomes %2$@", comment: "VoiceOver: balance before and after a swap"), now, (current + d).accessibilityCurrency(currencyCode))
     }
     
     private func save() {
