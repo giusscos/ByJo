@@ -151,7 +151,6 @@ struct AssetDetailView: View {
                 }
             }
             .navigationTitle(asset.name)
-            .environment(\.editMode, $isEditMode)
             .toolbar {
                 if !(asset.operations ?? []).isEmpty {
                     ToolbarItem(placement: .topBarLeading) {
@@ -284,6 +283,8 @@ struct AssetDetailView: View {
                     }
                 }
             }
+            // After .toolbar, so the toolbar's EditButton reads and toggles this binding.
+            .environment(\.editMode, $isEditMode)
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                     case .editAsset:
