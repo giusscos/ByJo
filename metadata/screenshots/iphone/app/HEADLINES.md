@@ -48,3 +48,12 @@ Translated app screens are kept for iPhone only, where most people see them.
 | en (live) | nl-NL | ja | zh-Hans | zh-Hant | ar-SA |
 |---|---|---|---|---|---|
 | Unfold the / full picture | Klap open voor / het hele plaatje | 開けば / 全体が見える | 展开屏幕 / 看清全貌 | 展開螢幕 / 看清全貌 | افتح الشاشة / لترى الصورة كاملة |
+
+## iPhone Duo 02-dashboard (added 2026-11-12)
+
+New second iPhone Duo frame: the unfolded two-column Home (`iphone-duo/app/en-US/01-home-inner.png`).
+Order is now 01-all-your-money (outer), 02-dashboard, 03-unfold (assets), 04-plan.
+
+| en | de-DE | es-ES | fr-FR / fr-CA | it | pt-PT / pt-BR | nl-NL | ja | zh-Hans | zh-Hant | ar-SA |
+|---|---|---|---|---|---|---|---|---|---|---|
+| See it all / side by side | Alles im Blick / Seite an Seite | Todo a la vista / lado a lado | Tout d’un coup d’œil / côte à côte | Tutto a colpo d’occhio / fianco a fianco | Tudo à vista / lado a lado | Alles in één oogopslag / naast elkaar | すべてを / 並べて見渡す | 一屏尽览 / 图表并排呈现 | 一屏盡覽 / 圖表並排呈現 | كل شيء أمامك / جنبًا إلى جنب |
