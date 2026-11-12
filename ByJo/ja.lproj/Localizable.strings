@@ -596,3 +596,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "純資産の推移、支出の傾向、資産配分などをホームで直接確認。";
 "Reorder and hide Home sections to match how you think about money." = "ホームのセクションを並べ替えたり隠したりして、自分のお金の見方に合わせられます。";
 "Reorder and hide Home sections" = "ホームのセクションを並べ替え・非表示";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "%@ 増加";
+"Down %@" = "%@ 減少";
+"Forecast, %@" = "予測、%@";
+"Shows the next 12 months based on your recurring operations" = "繰り返しの取引にもとづいて今後12か月を表示します";
+"%@ of %@" = "%@ / %@";
+"%@ of income spent" = "収入の%@を支出";
+"Clear" = "消去";
+"Switches the From and To assets" = "移動元と移動先の資産を入れ替えます";
+"%1$@, becomes %2$@" = "%1$@、変更後 %2$@";
+"Pinned" = "ピン留め";
+"Ascending" = "昇順";
+"Descending" = "降順";
+"Shown" = "表示";
+"Hidden" = "非表示";
+"Required" = "必須";

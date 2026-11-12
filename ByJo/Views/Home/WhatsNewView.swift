@@ -72,6 +72,7 @@ struct WhatsNewView: View {
                     .font(.system(size: 44, weight: .semibold))
                     .foregroundStyle(.tint)
             }
+            .accessibilityHidden(true)
             .padding(.top)
 
             Text("What's New in ByJo")

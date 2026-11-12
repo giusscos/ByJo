@@ -38,11 +38,13 @@ struct ProFeatureList: View {
                 .foregroundStyle(color)
                 .frame(width: 36, height: 36)
                 .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 3) {
                 Text(title).font(.headline)
                 Text(description).font(.subheadline).foregroundStyle(.secondary)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -82,12 +84,13 @@ struct PlanPicker: View {
     private func planCard(_ product: Product, title: LocalizedStringKey, subtitle: Text, badge: Text?) -> some View {
         let isSelected = selectedID == product.id
         return Button {
-            withAnimation(.snappy(duration: 0.2)) { selectedID = product.id }
+            withMotionAnimation(.snappy(duration: 0.2)) { selectedID = product.id }
         } label: {
-            HStack(spacing: 12) {
+            AdaptiveStack(spacing: 12) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
                     .foregroundStyle(isSelected ? Color.accentColor : .secondary)
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.headline)
@@ -96,7 +99,7 @@ struct PlanPicker: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                Spacer()
+                Spacer(minLength: 0)
                 Text(product.displayPrice)
                     .font(.title3.bold())
                     .foregroundStyle(.primary)
@@ -241,18 +244,26 @@ struct BottomBarFade: View {
 /// terms line, so no separate notice is needed here.
 struct PaywallLegalFooter: View {
     var store: Store
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        HStack(spacing: 6) {
+        AdaptiveStack(horizontalAlignment: .center, spacing: 6) {
             Link("Terms", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-            Text(verbatim: "·").foregroundStyle(.tertiary)
+            separator
             Link("Privacy", destination: URL(string: "https://by-jo.com/privacy")!)
-            Text(verbatim: "·").foregroundStyle(.tertiary)
+            separator
             Button("Restore Purchases") {
                 Task { await store.restorePurchases() }
             }
         }
         .font(.caption)
         .buttonStyle(.borderless)
+    }
+
+    /// A dot between the links; dropped when they stack at accessibility sizes.
+    @ViewBuilder private var separator: some View {
+        if !dynamicTypeSize.isAccessibilitySize {
+            Text(verbatim: "·").foregroundStyle(.tertiary).accessibilityHidden(true)
+        }
     }
 }

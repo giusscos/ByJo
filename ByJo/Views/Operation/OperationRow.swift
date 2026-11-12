@@ -11,10 +11,12 @@ struct OperationRow: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
     
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var operation: AssetOperation
     
     var body: some View {
-        HStack (spacing: 6) {
+        AdaptiveStack(spacing: 6) {
             VStack (alignment: .leading) {                
                 Text(operation.name)
                     .font(.title3)
@@ -32,31 +34,44 @@ struct OperationRow: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             }
-            .lineLimit(1)
+            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
             
-            Spacer()            
+            Spacer(minLength: 0)
 
-            Group {
-                if operation.swapId != nil {
-                    Image(systemName: "arrow.left.arrow.right.circle.fill")
-                        .foregroundStyle(.blue)
-                } else if operation.amount > 0 {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .foregroundStyle(Color.rise)
-                } else {
-                    Image(systemName: "arrow.down.circle.fill")
-                        .foregroundStyle(Color.fall)
+            HStack(spacing: 6) {
+                Group {
+                    if operation.swapId != nil {
+                        Image(systemName: "arrow.left.arrow.right.circle.fill")
+                            .foregroundStyle(.blue)
+                    } else if operation.amount > 0 {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .foregroundStyle(Color.rise)
+                    } else {
+                        Image(systemName: "arrow.down.circle.fill")
+                            .foregroundStyle(Color.fall)
+                    }
                 }
-            }
-            .imageScale(.large)
-            .fontWeight(.semibold)
-            
-            Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
-                .font(.title)
+                .imageScale(.large)
                 .fontWeight(.semibold)
-                .contentTransition(.numericText(value: compactNumber ? 0 : 1))
-                .lineLimit(1)
+            
+                Text(operation.amount < 0 ? operation.amount * -1 : operation.amount, format: compactNumber ? .currency(code: currency.rawValue).notation(.compactName) : .currency(code: currency.rawValue))
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .contentTransition(.numericText(value: compactNumber ? 0 : 1))
+                    .lineLimit(1)
+            }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(operation.name))
+        .accessibilityValue(Text(verbatim: accessibilityValue))
+    }
+
+    /// "Outflow, $12.50, 9:41 AM, BuddyBank": the direction the arrow shows, then the details.
+    private var accessibilityValue: String {
+        let kind = NSLocalizedString(operation.swapId != nil ? "Swap" : (operation.amount > 0 ? "Inflow" : "Outflow"), comment: "")
+        var parts = [kind, abs(operation.amount).accessibilityCurrency(currency), operation.date.formatted(.dateTime.hour().minute())]
+        if let asset = operation.asset { parts.append(asset.name) }
+        return parts.joined(separator: ", ")
     }
 }
 

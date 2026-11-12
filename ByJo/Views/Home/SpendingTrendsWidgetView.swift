@@ -56,14 +56,14 @@ struct SpendingTrendsWidgetView: View {
         if hasData {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    HStack {
+                    AdaptiveStack {
                         Text("Spending Trends")
                             .font(.headline)
                             .foregroundStyle(.secondary)
 
                         Spacer()
 
-                        Picker("", selection: $lookback) {
+                        Picker("Timeframe", selection: $lookback) {
                             ForEach(lookbackOptions, id: \.months) { opt in
                                 Text(opt.label).tag(opt.months)
                             }
@@ -79,6 +79,8 @@ struct SpendingTrendsWidgetView: View {
                         )
                         .foregroundStyle(Color.accentColor.gradient)
                         .cornerRadius(4)
+                        .accessibilityLabel(Text(bucket.month, format: .dateTime.month(.wide).year()))
+                        .accessibilityValue(Text(bucket.amount.accessibilityCurrency(currencyCode)))
                     }
                     .chartXAxis {
                         AxisMarks(values: .stride(by: .month)) { value in
@@ -101,6 +103,7 @@ struct SpendingTrendsWidgetView: View {
                         }
                     }
                     .frame(height: 160)
+                    .accessibilityLabel(Text("Spending Trends"))
                 }
                 .padding(.vertical, 8)
             }

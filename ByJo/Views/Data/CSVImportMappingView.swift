@@ -232,6 +232,7 @@ struct MappingPickerRow: View {
                         .font(.system(size: 8, weight: .bold))
                         .foregroundStyle(.orange)
                         .offset(y: -3)
+                        .accessibilityLabel(Text("Required"))
                 }
             }
         }

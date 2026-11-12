@@ -15,6 +15,7 @@ struct OnboardingPlansStep: View {
     @AppStorage("currencyCode") private var currencyCode: CurrencyCode = .usd
     @Query private var assets: [Asset]
     @State private var selectedPlanID = ""
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var netWorth: Decimal {
         assets.reduce(0) { $0 + $1.calculateCurrentBalance() }
@@ -42,6 +43,12 @@ struct OnboardingPlansStep: View {
                     ProgressView()
                 }
 
+                // At accessibility text sizes the purchase bar scrolls with the plans,
+                // so a pinned bar can't cover most of the screen.
+                if dynamicTypeSize.isAccessibilitySize {
+                    purchaseBar
+                }
+
                 ProFeatureList()
                     .padding(16)
                     .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
@@ -49,26 +56,32 @@ struct OnboardingPlansStep: View {
             .padding(24)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack(spacing: 12) {
-                PlanPurchaseButton(store: store, selectedID: selectedPlanID)
-
-                Button(action: onContinueFree) {
-                    Text("Continue for free")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderless)
-
-                PaywallLegalFooter(store: store)
+            if !dynamicTypeSize.isAccessibilitySize {
+                purchaseBar
+                    .padding(.horizontal, 24)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                    .background { BottomBarFade() }
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
-            .background { BottomBarFade() }
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if selectedPlanID.isEmpty { selectedPlanID = store.yearlyProductId }
+        }
+    }
+
+    private var purchaseBar: some View {
+        VStack(spacing: 12) {
+            PlanPurchaseButton(store: store, selectedID: selectedPlanID)
+
+            Button(action: onContinueFree) {
+                Text("Continue for free")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderless)
+
+            PaywallLegalFooter(store: store)
         }
     }
 
@@ -81,7 +94,7 @@ struct OnboardingPlansStep: View {
                 .foregroundStyle(Color.accentColor)
 
             Text(netWorth, format: .currency(code: currencyCode.rawValue))
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .scaledFont(size: 40, weight: .bold, design: .rounded, maxSize: 72)
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
 

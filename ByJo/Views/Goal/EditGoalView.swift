@@ -87,7 +87,9 @@ struct EditGoalView: View {
                     VStack(spacing: 6) {
                         ZStack {
                             TextField("0", text: $targetAmountString)
-                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel(Text("Target"))
                                 .multilineTextAlignment(.center)
                                 .keyboardType(.decimalPad)
                                 .focused($focusedField, equals: .targetAmount)
@@ -101,6 +103,7 @@ struct EditGoalView: View {
                                         targetAmountString = ""
                                     } label: {
                                         Image(systemName: "xmark.circle.fill")
+                                            .accessibilityLabel(Text("Clear"))
                                             .font(.callout)
                                             .foregroundStyle(.tertiary)
                                     }
@@ -118,30 +121,32 @@ struct EditGoalView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
 
-                    HStack(spacing: 8) {
+                    AdaptiveStack(spacing: 8) {
                         Button {
                             statusTargetAmount = .positive
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "plus.circle.fill")
+                                Image(systemName: statusTargetAmount == .positive ? "plus.circle.fill" : "plus.circle")
                                 Text("Positive")
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(statusTargetAmount == .positive ? .green : .secondary)
+                        .accessibilityAddTraits(statusTargetAmount == .positive ? .isSelected : [])
 
                         Button {
                             statusTargetAmount = .negative
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "minus.circle.fill")
+                                Image(systemName: statusTargetAmount == .negative ? "minus.circle.fill" : "minus.circle")
                                 Text("Negative")
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(statusTargetAmount == .negative ? .red : .secondary)
+                        .accessibilityAddTraits(statusTargetAmount == .negative ? .isSelected : [])
                     }
                 }
                 .listRowSeparator(.hidden)

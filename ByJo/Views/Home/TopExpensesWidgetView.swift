@@ -10,6 +10,7 @@ struct TopExpensesWidgetView: View {
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query var assets: [Asset]
 
     private var topExpenses: [AssetOperation] {
@@ -40,13 +41,13 @@ struct TopExpensesWidgetView: View {
 
                     ForEach(Array(topExpenses.enumerated()), id: \.offset) { index, op in
                         VStack(alignment: .leading, spacing: 6) {
-                            HStack {
+                            AdaptiveStack {
                                 Text(op.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                    .lineLimit(1)
+                                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 3 : 1)
 
-                                Spacer()
+                                Spacer(minLength: 0)
 
                                 Text(abs(op.amount), format: compactNumber
                                      ? .currency(code: currencyCode.rawValue).notation(.compactName)
@@ -62,10 +63,14 @@ struct TopExpensesWidgetView: View {
                                 Capsule()
                                     .fill(Color.red.opacity(0.8 - Double(index) * 0.2))
                                     .frame(width: max(0, geo.size.width * ratio), height: 6)
-                                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: ratio)
+                                    .motionAnimation(.spring(response: 0.6, dampingFraction: 0.8), value: ratio)
                             }
                             .frame(height: 6)
+                            .accessibilityHidden(true)
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text(op.name))
+                        .accessibilityValue(Text(abs(op.amount).accessibilityCurrency(currencyCode)))
                     }
                 }
                 .padding(.vertical, 8)

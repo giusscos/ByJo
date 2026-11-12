@@ -74,7 +74,9 @@ struct EditAssetView: View {
                     VStack(spacing: 6) {
                         ZStack {
                             TextField("0", text: $initialBalanceString)
-                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel(Text("Balance"))
                                 .multilineTextAlignment(.center)
                                 .keyboardType(.decimalPad)
                                 .focused($focusedField, equals: .balance)
@@ -90,6 +92,7 @@ struct EditAssetView: View {
                                         initialBalanceString = ""
                                     } label: {
                                         Image(systemName: "xmark.circle.fill")
+                                            .accessibilityLabel(Text("Clear"))
                                             .font(.callout)
                                             .foregroundStyle(.tertiary)
                                     }
@@ -107,30 +110,32 @@ struct EditAssetView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
 
-                    HStack(spacing: 8) {
+                    AdaptiveStack(spacing: 8) {
                         Button {
                             statusInitialBalance = .positive
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "plus.circle.fill")
+                                Image(systemName: statusInitialBalance == .positive ? "plus.circle.fill" : "plus.circle")
                                 Text("Positive")
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(statusInitialBalance == .positive ? .green : .secondary)
+                        .accessibilityAddTraits(statusInitialBalance == .positive ? .isSelected : [])
 
                         Button {
                             statusInitialBalance = .negative
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "minus.circle.fill")
+                                Image(systemName: statusInitialBalance == .negative ? "minus.circle.fill" : "minus.circle")
                                 Text("Negative")
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(statusInitialBalance == .negative ? .red : .secondary)
+                        .accessibilityAddTraits(statusInitialBalance == .negative ? .isSelected : [])
                     }
                 }
                 .listRowSeparator(.hidden)

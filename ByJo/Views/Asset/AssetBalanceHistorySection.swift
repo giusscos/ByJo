@@ -68,7 +68,7 @@ struct AssetBalanceHistorySection: View {
     var body: some View {
         Section {
             VStack(alignment: .leading, spacing: 16) {
-                HStack(alignment: .top) {
+                AdaptiveStack(verticalAlignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Balance history")
                             .font(.headline)
@@ -92,12 +92,14 @@ struct AssetBalanceHistorySection: View {
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(lineColor)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(Text(String(format: NSLocalizedString(delta >= 0 ? "Up %@" : "Down %@", comment: "VoiceOver: change over the period"), abs(delta).accessibilityCurrency(currencyCode))))
                         }
                     }
 
                     Spacer()
 
-                    Picker("", selection: $selectedRange) {
+                    Picker("Timeframe", selection: $selectedRange) {
                         ForEach(rangeOptions, id: \.self) { option in
                             Text(option.label).tag(option)
                         }
@@ -118,6 +120,7 @@ struct AssetBalanceHistorySection: View {
                                 startPoint: .top, endPoint: .bottom
                             ))
                             .interpolationMethod(.monotone)
+                            .accessibilityHidden(true)
 
                             LineMark(
                                 x: .value("Date", point.date),
@@ -126,6 +129,8 @@ struct AssetBalanceHistorySection: View {
                             .foregroundStyle(lineColor)
                             .lineStyle(StrokeStyle(lineWidth: 2))
                             .interpolationMethod(.monotone)
+                            .accessibilityLabel(Text(point.date, format: .dateTime.day().month().year()))
+                            .accessibilityValue(Text(point.value.accessibilityCurrency(currencyCode)))
                         }
                     }
                     .chartYScale(domain: .automatic(includesZero: false))
@@ -157,6 +162,7 @@ struct AssetBalanceHistorySection: View {
                         }
                     }
                     .frame(height: 160)
+                    .accessibilityLabel(Text("Balance history"))
                 }
             }
             .padding(.vertical, 8)

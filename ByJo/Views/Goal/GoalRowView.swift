@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GoalRowView: View {
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage("compactNumber") var compactNumber: Bool = true
     @AppStorage("pinnedGoalId") private var pinnedGoalId: String = ""
 
@@ -55,6 +56,7 @@ struct GoalRowView: View {
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(.background, .yellow)
                         .rotationEffect(.degrees(45))
+                        .accessibilityLabel(Text("Pinned"))
                 }
 
                 if goal.isExpired {
@@ -124,34 +126,42 @@ struct GoalRowView: View {
                 }
             }
             .frame(height: 6)
-            .animation(.spring(duration: 0.6), value: progress)
+            .motionAnimation(.spring(duration: 0.6), value: progress)
+            .accessibilityHidden(true)
 
             // Footer: from · % · to + due date
-            HStack(spacing: 3) {
+            AdaptiveStack(spacing: 3) {
                 Text(goal.startingAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)
                      : .currency(code: currency.rawValue))
                     .foregroundStyle(.secondary)
 
-                Text("·")
-                    .foregroundStyle(Color.secondary.opacity(0.4))
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("·")
+                        .foregroundStyle(Color.secondary.opacity(0.4))
+                        .accessibilityHidden(true)
+                }
 
                 Text("\(progressPercent)%")
                     .fontWeight(.semibold)
 
-                Text("·")
-                    .foregroundStyle(Color.secondary.opacity(0.4))
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("·")
+                        .foregroundStyle(Color.secondary.opacity(0.4))
+                        .accessibilityHidden(true)
+                }
 
                 Text(goal.targetAmount, format: compactNumber
                      ? .currency(code: currency.rawValue).notation(.compactName)
                      : .currency(code: currency.rawValue))
                     .foregroundStyle(.secondary)
 
-                Spacer()
+                Spacer(minLength: 0)
 
                 if let dueDate = goal.dueDate {
                     HStack(spacing: 3) {
                         Image(systemName: "calendar")
+                            .accessibilityHidden(true)
                         Text(dueDate, format: .dateTime.month(.abbreviated).year())
                     }
                     .foregroundStyle(.secondary)

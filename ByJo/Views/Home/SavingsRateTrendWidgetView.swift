@@ -66,6 +66,7 @@ struct SavingsRateTrendWidgetView: View {
                         .foregroundStyle(Color.accentColor)
                         .lineStyle(StrokeStyle(lineWidth: 2))
                         .interpolationMethod(.monotone)
+                        .accessibilityHidden(true)
 
                         PointMark(
                             x: .value("Month", point.month, unit: .month),
@@ -73,6 +74,8 @@ struct SavingsRateTrendWidgetView: View {
                         )
                         .foregroundStyle(rateColor(point.rate))
                         .symbolSize(50)
+                        .accessibilityLabel(Text(point.month, format: .dateTime.month(.wide).year()))
+                        .accessibilityValue(Text(point.rate, format: .percent.precision(.fractionLength(0))))
                     }
                     .chartYScale(domain: 0...100)
                     .chartXAxis {
@@ -93,13 +96,14 @@ struct SavingsRateTrendWidgetView: View {
                         }
                     }
                     .frame(height: 140)
+                    .accessibilityLabel(Text("Savings Rate Trend"))
 
-                    HStack {
-                        Label("≥20% great", systemImage: "circle.fill").foregroundStyle(.green)
-                        Spacer()
-                        Label("10–20% ok", systemImage: "circle.fill").foregroundStyle(.yellow)
-                        Spacer()
-                        Label("<10% low", systemImage: "circle.fill").foregroundStyle(.red)
+                    AdaptiveStack {
+                        Label { Text("≥20% great") } icon: { Image(systemName: "circle.fill").foregroundStyle(.green) }
+                        Spacer(minLength: 0)
+                        Label { Text("10–20% ok") } icon: { Image(systemName: "circle.fill").foregroundStyle(.yellow) }
+                        Spacer(minLength: 0)
+                        Label { Text("<10% low") } icon: { Image(systemName: "circle.fill").foregroundStyle(.red) }
                     }
                     .font(.caption2)
                     .foregroundStyle(.secondary)

@@ -596,3 +596,20 @@
 "Net worth history, spending trends, asset allocation and more, right on Home." = "淨資產走勢、支出趨勢、資產配置等，直接顯示在首頁。";
 "Reorder and hide Home sections to match how you think about money." = "調整首頁區塊的順序或隱藏區塊，照你的理財思路來安排。";
 "Reorder and hide Home sections" = "調整和隱藏首頁區塊";
+
+/* MARK: - Accessibility (VoiceOver) */
+"Up %@" = "上漲 %@";
+"Down %@" = "下跌 %@";
+"Forecast, %@" = "預測，%@";
+"Shows the next 12 months based on your recurring operations" = "根據你的定期交易顯示未來 12 個月";
+"%@ of %@" = "%@，共 %@";
+"%@ of income spent" = "已花費收入的 %@";
+"Clear" = "清除";
+"Switches the From and To assets" = "交換轉出與轉入資產";
+"%1$@, becomes %2$@" = "%1$@，變為 %2$@";
+"Pinned" = "已釘選";
+"Ascending" = "遞增";
+"Descending" = "遞減";
+"Shown" = "顯示";
+"Hidden" = "隱藏";
+"Required" = "必填";

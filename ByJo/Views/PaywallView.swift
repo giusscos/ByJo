@@ -29,6 +29,7 @@ struct PaywallView: View {
     var dismissOnUnlock: Bool = true
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedPlanID: String = ""
 
     var body: some View {
@@ -49,6 +50,12 @@ struct PaywallView: View {
                         PlanPicker(store: store, selectedID: $selectedPlanID)
                     }
 
+                    // At accessibility text sizes the purchase bar scrolls with the plans,
+                    // so a pinned bar can't cover most of the screen.
+                    if dynamicTypeSize.isAccessibilitySize {
+                        purchaseBar
+                    }
+
                     ProFeatureList()
                         .padding(16)
                         .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
@@ -56,14 +63,13 @@ struct PaywallView: View {
                 .padding(20)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                VStack(spacing: 12) {
-                    PlanPurchaseButton(store: store, selectedID: selectedPlanID)
-                    PaywallLegalFooter(store: store)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    purchaseBar
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
+                        .padding(.bottom, 8)
+                        .background { BottomBarFade() }
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 8)
-                .background { BottomBarFade() }
             }
             .navigationTitle("ByJo Pro")
             .navigationBarTitleDisplayMode(.inline)
@@ -81,6 +87,13 @@ struct PaywallView: View {
         }
     }
 
+    private var purchaseBar: some View {
+        VStack(spacing: 12) {
+            PlanPurchaseButton(store: store, selectedID: selectedPlanID)
+            PaywallLegalFooter(store: store)
+        }
+    }
+
     private var header: some View {
         VStack(spacing: 10) {
             Image(systemName: icon)
@@ -88,9 +101,11 @@ struct PaywallView: View {
                 .foregroundStyle(Color.accentColor)
                 .frame(width: 80, height: 80)
                 .background(Color.accentColor.opacity(0.12), in: Circle())
+                .accessibilityHidden(true)
 
             Text(headline)
                 .font(.title2.bold())
+                .accessibilityAddTraits(.isHeader)
                 .multilineTextAlignment(.center)
 
             Text(subheadline)

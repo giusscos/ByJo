@@ -401,6 +401,7 @@ struct OperationListView: View {
                                                 
                                                 if sortOrder == sort {
                                                     Image(systemName: isAscending ? "arrow.up" : "arrow.down")
+                                                        .accessibilityLabel(Text(isAscending ? "Ascending" : "Descending"))
                                                 }
                                             }
                                         }

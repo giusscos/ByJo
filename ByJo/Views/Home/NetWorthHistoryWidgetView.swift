@@ -108,7 +108,7 @@ struct NetWorthHistoryWidgetView: View {
         if !assets.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    HStack(alignment: .top) {
+                    AdaptiveStack(verticalAlignment: .top) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Net Worth History")
                                 .font(.headline)
@@ -132,13 +132,15 @@ struct NetWorthHistoryWidgetView: View {
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundStyle(lineColor)
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel(Text(String(format: NSLocalizedString(delta >= 0 ? "Up %@" : "Down %@", comment: "VoiceOver: change over the period"), abs(delta).accessibilityCurrency(currencyCode))))
                             }
                         }
 
                         Spacer()
 
                         VStack(alignment: .trailing, spacing: 6) {
-                            Picker("", selection: $selectedRange) {
+                            Picker("Timeframe", selection: $selectedRange) {
                                 ForEach(rangeOptions, id: \.self) { option in
                                     Text(option.label).tag(option)
                                 }
@@ -147,7 +149,7 @@ struct NetWorthHistoryWidgetView: View {
                             .pickerStyle(.menu)
 
                             Button {
-                                withAnimation { showProjection.toggle() }
+                                withMotionAnimation { showProjection.toggle() }
                             } label: {
                                 Text("Forecast")
                                     .font(.caption2)
@@ -159,6 +161,8 @@ struct NetWorthHistoryWidgetView: View {
                                     .clipShape(Capsule())
                             }
                             .buttonStyle(.plain)
+                            .accessibilityAddTraits(showProjection ? .isSelected : [])
+                            .accessibilityHint(Text("Shows the next 12 months based on your recurring operations"))
                         }
                     }
 
@@ -174,6 +178,7 @@ struct NetWorthHistoryWidgetView: View {
                                     startPoint: .top, endPoint: .bottom
                                 ))
                                 .interpolationMethod(.monotone)
+                                .accessibilityHidden(true)
 
                                 LineMark(
                                     x: .value("Date", point.date),
@@ -182,6 +187,8 @@ struct NetWorthHistoryWidgetView: View {
                                 .foregroundStyle(lineColor)
                                 .lineStyle(StrokeStyle(lineWidth: 2))
                                 .interpolationMethod(.monotone)
+                                .accessibilityLabel(Text(point.date, format: .dateTime.day().month().year()))
+                                .accessibilityValue(Text(point.value.accessibilityCurrency(currencyCode)))
                             }
 
                             ForEach(projectionPoints) { point in
@@ -192,6 +199,8 @@ struct NetWorthHistoryWidgetView: View {
                                 .foregroundStyle(lineColor.opacity(0.5))
                                 .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 3]))
                                 .interpolationMethod(.monotone)
+                                .accessibilityLabel(Text(String(format: NSLocalizedString("Forecast, %@", comment: "VoiceOver: projected chart point"), point.date.formatted(.dateTime.month().year()))))
+                                .accessibilityValue(Text(point.value.accessibilityCurrency(currencyCode)))
                             }
                         }
                         .chartYScale(domain: .automatic(includesZero: false))
@@ -223,6 +232,7 @@ struct NetWorthHistoryWidgetView: View {
                             }
                         }
                         .frame(height: 160)
+                        .accessibilityLabel(Text("Net Worth History"))
                     }
                 }
                 .padding(.vertical, 8)

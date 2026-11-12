@@ -9,6 +9,7 @@ import SwiftUI
 struct GoalDetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @AppStorage("currencyCode") var currency: CurrencyCode = .usd
     @AppStorage("compactNumber") var compactNumber: Bool = true
@@ -112,7 +113,7 @@ struct GoalDetailView: View {
                             )
                             .frame(width: 160, height: 160)
                             .rotationEffect(.degrees(-90))
-                            .animation(.spring(duration: 1.2, bounce: 0.2), value: progress)
+                            .motionAnimation(.spring(duration: 1.2, bounce: 0.2), value: progress)
 
                         // Milestone markers at 25%, 50%, 75%
                         ForEach([0.25, 0.50, 0.75], id: \.self) { milestone in
@@ -126,17 +127,23 @@ struct GoalDetailView: View {
 
                         VStack(spacing: 2) {
                             Text("\(progressPercent)%")
-                                .font(.system(size: 44, weight: .black, design: .rounded))
+                                .scaledFont(size: 44, weight: .black, design: .rounded, maxSize: 60)
                                 .foregroundStyle(progress >= 1 ? .green : .primary)
                                 .contentTransition(.numericText())
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                             Text(asset.name)
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
                         }
+                        .frame(width: 128)
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text("Progress"))
+                    .accessibilityValue(Text(verbatim: "\(progressPercent)%, \(asset.name)"))
 
-                    HStack {
+                    AdaptiveStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Started")
                                 .font(.caption)
@@ -146,7 +153,7 @@ struct GoalDetailView: View {
                                 .fontWeight(.bold)
                         }
                         Spacer()
-                        VStack(alignment: .trailing, spacing: 2) {
+                        VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing, spacing: 2) {
                             Text("Target")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -161,7 +168,7 @@ struct GoalDetailView: View {
 
                 // Stat rows
                 if remaining > 0 {
-                    HStack {
+                    AdaptiveStack {
                         Label("Remaining", systemImage: "target")
                             .foregroundStyle(.secondary)
                         Spacer()
@@ -171,7 +178,7 @@ struct GoalDetailView: View {
                             .foregroundStyle(goal.isExpired ? .red : .primary)
                     }
 
-                    HStack {
+                    AdaptiveStack {
                         Label("Saved so far", systemImage: "arrow.up.circle")
                             .foregroundStyle(.secondary)
                         Spacer()
@@ -181,7 +188,7 @@ struct GoalDetailView: View {
                             .foregroundStyle(Color.trend(up: netProgress >= 0))
                     }
                 } else {
-                    HStack {
+                    AdaptiveStack {
                         Label("Goal reached!", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(.green)
                         Spacer()
@@ -193,7 +200,7 @@ struct GoalDetailView: View {
                 }
 
                 if let dueDate = goal.dueDate {
-                    HStack {
+                    AdaptiveStack {
                         Label("Due date", systemImage: "calendar")
                             .foregroundStyle(.secondary)
                         Spacer()
@@ -220,7 +227,7 @@ struct GoalDetailView: View {
             // MARK: Projections
             if let pace = monthlyPace {
                 Section {
-                    HStack {
+                    AdaptiveStack {
                         Label("Monthly pace", systemImage: "chart.line.uptrend.xyaxis")
                             .foregroundStyle(.secondary)
                         Spacer()
@@ -231,7 +238,7 @@ struct GoalDetailView: View {
 
                     if pace > 0 && remaining > 0 {
                         if let eta = estimatedCompletionDate {
-                            HStack {
+                            AdaptiveStack {
                                 Label("Estimated completion", systemImage: "flag.checkered")
                                     .foregroundStyle(.secondary)
                                 Spacer()
@@ -242,7 +249,7 @@ struct GoalDetailView: View {
 
                         if let due = goal.dueDate, let eta = estimatedCompletionDate {
                             let onTrack = eta <= due
-                            HStack {
+                            AdaptiveStack {
                                 Label(onTrack ? "On track" : "Behind schedule", systemImage: onTrack ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
                                     .foregroundStyle(onTrack ? Color.green : Color.orange)
                                 Spacer()
@@ -269,7 +276,7 @@ struct GoalDetailView: View {
             if goal.dueDate != nil && remaining > 0 {
                 Section {
                     if let daily = requiredDaily {
-                        HStack {
+                        AdaptiveStack {
                             Label("Per day", systemImage: "sun.max")
                                 .foregroundStyle(.secondary)
                             Spacer()
@@ -281,7 +288,7 @@ struct GoalDetailView: View {
                     }
 
                     if let weekly = requiredWeekly {
-                        HStack {
+                        AdaptiveStack {
                             Label("Per week", systemImage: "calendar.badge.clock")
                                 .foregroundStyle(.secondary)
                             Spacer()
@@ -293,7 +300,7 @@ struct GoalDetailView: View {
                     }
 
                     if let monthly = requiredMonthly {
-                        HStack {
+                        AdaptiveStack {
                             Label("Per month", systemImage: "calendar")
                                 .foregroundStyle(.secondary)
                             Spacer()
@@ -315,7 +322,7 @@ struct GoalDetailView: View {
             // MARK: Manage
             Section("Manage") {
                 Button {
-                    withAnimation {
+                    withMotionAnimation {
                         pinnedGoalId = isPinned ? "" : goal.id.uuidString
                     }
                 } label: {

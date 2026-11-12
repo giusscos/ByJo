@@ -158,7 +158,7 @@ struct EditAssetOperationView: View {
                     Section("Suggestions") {
                         ForEach(nameSuggestions.prefix(5), id: \.self) { suggestion in
                             Button {
-                                withAnimation(.snappy(duration: 0.25)) {
+                                withMotionAnimation(.snappy(duration: 0.25)) {
                                     name = suggestion
                                     focusedField = .amount
                                 }
@@ -174,7 +174,9 @@ struct EditAssetOperationView: View {
                     VStack(spacing: 6) {
                         ZStack {
                             TextField("0", text: $amountString)
-                                .font(.system(size: 52, weight: .bold, design: .rounded))
+                                .scaledFont(size: 52, weight: .bold, design: .rounded, maxSize: 88)
+                                .minimumScaleFactor(0.5)
+                                .accessibilityLabel(Text("Amount"))
                                 .multilineTextAlignment(.center)
                                 .keyboardType(.decimalPad)
                                 .focused($focusedField, equals: .amount)
@@ -190,6 +192,7 @@ struct EditAssetOperationView: View {
                                         amountString = ""
                                     } label: {
                                         Image(systemName: "xmark.circle.fill")
+                                            .accessibilityLabel(Text("Clear"))
                                             .font(.callout)
                                             .foregroundStyle(.tertiary)
                                     }
@@ -207,30 +210,32 @@ struct EditAssetOperationView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
 
-                    HStack(spacing: 8) {
+                    AdaptiveStack(spacing: 8) {
                         Button {
                             operationType = .inflow
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "arrow.down.circle.fill")
+                                Image(systemName: operationType == .inflow ? "arrow.down.circle.fill" : "arrow.down.circle")
                                 Text(OperationType.inflow.displayName)
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(operationType == .inflow ? Color.rise : .secondary)
+                        .accessibilityAddTraits(operationType == .inflow ? .isSelected : [])
 
                         Button {
                             operationType = .outflow
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "arrow.up.circle.fill")
+                                Image(systemName: operationType == .outflow ? "arrow.up.circle.fill" : "arrow.up.circle")
                                 Text(OperationType.outflow.displayName)
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
                         .tint(operationType == .outflow ? Color.fall : .secondary)
+                        .accessibilityAddTraits(operationType == .outflow ? .isSelected : [])
                     }
                 }
                 .listRowSeparator(.hidden)
@@ -246,7 +251,7 @@ struct EditAssetOperationView: View {
 
                     if isSplit {
                         ForEach($splitRows) { $row in
-                            HStack {
+                            AdaptiveStack {
                                 Picker("Category", selection: $row.category) {
                                     Text("—").tag(Optional<CategoryOperation>.none)
                                     ForEach(categoriesOperation) { cat in
@@ -259,7 +264,7 @@ struct EditAssetOperationView: View {
                                 TextField("Amount", text: $row.amountString)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
-                                    .frame(width: 100)
+                                    .frame(minWidth: 100, maxWidth: 160)
                             }
                         }
                         .onDelete { indices in splitRows.remove(atOffsets: indices) }
@@ -324,8 +329,8 @@ struct EditAssetOperationView: View {
                 }
                 .listRowInsets(.init(top: 16, leading: 14, bottom: 16, trailing: 16))
             }
-            .animation(.snappy(duration: 0.28), value: focusedField == .name && !nameSuggestions.isEmpty)
-            .animation(.snappy(duration: 0.22), value: nameSuggestions)
+            .motionAnimation(.snappy(duration: 0.28), value: focusedField == .name && !nameSuggestions.isEmpty)
+            .motionAnimation(.snappy(duration: 0.22), value: nameSuggestions)
             .onChange(of: store.isPro) { _, isPro in
                 if isPro, let pendingFrequency {
                     frequency = pendingFrequency
