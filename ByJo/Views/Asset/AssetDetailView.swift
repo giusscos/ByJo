@@ -204,7 +204,7 @@ struct AssetDetailView: View {
                                 Button {
                                     activeSheet = .editAsset
                                 } label: {
-                                    Label("Edit", systemImage: "pencil")
+                                    Label("Edit asset", systemImage: "pencil")
                                 }
 
                                 Button {
