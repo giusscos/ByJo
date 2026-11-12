@@ -1,0 +1,836 @@
+{
+ "info": {
+  "en-US": {
+   "name": "Net Worth Tracker - ByJo",
+   "subtitle": "Private Budget & Finance"
+  },
+  "en-GB": {
+   "name": "Net Worth Tracker - ByJo",
+   "subtitle": "Private Budget & Finance"
+  },
+  "de-DE": {
+   "name": "Nettovermögen Tracker - ByJo",
+   "subtitle": "Vermögen, Budget & Ziele"
+  },
+  "es-ES": {
+   "name": "Patrimonio Neto - ByJo",
+   "subtitle": "Control de gastos y finanzas"
+  },
+  "fr-FR": {
+   "name": "Patrimoine net - ByJo",
+   "subtitle": "Suivi financier et budget"
+  },
+  "fr-CA": {
+   "name": "Valeur nette - ByJo",
+   "subtitle": "Suivi du patrimoine et budget"
+  },
+  "it": {
+   "name": "Patrimonio Netto - ByJo",
+   "subtitle": "Finanze, budget e obiettivi"
+  },
+  "pt-PT": {
+   "name": "Património Líquido - ByJo",
+   "subtitle": "Gestor financeiro e orçamento"
+  },
+  "pt-BR": {
+   "name": "Patrimônio Líquido - ByJo",
+   "subtitle": "Controle financeiro, orçamento"
+  },
+  "es-MX": {
+   "name": "Patrimonio Neto - ByJo",
+   "subtitle": "Presupuesto privado y gastos"
+  },
+  "en-AU": {
+   "name": "Net Worth Tracker - ByJo",
+   "subtitle": "Private Budget & Finance"
+  },
+  "en-CA": {
+   "name": "Net Worth Tracker - ByJo",
+   "subtitle": "Private Budget & Finance"
+  },
+  "ar-SA": {
+   "name": "متتبع صافي الثروة - ByJo",
+   "subtitle": "ميزانية ومصاريف بخصوصية تامة"
+  },
+  "ja": {
+   "name": "純資産管理 - ByJo",
+   "subtitle": "家計簿と予算をプライベートに"
+  },
+  "nl-NL": {
+   "name": "Vermogen Tracker - ByJo",
+   "subtitle": "Privé budget & huishoudboekje"
+  },
+  "zh-Hans": {
+   "name": "净资产管理 - ByJo",
+   "subtitle": "隐私记账、预算与存钱"
+  },
+  "zh-Hant": {
+   "name": "淨資產管理 - ByJo",
+   "subtitle": "隱私記帳、預算與存錢"
+  }
+ },
+ "ver": {
+  "es-MX": {
+   "description": "ByJo es una app privada para seguir tu patrimonio neto y tu presupuesto, pensada como una alternativa más clara a las hojas de cálculo. Agrega lo que tienes y lo que debes, registra ingresos y gastos, y ve todo tu panorama financiero en un solo lugar.\n\nPRIVADA DESDE EL DISEÑO\nSin registro ni acceso a tu banco. Tus datos se quedan en tus dispositivos y solo se sincronizan con tu propio iCloud privado. Sin servidores de ByJo y sin compartir nada.\n\nTU PATRIMONIO NETO EN UN SOLO NÚMERO\nSigue más de 40 tipos de activos: efectivo, cuentas bancarias, tarjetas de crédito, cripto, acciones, ETF, bienes raíces, vehículos, préstamos, hipotecas y más. ByJo los suma en un solo patrimonio neto, en cualquiera de más de 50 monedas.\n\nPRESUPUESTO Y GASTOS\n• Registra ingresos y gastos en segundos, y divide un pago entre varias categorías\n• Define un presupuesto mensual para cada categoría\n• Medidor de gasto: compara hoy con ayer y este mes con el anterior\n• Resumen mensual, principales gastos y tasa de ahorro en Inicio\n• Mueve dinero entre activos con transferencias vinculadas\n\nREGISTRO SIN ESFUERZO\nRegistra operaciones y transferencias con Siri y Atajos, o configura una automatización de Wallet para que tus pagos con tarjeta lleguen solos a ByJo.\n\nPLAN GRATUITO Y BYJO PRO\nEl plan gratuito incluye hasta 3 activos, con operaciones y categorías ilimitadas. ByJo Pro agrega:\n• Activos ilimitados\n• Metas financieras con monto objetivo, fecha límite y proyecciones\n• Ingresos y pagos recurrentes, con un recordatorio antes de cada uno\n• Widgets para la pantalla de inicio\n• Gráficas avanzadas: historial del patrimonio neto, tendencias de gasto, evolución de la tasa de ahorro, desglose de gastos, distribución de activos y pago de deudas\n• Una pantalla de Inicio que puedes reordenar y simplificar\n• Exportación e importación en CSV y JSON\n\nEmpieza con una prueba gratuita de 7 días del plan anual, o elige el plan semanal o una compra única de por vida.\nLas suscripciones se renuevan automáticamente (cada semana o cada año) salvo que las canceles al menos 24 horas antes de que termine el periodo actual. Cancela cuando quieras en la configuración de tu cuenta de Apple.",
+   "keywords": "finanzas,personales,ahorro,ingresos,activos,deudas,inversiones,cartera,cripto,dinero,control,metas",
+   "promotionalText": "Todo tu patrimonio en un solo lugar, gratis hasta 3 activos. Sin registro ni acceso al banco: tus datos se quedan en tus dispositivos y en tu propio iCloud."
+  },
+  "en-AU": {
+   "description": "ByJo is a private net worth tracker and budget app, built as a clearer alternative to spreadsheets. Add what you own and what you owe, log income and expenses, and see your whole financial picture in one place.\n\nPRIVATE BY DESIGN\nNo sign-up, no bank login. Your data stays on your devices and syncs only through your own private iCloud. No ByJo servers, no sharing.\n\nYOUR NET WORTH IN ONE NUMBER\nTrack 40+ asset types: cash, bank accounts, credit cards, crypto, shares, ETFs, property, vehicles, loans, mortgages and more. ByJo adds them up into one net worth, in any of 50+ currencies.\n\nBUDGET AND SPENDING\n• Log inflows and outflows in seconds, and split a payment across categories\n• Set a monthly budget for each category\n• Spendmeter: compare today with yesterday, this month with last month\n• Monthly summary, top expenses and savings rate on Home\n• Move money between assets with linked transfers\n\nHANDS-FREE LOGGING\nLog operations and transfers with Siri and Shortcuts, or set up a Wallet automation so card payments land in ByJo.\n\nFREE PLAN AND BYJO PRO\nThe free plan covers up to 3 assets, with unlimited operations and categories. ByJo Pro adds:\n• Unlimited assets\n• Financial goals with a target, a due date and projections\n• Recurring income and bills, with a reminder before each one\n• Home Screen widgets\n• Advanced charts: net worth history, spending trends, savings rate trend, expense breakdown, asset allocation and debt payoff\n• A Home screen you can reorder and trim\n• Export and import with CSV and JSON\n\nStart with a 7-day free trial on the yearly plan, or choose the weekly plan or a one-time lifetime purchase.\nSubscriptions renew automatically (weekly or yearly) unless cancelled at least 24 hours before the end of the current period. Cancel anytime in your Apple Account settings.",
+   "keywords": "networth,assets,liabilities,super,shares,property,mortgage,loan,calculator,allocation,offline,etf",
+   "promotionalText": "Your whole net worth in one place, free for up to 3 assets. No sign-up, no bank login: your data stays on your devices and in your own iCloud."
+  },
+  "en-CA": {
+   "description": "ByJo is a private net worth tracker and budget app, built as a clearer alternative to spreadsheets. Add what you own and what you owe, log income and expenses, and see your whole financial picture in one place.\n\nPRIVATE BY DESIGN\nNo sign-up, no bank login. Your data stays on your devices and syncs only through your own private iCloud. No ByJo servers, no sharing.\n\nYOUR NET WORTH IN ONE NUMBER\nTrack 40+ asset types: cash, chequing and savings accounts, credit cards, crypto, stocks, ETFs, real estate, vehicles, loans, mortgages and more. ByJo adds them up into one net worth, in any of 50+ currencies.\n\nBUDGET AND SPENDING\n• Log inflows and outflows in seconds, and split a payment across categories\n• Set a monthly budget for each category\n• Spendmeter: compare today with yesterday, this month with last month\n• Monthly summary, top expenses and savings rate on Home\n• Move money between assets with linked transfers\n\nHANDS-FREE LOGGING\nLog operations and transfers with Siri and Shortcuts, or set up a Wallet automation so card payments land in ByJo.\n\nFREE PLAN AND BYJO PRO\nThe free plan covers up to 3 assets, with unlimited operations and categories. ByJo Pro adds:\n• Unlimited assets\n• Financial goals with a target, a due date and projections\n• Recurring income and bills, with a reminder before each one\n• Home Screen widgets\n• Advanced charts: net worth history, spending trends, savings rate trend, expense breakdown, asset allocation and debt payoff\n• A Home screen you can reorder and trim\n• Export and import with CSV and JSON\n\nStart with a 7-day free trial on the yearly plan, or choose the weekly plan or a one-time lifetime purchase.\nSubscriptions renew automatically (weekly or yearly) unless cancelled at least 24 hours before the end of the current period. Cancel anytime in your Apple Account settings.",
+   "keywords": "networth,assets,tfsa,rrsp,fhsa,spending,expense,income,portfolio,crypto,savings,debt,mortgage,wealth",
+   "promotionalText": "Your whole net worth in one place, free for up to 3 assets. No sign-up, no bank login: your data stays on your devices and in your own iCloud."
+  },
+  "ar-SA": {
+   "description": "ByJo تطبيق خاص لتتبّع صافي الثروة والميزانية، صُمّم ليكون بديلًا أوضح لجداول البيانات. أضف ما تملكه وما عليك من ديون، وسجّل الدخل والمصاريف، وشاهد صورتك المالية كاملة في مكان واحد.\n\nالخصوصية أولًا\nبلا تسجيل وبلا ربط بالبنك. تبقى بياناتك على أجهزتك ولا تتزامن إلا عبر iCloud الخاص بك. لا خوادم لـ ByJo ولا مشاركة.\n\nصافي ثروتك في رقم واحد\nتتبّع أكثر من 40 نوعًا من الأصول: النقد والحسابات البنكية وبطاقات الائتمان والعملات الرقمية والأسهم وصناديق المؤشرات والعقارات والمركبات والقروض والرهن العقاري وغيرها. يجمعها ByJo في رقم واحد لصافي ثروتك، بأي من أكثر من 50 عملة.\n\nالميزانية والإنفاق\n• سجّل الدخل والمصاريف في ثوانٍ، وقسّم الدفعة على أكثر من فئة\n• حدّد ميزانية شهرية لكل فئة\n• مقياس الإنفاق: قارن اليوم بالأمس وهذا الشهر بالشهر الماضي\n• الملخص الشهري وأعلى المصاريف ومعدل الادخار في الشاشة الرئيسية\n• انقل الأموال بين الأصول بتحويلات مرتبطة\n\nتسجيل بلا عناء\nسجّل العمليات والتحويلات عبر Siri والاختصارات، أو أعدّ أتمتة Wallet لتصل دفعات بطاقتك إلى ByJo تلقائيًا.\n\nالخطة المجانية وByJo Pro\nتشمل الخطة المجانية حتى 3 أصول، مع عمليات وفئات بلا حدود. ويضيف ByJo Pro:\n• أصولًا بلا حدود\n• أهدافًا مالية بمبلغ مستهدف وموعد نهائي وتوقّعات\n• دخلًا وفواتير متكررة، مع تذكير قبل كل موعد\n• أدوات للشاشة الرئيسية\n• رسومًا بيانية متقدمة: سجل صافي الثروة واتجاهات الإنفاق واتجاه معدل الادخار وتفصيل المصاريف وتوزيع الأصول وسداد الديون\n• شاشة رئيسية يمكنك إعادة ترتيبها وإخفاء أقسامها\n• التصدير والاستيراد بصيغتي CSV وJSON\n\nابدأ بتجربة مجانية لمدة 7 أيام على الخطة السنوية، أو اختر الخطة الأسبوعية أو شراءً لمرة واحدة مدى الحياة.\nتتجدد الاشتراكات تلقائيًا (أسبوعيًا أو سنويًا) ما لم تُلغَ قبل 24 ساعة على الأقل من نهاية الفترة الحالية. يمكنك الإلغاء في أي وقت من إعدادات حساب Apple.",
+   "keywords": "ذهب,ادخار,استثمار,أسهم,ديون,قروض,أصول,دخل,ثروة,محفظة",
+   "promotionalText": "صافي ثروتك كاملًا في مكان واحد، مجانًا حتى 3 أصول. بلا تسجيل وبلا ربط بالبنك: تبقى بياناتك على أجهزتك وفي iCloud الخاص بك."
+  },
+  "ja": {
+   "description": "ByJoは、純資産と予算をプライベートに管理できるアプリです。表計算よりわかりやすく、持っているものと借りているものを追加して収入と支出を記録するだけで、お金の全体像をひとつの場所で確認できます。\n\nプライバシーを最優先\n登録不要、銀行ログイン不要。データはあなたのデバイスに保存され、同期はご自身のプライベートなiCloudだけを通じて行われます。ByJoのサーバーはなく、データが共有されることもありません。\n\n純資産をひとつの数字で\n現金、銀行口座、クレジットカード、暗号資産、株式、ETF、不動産、車両、ローン、住宅ローンなど、40種類以上の資産に対応。ByJoがすべてを合計し、50以上の通貨から選んだ通貨で純資産を表示します。\n\n予算と支出\n• 収入と支出を数秒で記録し、1回の支払いを複数のカテゴリに分割\n• カテゴリごとに月の予算を設定\n• 支出メーター：今日と昨日、今月と先月を比較\n• 月次サマリー、主な支出、貯蓄率をホームに表示\n• 連動した振替で資産間の資金を移動\n\n手間なく記録\nSiriやショートカットで取引や振替を記録。Walletのオートメーションを設定すれば、カードの支払いが自動でByJoに記録されます。\n\n無料プランとByJo Pro\n無料プランでは資産3件まで、取引とカテゴリは無制限で使えます。ByJo Proでは次の機能が加わります。\n• 資産を無制限に\n• 目標額・期日・予測つきのお金の目標\n• 定期的な収入と請求、それぞれの前にリマインダー\n• ホーム画面ウィジェット\n• 高度なグラフ：純資産の推移、支出の推移、貯蓄率の推移、支出の内訳、資産配分、返済状況\n• 並べ替えや非表示ができるホーム画面\n• CSVとJSONでの書き出しと読み込み\n\n年額プランの7日間無料トライアルから始めるか、週額プランまたは買い切りを選べます。\nサブスクリプションは、現在の期間が終了する24時間前までにキャンセルしない限り、自動的に更新されます（毎週または毎年）。Appleアカウントの設定からいつでもキャンセルできます。",
+   "keywords": "資産推移,貯金,支出,収入,負債,投資,暗号資産,株,目標,節約,総資産,ローン",
+   "promotionalText": "純資産のすべてをひとつの場所に。資産3件までは無料です。登録も銀行ログインも不要で、データはあなたのデバイスとご自身のiCloudにだけ保存されます。"
+  },
+  "nl-NL": {
+   "description": "ByJo is een privé-app om je nettovermogen en budget bij te houden, gemaakt als overzichtelijker alternatief voor spreadsheets. Voeg toe wat je bezit en wat je schuldig bent, leg inkomsten en uitgaven vast en zie je hele financiële plaatje op één plek.\n\nPRIVÉ VANAF HET BEGIN\nGeen account, geen bankkoppeling. Je gegevens blijven op je apparaten en synchroniseren alleen via je eigen privé-iCloud. Geen servers van ByJo, niets wordt gedeeld.\n\nJE NETTOVERMOGEN IN ÉÉN GETAL\nHoud meer dan 40 soorten bezittingen bij: contant geld, bankrekeningen, creditcards, crypto, aandelen, ETF's, vastgoed, voertuigen, leningen, hypotheken en meer. ByJo telt alles op tot één nettovermogen, in een van meer dan 50 valuta.\n\nBUDGET EN UITGAVEN\n• Leg inkomsten en uitgaven in seconden vast en verdeel een betaling over meerdere categorieën\n• Stel per categorie een maandbudget in\n• Uitgavenmeter: vergelijk vandaag met gisteren en deze maand met vorige maand\n• Maandoverzicht, grootste uitgaven en spaarquote op Home\n• Verplaats geld tussen bezittingen met gekoppelde overboekingen\n\nVASTLEGGEN ZONDER GEDOE\nLeg transacties en overboekingen vast met Siri en Opdrachten, of stel een Wallet-automatisering in zodat je kaartbetalingen vanzelf in ByJo terechtkomen.\n\nGRATIS ABONNEMENT EN BYJO PRO\nHet gratis abonnement omvat maximaal 3 bezittingen, met onbeperkt transacties en categorieën. ByJo Pro voegt toe:\n• Onbeperkt bezittingen\n• Financiële doelen met doelbedrag, einddatum en prognoses\n• Terugkerende inkomsten en rekeningen, met een herinnering vooraf\n• Widgets op het beginscherm\n• Uitgebreide grafieken: verloop nettovermogen, uitgaventrends, verloop spaarquote, uitgaven per categorie, vermogensverdeling en schulden aflossen\n• Een Home-scherm dat je kunt ordenen en inkorten\n• Exporteren en importeren met CSV en JSON\n\nBegin met 7 dagen gratis proberen op het jaarabonnement, of kies het weekabonnement of een eenmalige levenslange aankoop.\nAbonnementen worden automatisch verlengd (per week of per jaar), tenzij je ten minste 24 uur voor het einde van de lopende periode opzegt. Opzeggen kan altijd via de instellingen van je Apple-account.",
+   "keywords": "nettovermogen,financiën,uitgaven,inkomsten,sparen,beleggen,aandelen,crypto,schulden,hypotheek,geld",
+   "promotionalText": "Je hele nettovermogen op één plek, gratis voor maximaal 3 bezittingen. Geen account, geen bankkoppeling: je gegevens blijven op je apparaten en in je eigen iCloud."
+  },
+  "zh-Hans": {
+   "description": "ByJo 是一款注重隐私的净资产与预算管理 App，比表格更清楚好用。添加你拥有的和你欠下的，记录收入和支出，就能在一个地方看清完整的财务状况。\n\n隐私优先\n无需注册，无需登录银行。数据保存在你的设备上，只通过你自己的私有 iCloud 同步。没有 ByJo 服务器，不会分享任何数据。\n\n一个数字看清净资产\n支持 40 多种资产类型：现金、银行账户、信用卡、加密货币、股票、ETF、房产、车辆、贷款、房贷等。ByJo 把它们加总成一个净资产数字，支持 50 多种货币。\n\n预算与支出\n• 几秒记一笔收入或支出，一笔付款可拆分到多个分类\n• 为每个分类设置月度预算\n• 支出仪表：对比今天和昨天、本月和上月\n• 首页显示月度汇总、主要支出和储蓄率\n• 通过关联转账在资产之间转移资金\n\n轻松记账\n用 Siri 和快捷指令记录交易和转账，或设置钱包自动化，让刷卡支付自动记入 ByJo。\n\n免费版与 ByJo Pro\n免费版最多 3 项资产，交易和分类不限数量。ByJo Pro 还提供：\n• 无限资产\n• 带目标金额、截止日期和预测的财务目标\n• 周期收入和账单，每笔到期前提醒\n• 主屏幕小组件\n• 高级图表：净资产走势、支出趋势、储蓄率趋势、支出构成、资产配置和还债进度\n• 可调整顺序、隐藏板块的首页\n• CSV 和 JSON 导出与导入\n\n年度方案可免费试用 7 天，也可以选择每周方案或一次性永久购买。\n订阅会自动续订（每周或每年），除非在当前周期结束前至少 24 小时取消。可随时在 Apple 账户设置中取消。",
+   "keywords": "理财,账本,负债,收支,投资,股票,基金,攒钱,资产负债表,财务自由,储蓄,净值",
+   "promotionalText": "在一个地方看清全部净资产，最多 3 项资产免费。无需注册，无需登录银行：数据只保存在你的设备和你自己的 iCloud 中。"
+  },
+  "zh-Hant": {
+   "description": "ByJo 是一款重視隱私的淨資產與預算管理 App，比試算表更清楚好用。新增你擁有的和你欠下的，記錄收入和支出，就能在同一個地方看清完整的財務狀況。\n\n隱私優先\n不必註冊，不必登入銀行。資料儲存在你的裝置上，只透過你自己的私人 iCloud 同步。沒有 ByJo 伺服器，不會分享任何資料。\n\n一個數字看清淨資產\n支援 40 多種資產類型：現金、銀行帳戶、信用卡、加密貨幣、股票、ETF、不動產、車輛、貸款、房貸等。ByJo 把它們加總成一個淨資產數字，支援 50 多種貨幣。\n\n預算與支出\n• 幾秒記一筆收入或支出，一筆付款可拆分到多個分類\n• 為每個分類設定每月預算\n• 支出儀表：比較今天和昨天、本月和上月\n• 首頁顯示每月摘要、主要支出和儲蓄率\n• 透過關聯轉帳在資產之間移動資金\n\n輕鬆記帳\n用 Siri 和捷徑記錄交易和轉帳，或設定錢包自動化，讓感應付款自動記入 ByJo。\n\n免費方案與 ByJo Pro\n免費方案最多 3 項資產，交易和分類不限數量。ByJo Pro 還提供：\n• 無限資產\n• 有目標金額、截止日期和預測的財務目標\n• 定期收入和帳單，每筆到期前提醒\n• 主畫面小工具\n• 進階圖表：淨資產走勢、支出趨勢、儲蓄率趨勢、支出組成、資產配置和還款進度\n• 可調整順序、隱藏區塊的首頁\n• CSV 和 JSON 匯出與匯入\n\n年度方案可免費試用 7 天，也可以選擇每週方案或一次付費永久使用。\n訂閱會自動續訂（每週或每年），除非在目前週期結束前至少 24 小時取消。隨時可以在 Apple 帳號設定中取消。",
+   "keywords": "理財,帳本,存股,負債,收支,投資,股票,ETF,基金,財務自由,資產負債表,儲蓄",
+   "promotionalText": "在同一個地方看清全部淨資產，最多 3 項資產免費。不必註冊，不必登入銀行：資料只儲存在你的裝置和你自己的 iCloud 中。"
+  }
+ },
+ "shots": {
+  "ar-SA": {
+   "APP_IPHONE_65": [
+    {
+     "path": "s65/ar-SA/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 633180,
+     "md5": "77d7ab19172cd8969453c9c6a8ef63ee",
+     "gh": "iphone/ar-SA/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/ar-SA/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 679109,
+     "md5": "ad4a2d50f178b0baa89e59ddea802d3d",
+     "gh": "iphone/ar-SA/02-private.jpg"
+    },
+    {
+     "path": "s65/ar-SA/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 576416,
+     "md5": "e8cc30a1c30089f99e3fa6b5bf93d73a",
+     "gh": "iphone/ar-SA/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/ar-SA/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 577110,
+     "md5": "e5fae6a9afbca67c569b0982cc0944a1",
+     "gh": "iphone/ar-SA/04-goals.jpg"
+    },
+    {
+     "path": "s65/ar-SA/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 505001,
+     "md5": "0e542be5c107cb50036db1bc4eba9e84",
+     "gh": "iphone/ar-SA/05-plan.jpg"
+    },
+    {
+     "path": "s65/ar-SA/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1023628,
+     "md5": "bc6a87aae75158f6973e4bbc839d5913",
+     "gh": "iphone/ar-SA/06-widgets.jpg"
+    }
+   ],
+   "APP_IPAD_PRO_3GEN_129": [
+    {
+     "path": "s65/iPad/ar-SA/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 899691,
+     "md5": "8e34ebb61ef2b50cbe0d70ec18ad6249",
+     "gh": "ipad/ar-SA/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPad/ar-SA/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 868508,
+     "md5": "115e6264c20af2e96cdf1a4f74250fe4",
+     "gh": "ipad/ar-SA/02-private.jpg"
+    },
+    {
+     "path": "s65/iPad/ar-SA/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 942797,
+     "md5": "e017d22a37e422c19f2205d029c63c38",
+     "gh": "ipad/ar-SA/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/iPad/ar-SA/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 582834,
+     "md5": "43e975dcc4ade933815b3ff31a435a91",
+     "gh": "ipad/ar-SA/04-goals.jpg"
+    },
+    {
+     "path": "s65/iPad/ar-SA/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 791679,
+     "md5": "27fa365485f4bd7e24003e6be8056591",
+     "gh": "ipad/ar-SA/05-plan.jpg"
+    },
+    {
+     "path": "s65/iPad/ar-SA/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1519644,
+     "md5": "2291e3d75476a0d76bf6d76e635d4d3f",
+     "gh": "ipad/ar-SA/06-widgets.jpg"
+    }
+   ],
+   "APP_IPHONE_DUO": [
+    {
+     "path": "s65/iPhone Duo/ar-SA/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 568127,
+     "md5": "3f9e8424e50a008d3fa37b97bda223ef",
+     "gh": "duo/ar-SA/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/ar-SA/02-dashboard.jpg",
+     "name": "02-dashboard.jpg",
+     "size": 768844,
+     "md5": "5a41920b0d9b40329ec4000c0599459a",
+     "gh": "duo/ar-SA/02-dashboard.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/ar-SA/03-unfold.jpg",
+     "name": "03-unfold.jpg",
+     "size": 799650,
+     "md5": "e2ff40fde993798ce6f8c1af3fdab914",
+     "gh": "duo/ar-SA/03-unfold.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/ar-SA/04-plan.jpg",
+     "name": "04-plan.jpg",
+     "size": 722530,
+     "md5": "0c9cb3d75d9f7b8bb6a4578afd934b8d",
+     "gh": "duo/ar-SA/04-plan.jpg"
+    }
+   ]
+  },
+  "ja": {
+   "APP_IPHONE_65": [
+    {
+     "path": "s65/ja/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 668497,
+     "md5": "e6a10026b92e89a4f667e2d684551f7b",
+     "gh": "iphone/ja/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/ja/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 716534,
+     "md5": "f1955964729e913155730d139c0503ad",
+     "gh": "iphone/ja/02-private.jpg"
+    },
+    {
+     "path": "s65/ja/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 612778,
+     "md5": "50fe46f474d2eebf11b95ad28b8537b1",
+     "gh": "iphone/ja/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/ja/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 601794,
+     "md5": "e6252f5f0def6553be827e0b7b9ff2bc",
+     "gh": "iphone/ja/04-goals.jpg"
+    },
+    {
+     "path": "s65/ja/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 537311,
+     "md5": "71971fa8ee1a1fe28c5501cbb48bae4d",
+     "gh": "iphone/ja/05-plan.jpg"
+    },
+    {
+     "path": "s65/ja/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1004215,
+     "md5": "aa23aaf48c5ea4eb6d2fb27818610f9a",
+     "gh": "iphone/ja/06-widgets.jpg"
+    }
+   ],
+   "APP_IPAD_PRO_3GEN_129": [
+    {
+     "path": "s65/iPad/ja/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 945718,
+     "md5": "0d5b431233f585c6f4756ba1bcdf7193",
+     "gh": "ipad/ja/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPad/ja/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 906617,
+     "md5": "39dfc830c962117b0fda15d866c957fb",
+     "gh": "ipad/ja/02-private.jpg"
+    },
+    {
+     "path": "s65/iPad/ja/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 989702,
+     "md5": "67bb9bba03073fb39ac9524348092572",
+     "gh": "ipad/ja/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/iPad/ja/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 605519,
+     "md5": "b93e61c76c0af6b2992458bdcec442e8",
+     "gh": "ipad/ja/04-goals.jpg"
+    },
+    {
+     "path": "s65/iPad/ja/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 825296,
+     "md5": "2e3b33f5e6c3c2750251b2f86c0837ed",
+     "gh": "ipad/ja/05-plan.jpg"
+    },
+    {
+     "path": "s65/iPad/ja/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1501212,
+     "md5": "dcada6a6e7d686ddfcd9f658197d48f4",
+     "gh": "ipad/ja/06-widgets.jpg"
+    }
+   ],
+   "APP_IPHONE_DUO": [
+    {
+     "path": "s65/iPhone Duo/ja/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 613877,
+     "md5": "be78ff8b91cf9f82647c5e7e6e8da67b",
+     "gh": "duo/ja/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/ja/02-dashboard.jpg",
+     "name": "02-dashboard.jpg",
+     "size": 742852,
+     "md5": "d748638e9b0c7e1b6c8ff5c1c49b4209",
+     "gh": "duo/ja/02-dashboard.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/ja/03-unfold.jpg",
+     "name": "03-unfold.jpg",
+     "size": 763259,
+     "md5": "0185352bcb89733a8b1fda075cdc9991",
+     "gh": "duo/ja/03-unfold.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/ja/04-plan.jpg",
+     "name": "04-plan.jpg",
+     "size": 755904,
+     "md5": "b7e8e2460ec116734812fd14ebd2defd",
+     "gh": "duo/ja/04-plan.jpg"
+    }
+   ]
+  },
+  "nl-NL": {
+   "APP_IPHONE_65": [
+    {
+     "path": "s65/nl-NL/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 627471,
+     "md5": "9ce0a8e79ed3a8e89934c55e73ca2505",
+     "gh": "iphone/nl-NL/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/nl-NL/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 667957,
+     "md5": "78f1a040810e333234c5faf13a823836",
+     "gh": "iphone/nl-NL/02-private.jpg"
+    },
+    {
+     "path": "s65/nl-NL/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 588786,
+     "md5": "0b4f3edb14e44eac731fd3291edf7ba4",
+     "gh": "iphone/nl-NL/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/nl-NL/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 619974,
+     "md5": "9282d821e8a4968f3abb6f6dc8bf94ab",
+     "gh": "iphone/nl-NL/04-goals.jpg"
+    },
+    {
+     "path": "s65/nl-NL/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 524669,
+     "md5": "ad4a4b6fed7a9d02d0cb93fafe3c2af8",
+     "gh": "iphone/nl-NL/05-plan.jpg"
+    },
+    {
+     "path": "s65/nl-NL/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1026394,
+     "md5": "35cf681cce9c948153dc98a84ff9f4db",
+     "gh": "iphone/nl-NL/06-widgets.jpg"
+    }
+   ],
+   "APP_IPAD_PRO_3GEN_129": [
+    {
+     "path": "s65/iPad/nl-NL/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 891703,
+     "md5": "dfab015e20e99edaab80aa6f8149f306",
+     "gh": "ipad/nl-NL/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPad/nl-NL/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 881711,
+     "md5": "f28930f8f87d9bf77ceb859937732ada",
+     "gh": "ipad/nl-NL/02-private.jpg"
+    },
+    {
+     "path": "s65/iPad/nl-NL/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 952571,
+     "md5": "bfe6ec1dc6106ed2634fb7e93203d560",
+     "gh": "ipad/nl-NL/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/iPad/nl-NL/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 593956,
+     "md5": "cae291789c4c1af2404a36602904bb3d",
+     "gh": "ipad/nl-NL/04-goals.jpg"
+    },
+    {
+     "path": "s65/iPad/nl-NL/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 790437,
+     "md5": "c5e4aeb2e52a77ce1fe973fa0bbd17fd",
+     "gh": "ipad/nl-NL/05-plan.jpg"
+    },
+    {
+     "path": "s65/iPad/nl-NL/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1521454,
+     "md5": "853b3a047cbcfaa6afd23a8ca8d1a8a2",
+     "gh": "ipad/nl-NL/06-widgets.jpg"
+    }
+   ],
+   "APP_IPHONE_DUO": [
+    {
+     "path": "s65/iPhone Duo/nl-NL/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 557627,
+     "md5": "c0dcbb89c529b9e99b43aa8409dc0e61",
+     "gh": "duo/nl-NL/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/nl-NL/02-dashboard.jpg",
+     "name": "02-dashboard.jpg",
+     "size": 831098,
+     "md5": "b44a387b2fbf22c49b6034b5ba6f19dc",
+     "gh": "duo/nl-NL/02-dashboard.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/nl-NL/03-unfold.jpg",
+     "name": "03-unfold.jpg",
+     "size": 802296,
+     "md5": "59f4a120363271c43fec90f6187aab66",
+     "gh": "duo/nl-NL/03-unfold.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/nl-NL/04-plan.jpg",
+     "name": "04-plan.jpg",
+     "size": 719811,
+     "md5": "f89eda935026097388b6a9413ab1d911",
+     "gh": "duo/nl-NL/04-plan.jpg"
+    }
+   ]
+  },
+  "zh-Hans": {
+   "APP_IPHONE_65": [
+    {
+     "path": "s65/zh-Hans/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 679294,
+     "md5": "121580fb1d6280a7c81bbf9b702c345f",
+     "gh": "iphone/zh-Hans/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/zh-Hans/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 696554,
+     "md5": "44a3c515efdd262a8d72d6b91a17f654",
+     "gh": "iphone/zh-Hans/02-private.jpg"
+    },
+    {
+     "path": "s65/zh-Hans/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 597870,
+     "md5": "1754f090101d6094d746d148c217ca92",
+     "gh": "iphone/zh-Hans/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/zh-Hans/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 587619,
+     "md5": "0fd923cd2f6f251aa5eeb1124408ae2a",
+     "gh": "iphone/zh-Hans/04-goals.jpg"
+    },
+    {
+     "path": "s65/zh-Hans/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 504575,
+     "md5": "338be2465616aee3733f092a9b385c1b",
+     "gh": "iphone/zh-Hans/05-plan.jpg"
+    },
+    {
+     "path": "s65/zh-Hans/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 995434,
+     "md5": "d9d8799fc7ae409b3a7e22b1fce42ff8",
+     "gh": "iphone/zh-Hans/06-widgets.jpg"
+    }
+   ],
+   "APP_IPAD_PRO_3GEN_129": [
+    {
+     "path": "s65/iPad/zh-Hans/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 949283,
+     "md5": "a4a2b2de2714931c85e569622de3cec9",
+     "gh": "ipad/zh-Hans/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hans/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 897636,
+     "md5": "02d47df4079b8ef10cd89256b7531695",
+     "gh": "ipad/zh-Hans/02-private.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hans/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 982079,
+     "md5": "2acb19d0bfdc6e3f0539d4ae5fa333d7",
+     "gh": "ipad/zh-Hans/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hans/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 590851,
+     "md5": "379f3f32b31dc4f886fcc7f2fcd144e3",
+     "gh": "ipad/zh-Hans/04-goals.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hans/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 797183,
+     "md5": "99b6f04e982a7219f5dc3a0775d83be5",
+     "gh": "ipad/zh-Hans/05-plan.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hans/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1491138,
+     "md5": "4e48e823ab3ab7a270f8367367a644ba",
+     "gh": "ipad/zh-Hans/06-widgets.jpg"
+    }
+   ],
+   "APP_IPHONE_DUO": [
+    {
+     "path": "s65/iPhone Duo/zh-Hans/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 615406,
+     "md5": "f73f18aa172dd827314a85673bfc4691",
+     "gh": "duo/zh-Hans/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/zh-Hans/02-dashboard.jpg",
+     "name": "02-dashboard.jpg",
+     "size": 747108,
+     "md5": "6016dab01ae164e87d74034f3f5e6261",
+     "gh": "duo/zh-Hans/02-dashboard.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/zh-Hans/03-unfold.jpg",
+     "name": "03-unfold.jpg",
+     "size": 775391,
+     "md5": "d0e604cd0a4867dafa880a0059d23821",
+     "gh": "duo/zh-Hans/03-unfold.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/zh-Hans/04-plan.jpg",
+     "name": "04-plan.jpg",
+     "size": 726856,
+     "md5": "2b6b69e1af6d90c0156d7fb957874d1b",
+     "gh": "duo/zh-Hans/04-plan.jpg"
+    }
+   ]
+  },
+  "zh-Hant": {
+   "APP_IPHONE_65": [
+    {
+     "path": "s65/zh-Hant/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 690138,
+     "md5": "e55847375c4ca18541efbfa3250a0f54",
+     "gh": "iphone/zh-Hant/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/zh-Hant/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 719152,
+     "md5": "8c797cd64c1fe2df4585a7a390e5dbc7",
+     "gh": "iphone/zh-Hant/02-private.jpg"
+    },
+    {
+     "path": "s65/zh-Hant/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 616314,
+     "md5": "5b8aec05d6142ba20b3a8649e8b16263",
+     "gh": "iphone/zh-Hant/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/zh-Hant/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 600146,
+     "md5": "47c1654e576cedb4475e68daecb94abd",
+     "gh": "iphone/zh-Hant/04-goals.jpg"
+    },
+    {
+     "path": "s65/zh-Hant/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 511784,
+     "md5": "be464c73904231b9306d7e30259e99f7",
+     "gh": "iphone/zh-Hant/05-plan.jpg"
+    },
+    {
+     "path": "s65/zh-Hant/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 990728,
+     "md5": "3968be7da2ee4781a0cca6b4b8bfe847",
+     "gh": "iphone/zh-Hant/06-widgets.jpg"
+    }
+   ],
+   "APP_IPAD_PRO_3GEN_129": [
+    {
+     "path": "s65/iPad/zh-Hant/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 958201,
+     "md5": "a46c6d30b231d392e9e067af0d0fb688",
+     "gh": "ipad/zh-Hant/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hant/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 897569,
+     "md5": "ab4ecdf72186e949ef9ee80afb534b88",
+     "gh": "ipad/zh-Hant/02-private.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hant/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 982706,
+     "md5": "609abba0c88428482e0e05f9d88ac4bf",
+     "gh": "ipad/zh-Hant/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hant/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 596932,
+     "md5": "224047bd65f1e64c3d984221208fd705",
+     "gh": "ipad/zh-Hant/04-goals.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hant/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 792894,
+     "md5": "8713010fa0b034189eafbc73baa182b5",
+     "gh": "ipad/zh-Hant/05-plan.jpg"
+    },
+    {
+     "path": "s65/iPad/zh-Hant/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1485332,
+     "md5": "9b2f5e4429f68e6894e3bff6c771a80a",
+     "gh": "ipad/zh-Hant/06-widgets.jpg"
+    }
+   ],
+   "APP_IPHONE_DUO": [
+    {
+     "path": "s65/iPhone Duo/zh-Hant/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 623839,
+     "md5": "42acab872d6ba701f0c83153f592f699",
+     "gh": "duo/zh-Hant/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/zh-Hant/02-dashboard.jpg",
+     "name": "02-dashboard.jpg",
+     "size": 752025,
+     "md5": "20933c1b3d74697bcd8e0c9c7c247d2f",
+     "gh": "duo/zh-Hant/02-dashboard.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/zh-Hant/03-unfold.jpg",
+     "name": "03-unfold.jpg",
+     "size": 793186,
+     "md5": "642b8d092a6b6b2718b4464a57ea285f",
+     "gh": "duo/zh-Hant/03-unfold.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/zh-Hant/04-plan.jpg",
+     "name": "04-plan.jpg",
+     "size": 725456,
+     "md5": "adf0da9f5ff83ed29f8bd014fe7bdc87",
+     "gh": "duo/zh-Hant/04-plan.jpg"
+    }
+   ]
+  },
+  "es-MX": {
+   "APP_IPHONE_65": [
+    {
+     "path": "s65/es-ES/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 693525,
+     "md5": "cd01da41ace631b89a641decd9a5744c",
+     "gh": "iphone/es-ES/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/es-ES/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 696418,
+     "md5": "6f83adbfa0dfa0e07f0f8f438dbd4974",
+     "gh": "iphone/es-ES/02-private.jpg"
+    },
+    {
+     "path": "s65/es-ES/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 618167,
+     "md5": "d3500fe751e2aded81d605462e4a2268",
+     "gh": "iphone/es-ES/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/es-ES/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 615831,
+     "md5": "d8cc968249c8e822949f1e6486438261",
+     "gh": "iphone/es-ES/04-goals.jpg"
+    },
+    {
+     "path": "s65/es-ES/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 549671,
+     "md5": "c473ea91ce45783faa92d59168711bc5",
+     "gh": "iphone/es-ES/05-plan.jpg"
+    },
+    {
+     "path": "s65/es-ES/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1042560,
+     "md5": "01c3404426c2be9fbc4a46c117a70945",
+     "gh": "iphone/es-ES/06-widgets.jpg"
+    }
+   ],
+   "APP_IPAD_PRO_3GEN_129": [
+    {
+     "path": "s65/iPad/es-ES/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 919064,
+     "md5": "205b3ca9c44e03130898f30606b49ce4",
+     "gh": "ipad/es-ES/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPad/es-ES/02-private.jpg",
+     "name": "02-private.jpg",
+     "size": 894542,
+     "md5": "cb500e9203623730fe88e416b5ab335a",
+     "gh": "ipad/es-ES/02-private.jpg"
+    },
+    {
+     "path": "s65/iPad/es-ES/03-spending-habits.jpg",
+     "name": "03-spending-habits.jpg",
+     "size": 986024,
+     "md5": "01489f1d8173fd98770be112aded445b",
+     "gh": "ipad/es-ES/03-spending-habits.jpg"
+    },
+    {
+     "path": "s65/iPad/es-ES/04-goals.jpg",
+     "name": "04-goals.jpg",
+     "size": 602719,
+     "md5": "f2ba58422ca60147a748f624d75ffac0",
+     "gh": "ipad/es-ES/04-goals.jpg"
+    },
+    {
+     "path": "s65/iPad/es-ES/05-plan.jpg",
+     "name": "05-plan.jpg",
+     "size": 819832,
+     "md5": "7103b2203d532ae43aeb4b031d37dd85",
+     "gh": "ipad/es-ES/05-plan.jpg"
+    },
+    {
+     "path": "s65/iPad/es-ES/06-widgets.jpg",
+     "name": "06-widgets.jpg",
+     "size": 1538992,
+     "md5": "ae2e2227e92f70d2804d5c1f06b3e2d1",
+     "gh": "ipad/es-ES/06-widgets.jpg"
+    }
+   ],
+   "APP_IPHONE_DUO": [
+    {
+     "path": "s65/iPhone Duo/es-ES/01-all-your-money.jpg",
+     "name": "01-all-your-money.jpg",
+     "size": 585799,
+     "md5": "7e69eef18b191dec94d0b9ff2a138598",
+     "gh": "duo/es-ES/01-all-your-money.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/es-ES/02-dashboard.jpg",
+     "name": "02-dashboard.jpg",
+     "size": 765887,
+     "md5": "f58be8bb3617e5123dda426aee95ebc1",
+     "gh": "duo/es-ES/02-dashboard.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/es-ES/03-unfold.jpg",
+     "name": "03-unfold.jpg",
+     "size": 792728,
+     "md5": "8b29389a8eea0ec927a6843867a1e1e4",
+     "gh": "duo/es-ES/03-unfold.jpg"
+    },
+    {
+     "path": "s65/iPhone Duo/es-ES/04-plan.jpg",
+     "name": "04-plan.jpg",
+     "size": 749269,
+     "md5": "bf08e3b9f4adc5f780fa4dedd402d126",
+     "gh": "duo/es-ES/04-plan.jpg"
+    }
+   ]
+  }
+ }
+}
