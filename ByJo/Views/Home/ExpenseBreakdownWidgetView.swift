@@ -61,14 +61,14 @@ struct ExpenseBreakdownWidgetView: View {
         if !slices.isEmpty {
             Section {
                 VStack(alignment: .leading, spacing: 16) {
-                    HStack {
+                    AdaptiveStack {
                         Text("Expense Breakdown")
                             .font(.headline)
                             .foregroundStyle(.secondary)
 
                         Spacer()
 
-                        Picker("", selection: $selectedRange) {
+                        Picker("Timeframe", selection: $selectedRange) {
                             ForEach(rangeOptions, id: \.self) { option in
                                 Text(option.label).tag(option)
                             }
@@ -77,7 +77,7 @@ struct ExpenseBreakdownWidgetView: View {
                         .pickerStyle(.menu)
                     }
 
-                    HStack(alignment: .center, spacing: 24) {
+                    AdaptiveStack(spacing: 24) {
                         Chart(slices) { slice in
                             SectorMark(
                                 angle: .value("Value", slice.value),
@@ -86,8 +86,11 @@ struct ExpenseBreakdownWidgetView: View {
                             )
                             .foregroundStyle(slice.color)
                             .cornerRadius(4)
+                            .accessibilityLabel(Text(slice.label))
+                            .accessibilityValue(Text(slice.amount.accessibilityCurrency(currencyCode)))
                         }
                         .frame(width: 110, height: 110)
+                        .accessibilityLabel(Text("Expense Breakdown"))
 
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(slices.prefix(5)) { slice in
@@ -110,6 +113,9 @@ struct ExpenseBreakdownWidgetView: View {
                                         .foregroundStyle(.secondary)
                                         .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                                 }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel(Text(slice.label))
+                                .accessibilityValue(Text(slice.amount.accessibilityCurrency(currencyCode)))
                             }
                         }
                     }

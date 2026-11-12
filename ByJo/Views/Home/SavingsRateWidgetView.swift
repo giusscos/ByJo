@@ -56,13 +56,13 @@ struct SavingsRateWidgetView: View {
 
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(hasData ? "\(savingsRatePercent)" : "—")
-                            .font(.system(size: 52, weight: .black, design: .rounded))
+                            .scaledFont(size: 52, weight: .black, design: .rounded, maxSize: 96)
                             .foregroundStyle(hasData ? rateColor : Color.secondary)
                             .contentTransition(.numericText(value: Double(savingsRatePercent)))
 
                         if hasData {
                             Text("%")
-                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                                .scaledFont(size: 28, weight: .bold, design: .rounded, maxSize: 52)
                                 .foregroundStyle(rateColor)
                                 .padding(.bottom, 6)
                         }
@@ -78,25 +78,30 @@ struct SavingsRateWidgetView: View {
                             Capsule()
                                 .fill(rateColor)
                                 .frame(width: max(0, geo.size.width * progress), height: 8)
-                                .animation(.spring(response: 0.8, dampingFraction: 0.75), value: progress)
+                                .motionAnimation(.spring(response: 0.8, dampingFraction: 0.75), value: progress)
                         }
                     }
                     .frame(height: 8)
+                    .accessibilityHidden(true)
 
-                    HStack {
+                    AdaptiveStack {
                         Label("≥20% great", systemImage: "circle.fill")
                             .foregroundStyle(.green)
-                        Spacer()
+                        Spacer(minLength: 0)
                         Label("10–20% ok", systemImage: "circle.fill")
                             .foregroundStyle(.yellow)
-                        Spacer()
+                        Spacer(minLength: 0)
                         Label("<10% low", systemImage: "circle.fill")
                             .foregroundStyle(.red)
                     }
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
                 }
                 .padding(.vertical, 8)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Savings Rate"))
+                .accessibilityValue(Text(verbatim: hasData ? "\(savingsRate.formatted(.percent.precision(.fractionLength(0)))), \(NSLocalizedString(savingsRate >= 0.20 ? "≥20% great" : savingsRate >= 0.10 ? "10–20% ok" : "<10% low", comment: ""))" : "—"))
             }
         }
     }

@@ -34,18 +34,23 @@ struct FinancialSummaryWidgetView: View {
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         if netChangeThisMonth > 0 {
                             Text("+")
-                                .font(.system(size: 40, weight: .black, design: .rounded))
+                                .scaledFont(size: 40, weight: .black, design: .rounded, maxSize: 72)
                                 .foregroundStyle(Color.rise)
                         }
 
                         Text(netChangeThisMonth, format: compactNumber
                              ? .currency(code: currencyCode.rawValue).notation(.compactName)
                              : .currency(code: currencyCode.rawValue))
-                            .font(.system(size: 40, weight: .black, design: .rounded))
+                            .scaledFont(size: 40, weight: .black, design: .rounded, maxSize: 72)
                             .foregroundStyle(Color.trend(up: netChangeThisMonth >= 0))
                             .contentTransition(.numericText(value: compactNumber ? 0 : 1))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("This month"))
+                .accessibilityValue(Text((netChangeThisMonth > 0 ? "+" : "") + netChangeThisMonth.accessibilityCurrency(currencyCode)))
                 .padding(.vertical, 8)
             }
         }

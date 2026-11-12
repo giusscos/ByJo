@@ -54,7 +54,7 @@ struct AssetAllocationWidgetView: View {
                         .font(.headline)
                         .foregroundStyle(.secondary)
 
-                    HStack(alignment: .center, spacing: 24) {
+                    AdaptiveStack(spacing: 24) {
                         Chart(slices) { slice in
                             SectorMark(
                                 angle: .value("Value", slice.value),
@@ -63,8 +63,11 @@ struct AssetAllocationWidgetView: View {
                             )
                             .foregroundStyle(slice.color)
                             .cornerRadius(4)
+                            .accessibilityLabel(Text(slice.label))
+                            .accessibilityValue(Text(slice.value / 100, format: .percent.precision(.fractionLength(0))))
                         }
                         .frame(width: 110, height: 110)
+                        .accessibilityLabel(Text("Asset Allocation"))
 
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(slices.prefix(5)) { slice in
@@ -84,6 +87,7 @@ struct AssetAllocationWidgetView: View {
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.secondary)
                                 }
+                                .accessibilityElement(children: .combine)
                             }
                         }
                     }

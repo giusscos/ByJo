@@ -185,6 +185,11 @@ private final class SpringDriver {
 
     /// Animate toward newTarget, reusing the running display link if one exists.
     func animate(to newTarget: Double) {
+        // Reduce Motion: jump to the value instead of sweeping the capsule along the arc.
+        if UIAccessibility.isReduceMotionEnabled {
+            set(newTarget)
+            return
+        }
         target = newTarget
         guard displayLink == nil else { return }
         let link = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.tick(_:)))
@@ -228,6 +233,7 @@ struct SpendmeterView: View {
     @State private var valueDriver = SpringDriver(value: 0.5, response: 1.3, dampingFraction: 0.72)
     @State private var savedDriver = SpringDriver(value: 0,   response: 1.3, dampingFraction: 0.72)
     @State private var hasAppeared = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let startDeg: Double = 150
     private let sweepDeg: Double = 240
@@ -277,33 +283,41 @@ struct SpendmeterView: View {
 
             HStack(alignment: .top, spacing: 2) {
                 Text(isPositive ? "+" : "-")
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .scaledFont(size: 48, weight: .bold, design: .rounded, maxSize: 84)
                 Text(String(format: "%.0f", absVal))
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .scaledFont(size: 48, weight: .bold, design: .rounded, maxSize: 84)
                     .monospacedDigit()
                     .contentTransition(.numericText(countsDown: !isPositive))
                 Text(currencyCode.symbol)
-                    .font(.system(size: 24, weight: .semibold, design: .rounded))
+                    .scaledFont(size: 24, weight: .semibold, design: .rounded, maxSize: 42)
                     .foregroundStyle(.secondary)
                     .padding(.top, 7)
             }
             .foregroundStyle(isPositive ? Color.primary : Color.red)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 16)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Saved"))
+            .accessibilityValue(Text(verbatim: (savedAmount >= 0 ? "" : "-") + abs(savedAmount).accessibilityCurrency(currencyCode)))
 
             HStack(spacing: 6) {
                 Image(systemName: insightSymbol)
                     .foregroundStyle(insightColor)
+                    .accessibilityHidden(true)
                 Text(insightMessage)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .animation(.easeInOut(duration: 0.2), value: insightMessage)
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityHidden(!hasPreviousData)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 16)
             .opacity(hasPreviousData ? 1 : 0)
-            .scaleEffect(hasPreviousData ? 1 : 0.88, anchor: .top)
-            .animation(.spring(response: 0.45, dampingFraction: 0.72), value: hasPreviousData)
+            .scaleEffect(hasPreviousData || reduceMotion ? 1 : 0.88, anchor: .top)
+            .motionAnimation(.spring(response: 0.45, dampingFraction: 0.72), value: hasPreviousData)
 
             GeometryReader { geo in
                 let rx: CGFloat = min(geo.size.width * 0.44, 175)
@@ -368,6 +382,9 @@ struct SpendmeterView: View {
             .frame(height: 145)
             .padding(.horizontal, 10)
             .clipped()
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Spendmeter"))
+            .accessibilityValue(Text(verbatim: String(format: NSLocalizedString("%@ of income spent", comment: "VoiceOver: Spendmeter gauge value"), value.formatted(.percent.precision(.fractionLength(0))))))
         }
         .onAppear {
             guard !hasAppeared else { return }

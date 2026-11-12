@@ -89,6 +89,9 @@ struct PeriodComparisonWidgetView: View {
                             .foregroundStyle(.secondary)
                         }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text("VS last month"))
+                    .accessibilityValue(Text(verbatim: "\(accessibilityChange(netWorthPreviousPeriod.amount, currencyCode)), \(netWorthPreviousPeriod.percentage.formatted(.number.precision(.fractionLength(2))))%"))
                 }
             }
         }

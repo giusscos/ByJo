@@ -62,10 +62,14 @@ struct TopExpensesWidgetView: View {
                                 Capsule()
                                     .fill(Color.red.opacity(0.8 - Double(index) * 0.2))
                                     .frame(width: max(0, geo.size.width * ratio), height: 6)
-                                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: ratio)
+                                    .motionAnimation(.spring(response: 0.6, dampingFraction: 0.8), value: ratio)
                             }
                             .frame(height: 6)
+                            .accessibilityHidden(true)
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text(op.name))
+                        .accessibilityValue(Text(abs(op.amount).accessibilityCurrency(currencyCode)))
                     }
                 }
                 .padding(.vertical, 8)

@@ -119,12 +119,17 @@ struct CategoryWidgetView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .contentTransition(.numericText(value: compactNumber ? 0 : 1))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
                         }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(topCategory.category.name))
+                    .accessibilityValue(Text(verbatim: topCategory.amount.accessibilityCurrency(currencyCode)))
 
                     if topCategory.category.monthlyBudget > 0 {
                         VStack(alignment: .leading, spacing: 6) {
-                            HStack {
+                            AdaptiveStack {
                                 Text("Budget")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
@@ -153,8 +158,12 @@ struct CategoryWidgetView: View {
                                 }
                             }
                             .frame(height: 4)
-                            .animation(.spring(duration: 0.6), value: topCategoryBudgetRatio)
+                            .motionAnimation(.spring(duration: 0.6), value: topCategoryBudgetRatio)
+                            .accessibilityHidden(true)
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text("Budget"))
+                        .accessibilityValue(Text(verbatim: String(format: NSLocalizedString("%@ of %@", comment: "VoiceOver: spent of budget"), topCategoryMonthlyExpenses.accessibilityCurrency(currencyCode), topCategoryBudget.accessibilityCurrency(currencyCode))))
                     }
                 }
             }
