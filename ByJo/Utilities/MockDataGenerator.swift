@@ -151,6 +151,26 @@ struct MockDataGenerator {
 
         [emergencyFund, newLaptop, vacationFund].forEach { context.insert($0) }
 
+        // `-mockScale 100` multiplies every amount, so App Store screenshots in yen or
+        // New Taiwan dollars show realistic numbers instead of dollar-sized ones.
+        let scale = UserDefaults.standard.double(forKey: "mockScale")
+        if scale > 0, scale != 1 {
+            let factor = Decimal(scale)
+            for asset in (try? context.fetch(FetchDescriptor<Asset>())) ?? [] {
+                asset.initialBalance *= factor
+            }
+            for operation in (try? context.fetch(FetchDescriptor<AssetOperation>())) ?? [] {
+                operation.amount *= factor
+            }
+            for goal in (try? context.fetch(FetchDescriptor<Goal>())) ?? [] {
+                goal.startingAmount *= factor
+                goal.targetAmount *= factor
+            }
+            for category in (try? context.fetch(FetchDescriptor<CategoryOperation>())) ?? [] {
+                category.monthlyBudget *= factor
+            }
+        }
+
         try? context.save()
     }
 }
