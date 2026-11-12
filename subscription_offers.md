@@ -24,6 +24,10 @@
 | zh-Hant | 把全部淨資產集中在一處 | Pro 提供無限資產、目標、定期收支、小工具、圖表和匯出功能。你的資料依舊保持私密。 |
 | ar-SA | احتفظ بصافي ثروتك كاملًا في مكان واحد | مع Pro: أصول غير محدودة، وأهداف، وعمليات متكررة، وأدوات، ورسوم بيانية، وتصدير. تبقى بياناتك خاصة. |
 
+## Billing grace period (on since Nov 13, 2026)
+
+16 days, all renewals, production and sandbox (same as Poly). Subscribers whose payment fails keep Pro while Apple retries. The app already treats `inGracePeriod` as active (`Store.updateSubscriptionStatus`), so no app update was needed.
+
 ## Not set up yet
 
 - **Retention offer** (e.g. 50% off for a year for subscribers with at least 1 paid month, as yPrompt does): add once there are paying subscribers to keep.
