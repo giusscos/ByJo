@@ -56,6 +56,20 @@ struct ContentView: View {
         // Tab bar on compact width; on regular width (iPhone Duo inner display, iPad)
         // it can expand into a sidebar.
         .tabViewStyle(.sidebarAdaptable)
+        .activatesSearchOnTabSelection()
+    }
+}
+
+private extension View {
+    /// Tapping the Search tab opens the search field and the keyboard right away (iOS 26+):
+    /// the Search screen has nothing to show until something is typed.
+    @ViewBuilder
+    func activatesSearchOnTabSelection() -> some View {
+        if #available(iOS 26.0, *) {
+            tabViewSearchActivation(.searchTabSelection)
+        } else {
+            self
+        }
     }
 }
 
