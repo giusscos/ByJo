@@ -11,6 +11,7 @@ struct BudgetProgressWidgetView: View {
     @AppStorage("compactNumber") var compactNumber: Bool = true
 
     @Query var categories: [CategoryOperation]
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var budgetRows: [(category: CategoryOperation, spent: Decimal, budget: Decimal)] {
         let (start, end) = DateRangeOption.month.dateRange
@@ -47,12 +48,12 @@ struct BudgetProgressWidgetView: View {
                         let barColor: Color = isOver ? .red : (ratio > 0.8 ? .orange : .accentColor)
 
                         VStack(alignment: .leading, spacing: 6) {
-                            HStack(alignment: .firstTextBaseline) {
+                            AdaptiveStack(verticalAlignment: .firstTextBaseline) {
                                 Text(row.category.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                Spacer()
-                                VStack(alignment: .trailing, spacing: 1) {
+                                Spacer(minLength: 0)
+                                VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing, spacing: 1) {
                                     Text(row.spent, format: compactNumber
                                          ? .currency(code: currencyCode.rawValue).notation(.compactName)
                                          : .currency(code: currencyCode.rawValue))
@@ -75,7 +76,11 @@ struct BudgetProgressWidgetView: View {
                                             .frame(width: geo.size.width * ratio)
                                     }
                                 }
+                                .accessibilityHidden(true)
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text(row.category.name))
+                        .accessibilityValue(Text(verbatim: String(format: NSLocalizedString("%@ of %@", comment: "VoiceOver: spent of budget"), row.spent.accessibilityCurrency(currencyCode), row.budget.accessibilityCurrency(currencyCode))))
                     }
                 }
                 .padding(.vertical, 8)

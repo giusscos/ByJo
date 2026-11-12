@@ -162,7 +162,7 @@ struct OnboardingAssetStep: View {
                             .padding(.horizontal, 14)
                             .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
 
-                            HStack(spacing: 8) {
+                            AdaptiveStack(spacing: 8) {
                                 Button {
                                     statusBalance = .positive
                                 } label: {

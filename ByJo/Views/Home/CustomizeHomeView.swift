@@ -28,13 +28,17 @@ struct CustomizeHomeView: View {
                                 .frame(width: 28)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel(Text("Wallet Auto-Log"))
+                        .accessibilityValue(Text(showWalletShortcutBanner ? "Shown" : "Hidden"))
 
                         Image(systemName: "wallet.pass")
                             .foregroundStyle(Color.secondary)
                             .frame(width: 20)
+                            .accessibilityHidden(true)
 
                         Text("Wallet Auto-Log")
                             .foregroundStyle(showWalletShortcutBanner ? Color.primary : Color.secondary)
+                            .accessibilityHidden(true)
                     }
                 } footer: {
                     Text("Shown at the top of Home when enabled.")
@@ -53,9 +57,10 @@ struct CustomizeHomeView: View {
                                 Image(systemName: "lock.fill")
                                     .foregroundStyle(Color.accentColor)
                                     .frame(width: 28)
+                                    .accessibilityHidden(true)
                                 Text("Reorder and hide Home sections")
                                     .foregroundStyle(Color.primary)
-                                Spacer()
+                                Spacer(minLength: 0)
                                 Text(verbatim: "Pro")
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(.white)
@@ -91,13 +96,17 @@ struct CustomizeHomeView: View {
                             .frame(width: 28)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(Text(section.title))
+                    .accessibilityValue(Text(hiddenSections.contains(section) ? "Hidden" : "Shown"))
 
                     Image(systemName: section.icon)
                         .foregroundStyle(Color.secondary)
                         .frame(width: 20)
+                        .accessibilityHidden(true)
 
                     Text(section.title)
                         .foregroundStyle(hiddenSections.contains(section) ? Color.secondary : Color.primary)
+                        .accessibilityHidden(true)
                 }
                 .deleteDisabled(true)
             }

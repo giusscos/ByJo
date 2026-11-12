@@ -36,7 +36,7 @@ struct RecurringOperationWidgetView: View {
                             .fontWeight(.semibold)
                             .lineLimit(1)
 
-                        HStack(alignment: .lastTextBaseline) {
+                        AdaptiveStack(verticalAlignment: .lastTextBaseline) {
                             HStack(spacing: 4) {
                                 Group {
                                     if recurringOperation.amount > 0 {
@@ -59,7 +59,7 @@ struct RecurringOperationWidgetView: View {
                                     .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                             }
 
-                            Spacer()
+                            Spacer(minLength: 0)
 
                             if let nextPaymentDate = recurringOperation.frequency.nextPaymentDate(from: recurringOperation.date) {
                                 Text(nextPaymentDate, format: .dateTime.day().month(.abbreviated).year(.twoDigits).hour().minute())
@@ -69,6 +69,12 @@ struct RecurringOperationWidgetView: View {
                             }
                         }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(recurringOperation.name))
+                    .accessibilityValue(Text(verbatim: [
+                        accessibilityChange(recurringOperation.amount, currencyCode),
+                        recurringOperation.frequency.nextPaymentDate(from: recurringOperation.date)?.formatted(.dateTime.day().month().year().hour().minute())
+                    ].compactMap { $0 }.joined(separator: ", ")))
                 }
             }
             .onAppear {

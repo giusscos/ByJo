@@ -88,11 +88,11 @@ struct DebtPayoffWidgetView: View {
                         }()
 
                         VStack(alignment: .leading, spacing: 6) {
-                            HStack(alignment: .firstTextBaseline) {
+                            AdaptiveStack(verticalAlignment: .firstTextBaseline) {
                                 Text(debt.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                Spacer()
+                                Spacer(minLength: 0)
                                 Text(debt.currentBalance, format: compactNumber
                                      ? .currency(code: currencyCode.rawValue).notation(.compactName)
                                      : .currency(code: currencyCode.rawValue))
@@ -112,9 +112,12 @@ struct DebtPayoffWidgetView: View {
                                                 .frame(width: geo.size.width * paidRatio)
                                         }
                                     }
+                                    .accessibilityElement()
+                                    .accessibilityLabel(Text("Progress"))
+                                    .accessibilityValue(Text(paidRatio, format: .percent.precision(.fractionLength(0))))
                             }
 
-                            HStack {
+                            AdaptiveStack {
                                 if debt.monthlyPayment > 0 {
                                     Label {
                                         Text(debt.monthlyPayment, format: .currency(code: currencyCode.rawValue)) +
@@ -122,11 +125,12 @@ struct DebtPayoffWidgetView: View {
                                         Text("/ mo")
                                     } icon: {
                                         Image(systemName: "calendar")
+                                            .accessibilityHidden(true)
                                     }
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                                 }
-                                Spacer()
+                                Spacer(minLength: 0)
                                 if let date = debt.payoffDate {
                                     Text("Paid off \(date, format: .dateTime.month(.abbreviated).year())")
                                         .font(.caption2)

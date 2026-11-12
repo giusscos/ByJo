@@ -56,6 +56,7 @@ struct HomeView: View {
     @Environment(\.requestReview) private var requestReview
     @Environment(Store.self) private var store
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var homeWidth: CGFloat = 0
 
     @AppStorage("currencyCode") var currencyCode: CurrencyCode = .usd
@@ -151,7 +152,8 @@ struct HomeView: View {
     /// iPad and the unfolded iPhone Duo: the same cards in columns (two, or three when there is room),
     /// in the user's section order, instead of one list stretched across the screen.
     private var wideHome: some View {
-        let columns = homeWidth >= 1100 ? 3 : 2
+        // One column at accessibility text sizes, so large text isn't squeezed into narrow cards.
+        let columns = dynamicTypeSize.isAccessibilitySize ? 1 : (homeWidth >= 1100 ? 3 : 2)
         let sections = Array(visibleSections.enumerated())
         return ScrollView {
             VStack(spacing: 16) {
