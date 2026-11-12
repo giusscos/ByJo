@@ -201,7 +201,7 @@ struct EditAssetOperationView: View {
                         if let value = parsedAmount {
                             Text((operationType == .outflow ? value * -1 : value).formatted(.currency(code: currencyCode.rawValue)))
                                 .font(.callout)
-                                .foregroundStyle(operationType == .outflow ? .red : .secondary)
+                                .foregroundStyle(operationType == .outflow ? Color.fall : .secondary)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -218,7 +218,7 @@ struct EditAssetOperationView: View {
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
-                        .tint(operationType == .inflow ? .green : .secondary)
+                        .tint(operationType == .inflow ? Color.rise : .secondary)
 
                         Button {
                             operationType = .outflow
@@ -230,7 +230,7 @@ struct EditAssetOperationView: View {
                             .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
-                        .tint(operationType == .outflow ? .red : .secondary)
+                        .tint(operationType == .outflow ? Color.fall : .secondary)
                     }
                 }
                 .listRowSeparator(.hidden)

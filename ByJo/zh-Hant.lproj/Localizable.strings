@@ -1,0 +1,598 @@
+/* Traditional Chinese (Taiwan wording). Machine-assisted translation, 2026-11-12: a native speaker should review it before release.
+   Terms: net worth = 淨資產, assets = 資產, operations = 交易, goals = 目標,
+   recurring operations = 定期交易, inflow = 收入, outflow = 支出, widgets = 小工具. */
+
+/* MARK: - Asset Types */
+"Cash" = "現金";
+"Bank Account" = "銀行帳戶";
+"Savings Account" = "儲蓄帳戶";
+"Checking Account" = "支票帳戶";
+"Credit Card" = "信用卡";
+"Investment Account" = "投資帳戶";
+"Brokerage Account" = "證券帳戶";
+"Retirement Account" = "退休帳戶";
+"Pension" = "退休金";
+"Cryptocurrency" = "加密貨幣";
+"Stocks" = "股票";
+"Bonds" = "債券";
+"Mutual Funds" = "基金";
+"ETFs" = "ETF";
+"Real Estate" = "不動產";
+"Property" = "財產";
+"Vehicle" = "車輛";
+"Car" = "汽車";
+"Motorcycle" = "機車";
+"Boat" = "船";
+"Jewelry" = "珠寶";
+"Art" = "藝術品";
+"Collectibles" = "收藏品";
+"Business" = "事業";
+"Partnership" = "合夥事業";
+"Loan" = "貸款";
+"Mortgage" = "房貸";
+"Student Loan" = "學貸";
+"Personal Loan" = "信貸";
+"Insurance" = "保險";
+"Life Insurance" = "壽險";
+"Health Insurance" = "醫療險";
+"Annuity" = "年金";
+"Commodity" = "原物料";
+"Precious Metals" = "貴金屬";
+"Foreign Currency" = "外幣";
+"Options" = "選擇權";
+"Futures" = "期貨";
+"Private Equity" = "私募股權";
+"Crowdfunding Investment" = "群眾募資投資";
+"Other" = "其他";
+
+/* MARK: - Operation Types */
+"Inflow" = "收入";
+"Outflow" = "支出";
+
+/* MARK: - Recurrence Frequency */
+"Single" = "僅一次";
+"Daily" = "每天";
+"Weekly" = "每週";
+"Monthly" = "每月";
+"Yearly" = "每年";
+
+/* MARK: - Goal Status */
+"Completed" = "已完成";
+"Suspended" = "已暫停";
+
+/* MARK: - Balance Status */
+"Positive" = "正數";
+"Negative" = "負數";
+
+/* MARK: - Spendmeter Timeframe */
+"Day" = "日";
+"Week" = "週";
+"Month" = "月";
+"Year" = "年";
+
+/* MARK: - Asset Sort Order */
+"Name" = "名稱";
+"Balance" = "餘額";
+"Type" = "類型";
+
+/* MARK: - Home Sections */
+"Goals" = "目標";
+"Monthly Summary" = "每月摘要";
+"Spendmeter" = "支出儀表";
+"Recurring" = "定期";
+"Top Category" = "最高分類";
+"Savings Rate" = "儲蓄率";
+"Top Expenses" = "主要支出";
+"Asset Allocation" = "資產配置";
+
+/* MARK: - Spendmeter Period Labels */
+"yesterday" = "昨天";
+"last week" = "上週";
+"last month" = "上個月";
+"last year" = "去年";
+
+/* MARK: - Spendmeter Insight Messages */
+"Same as %@" = "與%@持平";
+"%d%% more saved than %@" = "比%2$@多存了%1$d%%";
+"%d%% less saved than %@" = "比%2$@少存了%1$d%%";
+"More saved than %@" = "比%@存得多";
+"Less saved than %@" = "比%@存得少";
+
+/* MARK: - Notifications */
+"Recurring operation" = "定期交易";
+
+/* MARK: - Assets */
+"Assets" = "資產";
+"Add asset" = "新增資產";
+"No assets found 😕" = "找不到資產 😕";
+"Start adding assets" = "開始新增資產";
+"Asset type" = "資產類型";
+"Long amount" = "完整金額";
+"Short amount" = "簡寫金額";
+"By Type" = "依類型";
+"Sort By" = "排序方式";
+"Filters" = "篩選";
+"Sorters" = "排序";
+"Menu" = "選單";
+
+/* MARK: - Operations */
+"Edit operation" = "編輯交易";
+"Create operation" = "新增交易";
+"Update recurring operation" = "更新定期交易";
+"Update this occurrence only" = "僅更新這一次";
+"Update all occurrences" = "更新全部";
+"Insert note" = "輸入備註";
+"Next occurrence: " = "下次: ";
+
+/* MARK: - Goals */
+"Add goal" = "新增目標";
+"Is Goal completed?" = "目標已完成了嗎？";
+
+/* MARK: - Categories */
+"Categories" = "分類";
+
+/* MARK: - Common Actions */
+"Save" = "儲存";
+"Edit" = "編輯";
+"Delete" = "刪除";
+"Cancel" = "取消";
+"Skip" = "略過";
+"Allow" = "允許";
+
+/* MARK: - Operation Detail */
+"Asset" = "資產";
+"Category" = "分類";
+"Next payment" = "下次付款";
+"From" = "轉出";
+"To" = "轉入";
+"Received" = "已收到";
+"Transfer" = "轉帳";
+"Note" = "備註";
+"History" = "紀錄";
+"Stop recurring" = "停止重複";
+"Delete current" = "刪除這筆";
+"Delete linked" = "刪除關聯交易";
+"Delete both" = "兩筆都刪除";
+"Are you sure you want to delete?" = "確定要刪除嗎？";
+"Stop recurring?" = "停止重複？";
+"No future occurrences will be generated. Past occurrences are kept." = "之後不會再產生新的交易，過去的交易會保留。";
+
+/* MARK: - Swap */
+"Swap" = "轉帳";
+
+/* MARK: - Keyboard */
+"Hide keyboard" = "隱藏鍵盤";
+"Dismiss keyboard" = "關閉鍵盤";
+
+/* MARK: - Onboarding */
+"Set Up a Recurring Payment" = "設定定期付款";
+"Log a Transaction" = "記一筆";
+"Description" = "說明";
+"Amount" = "金額";
+"Repeats" = "重複";
+"Enable Reminders" = "開啟提醒";
+"Get notified when recurring payments are due." = "定期付款到期時通知你。";
+"Reminders enabled" = "提醒已開啟";
+"Date" = "日期";
+
+/* MARK: - What's New */
+"What's New in ByJo" = "ByJo 新功能";
+"Here's everything that's new and improved." = "以下是所有新功能與改進。";
+"Continue" = "繼續";
+"Update Asset Value" = "更新資產價值";
+"Set an asset to its real value — ByJo records the adjustment as an operation with an optional note." = "將資產調整為實際價值，ByJo 會把差額記為一筆交易，可附上備註。";
+"Balance History" = "餘額走勢";
+"See how an asset’s value changed over time with a chart on the asset detail screen." = "在資產詳細資料畫面用圖表查看資產價值的變化。";
+
+/* MARK: - Update Asset Value */
+"Update value" = "更新價值";
+"Current" = "目前";
+"New value" = "新價值";
+"Adjustment: %@" = "調整: %@";
+"Note (optional)" = "備註（選填）";
+"Value update" = "價值更新";
+
+/* MARK: - Asset Balance History */
+"Balance history" = "餘額走勢";
+"Hide chart" = "隱藏圖表";
+"Show chart" = "顯示圖表";
+
+/* MARK: - Home Empty State */
+"Start tracking your money" = "開始記錄你的錢";
+"Add your assets, then log income and expenses to see your net worth and monthly progress." = "新增你的資產，再記錄收入和支出，就能看到淨資產和每月進度。";
+
+/* MARK: - Onboarding Welcome */
+"Your personal finance tracker.\nBuilt for clarity, not complexity." = "你的個人財務追蹤工具。\n清楚明瞭，不複雜。";
+"Get Started" = "開始使用";
+
+/* MARK: - Onboarding Why Save */
+"Know Your Net Worth" = "了解你的淨資產";
+"Your net worth — assets minus liabilities — is the clearest snapshot of your financial health." = "淨資產（資產減去負債）是衡量財務健康最清楚的指標。";
+"Next" = "下一步";
+"People don't know\ntheir net worth" = "的人不知道\n自己的淨資產";
+"More likely to hit\ngoals when tracking" = "持續記錄\n更容易達成目標";
+"You can't improve what you don't measure — tracking is the first step." = "無法衡量，就無法改進。記錄是第一步。";
+"Seeing your net worth grow month over month is the best motivation to keep going." = "看到淨資產逐月成長，是堅持下去的最好動力。";
+"Spotting a downward trend early lets you act before it becomes a bigger problem." = "及早發現下滑趨勢，就能在問題變大之前採取行動。";
+
+/* MARK: - Onboarding Why Invest */
+"Take Control of Your Budget" = "掌握你的預算";
+"Knowing where your money goes gives you the power to decide where it should go." = "知道錢花到哪裡，才能決定錢該花在哪裡。";
+"Let's Set Up ByJo" = "開始設定 ByJo";
+"Of income goes\nuntracked each month" = "的收入每月\n沒有被記錄";
+"Less overspending\nwith regular tracking" = "定期記錄\n減少超支";
+"Most people underestimate their monthly expenses by 20–30%." = "大多數人會把每月支出低估 20–30%。";
+"A simple spending log reveals patterns you'd never notice otherwise." = "簡單的支出紀錄能揭示你平常注意不到的規律。";
+"Budgeting isn't about restriction — it's about making intentional choices." = "做預算不是為了限制自己，而是為了有意識地做選擇。";
+
+/* MARK: - Onboarding Currency */
+"Choose Your Currency" = "選擇貨幣";
+"Select how amounts are displayed. You can change this anytime." = "選擇金額的顯示貨幣，之後隨時可以更改。";
+
+/* MARK: - Onboarding Asset Setup */
+"Add Your First Asset" = "新增第一項資產";
+"Track a bank account, savings, investments, or anything of value." = "記錄銀行帳戶、存款、投資或任何有價值的東西。";
+"Current Balance" = "目前餘額";
+"e.g. My Bank Account" = "例如：我的銀行帳戶";
+"Compact keyboard" = "精簡鍵盤";
+
+/* MARK: - Onboarding Transaction & Recurring */
+"Record an inflow or outflow for " = "記錄收入或支出: ";
+"Automate a salary, subscription, or bill for " = "自動記錄薪水、訂閱或帳單: ";
+"your asset" = "你的資產";
+"e.g. Monthly Salary" = "例如：月薪";
+"e.g. Grocery Shopping" = "例如：買菜";
+"e.g. Netflix" = "例如：Netflix";
+
+/* MARK: - Onboarding Success */
+"You're All Set!" = "一切就緒！";
+"Your financial journey starts now. ByJo will help you track every step — from savings to investments." = "你的理財之旅從現在開始。從存錢到投資，ByJo 幫你記錄每一步。";
+
+/* MARK: - Home Tips */
+"Add your first asset" = "新增第一項資產";
+"Tap here to add a bank account, investment, or any item with financial value to start tracking your net worth." = "點一下這裡新增銀行帳戶、投資或任何有價值的東西，開始追蹤你的淨資產。";
+"Log your first transaction" = "記第一筆交易";
+"Tap + to record inflows or outflows and keep your balances up to date." = "點一下 + 記錄收入或支出，讓餘額保持最新。";
+
+/* MARK: - Budget Progress Widget */
+"Budget Progress" = "預算進度";
+"of %@" = "/ %@";
+
+/* MARK: - Debt Payoff Widget */
+"Debt Payoff" = "還款進度";
+"/ mo" = "/ 月";
+"Paid off %@" = "%@ 還清";
+"No recurring payments" = "沒有定期付款";
+
+/* MARK: - Home Sections (additional) */
+"Expense Breakdown" = "支出組成";
+"Net Worth History" = "淨資產走勢";
+"Spending Trends" = "支出趨勢";
+"Savings Rate Trend" = "儲蓄率趨勢";
+
+/* MARK: - Home Widgets */
+"Net Worth" = "淨資產";
+"This month" = "本月";
+"VS last month" = "與上月相比";
+"Forecast" = "預測";
+"Budget" = "預算";
+"≥20% great" = "≥20% 很好";
+"10–20% ok" = "10–20% 還可以";
+"<10% low" = "<10% 偏低";
+"Add All" = "全部加入";
+"Customize Home" = "自訂首頁";
+"Drag to reorder. Tap the eye icon to show or hide a section." = "拖移可調整順序，點一下眼睛圖像可顯示或隱藏區塊。";
+"Recurring Operations" = "定期交易";
+"Categories overview" = "分類總覽";
+"Home" = "首頁";
+"Timeframe" = "時間範圍";
+"%lld pending operation" = "%lld 筆待處理交易";
+"%lld pending operations" = "%lld 筆待處理交易";
+"Operation: %lld" = "交易: %lld 筆";
+"Operations: %lld" = "交易: %lld 筆";
+
+/* MARK: - Goals (additional) */
+"Started" = "起始";
+"Target" = "目標金額";
+"Remaining" = "剩餘";
+"Saved so far" = "已存";
+"Goal reached!" = "目標達成！";
+"Due date" = "截止日期";
+"Expired" = "已過期";
+"Progress" = "進度";
+"Monthly pace" = "每月進度";
+"Estimated completion" = "預計完成";
+"On track" = "進度順利";
+"Behind schedule" = "落後計畫";
+"Need more savings" = "需要多存一些";
+"Balance not growing — add an inflow to this asset" = "餘額沒有成長，請為這項資產新增收入";
+"Projections" = "預測";
+"Based on your last 90 days of activity on %@." = "根據 %@ 最近 90 天的紀錄。";
+"Per day" = "每天";
+"Per week" = "每週";
+"Per month" = "每月";
+"Required savings" = "需存金額";
+"To reach your target in %lld days." = "在 %lld 天內達成目標。";
+"Manage" = "管理";
+"Pin to home" = "釘選到首頁";
+"Unpin from home" = "從首頁取消釘選";
+"Resume" = "繼續";
+"Suspend" = "暫停";
+"Mark as completed" = "標示為已完成";
+"Create goal" = "新增目標";
+"Edit goal" = "編輯目標";
+"Title" = "標題";
+"Current: " = "目前: ";
+"Ongoing" = "進行中";
+"Complete" = "已完成";
+"left to go" = "待存";
+"Due date: " = "截止日期: ";
+"Completed date: " = "完成日期: ";
+"Reached" = "已達成";
+"Missed" = "未達成";
+"%lld active" = "%lld 個進行中";
+"%lldd left" = "剩 %lld 天";
+
+/* MARK: - Export & Import */
+"Export & Import" = "匯出與匯入";
+"Done" = "完成";
+"OK" = "好";
+"Import Error" = "匯入錯誤";
+"Unknown error" = "未知的錯誤";
+"Export Operations as CSV" = "將交易匯出為 CSV";
+"No operations to export" = "沒有可匯出的交易";
+"Export Full Backup (JSON)" = "匯出完整備份（JSON）";
+"No data to export" = "沒有可匯出的資料";
+"Export" = "匯出";
+"CSV contains all operations. JSON contains everything: assets, operations, categories, and goals." = "CSV 包含所有交易。JSON 包含全部資料：資產、交易、分類和目標。";
+"Import CSV…" = "匯入 CSV…";
+"Restore from JSON Backup…" = "從 JSON 備份回復…";
+"Import" = "匯入";
+"Imported data is added to your existing data. CSV lets you map columns from any spreadsheet." = "匯入的資料會加入現有資料中。CSV 可以對應任何試算表的欄位。";
+"Sample CSV File" = "CSV 範例檔案";
+"Sample JSON Backup" = "JSON 備份範例";
+"Sample Files" = "範例檔案";
+"Download these to understand the expected format before importing your own data." = "匯入自己的資料前，可以先下載這些檔案了解所需格式。";
+"Could not access the file." = "無法存取該檔案。";
+"Could not read the file." = "無法讀取該檔案。";
+"The CSV file appears to be empty or has no header row." = "CSV 檔案似乎是空的，或沒有標題列。";
+"Map Columns" = "對應欄位";
+"Import Complete" = "匯入完成";
+"Import Failed" = "匯入失敗";
+"File Info" = "檔案資訊";
+"File" = "檔案";
+"Rows" = "列數";
+"Columns detected" = "偵測到的欄位";
+"Required Fields" = "必填欄位";
+"Select which column in your file corresponds to each field." = "選擇檔案中與各項目對應的欄位。";
+"Optional Fields" = "選填欄位";
+"Frequency" = "頻率";
+"Frequency values: Single, Daily, Weekly, Monthly, Yearly. Unrecognised values default to Single." = "頻率的值：Single、Daily、Weekly、Monthly、Yearly。無法辨識的值會當作 Single。";
+"Skip duplicates" = "略過重複項目";
+"Duplicates found" = "發現重複項目";
+"Import Options" = "匯入選項";
+"A duplicate matches an existing operation by description, date, amount, and asset." = "說明、日期、金額和資產都和現有交易相同時，視為重複項目。";
+"Issues — fix these to enable import" = "有問題，修正後才能匯入";
+"Select column…" = "選擇欄位…";
+"None" = "無";
+"Restore Backup" = "回復備份";
+"Export Date" = "匯出日期";
+"Version" = "版本";
+"Backup Contents" = "備份內容";
+"Duplicates Found" = "發現重複項目";
+"Assets and categories match by name. Operations match by description, date, amount, and asset. Goals match by title, target, and asset." = "資產和分類依名稱比對；交易依說明、日期、金額和資產比對；目標依標題、目標金額和資產比對。";
+"This adds to your existing data, not replaces it. To start fresh, delete your data first." = "這會加入現有資料中，不會取代。若要重新開始，請先刪除資料。";
+"Description is empty" = "說明是空的";
+"Asset name is empty" = "資產名稱是空的";
+"Column not found in file" = "檔案中找不到該欄位";
+"Import %lld" = "匯入 %lld 筆";
+"%lld imported, %lld duplicates skipped." = "已匯入 %lld 筆，略過 %lld 筆重複項目。";
+"%lld operations imported successfully." = "已成功匯入 %lld 筆交易。";
+"Preview — first %lld rows" = "預覽：前 %lld 列";
+"%lld already exist" = "%lld 筆已存在";
+"Required field not mapped: %@" = "必填欄位未對應: %@";
+"Row %lld: %@" = "第 %lld 列: %@";
+"Invalid backup file: %@" = "備份檔案無效: %@";
+"Unsupported backup version %lld. Please update ByJo." = "不支援備份版本 %lld，請更新 ByJo。";
+"Cannot parse date \"%@\"" = "無法辨識日期「%@」";
+"Cannot parse amount \"%@\"" = "無法辨識金額「%@」";
+
+/* MARK: - Wallet Auto-Log */
+"Wallet Auto-Log" = "錢包自動記帳";
+"Auto-log taps" = "自動記錄感應付款";
+"Set up Shortcuts to log merchant and amount automatically." = "設定捷徑，自動記錄商家和金額。";
+"Auto-log card taps" = "自動記錄卡片感應付款";
+"Add the shared ByJo Wallet Auto-Log shortcut, then wire a Transaction automation so each NFC tap logs into ByJo. Assets and categories are matched or created from the names you pass." = "加入共享的 ByJo Wallet Auto-Log 捷徑，再設定「交易」自動化，每次 NFC 感應付款都會記入 ByJo。資產和分類會依傳入的名稱比對或建立。";
+"Get Shortcut" = "取得捷徑";
+"Opens the shared ByJo Wallet Auto-Log shortcut so you can add it to Shortcuts." = "打開共享的 ByJo Wallet Auto-Log 捷徑，以便加入「捷徑」App。";
+"Create Automation" = "製作自動化";
+"Opens Shortcuts to create a new Transaction / Wallet automation." = "打開「捷徑」，製作新的「交易」或「錢包」自動化。";
+"Setup steps" = "設定步驟";
+"Tap Get Shortcut and add ByJo Wallet Auto-Log." = "點一下「取得捷徑」，加入 ByJo Wallet Auto-Log。";
+"Tap Create Automation and choose Transaction (or Wallet on newer iOS)." = "點一下「製作自動化」，選擇「交易」（較新的 iOS 為「錢包」）。";
+"Select the cards to track, then choose Run Immediately." = "選擇要記錄的卡片，然後選擇「立即執行」。";
+"Add Action → Run Shortcut → ByJo Wallet Auto-Log (or open the shortcut and confirm Merchant, Amount, and Asset Name mappings)." = "加入動作 → 執行捷徑 → ByJo Wallet Auto-Log（或打開捷徑，確認商家、金額和資產名稱的對應）。";
+"Optionally set Category Name. Leave empty to categorize later in ByJo." = "可選填分類名稱。留空即可稍後在 ByJo 中分類。";
+"If taps never log, enable Mobile Data for Wallet in Settings → Apps → Wallet." = "如果感應付款一直沒有記錄，請到「設定 → App → 錢包」開啟行動數據。";
+"I've set this up" = "我已設定好";
+"This hides the tip on Home. You can always show it again from Customize Home." = "這會隱藏首頁上的提示。你隨時可以在「自訂首頁」中重新顯示。";
+"Shown at the top of Home when enabled." = "開啟後顯示在首頁頂端。";
+
+/* MARK: - Operations (additional) */
+"Operations" = "交易";
+"Add operation" = "新增交易";
+"on" = "·";
+"Details" = "詳細資料";
+"Asset from" = "轉出資產";
+"Asset to" = "轉入資產";
+"Suggestions" = "建議";
+"Add split" = "新增拆分";
+"Remove splits" = "移除拆分";
+"Split transaction" = "拆分交易";
+"Splits" = "拆分";
+"Do you want to update only this occurrence or all %lld occurrences in the series?" = "只更新這一次，還是更新這個系列的全部 %lld 次？";
+"Change Category" = "更改分類";
+"Change Asset" = "更改資產";
+"Reassign" = "重新指定";
+"Recurring only" = "僅定期交易";
+"Delete Operations" = "刪除交易";
+"No operations found 😕" = "找不到交易 😕";
+"Start adding operations" = "開始新增交易";
+"Add operations" = "新增交易";
+"No categories found 😕" = "找不到分類 😕";
+"Start adding categories" = "開始新增分類";
+"Add categories" = "新增分類";
+"Add category" = "新增分類";
+"Operation" = "交易";
+
+/* MARK: - Assets (additional) */
+"Create asset" = "新增資產";
+"Edit asset" = "編輯資產";
+"Goal list" = "目標列表";
+"Clear Filter" = "清除篩選";
+"Delete Assets" = "刪除資產";
+"All" = "全部";
+
+/* MARK: - Paywall */
+"Terms" = "條款";
+"Privacy" = "隱私權";
+
+/* MARK: - Search */
+"Search" = "搜尋";
+"Search for assets and operations by name, type, or category." = "依名稱、類型或分類搜尋資產和交易。";
+"Assets, operations, categories…" = "資產、交易、分類…";
+
+/* MARK: - Currency Picker */
+"Hey, I'm ByJo 👋" = "嗨，我是 ByJo 👋";
+"Before you start, set your preferred currency" = "開始之前，先設定你常用的貨幣";
+"Currency" = "貨幣";
+
+/* MARK: - Categories (additional) */
+"Budget / month" = "預算 / 月";
+"%@ / month" = "%@ / 月";
+"Add" = "加入";
+"Delete Categories" = "刪除分類";
+
+/* MARK: - App Intents */
+"Add Operation" = "新增交易";
+"Log a financial operation to an asset in ByJo. Use a positive amount for an inflow and a negative amount for an outflow." = "在 ByJo 中為資產記一筆交易。收入用正數，支出用負數。";
+"Added %@ to %@." = "已將 %1$@ 加入 %2$@。";
+"Transfer Between Assets" = "資產間轉帳";
+"Move funds from one asset to another in ByJo." = "在 ByJo 中把資金從一項資產轉到另一項。";
+"From Asset" = "轉出資產";
+"To Asset" = "轉入資產";
+"Transferred %@ from %@ to %@." = "已從 %2$@ 轉帳 %1$@ 到 %3$@。";
+"Log Wallet Transaction" = "記錄錢包交易";
+"Log a Wallet card tap as an expense in ByJo. Missing assets and categories are created automatically from the names you pass." = "將錢包感應付款記為 ByJo 中的一筆支出。不存在的資產和分類會依傳入的名稱自動建立。";
+"Merchant" = "商家";
+"Asset Name" = "資產名稱";
+"Category Name" = "分類名稱";
+"Card" = "卡片";
+"Card tap" = "感應付款";
+"Wallet" = "錢包";
+"Wallet · %@" = "錢包 · %@";
+"Logged %@ (%@) to %@." = "已將 %1$@（%2$@）記入 %3$@。";
+"Transfer Funds" = "轉帳";
+"Log Wallet Tap" = "記錄錢包感應付款";
+"Asset not found." = "找不到資產。";
+"Asset name is required." = "請輸入資產名稱。";
+
+/* MARK: - Widget Extension */
+"Track your financial goals." = "追蹤你的財務目標。";
+"How your wealth is distributed across assets." = "你的財富在各項資產間的分布。";
+"Monthly spending over the last 6 months." = "最近 6 個月的每月支出。";
+"Your net worth trend over the past month." = "最近一個月的淨資產走勢。";
+"Your savings rate over the last 6 months." = "最近 6 個月的儲蓄率。";
+"Your monthly savings rate." = "本月儲蓄率。";
+"This month's expenses by category." = "本月各分類支出。";
+"Upcoming recurring inflows and outflows." = "即將到來的定期收入和支出。";
+"Your total net worth at a glance." = "一眼看清你的淨資產總額。";
+"This month's inflow vs. outflow ratio." = "本月收入與支出的比例。";
+"No history" = "沒有紀錄";
+"No history yet" = "還沒有紀錄";
+"Spending" = "支出";
+"6 months" = "6 個月";
+"No data" = "沒有資料";
+"No spending data" = "沒有支出資料";
+"Total" = "總計";
+"Avg / month" = "月平均";
+"Allocation" = "配置";
+"No assets yet" = "還沒有資產";
+"Great" = "很好";
+"Low" = "偏低";
+"Monthly Savings Rate" = "本月儲蓄率";
+"Saved" = "已存";
+"Savings Trend" = "儲蓄趨勢";
+"No data yet" = "還沒有資料";
+"Expenses" = "支出";
+"No expenses this month" = "本月沒有支出";
+"Financial Goals" = "財務目標";
+"No active goals" = "沒有進行中的目標";
+"No active\ngoals" = "沒有進行中\n的目標";
+"No active goals yet" = "還沒有進行中的目標";
+"Today" = "今天";
+"Tomorrow" = "明天";
+"in %lldd" = "%lld 天後";
+"Next Recurring" = "下一筆定期交易";
+"No recurring\noperations" = "沒有\n定期交易";
+"No recurring operations" = "沒有定期交易";
+"No recurring operations yet" = "還沒有定期交易";
+
+/* MARK: - Paywall trial */
+"Your net worth is ready" = "你的淨資產已準備好";
+"Tracked assets: %lld" = "已記錄資產: %lld 項";
+"Your ByJo trial ends tomorrow" = "你的 ByJo 試用明天結束";
+"Keep your net worth in view, or cancel anytime in Settings before it renews." = "繼續掌握你的淨資產，或在續訂前隨時到「設定」取消。";
+
+/* MARK: - Free plan & ByJo Pro */
+"Unlimited Assets" = "無限資產";
+"Track every account, card, loan and investment. The free plan covers %lld." = "記錄每個帳戶、卡片、貸款和投資。免費方案最多 %lld 項。";
+"Give any asset a target and a date, and watch your progress." = "為任何資產設定目標金額和日期，隨時查看進度。";
+"Schedule bills and income, with a reminder before each one." = "安排帳單和收入，每筆到期前都會提醒。";
+"Home Screen Widgets" = "主畫面小工具";
+"Net worth, spending and goals at a glance, without opening the app." = "不必打開 App，一眼看到淨資產、支出和目標。";
+"Bring in a CSV or JSON file, and take your data with you anytime." = "匯入 CSV 或 JSON 檔案，隨時帶走你的資料。";
+"All Future Pro Features" = "未來所有 Pro 功能";
+"New Pro features are included in every plan." = "所有方案都包含新的 Pro 功能。";
+"Lifetime" = "永久";
+"Flexible, cancel anytime" = "彈性，隨時取消";
+"Pay once, keep it forever" = "一次付費，永久使用";
+"%lld Days Free" = "免費 %lld 天";
+"Best Value" = "最划算";
+"Just %@ per week" = "每週只要 %@";
+"Start %lld-Day Free Trial" = "開始 %lld 天免費試用";
+"Purchase Error" = "購買錯誤";
+"%lld days free, then %@/year. Cancel anytime." = "免費 %lld 天，之後 %@/年。可隨時取消。";
+"%@ per year. Renews automatically, cancel anytime." = "%@/年。自動續訂，可隨時取消。";
+"%@ per week. Renews automatically, cancel anytime." = "%@/週。自動續訂，可隨時取消。";
+"One payment of %@. No subscription." = "一次付款 %@，不是訂閱。";
+"Restore Purchases" = "回復購買項目";
+"Plans are unavailable right now. Check your connection and try again." = "目前無法取得方案，請檢查網路連線後再試一次。";
+"Close" = "關閉";
+"Unlock ByJo Pro" = "解鎖 ByJo Pro";
+"Track Every Account" = "記錄每個帳戶";
+"Set Goals with Pro" = "用 Pro 設定目標";
+"Recurring Operations with Pro" = "用 Pro 使用定期交易";
+"Export & Import with Pro" = "用 Pro 匯出與匯入";
+"Your whole financial picture, private and in one place." = "完整的財務全貌，私密又集中在一處。";
+"The free plan covers %lld assets. Pro adds as many as you need." = "免費方案最多 %lld 項資產，Pro 不限數量。";
+"Schedule bills and income, and get a reminder before each one." = "安排帳單和收入，每筆到期前都會收到提醒。";
+"Bring your data in from a spreadsheet, or take it with you anytime." = "從試算表匯入資料，或隨時帶走你的資料。";
+"The free plan covers %lld assets. Pick one of your assets, or open ByJo to upgrade to Pro." = "免費方案最多 %lld 項資產。請選擇現有資產，或打開 ByJo 升級到 Pro。";
+"Savings" = "存款";
+"Investments" = "投資";
+"Car loan" = "車貸";
+"Your whole net worth.\nPrivate." = "你的全部淨資產。\n私密安全。";
+"No sign-up, no bank login. Your data stays on your devices and in your own iCloud." = "不必註冊，不必登入銀行。資料只儲存在你的裝置和你自己的 iCloud 中。";
+"Example of a net worth made of savings, investments and a car loan" = "由存款、投資和車貸組成的淨資產範例";
+"Name (optional)" = "名稱（選填）";
+"Every account, goal and widget, with no limits." = "帳戶、目標和小工具，全部不設限。";
+"Continue for free" = "免費繼續使用";
+"Upgrade to ByJo Pro" = "升級到 ByJo Pro";
+"Charts & Insights" = "圖表與分析";
+"Net worth history, spending trends, allocation and more, with Home arranged your way." = "淨資產走勢、支出趨勢、資產配置等，首頁照你的方式排列。";
+"See the Whole Picture" = "看清全貌";
+"Make Home Yours" = "打造你的首頁";
+"Net worth history, spending trends, asset allocation and more, right on Home." = "淨資產走勢、支出趨勢、資產配置等，直接顯示在首頁。";
+"Reorder and hide Home sections to match how you think about money." = "調整首頁區塊的順序或隱藏區塊，照你的理財思路來安排。";
+"Reorder and hide Home sections" = "調整和隱藏首頁區塊";

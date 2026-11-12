@@ -41,13 +41,13 @@ struct RecurringOperationWidgetView: View {
                                 Group {
                                     if recurringOperation.amount > 0 {
                                         Image(systemName: "arrow.up.circle.fill")
-                                            .foregroundStyle(.green)
+                                            .foregroundStyle(Color.rise)
                                     } else if recurringOperation.amount == 0 {
                                         Image(systemName: "equal.circle.fill")
                                             .foregroundStyle(.gray)
                                     } else {
                                         Image(systemName: "arrow.down.circle.fill")
-                                            .foregroundStyle(.red)
+                                            .foregroundStyle(Color.fall)
                                     }
                                 }
                                 .imageScale(.large)
@@ -217,7 +217,7 @@ private struct RecurringOperationsPreviewSheet: View {
                         Text(operation.amount, format: compactNumber ? .currency(code: currencyCode.rawValue).notation(.compactName) : .currency(code: currencyCode.rawValue))
                             .font(.body)
                             .fontWeight(.semibold)
-                            .foregroundStyle(operation.amount >= 0 ? .green : .red)
+                            .foregroundStyle(Color.trend(up: operation.amount >= 0))
                             .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
                     .padding(.vertical, 4)

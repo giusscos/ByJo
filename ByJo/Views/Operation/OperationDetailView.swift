@@ -34,7 +34,7 @@ struct OperationDetailView: View {
     @State var pendingDelete: DeleteAction = .none
 
     private var isInflow: Bool { operation.amount >= 0 }
-    private var accentColor: Color { isInflow ? .green : .red }
+    private var accentColor: Color { .trend(up: isInflow) }
 
     private var seriesHistory: [AssetOperation] {
         guard operation.frequency != .single else { return [] }
@@ -155,7 +155,7 @@ struct OperationDetailView: View {
 
                     LabeledContent {
                         Text(linkedOperation.amount, format: .currency(code: currencyCode.rawValue))
-                            .foregroundStyle(linkedOperation.amount >= 0 ? .green : .red)
+                            .foregroundStyle(Color.trend(up: linkedOperation.amount >= 0))
                     } label: {
                         Label("Received", systemImage: "arrow.down.circle")
                     }
@@ -191,7 +191,7 @@ struct OperationDetailView: View {
                             Spacer()
                             Text(abs(split.amount), format: .currency(code: currencyCode.rawValue))
                                 .fontWeight(.semibold)
-                                .foregroundStyle(operation.amount < 0 ? .red : .green)
+                                .foregroundStyle(Color.trend(up: operation.amount >= 0))
                         }
                     }
                 } header: {
@@ -214,7 +214,7 @@ struct OperationDetailView: View {
                                 Text(sibling.amount, format: .currency(code: currencyCode.rawValue))
                                     .font(.body)
                                     .fontWeight(.semibold)
-                                    .foregroundStyle(sibling.amount >= 0 ? .green : .red)
+                                    .foregroundStyle(Color.trend(up: sibling.amount >= 0))
                             }
                         }
                     }

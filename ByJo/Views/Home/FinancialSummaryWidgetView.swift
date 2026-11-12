@@ -35,14 +35,14 @@ struct FinancialSummaryWidgetView: View {
                         if netChangeThisMonth > 0 {
                             Text("+")
                                 .font(.system(size: 40, weight: .black, design: .rounded))
-                                .foregroundStyle(.green)
+                                .foregroundStyle(Color.rise)
                         }
 
                         Text(netChangeThisMonth, format: compactNumber
                              ? .currency(code: currencyCode.rawValue).notation(.compactName)
                              : .currency(code: currencyCode.rawValue))
                             .font(.system(size: 40, weight: .black, design: .rounded))
-                            .foregroundStyle(netChangeThisMonth >= 0 ? Color.green : Color.red)
+                            .foregroundStyle(Color.trend(up: netChangeThisMonth >= 0))
                             .contentTransition(.numericText(value: compactNumber ? 0 : 1))
                     }
                 }

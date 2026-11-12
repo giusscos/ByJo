@@ -49,13 +49,13 @@ struct OperationsGroupedByCategoryListView: View {
                             Group {
                                 if total > 0 {
                                     Image(systemName: "arrow.up.circle.fill")
-                                        .foregroundStyle(.green)
+                                        .foregroundStyle(Color.rise)
                                 } else if total == 0 {
                                     Image(systemName: "equal.circle.fill")
                                         .foregroundStyle(.gray)
                                 } else {
                                     Image(systemName: "arrow.down.circle.fill")
-                                        .foregroundStyle(.red)
+                                        .foregroundStyle(Color.fall)
                                 }
                             }
                             .imageScale(.large)

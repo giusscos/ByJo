@@ -67,6 +67,7 @@
 		3B32142A2FFB7E0E00BB05E3 /* Exceptions for "ByJoWidget" folder in "ByJo" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				TrendColor.swift,
 				WidgetShared.swift,
 			);
 			target = 68A4BD162CD8E7D100614F19 /* ByJo */;
@@ -236,6 +237,8 @@
 				ar,
 				ja,
 				nl,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 68A4BD0E2CD8E7D100614F19;
 			minimizedProjectReferenceProxies = 1;

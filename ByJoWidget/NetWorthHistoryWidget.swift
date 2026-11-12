@@ -124,7 +124,7 @@ struct NetWorthHistoryWidgetView: View {
 
 private struct NWHSmall: View {
     let entry: NetWorthHistoryEntry
-    var lineColor: Color { entry.data.delta >= 0 ? .green : .red }
+    var lineColor: Color { .trend(up: entry.data.delta >= 0) }
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Label("Net Worth", systemImage: "chart.line.uptrend.xyaxis")
@@ -153,7 +153,7 @@ private struct NWHSmall: View {
 
 private struct NWHMedium: View {
     let entry: NetWorthHistoryEntry
-    var lineColor: Color { entry.data.delta >= 0 ? .green : .red }
+    var lineColor: Color { .trend(up: entry.data.delta >= 0) }
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top) {
@@ -190,7 +190,7 @@ private struct NWHMedium: View {
 
 private struct NWHLarge: View {
     let entry: NetWorthHistoryEntry
-    var lineColor: Color { entry.data.delta >= 0 ? .green : .red }
+    var lineColor: Color { .trend(up: entry.data.delta >= 0) }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Net Worth History", systemImage: "chart.line.uptrend.xyaxis")

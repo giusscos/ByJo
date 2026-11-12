@@ -73,7 +73,7 @@ struct NetWorthHistoryWidgetView: View {
     }
 
     private var delta: Double { (points.first?.value).map { currentNetWorth - $0 } ?? 0 }
-    private var lineColor: Color { delta >= 0 ? .green : .red }
+    private var lineColor: Color { .trend(up: delta >= 0) }
 
     private var monthlyRecurringNet: Double {
         assets.flatMap { $0.operations ?? [] }

@@ -16,6 +16,8 @@
 		<string>ar</string>
 		<string>ja</string>
 		<string>nl</string>
+		<string>zh-Hans</string>
+		<string>zh-Hant</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

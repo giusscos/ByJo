@@ -5,14 +5,14 @@ Stor metadata import template
 3. Import this file from the Listing tab → Import Markdown.
 Character limits: Name 30 · Subtitle 30 · Description 4000 · Keywords 100 · Promotional Text 170 · What's New 4000
 -->
-<!-- PROPOSAL, prepared 2026-11-12. NOT shipped: six NEW App Store localizations for the version after 1.2.0.
+<!-- PROPOSAL, prepared 2026-11-12. NOT shipped: eight NEW App Store localizations for the version after 1.2.0.
      1.2.0 ships only the rename; add these in the next version, after Giuseppe's yes.
 
-     NATIVE-SPEAKER REVIEW NEEDED: the es-MX, ar-SA, ja and nl-NL text is a machine-assisted translation.
+     NATIVE-SPEAKER REVIEW NEEDED: the es-MX, ar-SA, ja, nl-NL, zh-Hans and zh-Hant text is a machine-assisted translation.
      Have a native speaker read name, subtitle, keywords, promotional text and description before import.
 
      - es-MX, en-AU, en-CA: listings only. The app shows them its existing es / en / en-GB strings.
-     - ar-SA, ja, nl-NL: listings for the new app languages (ByJo/ar.lproj, ja.lproj, nl.lproj).
+     - ar-SA, ja, nl-NL, zh-Hans, zh-Hant: listings for the new app languages (ByJo/ar, ja, nl, zh-Hans, zh-Hant .lproj).
 
      Why each one (Apple's storefront table, checked 2026-11-12):
      - es-MX is the default listing in Mexico, Argentina and most of Latin America (they see en-GB today)
@@ -330,5 +330,120 @@ nettovermogen,financiën,uitgaven,inkomsten,sparen,beleggen,aandelen,crypto,schu
 
 ## Promotional Text
 Je hele nettovermogen op één plek, gratis voor maximaal 3 bezittingen. Geen account, geen bankkoppeling: je gegevens blijven op je apparaten en in je eigen iCloud.
+
+## What's New
+
+---
+
+<!-- Chinese, added 2026-11-12 at Giuseppe's request. ByJo is already on the China, Taiwan and Hong Kong storefronts
+     in English. "净资产" in China: top-10 median 2 ratings. "淨資產" in Taiwan: median 148 (Percento, Networth淨資產).
+     "记账" / "記帳" (bookkeeping) are owned by giants (median 111k / 32k ratings), so they sit in the subtitle only.
+     zh-Hant uses Taiwan wording; iOS also shows it in Hong Kong. Apple's table lists both Chinese locales as extra
+     languages in the US too.
+     Two-character keywords are normal in Chinese; if App Store Connect rejects them, the fallback sets are below each one. -->
+
+# Locale: zh-Hans
+
+## Name
+净资产管理 - ByJo
+
+## Subtitle
+隐私记账、预算与存钱
+
+## Description
+ByJo 是一款注重隐私的净资产与预算管理 App，比表格更清楚好用。添加你拥有的和你欠下的，记录收入和支出，就能在一个地方看清完整的财务状况。
+
+隐私优先
+无需注册，无需登录银行。数据保存在你的设备上，只通过你自己的私有 iCloud 同步。没有 ByJo 服务器，不会分享任何数据。
+
+一个数字看清净资产
+支持 40 多种资产类型：现金、银行账户、信用卡、加密货币、股票、ETF、房产、车辆、贷款、房贷等。ByJo 把它们加总成一个净资产数字，支持 50 多种货币。
+
+预算与支出
+• 几秒记一笔收入或支出，一笔付款可拆分到多个分类
+• 为每个分类设置月度预算
+• 支出仪表：对比今天和昨天、本月和上月
+• 首页显示月度汇总、主要支出和储蓄率
+• 通过关联转账在资产之间转移资金
+
+轻松记账
+用 Siri 和快捷指令记录交易和转账，或设置钱包自动化，让刷卡支付自动记入 ByJo。
+
+免费版与 ByJo Pro
+免费版最多 3 项资产，交易和分类不限数量。ByJo Pro 还提供：
+• 无限资产
+• 带目标金额、截止日期和预测的财务目标
+• 周期收入和账单，每笔到期前提醒
+• 主屏幕小组件
+• 高级图表：净资产走势、支出趋势、储蓄率趋势、支出构成、资产配置和还债进度
+• 可调整顺序、隐藏板块的首页
+• CSV 和 JSON 导出与导入
+
+年度方案可免费试用 7 天，也可以选择每周方案或一次性永久购买。
+订阅会自动续订（每周或每年），除非在当前周期结束前至少 24 小时取消。可随时在 Apple 账户设置中取消。
+
+## Keywords
+理财,账本,负债,收支,投资,股票,基金,攒钱,资产负债表,财务自由,储蓄,净值
+
+<!-- Fallback if two-character keywords are rejected (54 bytes):
+资产负债表,财务自由,加密货币,家庭账本
+-->
+
+## Promotional Text
+在一个地方看清全部净资产，最多 3 项资产免费。无需注册，无需登录银行：数据只保存在你的设备和你自己的 iCloud 中。
+
+## What's New
+
+---
+
+# Locale: zh-Hant
+
+## Name
+淨資產管理 - ByJo
+
+## Subtitle
+隱私記帳、預算與存錢
+
+## Description
+ByJo 是一款重視隱私的淨資產與預算管理 App，比試算表更清楚好用。新增你擁有的和你欠下的，記錄收入和支出，就能在同一個地方看清完整的財務狀況。
+
+隱私優先
+不必註冊，不必登入銀行。資料儲存在你的裝置上，只透過你自己的私人 iCloud 同步。沒有 ByJo 伺服器，不會分享任何資料。
+
+一個數字看清淨資產
+支援 40 多種資產類型：現金、銀行帳戶、信用卡、加密貨幣、股票、ETF、不動產、車輛、貸款、房貸等。ByJo 把它們加總成一個淨資產數字，支援 50 多種貨幣。
+
+預算與支出
+• 幾秒記一筆收入或支出，一筆付款可拆分到多個分類
+• 為每個分類設定每月預算
+• 支出儀表：比較今天和昨天、本月和上月
+• 首頁顯示每月摘要、主要支出和儲蓄率
+• 透過關聯轉帳在資產之間移動資金
+
+輕鬆記帳
+用 Siri 和捷徑記錄交易和轉帳，或設定錢包自動化，讓感應付款自動記入 ByJo。
+
+免費方案與 ByJo Pro
+免費方案最多 3 項資產，交易和分類不限數量。ByJo Pro 還提供：
+• 無限資產
+• 有目標金額、截止日期和預測的財務目標
+• 定期收入和帳單，每筆到期前提醒
+• 主畫面小工具
+• 進階圖表：淨資產走勢、支出趨勢、儲蓄率趨勢、支出組成、資產配置和還款進度
+• 可調整順序、隱藏區塊的首頁
+• CSV 和 JSON 匯出與匯入
+
+年度方案可免費試用 7 天，也可以選擇每週方案或一次付費永久使用。
+訂閱會自動續訂（每週或每年），除非在目前週期結束前至少 24 小時取消。隨時可以在 Apple 帳號設定中取消。
+
+## Keywords
+理財,帳本,存股,負債,收支,投資,股票,ETF,基金,財務自由,資產負債表,儲蓄
+
+<!-- Fallback if two-character keywords are rejected (45 bytes):
+ETF,財務自由,資產負債表,加密貨幣
+-->
+
+## Promotional Text
+在同一個地方看清全部淨資產，最多 3 項資產免費。不必註冊，不必登入銀行：資料只儲存在你的裝置和你自己的 iCloud 中。
 
 ## What's New

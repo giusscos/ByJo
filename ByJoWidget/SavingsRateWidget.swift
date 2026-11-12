@@ -124,11 +124,11 @@ private struct SRMedium: View {
             Divider()
             VStack(alignment: .leading, spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Inflow", systemImage: "arrow.up.circle.fill").font(.caption2).foregroundStyle(.green)
+                    Label("Inflow", systemImage: "arrow.up.circle.fill").font(.caption2).foregroundStyle(Color.rise)
                     Text(srFmt(entry.data.inflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Outflow", systemImage: "arrow.down.circle.fill").font(.caption2).foregroundStyle(.red)
+                    Label("Outflow", systemImage: "arrow.down.circle.fill").font(.caption2).foregroundStyle(Color.fall)
                     Text(srFmt(entry.data.outflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
             }
@@ -164,13 +164,13 @@ private struct SRLarge: View {
             HStack(spacing: 0) {
                 Spacer()
                 VStack(spacing: 2) {
-                    Image(systemName: "arrow.up.circle.fill").foregroundStyle(.green)
+                    Image(systemName: "arrow.up.circle.fill").foregroundStyle(Color.rise)
                     Text("Inflow").font(.caption2).foregroundStyle(.secondary)
                     Text(srFmt(entry.data.inflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }
                 Spacer(); Divider().frame(height: 44); Spacer()
                 VStack(spacing: 2) {
-                    Image(systemName: "arrow.down.circle.fill").foregroundStyle(.red)
+                    Image(systemName: "arrow.down.circle.fill").foregroundStyle(Color.fall)
                     Text("Outflow").font(.caption2).foregroundStyle(.secondary)
                     Text(srFmt(entry.data.outflow, currency: entry.data.currencyCode)).font(.subheadline).fontWeight(.semibold)
                 }

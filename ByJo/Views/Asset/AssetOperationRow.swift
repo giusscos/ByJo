@@ -30,10 +30,10 @@ struct AssetOperationRow: View {
             Group {
                 if operation.amount > 0 {
                     Image(systemName: "arrow.up.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.rise)
                 } else {
                     Image(systemName: "arrow.down.circle.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color.fall)
                 }
             }
             .imageScale(.large)

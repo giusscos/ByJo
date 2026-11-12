@@ -125,7 +125,7 @@ struct UpdateAssetValueView: View {
                     if let delta, delta != 0 {
                         let amount = delta.formatted(.currency(code: currencyCode.rawValue))
                         Text("Adjustment: \(amount)")
-                            .foregroundStyle(delta >= 0 ? .green : .red)
+                            .foregroundStyle(Color.trend(up: delta >= 0))
                     }
                 }
                 .listRowSeparator(.hidden)

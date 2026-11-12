@@ -103,13 +103,13 @@ struct CategoryWidgetView: View {
                             Group {
                                 if topCategory.amount > 0 {
                                     Image(systemName: "arrow.up.circle.fill")
-                                        .foregroundStyle(.green)
+                                        .foregroundStyle(Color.rise)
                                 } else if topCategory.amount == 0 {
                                     Image(systemName: "equal.circle.fill")
                                         .foregroundStyle(.gray)
                                 } else {
                                     Image(systemName: "arrow.down.circle.fill")
-                                        .foregroundStyle(.red)
+                                        .foregroundStyle(Color.fall)
                                 }
                             }
                             .imageScale(.large)

@@ -251,7 +251,7 @@ struct SpendmeterView: View {
 
     private var insightColor: Color {
         guard abs(insightDiff) >= 0.01 else { return .secondary }
-        return insightDiff > 0 ? .green : .red
+        return .trend(up: insightDiff > 0)
     }
 
     private var insightMessage: String {

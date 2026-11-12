@@ -69,7 +69,7 @@ private struct RRow: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: item.isInflow ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
-                .foregroundStyle(item.isInflow ? .green : .red).font(.subheadline)
+                .foregroundStyle(Color.trend(up: item.isInflow)).font(.subheadline)
             VStack(alignment: .leading, spacing: 1) {
                 Text(item.name).font(.subheadline).fontWeight(.medium).lineLimit(1)
                 Text(item.assetName).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
@@ -77,7 +77,7 @@ private struct RRow: View {
             Spacer()
             VStack(alignment: .trailing, spacing: 1) {
                 Text(rFmt(item.amount, currency: currencyCode))
-                    .font(.subheadline).fontWeight(.semibold).foregroundStyle(item.isInflow ? .green : .primary)
+                    .font(.subheadline).fontWeight(.semibold).foregroundStyle(item.isInflow ? Color.rise : .primary)
                 Text(daysLabel(item.nextDate)).font(.caption2).foregroundStyle(.secondary)
             }
         }
@@ -109,7 +109,7 @@ private struct RSmall: View {
                     Text(item.name).font(.headline).lineLimit(1)
                     HStack(spacing: 4) {
                         Image(systemName: item.isInflow ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
-                            .foregroundStyle(item.isInflow ? .green : .red)
+                            .foregroundStyle(Color.trend(up: item.isInflow))
                         Text(rFmt(item.amount, currency: entry.data.currencyCode))
                             .font(.subheadline)
                             .fontWeight(.semibold)

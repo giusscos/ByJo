@@ -216,7 +216,7 @@ struct AssetAmountSwapView: View {
                 Text((current + d).formatted(.currency(code: currencyCode.rawValue)))
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .foregroundStyle(d < 0 ? .red : .green)
+                    .foregroundStyle(Color.trend(up: d >= 0))
             }
         }
     }

@@ -59,13 +59,13 @@ struct PeriodComparisonWidgetView: View {
                         Group {
                             if netWorthPreviousPeriod.amount > 0 {
                                 Image(systemName: "arrow.up.circle.fill")
-                                    .foregroundStyle(.green)
+                                    .foregroundStyle(Color.rise)
                             } else if netWorthPreviousPeriod.amount == 0 {
                                 Image(systemName: "equal.circle.fill")
                                     .foregroundStyle(.gray)
                             } else {
                                 Image(systemName: "arrow.down.circle.fill")
-                                    .foregroundStyle(.red)
+                                    .foregroundStyle(Color.fall)
                             }
                             
                         }

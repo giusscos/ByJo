@@ -63,7 +63,7 @@ struct AssetBalanceHistorySection: View {
     }
 
     private var delta: Double { (points.first?.value).map { currentBalance - $0 } ?? 0 }
-    private var lineColor: Color { delta >= 0 ? .green : .red }
+    private var lineColor: Color { .trend(up: delta >= 0) }
 
     var body: some View {
         Section {

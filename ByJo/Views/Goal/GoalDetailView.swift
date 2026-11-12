@@ -178,7 +178,7 @@ struct GoalDetailView: View {
                         Text(netProgress, format: .currency(code: currency.rawValue))
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .foregroundStyle(netProgress >= 0 ? .green : .red)
+                            .foregroundStyle(Color.trend(up: netProgress >= 0))
                     }
                 } else {
                     HStack {
